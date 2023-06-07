@@ -208,12 +208,13 @@ if __name__ == '__main__':
     audio_path = 'outputs/dialogue.wav'
     subtitle_path = 'outputs/subtitile.srt'
     timeline_path = 'outputs/timeline.csv'
+    images_dir = 'outputs/images'
     bg_path = 'assets/bg.png'
     video_wo_subtitle_path = 'outputs/zunda_bg.mp4'
     video_path = 'outputs/zunda.mp4'
 
-    #make_wav_file(audio_dir, bgm_path, audio_path)
-    #make_srt_file(audio_dir, subtitle_path, dst_timeline_path=timeline_path)
+    make_wav_file(audio_dir, bgm_path, audio_path)
+    make_srt_file(audio_dir, subtitle_path, dst_timeline_path=timeline_path)
     config = {
         'slide': {'offset': (250, 22), 'ratio': 0.71},
         'character': {
@@ -221,6 +222,6 @@ if __name__ == '__main__':
             'metan': {'initial_status': 'n', 'offset': (-300, 400), 'ratio': 0.7},
         }
     }
-    make_still_images(bg_path, character_dir, slide_path, timeline_path, config, 'outputs/images')
-    make_video_from_images('outputs/images', audio_path, timeline_path, video_wo_subtitle_path)
+    make_still_images(bg_path, character_dir, slide_path, timeline_path, config, images_dir)
+    make_video_from_images(images_dir, audio_path, timeline_path, video_wo_subtitle_path)
     make_subtitle_video(video_wo_subtitle_path, subtitle_path, timeline_path, video_path)
