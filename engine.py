@@ -1,7 +1,9 @@
 import os
+import hashlib
+import math
 import subprocess
 import tempfile
-from typing import List, Optional
+from typing import List
 
 import pandas as pd
 from pydub import AudioSegment
@@ -13,7 +15,9 @@ def _get_audio_length(filename: str) -> float:
     return audio.duration_seconds
 
 
-def _concat_audio_files(wav_files: List[str], bgm_file: str, wav_path: str, bgm_volume: int = -15) -> None:
+def _concat_audio_files(
+        wav_files: List[str], bgm_file: str, wav_path: str, bgm_volume: int = -15,
+        fadein_duration: int = 0, fadeout_duration: int = 5000) -> None:
     concatenated_audio = AudioSegment.empty()
 
     for wav_file in wav_files:
@@ -24,11 +28,15 @@ def _concat_audio_files(wav_files: List[str], bgm_file: str, wav_path: str, bgm_
     bgm = AudioSegment.from_wav(bgm_file)
     bgm = bgm + bgm_volume  # Decrease the volume
     # Repeat the BGM to be at least as long as the main audio
-    bgm_repeat_times = int(round(
+    bgm_repeat_times = int(math.ceil(
        concatenated_audio.duration_seconds / _get_audio_length(bgm_file)))
     bgm = bgm * bgm_repeat_times
     # Trim the BGM to the same length as the main audio
     bgm = bgm[:len(concatenated_audio)]
+    if 0 < fadein_duration:
+        bgm = bgm.fade_in(fadein_duration)
+    if 0 < fadeout_duration:
+        bgm = bgm.fade_out(fadeout_duration)
     # Overlay the main audio with the BGM
     final_output = concatenated_audio.overlay(bgm)
 
@@ -59,17 +67,82 @@ def make_wav_file(audio_dir: str, bgm_path: str, dst_wav_path: str, bgm_volume: 
     _concat_audio_files(wav_files, bgm_path, dst_wav_path, bgm_volume)
 
 
-def make_srt_file(audio_dir: str, dst_srt_path: str, dst_timeline_path: Optional[str] = None) -> None:
+def _get_hash_prefix(text):
+    text_bytes = text.encode("utf-8")
+    sha1_hash = hashlib.sha1(text_bytes)
+    hashed_text = sha1_hash.hexdigest()
+    prefix = hashed_text[:6]
+    return prefix
+
+
+def make_timeline_file(audio_dir: str, dst_timeline_path: str, max_length: int = 25) -> None:
+
+    prev_timeline = None
+    if os.path.exists(dst_timeline_path):
+        prev_timeline = pd.read_csv(dst_timeline_path)
+
+    def get_extra_columns(text):
+        def transform_text(raw_text):
+            if 0 < max_length:
+                return _insert_newlines(raw_text, max_length=max_length)
+            else:
+                return raw_text
+
+        row = None
+        if prev_timeline is not None:
+            hash = _get_hash_prefix(text)
+            filtered_tl = prev_timeline[prev_timeline['hash'] == hash]
+            if 0 < len(filtered_tl):
+                row = filtered_tl.iloc[0]
+                modified_text = row['text']
+            else:
+                modified_text = transform_text(raw_text)
+        else:
+            modified_text = transform_text(raw_text)
+
+        result = {'text': modified_text}
+        if row is not None:
+            result['slide'] = row['slide']
+            result['status'] = row['status']
+        else:
+            result['slide'] = 0
+            result['status'] = 'n'
+        return result
 
     wav_files = _get_paths(audio_dir, '.wav')
     txt_files = _get_paths(audio_dir, '.txt')
-
     frame = []
+    start_time = 0
+    for wav_file, txt_file in zip(wav_files, txt_files):
+        duration = _get_audio_length(wav_file)
+        end_time = start_time + duration
+
+        raw_text = open(txt_file, 'r', encoding='utf-8-sig').read()
+        character_dict = {
+            '四国めたん（ノーマル）': 'metan',
+            'ずんだもん（ノーマル）': 'zunda',
+        }
+        filename = os.path.splitext(os.path.basename(txt_file))[0]
+        character = filename.split('_')[1]
+        dic = {
+            'start_time': start_time,
+            'end_time': end_time,
+            'character': character_dict[character],
+            'hash': _get_hash_prefix(raw_text),
+        }
+        dic.update(get_extra_columns(raw_text))
+        frame.append(dic)
+        start_time = end_time
+    frame = pd.DataFrame(frame)
+    frame.to_csv(dst_timeline_path, index=False)
+
+
+def make_srt_file(timeline_path: str, dst_srt_path: str) -> None:
+    timeline = pd.read_csv(timeline_path)
     with open(dst_srt_path, 'w') as srt:
-        start_time = 0
-        for i, (wav_file, txt_file) in enumerate(zip(wav_files, txt_files)):
-            duration = _get_audio_length(wav_file)
-            end_time = start_time + duration
+        for i, row in timeline.iterrows():
+            start_time = row['start_time']
+            end_time = row['end_time']
             srt.write('{}\n'.format(i + 1))
             srt.write('{:02d}:{:02d}:{:02d},{:03d} --> {:02d}:{:02d}:{:02d},{:03d}\n'.format(
                 int(start_time / 3600), int((start_time / 60) % 60),
@@ -77,29 +150,8 @@ def make_srt_file(audio_dir: str, dst_srt_path: str, dst_timeline_path: Optional
                 int(end_time / 3600), int((end_time / 60) % 60),
                 int(end_time % 60), int((end_time % 1) * 1000),
             ))
-
-            text = open(txt_file, 'r', encoding='utf-8-sig').read()
-            modified_text = _insert_newlines(text, max_length=25)
-            srt.write(modified_text + '\n\n')
-            if dst_timeline_path:
-                character_dict = {
-                    '四国めたん（ノーマル）': 'metan',
-                    'ずんだもん（ノーマル）': 'zunda',
-                }
-                filename = os.path.splitext(os.path.basename(txt_file))[0]
-                character = filename.split('_')[1]
-                frame.append({
-                    'start_time': start_time,
-                    'end_time': end_time,
-                    'character': character_dict[character],
-                    'text': text,
-                    'slide': 0,
-                    'status': 'n',
-                })
-            start_time = end_time
-    if dst_timeline_path:
-        frame = pd.DataFrame(frame)
-        frame.to_csv(dst_timeline_path, index=False)
+            text = row['text']
+            srt.write(text + '\n\n')
 
 
 def make_still_video(bg_path: str, audio_path: str, dst_video_path: str) -> None:
@@ -172,10 +224,10 @@ def make_video_from_images(
                 file_path = os.path.join(images_dir, f'{i:03d}.png')
                 fp.write(f"file '{file_path}'\n")
                 fp.write(f"duration {d}\n")
-        
+
             # Handle the known bug where the last duration of ffmpeg is ignored
             fp.write(f"file '{file_path}'\n")
-            fp.write(f"duration 0.1\n")
+            fp.write("duration 0.1\n")
 
         # Use subprocess since concat is not available in ffmpeg-python
         command = f'ffmpeg -y -f concat -i {duration_path} -i {audio_path} -c:v libx264 -c:a aac -b:a 192k -pix_fmt yuv420p -r 30 {dst_video_path}'
@@ -214,7 +266,8 @@ if __name__ == '__main__':
     video_path = 'outputs/zunda.mp4'
 
     make_wav_file(audio_dir, bgm_path, audio_path)
-    make_srt_file(audio_dir, subtitle_path, dst_timeline_path=timeline_path)
+    make_timeline_file(audio_dir, timeline_path)
+    make_srt_file(timeline_path, subtitle_path)
     config = {
         'slide': {'offset': (250, 22), 'ratio': 0.71},
         'character': {
