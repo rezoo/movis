@@ -10,7 +10,14 @@ setup(
     install_requires=[
         'numpy>=1.18.1',
         'pandas>=1.0.1',
+        'pydub>=0.25.1',
+        'Pillow>=8.2.0',
     ],
+    entry_points={
+        'console_scripts': [
+            'zunda = zunda.engine:main',
+        ],
+    },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

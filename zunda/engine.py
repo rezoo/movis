@@ -3,8 +3,7 @@ import hashlib
 import math
 import subprocess
 import tempfile
-from typing import List, Dict
-from dataclasses import dataclass, asdict
+from typing import List
 
 import pandas as pd
 from pydub import AudioSegment
@@ -30,7 +29,7 @@ def _concat_audio_files(
     bgm = bgm + bgm_volume  # Decrease the volume
     # Repeat the BGM to be at least as long as the main audio
     bgm_repeat_times = int(math.ceil(
-       concatenated_audio.duration_seconds / _get_audio_length(bgm_file)))
+        concatenated_audio.duration_seconds / _get_audio_length(bgm_file)))
     bgm = bgm * bgm_repeat_times
     # Trim the BGM to the same length as the main audio
     bgm = bgm[:len(concatenated_audio)]
@@ -289,7 +288,7 @@ def make_subtitle_video(
         dst_video_path, vf=video_option_str, t=length).run(overwrite_output=True)
 
 
-if __name__ == '__main__':
+def main():
     audio_dir = 'audio'
     slide_path = 'slide.pdf'
 
@@ -303,9 +302,9 @@ if __name__ == '__main__':
     video_wo_subtitle_path = 'outputs/zunda_bg.mp4'
     video_path = 'outputs/zunda.mp4'
 
-    #make_wav_file(audio_dir, bgm_path, audio_path)
-    #make_timeline_file(audio_dir, timeline_path)
-    make_ass_file(timeline_path, subtitle_path)
+    # make_wav_file(audio_dir, bgm_path, audio_path)
+    # make_timeline_file(audio_dir, timeline_path)
+    # make_ass_file(timeline_path, subtitle_path)
     config = {
         'slide': {'offset': (250, 22), 'ratio': 0.71},
         'character': {
@@ -313,6 +312,10 @@ if __name__ == '__main__':
             'metan': {'initial_status': 'n', 'offset': (-300, 400), 'ratio': 0.7},
         }
     }
-    make_still_images(bg_path, character_dir, slide_path, timeline_path, config, images_dir)
-    make_video_from_images(images_dir, audio_path, timeline_path, video_wo_subtitle_path)
-    make_subtitle_video(video_wo_subtitle_path, subtitle_path, timeline_path, video_path)
+    # make_still_images(bg_path, character_dir, slide_path, timeline_path, config, images_dir)
+    # make_video_from_images(images_dir, audio_path, timeline_path, video_wo_subtitle_path)
+    # make_subtitle_video(video_wo_subtitle_path, subtitle_path, timeline_path, video_path)
+
+
+if __name__ == '__main__':
+    main()
