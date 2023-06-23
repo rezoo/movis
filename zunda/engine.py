@@ -3,7 +3,8 @@ import hashlib
 import math
 import subprocess
 import tempfile
-from typing import List
+from typing import List, Dict
+from dataclasses import dataclass, asdict
 
 import pandas as pd
 from pydub import AudioSegment
@@ -302,8 +303,8 @@ if __name__ == '__main__':
     video_wo_subtitle_path = 'outputs/zunda_bg.mp4'
     video_path = 'outputs/zunda.mp4'
 
-    make_wav_file(audio_dir, bgm_path, audio_path)
-    make_timeline_file(audio_dir, timeline_path)
+    #make_wav_file(audio_dir, bgm_path, audio_path)
+    #make_timeline_file(audio_dir, timeline_path)
     make_ass_file(timeline_path, subtitle_path)
     config = {
         'slide': {'offset': (250, 22), 'ratio': 0.71},
