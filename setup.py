@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='zunda',
@@ -6,7 +6,11 @@ setup(
     author='Masaki Saito',
     author_email='msaito@preferred.jp',
     description='A simple python package for creating simple zunda videos',
-    packages=['zunda'],
+    packages=find_packages(),
+    include_package_data=True,
+    package_data={
+        'zunda': ['assets/*'],
+    },
     install_requires=[
         'numpy>=1.18.1',
         'pandas>=1.0.1',

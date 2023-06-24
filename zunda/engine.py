@@ -1,9 +1,12 @@
+import argparse
 import os
 import hashlib
 import math
+import pkg_resources
 import subprocess
 import tempfile
 from typing import List
+import yaml
 
 import pandas as pd
 from pydub import AudioSegment
@@ -267,7 +270,8 @@ def make_video_from_images(
             fp.write("duration 0.1\n")
 
         # Use subprocess since concat is not available in ffmpeg-python
-        command = f'ffmpeg -y -f concat -i {duration_path} -i {audio_path} -c:v libx264 -c:a aac -b:a 192k -pix_fmt yuv420p -r 30 {dst_video_path}'
+        command = f'ffmpeg -y -f concat -i {duration_path} -i {audio_path}' \
+            ' -c:v libx264 -c:a aac -b:a 192k -pix_fmt yuv420p -r 30 {dst_video_path}'
         subprocess.call(command, shell=True)
     except subprocess.CalledProcessError as e:
         print("subprocess execution failed:", e)
@@ -288,7 +292,57 @@ def make_subtitle_video(
         dst_video_path, vf=video_option_str, t=length).run(overwrite_output=True)
 
 
+def init(args: argparse.Namespace):
+    current_directory = os.getcwd()
+    asset_dir = os.path.abspath(pkg_resources.resource_filename(__name__, '../assets'))
+    config_data = dict(
+        audio_dir='audio',
+        slide_path='slide.pdf',
+        bgm_path=os.path.join(asset_dir, 'assets/bgm2.wav'),
+        character_dir=os.path.join(asset_dir, 'character'),
+        bg_path=os.path.join(asset_dir, 'bg.png'),
+        audio_path='outputs/dialogue.wav',
+        subtitle_path='outputs/subtitile.ass',
+        timeline_path='outputs/timeline.csv',
+        images_dir='outputs/images',
+        video_wo_subtitle_path='outputs/dst_wo_subtitle.mp4',
+        video_path='outputs/dst.mp4',
+    )
+    config_file_path = os.path.join(current_directory, 'config.yaml')
+    with open(config_file_path, 'w') as config_file:
+        yaml.dump(config_data, config_file)
+    os.makedirs(os.path.join(current_directory, 'outputs'), exist_ok=True)
+
+
+def make_timeline(args: argparse.Namespace):
+    print('make_timeline')
+
+
+def make_video(args: argparse.Namespace):
+    print('make_video')
+
+
+
 def main():
+    parser = argparse.ArgumentParser(prog="zunda")
+    subparsers = parser.add_subparsers(dest="command")
+
+    subparsers.add_parser(
+        "init", help="Initialize a project").set_defaults(func=init)
+
+    make_parser = subparsers.add_parser("make", help="Make Zunda-related files")
+    make_subparsers = make_parser.add_subparsers(dest="make_command")
+    make_subparsers.add_parser(
+        "timeline", help="Make timeline").set_defaults(func=make_timeline)
+    make_subparsers.add_parser(
+        "video", help="Make video").set_defaults(func=make_video)
+
+    args = parser.parse_args()
+    if hasattr(args, "func"):
+        args.func(args)
+    else:
+        parser.print_help()
+
     audio_dir = 'audio'
     slide_path = 'slide.pdf'
 
