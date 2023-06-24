@@ -12,12 +12,12 @@ setup(
         'zunda': ['assets/*'],
     },
     install_requires=[
-        'numpy>=1.18.1',
         'pandas>=1.0.1',
         'pydub>=0.25.1',
         'Pillow>=8.2.0',
         'pdf2image>=1.16.3',
         'mecab-python3>=1.0.3',
+        'ffmpeg-python>=0.2.0',
     ],
     entry_points={
         'console_scripts': [
