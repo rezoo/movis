@@ -79,7 +79,6 @@ def _get_hash_prefix(text):
 
 
 def make_timeline_file(audio_dir: str, dst_timeline_path: str, max_length: int = 25) -> None:
-
     prev_timeline = None
     if os.path.exists(dst_timeline_path):
         prev_timeline = pd.read_csv(dst_timeline_path)
@@ -243,9 +242,9 @@ def make_still_images(
         slide_number += row['slide']
 
         img_t = bg_image.copy()
-        img_t.alpha_composite(slide_images[slide_number], video_config['slide']['offset'])
+        img_t.alpha_composite(slide_images[slide_number], tuple(video_config['slide']['offset']))
         for c, imgs in character_imgs.items():
-            img_t.alpha_composite(imgs[status[c]], video_config['character'][c]['offset'])
+            img_t.alpha_composite(imgs[status[c]], tuple(video_config['character'][c]['offset']))
         dst_path = os.path.join(dst_dir, f'{t:03d}.png')
         img_t.save(dst_path)
 
@@ -255,8 +254,8 @@ def make_video_from_images(
     timeline = pd.read_csv(timeline_path)
     temp_file = None
     try:
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        temp_file = tempfile.NamedTemporaryFile(suffix='.txt', dir=script_dir, delete=False)
+        current_directory = os.getcwd()
+        temp_file = tempfile.NamedTemporaryFile(suffix='.txt', dir=current_directory, delete=False)
         duration_path = temp_file.name
         duration = timeline['end_time'] - timeline['start_time']
         with open(duration_path, 'w') as fp:
@@ -271,7 +270,7 @@ def make_video_from_images(
 
         # Use subprocess since concat is not available in ffmpeg-python
         command = f'ffmpeg -y -f concat -i {duration_path} -i {audio_path}' \
-            ' -c:v libx264 -c:a aac -b:a 192k -pix_fmt yuv420p -r 30 {dst_video_path}'
+            f' -c:v libx264 -c:a aac -b:a 192k -pix_fmt yuv420p -r 30 {dst_video_path}'
         subprocess.call(command, shell=True)
     except subprocess.CalledProcessError as e:
         print("subprocess execution failed:", e)
@@ -298,7 +297,7 @@ def init(args: argparse.Namespace):
     config_data = dict(
         audio_dir='audio',
         slide_path='slide.pdf',
-        bgm_path=os.path.join(asset_dir, 'assets/bgm2.wav'),
+        bgm_path=os.path.join(asset_dir, 'bgm2.wav'),
         character_dir=os.path.join(asset_dir, 'character'),
         bg_path=os.path.join(asset_dir, 'bg.png'),
         audio_path='outputs/dialogue.wav',
@@ -307,6 +306,13 @@ def init(args: argparse.Namespace):
         images_dir='outputs/images',
         video_wo_subtitle_path='outputs/dst_wo_subtitle.mp4',
         video_path='outputs/dst.mp4',
+        layers={
+            'slide': {'offset': [250, 22], 'ratio': 0.71},
+            'character': {
+                'zunda': {'initial_status': 'n', 'offset': [1400, 300], 'ratio': 0.7},
+                'metan': {'initial_status': 'n', 'offset': [-300, 400], 'ratio': 0.7},
+            }
+        },
     )
     config_file_path = os.path.join(current_directory, 'config.yaml')
     with open(config_file_path, 'w') as config_file:
@@ -315,12 +321,25 @@ def init(args: argparse.Namespace):
 
 
 def make_timeline(args: argparse.Namespace):
-    print('make_timeline')
+    config_file_path = os.path.join(os.getcwd(), 'config.yaml')
+    config = yaml.load(open(config_file_path, 'r'), Loader=yaml.FullLoader)
+    make_timeline_file(config['audio_dir'], config['timeline_path'])
 
 
 def make_video(args: argparse.Namespace):
-    print('make_video')
-
+    config_file_path = os.path.join(os.getcwd(), 'config.yaml')
+    config = yaml.load(open(config_file_path, 'r'), Loader=yaml.FullLoader)
+    make_wav_file(config['audio_dir'], config['bgm_path'], config['audio_path'])
+    make_ass_file(config['timeline_path'], config['subtitle_path'])
+    make_still_images(
+        config['bg_path'], config['character_dir'], config['slide_path'],
+        config['timeline_path'], config['layers'], config['images_dir'])
+    make_video_from_images(
+        config['images_dir'], config['audio_path'], config['timeline_path'],
+        config['video_wo_subtitle_path'])
+    make_subtitle_video(
+        config['video_wo_subtitle_path'], config['subtitle_path'],
+        config['timeline_path'], config['video_path'])
 
 
 def main():
@@ -342,33 +361,6 @@ def main():
         args.func(args)
     else:
         parser.print_help()
-
-    audio_dir = 'audio'
-    slide_path = 'slide.pdf'
-
-    bgm_path = 'assets/bgm2.wav'
-    character_dir = 'assets/character'
-    audio_path = 'outputs/dialogue.wav'
-    subtitle_path = 'outputs/subtitile.ass'
-    timeline_path = 'outputs/timeline.csv'
-    images_dir = 'outputs/images'
-    bg_path = 'assets/bg.png'
-    video_wo_subtitle_path = 'outputs/zunda_bg.mp4'
-    video_path = 'outputs/zunda.mp4'
-
-    # make_wav_file(audio_dir, bgm_path, audio_path)
-    # make_timeline_file(audio_dir, timeline_path)
-    # make_ass_file(timeline_path, subtitle_path)
-    config = {
-        'slide': {'offset': (250, 22), 'ratio': 0.71},
-        'character': {
-            'zunda': {'initial_status': 'n', 'offset': (1400, 300), 'ratio': 0.7},
-            'metan': {'initial_status': 'n', 'offset': (-300, 400), 'ratio': 0.7},
-        }
-    }
-    # make_still_images(bg_path, character_dir, slide_path, timeline_path, config, images_dir)
-    # make_video_from_images(images_dir, audio_path, timeline_path, video_wo_subtitle_path)
-    # make_subtitle_video(video_wo_subtitle_path, subtitle_path, timeline_path, video_path)
 
 
 if __name__ == '__main__':
