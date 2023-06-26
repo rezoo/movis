@@ -128,6 +128,9 @@ def make_timeline_file(audio_dir: str, dst_timeline_path: str, max_length: int =
     frame = []
     for txt_file in txt_files:
         raw_text = open(txt_file, 'r', encoding='utf-8-sig').read()
+        if raw_text == '':
+            raise RuntimeError(
+                f'Empty text file: {txt_file}. Please remove it and try again.')
         character_dict = {
             '四国めたん（ノーマル）': 'metan',
             'ずんだもん（ノーマル）': 'zunda',
