@@ -20,34 +20,6 @@ def _get_audio_length(filename: str) -> float:
     return audio.duration_seconds
 
 
-def _concat_audio_files(
-        wav_files: List[str], bgm_file: str, wav_path: str, bgm_volume: int = -15,
-        fadein_duration: int = 0, fadeout_duration: int = 5000) -> None:
-    concatenated_audio = AudioSegment.empty()
-
-    for wav_file in wav_files:
-        audio = AudioSegment.from_wav(wav_file)
-        concatenated_audio += audio
-
-    # Load BGM
-    bgm = AudioSegment.from_wav(bgm_file)
-    bgm = bgm + bgm_volume  # Decrease the volume
-    # Repeat the BGM to be at least as long as the main audio
-    bgm_repeat_times = int(math.ceil(
-        concatenated_audio.duration_seconds / _get_audio_length(bgm_file)))
-    bgm = bgm * bgm_repeat_times
-    # Trim the BGM to the same length as the main audio
-    bgm = bgm[:len(concatenated_audio)]
-    if 0 < fadein_duration:
-        bgm = bgm.fade_in(fadein_duration)
-    if 0 < fadeout_duration:
-        bgm = bgm.fade_out(fadeout_duration)
-    # Overlay the main audio with the BGM
-    final_output = concatenated_audio.overlay(bgm)
-
-    final_output.export(wav_path, format="wav")
-
-
 def _insert_newlines(text: str, max_length: int) -> str:
     tagger = MeCab.Tagger()
     parsed = tagger.parse(text).split("\n")
@@ -66,9 +38,33 @@ def _get_paths(src_dir: str, ext: str) -> List[str]:
         for f in os.listdir(src_dir) if f.endswith(ext)])
 
 
-def make_wav_file(audio_dir: str, bgm_path: str, dst_wav_path: str, bgm_volume: int = -20) -> None:
+def make_wav_file(
+        audio_dir: str, bgm_path: str, dst_wav_path: str, bgm_volume: int = -20,
+        fadein_duration: int = 0, fadeout_duration: int = 5000) -> None:
     wav_files = _get_paths(audio_dir, '.wav')
-    _concat_audio_files(wav_files, bgm_path, dst_wav_path, bgm_volume)
+    concatenated_audio = AudioSegment.empty()
+
+    for wav_file in wav_files:
+        audio = AudioSegment.from_wav(wav_file)
+        concatenated_audio += audio
+
+    # Load BGM
+    bgm = AudioSegment.from_wav(bgm_path)
+    bgm = bgm + bgm_volume  # Decrease the volume
+    # Repeat the BGM to be at least as long as the main audio
+    bgm_repeat_times = int(math.ceil(
+        concatenated_audio.duration_seconds / _get_audio_length(bgm_path)))
+    bgm = bgm * bgm_repeat_times
+    # Trim the BGM to the same length as the main audio
+    bgm = bgm[:len(concatenated_audio)]
+    if 0 < fadein_duration:
+        bgm = bgm.fade_in(fadein_duration)
+    if 0 < fadeout_duration:
+        bgm = bgm.fade_out(fadeout_duration)
+    # Overlay the main audio with the BGM
+    final_output = concatenated_audio.overlay(bgm)
+
+    final_output.export(dst_wav_path, format="wav")
 
 
 def _get_hash_prefix(text):
