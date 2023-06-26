@@ -8,6 +8,7 @@ import tempfile
 from typing import List
 import yaml
 
+import ffmpeg
 import MeCab
 import pandas as pd
 from pdf2image import convert_from_path
@@ -265,7 +266,6 @@ def make_video_from_images(
 
 def make_subtitle_video(
         audio_dir: str, video_path: str, srt_path: str, timeline_path: str, dst_video_path: str) -> None:
-    import ffmpeg
     timeline = pd.read_csv(timeline_path)
     audio_df = _get_audio_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
