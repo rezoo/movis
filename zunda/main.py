@@ -5,7 +5,6 @@ import math
 import pkg_resources
 import yaml
 
-import ffmpeg
 import MeCab
 import pandas as pd
 from pdf2image import convert_from_path
@@ -216,7 +215,6 @@ def init(args: argparse.Namespace):
         audio_path='outputs/dialogue.wav',
         subtitle_path='outputs/subtitile.ass',
         timeline_path='outputs/timeline.csv',
-        images_dir='outputs/images',
         video_wo_subtitle_path='outputs/dst_wo_subtitle.mp4',
         video_path='outputs/dst.mp4',
         layers={
