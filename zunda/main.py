@@ -7,9 +7,7 @@ import yaml
 
 import MeCab
 import pandas as pd
-from pdf2image import convert_from_path
 from pydub import AudioSegment
-from PIL import Image
 
 from zunda.engine import render_subtitle_video, render_video
 from zunda.utils import _get_audio_dataframe, _get_audio_length, _get_paths
@@ -156,51 +154,6 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     body = '\n'.join(lines)
     with open(dst_ass_path, 'w') as fp:
         fp.write(header + body)
-
-
-def make_still_images(
-        bg_path: str, character_dir: str, slide_path: str,
-        timeline_path: str, video_config: dict, dst_dir: str) -> None:
-    bg_image = Image.open(bg_path).convert('RGBA')
-    timeline = pd.read_csv(timeline_path)
-    character_imgs = {}
-    for c in os.listdir(character_dir):
-        c_dir = os.path.join(character_dir, c)
-        if not os.path.isdir(c_dir):
-            continue
-        status_filenames = [x for x in os.listdir(c_dir) if os.path.splitext(x)[1] == '.png']
-        ratio = video_config['character'][c]['ratio']
-        images = {}
-        for fn in status_filenames:
-            key = os.path.splitext(fn)[0]
-            img = Image.open(os.path.join(c_dir, fn)).convert('RGBA')
-            w, h = img.size
-            img = img.resize(
-                (int(w * ratio), int(h * ratio)), Image.Resampling.BICUBIC)
-            images[key] = img
-        character_imgs[c] = images
-    status = {k: v['initial_status'] for k, v in video_config['character'].items()}
-
-    slide_images = []
-    for img in convert_from_path(slide_path):
-        img = img.convert('RGBA')
-        w, h = img.size
-        ratio = video_config['slide']['ratio']
-        img = img.resize(
-            (int(w * ratio), int(h * ratio)), Image.Resampling.BICUBIC)
-        slide_images.append(img)
-    slide_number = 0
-    os.makedirs(dst_dir, exist_ok=True)
-    for t, row in timeline.iterrows():
-        status[row['character']] = row['status']
-        slide_number += row['slide']
-
-        img_t = bg_image.copy()
-        img_t.alpha_composite(slide_images[slide_number], tuple(video_config['slide']['offset']))
-        for c, imgs in character_imgs.items():
-            img_t.alpha_composite(imgs[status[c]], tuple(video_config['character'][c]['offset']))
-        dst_path = os.path.join(dst_dir, f'{t:03d}.png')
-        img_t.save(dst_path)
 
 
 def init(args: argparse.Namespace):
