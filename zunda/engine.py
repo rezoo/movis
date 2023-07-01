@@ -1,5 +1,6 @@
 import os
 
+from cachetools import LRUCache
 import ffmpeg
 import numpy as np
 import pandas as pd
@@ -10,72 +11,167 @@ from tqdm import tqdm
 from zunda.utils import _get_audio_dataframe
 
 
-def _get_character_imgs(character_dir: str, video_config: dict):
-    character_imgs = {}
-    for c in os.listdir(character_dir):
-        c_dir = os.path.join(character_dir, c)
-        if not os.path.isdir(c_dir):
-            continue
-        status_filenames = [x for x in os.listdir(c_dir) if os.path.splitext(x)[1] == '.png']
-        ratio = video_config['character'][c]['ratio']
-        images = {}
-        for fn in status_filenames:
-            key = os.path.splitext(fn)[0]
-            img = Image.open(os.path.join(c_dir, fn)).convert('RGBA')
-            w, h = img.size
-            img = img.resize(
-                (int(w * ratio), int(h * ratio)), Image.Resampling.BICUBIC)
-            images[key] = img
-        character_imgs[c] = images
-    return character_imgs
+class Layer(object):
+
+    def __init__(
+            self, name: str, timeline: pd.DataFrame, scale: float = 1.0, position: tuple[int, int] = (0, 0)):
+        self.name = name
+        self.timeline = timeline
+        self.position = position
+        self.scale = scale
+
+    def get_keys(self, time: float):
+        return (self.position, self.scale)
+
+    def get_state(self, time: float):
+        subset = self.timeline[(self.timeline['start_time'] <= time) & (time < self.timeline['end_time'])]
+        if subset.empty:
+            return None
+        return subset.iloc[0]
+
+    def render(self, time: float, state: pd.Series) -> Image.Image:
+        raise NotImplementedError
 
 
-def _get_slide_imgs(slide_path: str, slide_config: dict):
-    slide_images = []
-    for img in convert_from_path(slide_path):
-        img = img.convert('RGBA')
+class ImageLayer(Layer):
+
+    def __init__(self, img_path: str, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.image = Image.open(img_path).convert('RGBA')
+
+    def render(self, time: float, state: pd.Series) -> Image.Image:
+        return self.image
+
+
+class SlideLayer(Layer):
+
+    def __init__(self, slide_path: str, slide_column: str = 'slide', *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.slide_timeline = np.cumsum(self.timeline[slide_column])
+        self.slide_images = self._get_slide_imgs(slide_path)
+
+    def _get_slide_imgs(self, slide_path: str):
+        slide_images = []
+        for img in convert_from_path(slide_path):
+            img = img.convert('RGBA')
+            slide_images.append(img)
+        return slide_images
+
+    def get_keys(self, time: float):
+        state = self.get_state(time)
+        return super().get_keys(time) + (state.name,)
+
+    def render(self, time: float, state: pd.Series) -> Image.Image:
+        slide_number = self.slide_timeline[state.name]
+        return self.slide_images[slide_number]
+
+
+class CharacterLayer(Layer):
+
+    def __init__(
+            self, character_dir: str, character_column: str = 'character',
+            status_column: str = 'status', initial_status='n', *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.character_imgs = {}
+        emotions = set(self.timeline[self.timeline[character_column] == self.name][status_column].unique())
+        emotions.add(initial_status)
+        for emotion in emotions:
+            path = os.path.join(character_dir, f'{emotion}.png')
+            self.character_imgs[emotion] = Image.open(path).convert('RGBA')
+
+        self.character_timeline = []
+        status = initial_status
+        for _, row in self.timeline.iterrows():
+            if row[character_column] == self.name:
+                status = row[status_column]
+            self.character_timeline.append(status)
+
+    def get_keys(self, time: float):
+        state = self.get_state(time)
+        emotion = self.character_timeline[state.name]
+        return super().get_keys(time) + (emotion,)
+
+    def render(self, time: float, state: pd.Series) -> Image.Image:
+        emotion = self.character_timeline[state.name]
+        return self.character_imgs[emotion]
+
+
+class Scene(object):
+
+    def __init__(
+            self, bg_path: str, slide_path: str, character_dir: str,
+            timeline: pd.DataFrame, video_config: dict, size: tuple[int, int] = (1920, 1080)):
+        self.layers = []
+        self.size = size
+
+        self.timeline = timeline
+        self.video_config = video_config
+        self.bg_path = bg_path
+        self.slide_path = slide_path
+        self.character_dir = character_dir
+
+        self.cache = LRUCache(maxsize=256)
+
+        self.add_layer(ImageLayer(
+            name='bg', timeline=self.timeline, img_path=self.bg_path))
+        self.add_layer(SlideLayer(
+            name='slide', timeline=self.timeline, slide_path=self.slide_path,
+            position=tuple(self.video_config['slide']['offset']),
+            scale=self.video_config['slide']['ratio']))
+        self.add_layer(CharacterLayer(
+            name='zunda', timeline=self.timeline, character_dir=self.character_dir + '/zunda', initial_status='n',
+            position=tuple(self.video_config['character']['zunda']['offset']),
+            scale=self.video_config['character']['zunda']['ratio']))
+        self.add_layer(CharacterLayer(
+            name='metan', timeline=self.timeline, character_dir=self.character_dir + '/metan', initial_status='n',
+            position=tuple(self.video_config['character']['metan']['offset']),
+            scale=self.video_config['character']['metan']['ratio']))
+
+    def add_layer(self, layer: any):
+        self.layers.append(layer)
+
+    def resize(self, img: Image, scale: float = 1.0) -> Image.Image:
+        if scale == 1.0:
+            return img
         w, h = img.size
-        ratio = slide_config['ratio']
-        img = img.resize(
-            (int(w * ratio), int(h * ratio)), Image.Resampling.BICUBIC)
-        slide_images.append(img)
-    return slide_images
+        return img.resize((int(w * scale), int(h * scale)), Image.Resampling.BICUBIC)
+
+    def get_frame(self, time: float) -> Image.Image:
+        keys = tuple([layer.get_keys(time) for layer in self.layers])
+        if keys in self.cache:
+            return self.cache[keys]
+
+        frame = Image.new('RGBA', self.size)
+        for layer in self.layers:
+            state = layer.get_state(time)
+            if state is None:
+                continue
+            component = layer.render(time, state)
+            component = self.resize(component, layer.scale)
+            frame.alpha_composite(component, layer.position)
+        self.cache[keys] = frame
+        return frame
+
+    def render(self, dst_path: str, codec: str = 'libx264', fps: float = 30.0) -> None:
+        length = self.timeline['end_time'].max()
+        times = np.arange(0, length, 1. / fps)
+        writer = imageio.get_writer(
+            dst_path, fps=fps, codec=codec, macro_block_size=None)
+        for t in tqdm(times, total=len(times)):
+            frame = np.asarray(self.get_frame(t))
+            writer.append_data(frame)
+        writer.close()
 
 
 def render_video(
         bg_path: str, character_dir: str, slide_path: str,
         timeline_path: str, video_config: dict, audio_dir: str,
         dst_video_path: str, fps: float = 30.0) -> None:
-    delta = 1 / fps
-
-    bg_image = Image.open(bg_path).convert('RGBA')
-    audio_df = _get_audio_dataframe(audio_dir)
     timeline = pd.read_csv(timeline_path)
+    audio_df = _get_audio_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
-    character_imgs = _get_character_imgs(character_dir, video_config)
-    slide_images = _get_slide_imgs(slide_path, video_config['slide'])
-
-    time = 0.0
-    slide_number = 0
-    status = {k: v['initial_status'] for k, v in video_config['character'].items()}
-    writer = imageio.get_writer(
-        dst_video_path, fps=fps, codec='libx264',
-        macro_block_size=None)
-    for _, row in tqdm(timeline.iterrows(), total=len(timeline)):
-        status[row['character']] = row['status']
-        slide_number += row['slide']
-
-        img_t = bg_image.copy()
-        img_t.alpha_composite(slide_images[slide_number], tuple(video_config['slide']['offset']))
-        for c, imgs in character_imgs.items():
-            img_t.alpha_composite(imgs[status[c]], tuple(video_config['character'][c]['offset']))
-        img_t = np.asarray(img_t)
-
-        frames = np.arange(time, row['end_time'], delta)
-        for _ in frames:
-            writer.append_data(img_t)
-        time = frames[-1] + delta
-    writer.close()
+    scene = Scene(bg_path, slide_path, character_dir, timeline, video_config)
+    scene.render(dst_video_path, fps=fps)
 
 
 def render_subtitle_video(
