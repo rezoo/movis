@@ -159,49 +159,75 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 def init(args: argparse.Namespace):
     current_directory = os.getcwd()
     asset_dir = os.path.abspath(pkg_resources.resource_filename(__name__, '../assets'))
-    config_data = dict(
-        audio_dir='audio',
-        slide_path='slide.pdf',
-        bgm_path=os.path.join(asset_dir, 'bgm2.wav'),
-        character_dir=os.path.join(asset_dir, 'character'),
-        bg_path=os.path.join(asset_dir, 'bg.png'),
-        audio_path='outputs/dialogue.wav',
-        subtitle_path='outputs/subtitile.ass',
-        timeline_path='outputs/timeline.csv',
-        video_wo_subtitle_path='outputs/dst_wo_subtitle.mp4',
-        video_path='outputs/dst.mp4',
-        layers={
-            'slide': {'offset': [250, 22], 'ratio': 0.71},
-            'character': {
-                'zunda': {'initial_status': 'n', 'offset': [1400, 300], 'ratio': 0.7},
-                'metan': {'initial_status': 'n', 'offset': [-300, 400], 'ratio': 0.7},
-            }
+    config_data = {
+        'audio': {
+            'bgm_path': os.path.join(asset_dir, 'bgm2.wav'),
+            'bgm_volume': -20,
+            'audio_dir': 'audio',
+            'dst_audio_path': 'outputs/dialogue.wav',
         },
-    )
+        'video': {
+            'height': 1080,
+            'width': 1920,
+            'fps': 30.0,
+            'subtitle_path': 'outputs/subtitile.ass',
+            'dst_tmp_video_path': 'outputs/dst_wo_audio.mp4',
+            'layers': [
+                {
+                    'type': 'image',
+                    'name': 'bg',
+                    'img_path': os.path.join(asset_dir, 'bg.png'),
+                    'position': [0, 0],
+                    'scale': 1.0,
+                },
+                {
+                    'type': 'slide',
+                    'name': 'slide',
+                    'slide_path': 'slide.pdf',
+                    'position': [250, 22],
+                    'scale': 0.71,
+                },
+                {
+                    'type': 'character',
+                    'name': 'zunda',
+                    'character_dir': os.path.join(asset_dir, 'character', 'zunda'),
+                    'position': [1400, 300],
+                    'scale': 0.7,
+                },
+                {
+                    'type': 'character',
+                    'name': 'metan',
+                    'character_dir': os.path.join(asset_dir, 'character', 'metan'),
+                    'position': [-300, 400],
+                    'scale': 0.7,
+                }
+            ],
+        },
+        'dst_video_path': 'outputs/dst.mp4',
+        'timeline_path': 'outputs/timeline.csv',
+    }
     config_file_path = os.path.join(current_directory, 'config.yaml')
     with open(config_file_path, 'w') as config_file:
-        yaml.dump(config_data, config_file)
+        yaml.dump(config_data, config_file, sort_keys=False)
     os.makedirs(os.path.join(current_directory, 'outputs'), exist_ok=True)
 
 
 def make_timeline(args: argparse.Namespace):
     config_file_path = os.path.join(os.getcwd(), 'config.yaml')
     config = yaml.load(open(config_file_path, 'r'), Loader=yaml.FullLoader)
-    make_timeline_file(config['audio_dir'], config['timeline_path'])
+    make_timeline_file(config['audio']['audio_dir'], config['timeline_path'])
 
 
 def make_video(args: argparse.Namespace):
     config_file_path = os.path.join(os.getcwd(), 'config.yaml')
     config = yaml.load(open(config_file_path, 'r'), Loader=yaml.FullLoader)
-    make_wav_file(config['audio_dir'], config['bgm_path'], config['audio_path'])
-    make_ass_file(config['audio_dir'], config['timeline_path'], config['subtitle_path'])
+    make_wav_file(config['audio']['audio_dir'], config['audio']['bgm_path'], config['audio']['dst_audio_path'])
+    make_ass_file(config['audio']['audio_dir'], config['timeline_path'], config['video']['subtitle_path'])
     render_video(
-        config['bg_path'], config['character_dir'], config['slide_path'],
-        config['timeline_path'], config['layers'],
-        config['audio_dir'], config['video_wo_subtitle_path'])
+        config['video'], config['timeline_path'], config['audio']['audio_dir'], config['video']['dst_tmp_video_path'])
     render_subtitle_video(
-        config['video_wo_subtitle_path'], config['subtitle_path'],
-        config['audio_path'], config['video_path'])
+        config['video']['dst_tmp_video_path'], config['video']['subtitle_path'],
+        config['audio']['dst_audio_path'], config['dst_video_path'])
 
 
 def main():

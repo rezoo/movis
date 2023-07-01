@@ -22,6 +22,7 @@ setup(
         'imageio>=2.31.1',
         'imageio-ffmpeg>=0.4.8',
         'tqdm>=4.46.0',
+        'cachetools>=4.2.2',
     ],
     entry_points={
         'console_scripts': [

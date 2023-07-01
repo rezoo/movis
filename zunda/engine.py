@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 from cachetools import LRUCache
 import ffmpeg
@@ -96,36 +97,33 @@ class CharacterLayer(Layer):
         return self.character_imgs[emotion]
 
 
+type_to_class = {
+    'image': ImageLayer,
+    'slide': SlideLayer,
+    'character': CharacterLayer,
+}
+
+
 class Scene(object):
 
     def __init__(
-            self, bg_path: str, slide_path: str, character_dir: str,
-            timeline: pd.DataFrame, video_config: dict, size: tuple[int, int] = (1920, 1080)):
+            self, layers_config: List[dict], timeline: pd.DataFrame, size: tuple[int, int] = (1920, 1080)):
         self.layers = []
         self.size = size
-
         self.timeline = timeline
-        self.video_config = video_config
-        self.bg_path = bg_path
-        self.slide_path = slide_path
-        self.character_dir = character_dir
 
         self.cache = LRUCache(maxsize=256)
 
-        self.add_layer(ImageLayer(
-            name='bg', timeline=self.timeline, img_path=self.bg_path))
-        self.add_layer(SlideLayer(
-            name='slide', timeline=self.timeline, slide_path=self.slide_path,
-            position=tuple(self.video_config['slide']['offset']),
-            scale=self.video_config['slide']['ratio']))
-        self.add_layer(CharacterLayer(
-            name='zunda', timeline=self.timeline, character_dir=self.character_dir + '/zunda', initial_status='n',
-            position=tuple(self.video_config['character']['zunda']['offset']),
-            scale=self.video_config['character']['zunda']['ratio']))
-        self.add_layer(CharacterLayer(
-            name='metan', timeline=self.timeline, character_dir=self.character_dir + '/metan', initial_status='n',
-            position=tuple(self.video_config['character']['metan']['offset']),
-            scale=self.video_config['character']['metan']['ratio']))
+        for layer in layers_config:
+            kwargs = {
+                'timeline': self.timeline,
+                'name': layer.pop('name'),
+                'position': tuple(layer.pop('position')),
+                'scale': layer.pop('scale'),
+            }
+            cls = type_to_class[layer.pop('type')]
+            kwargs.update(layer)
+            self.add_layer(cls(**kwargs))
 
     def add_layer(self, layer: any):
         self.layers.append(layer)
@@ -164,14 +162,14 @@ class Scene(object):
 
 
 def render_video(
-        bg_path: str, character_dir: str, slide_path: str,
-        timeline_path: str, video_config: dict, audio_dir: str,
-        dst_video_path: str, fps: float = 30.0) -> None:
+        video_config: dict, timeline_path: str,
+        audio_dir: str, dst_video_path: str, fps: float = 30.0) -> None:
     timeline = pd.read_csv(timeline_path)
     audio_df = _get_audio_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
-    scene = Scene(bg_path, slide_path, character_dir, timeline, video_config)
-    scene.render(dst_video_path, fps=fps)
+    size = (video_config['width'], video_config['height'])
+    scene = Scene(video_config['layers'], timeline, size=size)
+    scene.render(dst_video_path, fps=video_config['fps'])
 
 
 def render_subtitle_video(
