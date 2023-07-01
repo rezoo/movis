@@ -30,7 +30,7 @@ def _get_character_imgs(character_dir: str, video_config: dict):
     return character_imgs
 
 
-def _get_slider_imgs(slide_path: str, slide_config: dict):
+def _get_slide_imgs(slide_path: str, slide_config: dict):
     slide_images = []
     for img in convert_from_path(slide_path):
         img = img.convert('RGBA')
@@ -45,8 +45,7 @@ def _get_slider_imgs(slide_path: str, slide_config: dict):
 def render_video(
         bg_path: str, character_dir: str, slide_path: str,
         timeline_path: str, video_config: dict, audio_dir: str,
-        dst_video_path: str) -> None:
-    fps = 30.0
+        dst_video_path: str, fps: float = 30.0) -> None:
     delta = 1 / fps
 
     bg_image = Image.open(bg_path).convert('RGBA')
@@ -54,7 +53,7 @@ def render_video(
     timeline = pd.read_csv(timeline_path)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
     character_imgs = _get_character_imgs(character_dir, video_config)
-    slide_images = _get_slider_imgs(slide_path, video_config['slide'])
+    slide_images = _get_slide_imgs(slide_path, video_config['slide'])
 
     time = 0.0
     slide_number = 0

@@ -21,6 +21,7 @@ setup(
         'ffmpeg-python>=0.2.0',
         'imageio>=2.31.1',
         'imageio-ffmpeg>=0.4.8',
+        'tqdm>=4.46.0',
     ],
     entry_points={
         'console_scripts': [
