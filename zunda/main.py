@@ -221,7 +221,9 @@ def make_timeline(args: argparse.Namespace):
 def make_video(args: argparse.Namespace):
     config_file_path = os.path.join(os.getcwd(), 'config.yaml')
     config = yaml.load(open(config_file_path, 'r'), Loader=yaml.FullLoader)
-    make_wav_file(config['audio']['audio_dir'], config['audio']['bgm_path'], config['audio']['dst_audio_path'])
+    make_wav_file(
+        config['audio']['audio_dir'], config['audio']['bgm_path'],
+        config['audio']['dst_audio_path'], bgm_volume=config['audio']['bgm_volume'])
     make_ass_file(config['audio']['audio_dir'], config['timeline_path'], config['video']['subtitle_path'])
     render_video(
         config['video'], config['timeline_path'], config['audio']['audio_dir'], config['video']['dst_tmp_video_path'])
