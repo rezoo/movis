@@ -3,13 +3,13 @@ from typing import List
 
 from cachetools import LRUCache
 import ffmpeg
+import imageio
 import numpy as np
 import pandas as pd
-import imageio
 from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
-from zunda.utils import _get_audio_dataframe
+from zunda.utils import get_audio_dataframe, rand_from_string
 
 
 class Layer(object):
@@ -74,11 +74,20 @@ class CharacterLayer(Layer):
             status_column: str = 'status', initial_status='n', *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.character_imgs = {}
+        self.eye_imgs = {}
         emotions = set(self.timeline[self.timeline[character_column] == self.name][status_column].unique())
         emotions.add(initial_status)
         for emotion in emotions:
             path = os.path.join(character_dir, f'{emotion}.png')
             self.character_imgs[emotion] = Image.open(path).convert('RGBA')
+            eye_path = os.path.join(character_dir, f'{emotion}.eye.png')
+            if os.path.exists(eye_path):
+                eyes = [Image.open(eye_path).convert('RGBA')]
+                for f in sorted(os.listdir(character_dir)):
+                    x = f.split('.')
+                    if f.startswith(f'{emotion}.eye.') and len(x) == 4:
+                        eyes.append(Image.open(os.path.join(character_dir, f)).convert('RGBA'))
+                self.eye_imgs[emotion] = eyes
 
         self.character_timeline = []
         status = initial_status
@@ -87,14 +96,41 @@ class CharacterLayer(Layer):
                 status = row[status_column]
             self.character_timeline.append(status)
 
+        self.wink_per_minute = 15
+        self.wink_duration = 0.15
+
+    def get_eye_state(self, time: float, state: pd.Series) -> int:
+        emotion = self.character_timeline[state.name]
+        if emotion not in self.eye_imgs:
+            return -1
+        elif len(self.eye_imgs[emotion]) == 1:
+            return 0
+        p_threshold = self.wink_per_minute * self.wink_duration / 60
+        n = int(time / self.wink_duration)
+        p = rand_from_string(f'{self.name}:{n}')
+        if p < p_threshold:
+            frame_duration = self.wink_duration / (len(self.eye_imgs[emotion]) - 1)
+            t1 = time - n * self.wink_duration
+            n1 = int(t1 / frame_duration)
+            return min(n1 + 1, len(self.eye_imgs[emotion]) - 1)
+        else:
+            return 0
+
     def get_keys(self, time: float):
         state = self.get_state(time)
         emotion = self.character_timeline[state.name]
-        return super().get_keys(time) + (emotion,)
+        eye = self.get_eye_state(time, state)
+        return super().get_keys(time) + (emotion, eye)
 
     def render(self, time: float, state: pd.Series) -> Image.Image:
         emotion = self.character_timeline[state.name]
-        return self.character_imgs[emotion]
+        base_img = self.character_imgs[emotion]
+        if emotion in self.eye_imgs:
+            eye_number = self.get_eye_state(time, state)
+            eye_img = self.eye_imgs[emotion][eye_number]
+            base_img = base_img.copy()
+            base_img.alpha_composite(eye_img)
+        return base_img
 
 
 type_to_class = {
@@ -112,7 +148,7 @@ class Scene(object):
         self.size = size
         self.timeline = timeline
 
-        self.cache = LRUCache(maxsize=256)
+        self.cache = LRUCache(maxsize=128)
 
         for layer in layers_config:
             kwargs = {
@@ -159,13 +195,14 @@ class Scene(object):
             frame = np.asarray(self.get_frame(t))
             writer.append_data(frame)
         writer.close()
+        self.cache.clear()
 
 
 def render_video(
         video_config: dict, timeline_path: str,
         audio_dir: str, dst_video_path: str, fps: float = 30.0) -> None:
     timeline = pd.read_csv(timeline_path)
-    audio_df = _get_audio_dataframe(audio_dir)
+    audio_df = get_audio_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
     size = (video_config['width'], video_config['height'])
     scene = Scene(video_config['layers'], timeline, size=size)
