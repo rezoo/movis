@@ -5,7 +5,7 @@ import numpy as np
 
 class Animation(object):
 
-    def __init__(self, start_time: float, end_time: float, scale=1.0):
+    def __init__(self, start_time: float, end_time: float, scale: float = 1.0):
         self.start_time = start_time
         self.end_time = end_time
         self.scale = scale
@@ -36,12 +36,19 @@ class BounceDown(Animation):
         return (0., float(np.abs(np.sin(t * np.pi * 2))))
 
 
+class Jitter(Animation):
+
+    def position_func(self, t: float) -> tuple[float, float]:
+        return (np.sin(t * np.pi * 15), 0.)
+
+
 def parse_animation_command(
         start_time: float, end_time: float, command: str) -> list[tuple[str, Animation]]:
     pattern = r'(\w+)\.(\w+)\(([\d.e+-]+)\s+([\d.e+-]+)\)'
     name_to_class = {
         'BounceUp': BounceUp,
         'BounceDown': BounceDown,
+        'Jitter': Jitter,
     }
     animations = []
     for string in command.split(';'):

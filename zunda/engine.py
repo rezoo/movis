@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from cachetools import LRUCache
 import ffmpeg
@@ -8,18 +9,19 @@ import pandas as pd
 from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
-from zunda.utils import get_audio_dataframe, rand_from_string
+from zunda.utils import get_audio_dataframe, rand_from_string, transform_scale, transform_position
 from zunda.animation import parse_animation_command
 
 
 class Layer(object):
 
     def __init__(
-            self, name: str, timeline: pd.DataFrame, scale: float = 1.0, position: tuple[int, int] = (0, 0)):
+            self, name: str, timeline: pd.DataFrame,
+            scale: tuple[float, float] = (1., 1.), position: tuple[int, int] = (0, 0)):
         self.name = name
         self.timeline = timeline
         self.position = position
-        self.scale = scale
+        self.scale = transform_scale(scale)
         self.animations = []
 
     def add_animation(self, animation: callable):
@@ -167,8 +169,8 @@ class Scene(object):
             kwargs = {
                 'timeline': self.timeline,
                 'name': layer.pop('name'),
-                'position': tuple(layer.pop('position')),
-                'scale': layer.pop('scale'),
+                'position': transform_position(layer.pop('position')),
+                'scale': transform_scale(layer.pop('scale')),
             }
             cls = type_to_class[layer.pop('type')]
             kwargs.update(layer)
@@ -188,11 +190,12 @@ class Scene(object):
         self.name_to_layer[layer.name] = layer
         self.layers.append(layer)
 
-    def resize(self, img: Image, scale: float = 1.0) -> Image.Image:
-        if scale == 1.0:
+    def resize(self, img: Image, scale: tuple[float, float] = (1., 1.)) -> Image.Image:
+        if scale == (1., 1.):
             return img
         w, h = img.size
-        return img.resize((int(w * scale), int(h * scale)), Image.Resampling.BICUBIC)
+        return img.resize(
+            (round(w * scale[0]), round(h * scale[1])), Image.Resampling.BICUBIC)
 
     def get_frame(self, time: float) -> Image.Image:
         keys = tuple([layer.get_keys(time) for layer in self.layers])
@@ -210,9 +213,12 @@ class Scene(object):
         self.cache[keys] = frame
         return frame
 
-    def render(self, dst_path: str, codec: str = 'libx264', fps: float = 30.0) -> None:
-        length = self.timeline['end_time'].max()
-        times = np.arange(0, length, 1. / fps)
+    def render(
+            self, dst_path: str, start_time: float = 0.0, end_time: Optional[float] = None,
+            codec: str = 'libx264', fps: float = 30.0) -> None:
+        if end_time is None:
+            end_time = self.timeline['end_time'].max()
+        times = np.arange(start_time, end_time, 1. / fps)
         writer = imageio.get_writer(
             dst_path, fps=fps, codec=codec, macro_block_size=None)
         for t in tqdm(times, total=len(times)):

@@ -1,13 +1,13 @@
 import hashlib
 import os
-from typing import List
+from typing import Union
 
 import numpy as np
 import pandas as pd
 from pydub import AudioSegment
 
 
-def get_paths(src_dir: str, ext: str) -> List[str]:
+def get_paths(src_dir: str, ext: str) -> list[str]:
     return sorted([
         os.path.join(src_dir, f)
         for f in os.listdir(src_dir) if f.endswith(ext)])
@@ -39,3 +39,23 @@ def rand_from_string(string: str, seed: int = 0) -> float:
     s = hashlib.sha224(f'{seed}:{string}'.encode('utf-8')).digest()
     s = np.frombuffer(s, dtype=np.uint32)[0]
     return np.random.RandomState(s).rand()
+
+
+def transform_position(x: Union[int, tuple[int, int], list[int]]) -> tuple[int, int]:
+    if isinstance(x, int):
+        x = (x, x)
+    elif isinstance(x, list):
+        if len(x) != 2:
+            raise ValueError(f'len(x) must be 2: {len(x)}')
+        x = tuple(x)
+    return x
+
+
+def transform_scale(x: Union[float, tuple[float, float], list[float]]) -> tuple[float, float]:
+    if isinstance(x, float):
+        x = (x, x)
+    elif isinstance(x, list):
+        if len(x) != 2:
+            raise ValueError(f'len(x) must be 2: {len(x)}')
+        x = tuple(x)
+    return x

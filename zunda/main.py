@@ -90,9 +90,11 @@ def make_timeline_file(audio_dir: str, dst_timeline_path: str, max_length: int =
         if row is not None:
             result['slide'] = row['slide']
             result['status'] = row['status']
+            result['animation'] = row['animation']
         else:
             result['slide'] = 0
             result['status'] = 'n'
+            result['animation'] = ''
         return result
 
     txt_files = get_paths(audio_dir, '.txt')
@@ -210,6 +212,7 @@ def init(args: argparse.Namespace):
     with open(config_file_path, 'w') as config_file:
         yaml.dump(config_data, config_file, sort_keys=False)
     os.makedirs(os.path.join(current_directory, 'outputs'), exist_ok=True)
+    os.makedirs(os.path.join(current_directory, 'audio'), exist_ok=True)
 
 
 def make_timeline(args: argparse.Namespace):
