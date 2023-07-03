@@ -36,10 +36,16 @@ class BounceDown(Animation):
         return (0., float(np.abs(np.sin(t * np.pi * 2))))
 
 
-class Jitter(Animation):
+class HorizontalShake(Animation):
 
     def position_func(self, t: float) -> tuple[float, float]:
         return (np.sin(t * np.pi * 15), 0.)
+
+
+class VerticalShake(Animation):
+
+    def position_func(self, t: float) -> tuple[float, float]:
+        return (0., np.sin(t * np.pi * 15))
 
 
 def parse_animation_command(
@@ -48,7 +54,8 @@ def parse_animation_command(
     name_to_class = {
         'BounceUp': BounceUp,
         'BounceDown': BounceDown,
-        'Jitter': Jitter,
+        'HorizontalShake': HorizontalShake,
+        'VerticalShake': VerticalShake,
     }
     animations = []
     for string in command.split(';'):
