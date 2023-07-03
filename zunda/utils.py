@@ -2,6 +2,7 @@ import hashlib
 import os
 from typing import List
 
+import numpy as np
 import pandas as pd
 from pydub import AudioSegment
 
@@ -35,6 +36,6 @@ def get_audio_dataframe(audio_dir: str) -> pd.DataFrame:
 
 def rand_from_string(string: str, seed: int = 0) -> float:
     string = f'{seed}:{string}'
-    hashed = hashlib.sha224(string.encode()).hexdigest()
-    max_hash = 16 ** 56 - 1
-    return int(hashed, 16) / max_hash
+    s = hashlib.sha224(f'{seed}:{string}'.encode('utf-8')).digest()
+    s = np.frombuffer(s, dtype=np.uint32)[0]
+    return np.random.RandomState(s).rand()

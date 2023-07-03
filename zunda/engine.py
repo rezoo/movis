@@ -1,5 +1,4 @@
 import os
-from typing import List
 
 from cachetools import LRUCache
 import ffmpeg
@@ -10,6 +9,7 @@ from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
 from zunda.utils import get_audio_dataframe, rand_from_string
+from zunda.animation import parse_animation_command
 
 
 class Layer(object):
@@ -20,11 +20,22 @@ class Layer(object):
         self.timeline = timeline
         self.position = position
         self.scale = scale
+        self.animations = []
+
+    def add_animation(self, animation: callable):
+        self.animations.append(animation)
 
     def get_keys(self, time: float):
-        return (self.position, self.scale)
+        return (self.get_position(time), self.scale)
 
-    def get_state(self, time: float):
+    def get_position(self, time: float) -> tuple[int, int]:
+        position = self.position
+        for anim in self.animations:
+            vec = anim(time)
+            position = (position[0] + vec[0], position[1] + vec[1])
+        return (round(position[0]), round(position[1]))
+
+    def get_state(self, time: float) -> pd.Series:
         subset = self.timeline[(self.timeline['start_time'] <= time) & (time < self.timeline['end_time'])]
         if subset.empty:
             return None
@@ -51,7 +62,7 @@ class SlideLayer(Layer):
         self.slide_timeline = np.cumsum(self.timeline[slide_column])
         self.slide_images = self._get_slide_imgs(slide_path)
 
-    def _get_slide_imgs(self, slide_path: str):
+    def _get_slide_imgs(self, slide_path: str) -> list[Image.Image]:
         slide_images = []
         for img in convert_from_path(slide_path):
             img = img.convert('RGBA')
@@ -60,7 +71,8 @@ class SlideLayer(Layer):
 
     def get_keys(self, time: float):
         state = self.get_state(time)
-        return super().get_keys(time) + (state.name,)
+        slide_number = self.slide_timeline[state.name]
+        return super().get_keys(time) + (slide_number,)
 
     def render(self, time: float, state: pd.Series) -> Image.Image:
         slide_number = self.slide_timeline[state.name]
@@ -96,8 +108,8 @@ class CharacterLayer(Layer):
                 status = row[status_column]
             self.character_timeline.append(status)
 
-        self.wink_per_minute = 15
-        self.wink_duration = 0.15
+        self.wink_per_minute = 3
+        self.wink_duration = 0.2
 
     def get_eye_state(self, time: float, state: pd.Series) -> int:
         emotion = self.character_timeline[state.name]
@@ -143,8 +155,9 @@ type_to_class = {
 class Scene(object):
 
     def __init__(
-            self, layers_config: List[dict], timeline: pd.DataFrame, size: tuple[int, int] = (1920, 1080)):
+            self, layers_config: list[dict], timeline: pd.DataFrame, size: tuple[int, int] = (1920, 1080)):
         self.layers = []
+        self.name_to_layer = {}
         self.size = size
         self.timeline = timeline
 
@@ -161,7 +174,18 @@ class Scene(object):
             kwargs.update(layer)
             self.add_layer(cls(**kwargs))
 
+        if 'animation' in timeline.columns:
+            anim_frame = timeline[timeline['animation'].notnull() & (timeline['animation'] != '')]
+            for _, row in anim_frame.iterrows():
+                animations = parse_animation_command(
+                    row['start_time'], row['end_time'], row['animation'])
+                for layer_name, animation in animations:
+                    self.name_to_layer[layer_name].add_animation(animation)
+
     def add_layer(self, layer: any):
+        if layer.name in self.name_to_layer:
+            raise KeyError(f'Layer with name {layer.name} already exists')
+        self.name_to_layer[layer.name] = layer
         self.layers.append(layer)
 
     def resize(self, img: Image, scale: float = 1.0) -> Image.Image:
@@ -182,7 +206,7 @@ class Scene(object):
                 continue
             component = layer.render(time, state)
             component = self.resize(component, layer.scale)
-            frame.alpha_composite(component, layer.position)
+            frame.alpha_composite(component, layer.get_position(time))
         self.cache[keys] = frame
         return frame
 
