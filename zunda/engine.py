@@ -9,33 +9,39 @@ import pandas as pd
 from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
-from zunda.utils import get_audio_dataframe, rand_from_string, transform_scale, transform_position
-from zunda.animation import parse_animation_command
+from zunda.utils import get_audio_dataframe, rand_from_string, resize, transform_scale, transform_position
+from zunda.animation import AnimationProperty, parse_animation_command
 
 
 class Layer(object):
 
     def __init__(
             self, name: str, timeline: pd.DataFrame,
-            scale: tuple[float, float] = (1., 1.), position: tuple[int, int] = (0, 0)):
+            scale: tuple[float, float] = (1., 1.), position: tuple[float, float] = (0., 0.),
+            opacity: float = 1.0):
         self.name = name
         self.timeline = timeline
         self.position = position
         self.scale = transform_scale(scale)
+        self.opacity = opacity
         self.animations = []
 
     def add_animation(self, animation: callable):
         self.animations.append(animation)
 
     def get_keys(self, time: float):
-        return (self.get_position(time), self.scale)
+        return self.get_layer_property(time)
 
-    def get_position(self, time: float) -> tuple[int, int]:
-        position = self.position
+    def get_layer_property(self, time: float) -> AnimationProperty:
+        prop = AnimationProperty(
+            position=self.position, scale=self.scale, opacity=self.opacity)
         for anim in self.animations:
-            vec = anim(time)
-            position = (position[0] + vec[0], position[1] + vec[1])
-        return (round(position[0]), round(position[1]))
+            p = anim(time)
+            position = (prop.position[0] + p.position[0], prop.position[1] + p.position[1])
+            scale = (prop.scale[0] * p.scale[0], prop.scale[1] * p.scale[1])
+            opacity = prop.opacity * p.opacity
+            prop = AnimationProperty(position=position, scale=scale, opacity=opacity)
+        return prop
 
     def get_state(self, time: float) -> pd.Series:
         subset = self.timeline[(self.timeline['start_time'] <= time) & (time < self.timeline['end_time'])]
@@ -85,7 +91,8 @@ class CharacterLayer(Layer):
 
     def __init__(
             self, character_dir: str, character_column: str = 'character',
-            status_column: str = 'status', initial_status='n', *args, **kwargs):
+            status_column: str = 'status', initial_status: str = 'n',
+            blink_per_minute: int = 3, blink_duration: float = 0.2, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.character_imgs = {}
         self.eye_imgs = {}
@@ -110,8 +117,8 @@ class CharacterLayer(Layer):
                 status = row[status_column]
             self.character_timeline.append(status)
 
-        self.wink_per_minute = 3
-        self.wink_duration = 0.2
+        self.blink_per_minute = blink_per_minute
+        self.blink_duration = blink_duration
 
     def get_eye_state(self, time: float, state: pd.Series) -> int:
         emotion = self.character_timeline[state.name]
@@ -119,12 +126,12 @@ class CharacterLayer(Layer):
             return -1
         elif len(self.eye_imgs[emotion]) == 1:
             return 0
-        p_threshold = self.wink_per_minute * self.wink_duration / 60
-        n = int(time / self.wink_duration)
+        p_threshold = self.blink_per_minute * self.blink_duration / 60
+        n = int(time / self.blink_duration)
         p = rand_from_string(f'{self.name}:{n}')
         if p < p_threshold:
-            frame_duration = self.wink_duration / (len(self.eye_imgs[emotion]) - 1)
-            t1 = time - n * self.wink_duration
+            frame_duration = self.blink_duration / (len(self.eye_imgs[emotion]) - 1)
+            t1 = time - n * self.blink_duration
             n1 = int(t1 / frame_duration)
             return min(n1 + 1, len(self.eye_imgs[emotion]) - 1)
         else:
@@ -190,12 +197,15 @@ class Scene(object):
         self.name_to_layer[layer.name] = layer
         self.layers.append(layer)
 
-    def resize(self, img: Image, scale: tuple[float, float] = (1., 1.)) -> Image.Image:
-        if scale == (1., 1.):
-            return img
-        w, h = img.size
-        return img.resize(
-            (round(w * scale[0]), round(h * scale[1])), Image.Resampling.BICUBIC)
+    def composite(self, base_img: Image.Image, layer: Layer, time: float) -> Image.Image:
+        state = layer.get_state(time)
+        if state is None:
+            return base_img
+        component = layer.render(time, state)
+        p = layer.get_layer_property(time)
+        component = resize(component, p.scale)
+        base_img.alpha_composite(component, (round(p.position[0]), round(p.position[1])))
+        return base_img
 
     def get_frame(self, time: float) -> Image.Image:
         keys = tuple([layer.get_keys(time) for layer in self.layers])
@@ -204,12 +214,7 @@ class Scene(object):
 
         frame = Image.new('RGBA', self.size)
         for layer in self.layers:
-            state = layer.get_state(time)
-            if state is None:
-                continue
-            component = layer.render(time, state)
-            component = self.resize(component, layer.scale)
-            frame.alpha_composite(component, layer.get_position(time))
+            self.composite(frame, layer, time)
         self.cache[keys] = frame
         return frame
 

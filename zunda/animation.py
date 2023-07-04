@@ -1,11 +1,19 @@
 import re
+from typing import NamedTuple
 
 import numpy as np
 
 
+class AnimationProperty(NamedTuple):
+
+    position: tuple[float, float] = (0., 0.)
+    scale: tuple[float, float] = (1., 1.)
+    opacity: float = 1.
+
+
 class Animation(object):
 
-    def __init__(self, start_time: float, end_time: float, scale: float = 1.0):
+    def __init__(self, start_time: float, end_time: float, scale: float = 1.):
         self.start_time = start_time
         self.end_time = end_time
         self.scale = scale
@@ -14,38 +22,36 @@ class Animation(object):
     def duration(self) -> float:
         return self.end_time - self.start_time
 
-    def __call__(self, time: float) -> tuple[float, float]:
+    def __call__(self, time: float) -> AnimationProperty:
         if time < self.start_time or self.end_time <= time:
-            return (0., 0.)
-        vec = self.position_func((time - self.start_time) / self.duration)
-        return (vec[0] * self.scale, vec[1] * self.scale)
+            return AnimationProperty()
+        p = self.animation_func((time - self.start_time) / self.duration)
+        return AnimationProperty(
+            position=(p.position[0] * self.scale, p.position[1] * self.scale),
+            scale=(p.scale[0], p.scale[1]),
+            opacity=p.opacity,
+        )
 
-    def position_func(self, t: float) -> tuple[float, float]:
-        return [1., 1.]
+    def animation_func(self, t: float) -> AnimationProperty:
+        return AnimationProperty()
 
 
 class BounceUp(Animation):
 
-    def position_func(self, t: float) -> float:
-        return (0., - float(np.abs(np.sin(t * np.pi * 2))))
-
-
-class BounceDown(Animation):
-
-    def position_func(self, t: float) -> float:
-        return (0., float(np.abs(np.sin(t * np.pi * 2))))
+    def animation_func(self, t: float) -> AnimationProperty:
+        return AnimationProperty(position=(0., - float(np.abs(np.sin(t * np.pi * 2)))))
 
 
 class HorizontalShake(Animation):
 
-    def position_func(self, t: float) -> tuple[float, float]:
-        return (np.sin(t * np.pi * 15), 0.)
+    def animation_func(self, t: float) -> AnimationProperty:
+        return AnimationProperty(position=(np.sin(t * np.pi * 15), 0.))
 
 
 class VerticalShake(Animation):
 
-    def position_func(self, t: float) -> tuple[float, float]:
-        return (0., np.sin(t * np.pi * 15))
+    def animation_func(self, t: float) -> AnimationProperty:
+        return AnimationProperty(position=(0., np.sin(t * np.pi * 15)))
 
 
 def parse_animation_command(
@@ -53,7 +59,6 @@ def parse_animation_command(
     pattern = r'(\w+)\.(\w+)\(([\d.e+-]+)\s+([\d.e+-]+)\)'
     name_to_class = {
         'BounceUp': BounceUp,
-        'BounceDown': BounceDown,
         'HorizontalShake': HorizontalShake,
         'VerticalShake': VerticalShake,
     }

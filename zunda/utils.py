@@ -5,6 +5,7 @@ from typing import Union
 import numpy as np
 import pandas as pd
 from pydub import AudioSegment
+from PIL import Image
 
 
 def get_paths(src_dir: str, ext: str) -> list[str]:
@@ -59,3 +60,11 @@ def transform_scale(x: Union[float, tuple[float, float], list[float]]) -> tuple[
             raise ValueError(f'len(x) must be 2: {len(x)}')
         x = tuple(x)
     return x
+
+
+def resize(img: Image.Image, scale: tuple[float, float] = (1., 1.)) -> Image.Image:
+    if scale == (1., 1.):
+        return img
+    w, h = img.size
+    return img.resize(
+        (round(w * scale[0]), round(h * scale[1])), Image.Resampling.BICUBIC)

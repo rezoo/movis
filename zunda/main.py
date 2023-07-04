@@ -165,6 +165,8 @@ def init(args: argparse.Namespace):
         'audio': {
             'bgm_path': os.path.join(asset_dir, 'bgm2.wav'),
             'bgm_volume': -20,
+            'fadein_duration': 0,
+            'fadeout_duration': 0,
             'audio_dir': 'audio',
             'dst_audio_path': 'outputs/dialogue.wav',
         },
@@ -193,6 +195,8 @@ def init(args: argparse.Namespace):
                     'type': 'character',
                     'name': 'zunda',
                     'character_dir': os.path.join(asset_dir, 'character', 'zunda'),
+                    'blink_per_minute': 3,
+                    'blink_duration': 0.2,
                     'position': [1400, 300],
                     'scale': 0.7,
                 },
@@ -200,6 +204,8 @@ def init(args: argparse.Namespace):
                     'type': 'character',
                     'name': 'metan',
                     'character_dir': os.path.join(asset_dir, 'character', 'metan'),
+                    'blink_per_minute': 3,
+                    'blink_duration': 0.2,
                     'position': [-300, 400],
                     'scale': 0.7,
                 }
