@@ -1,0 +1,48 @@
+audio:
+  bgm_path: ../../assets/bgm2.wav
+  bgm_volume: -20
+  fadein_duration: 0
+  fadeout_duration: 0  # set to 5000 if you want to fade out 5 seconds before the end of the video
+  audio_dir: audio
+  dst_audio_path: outputs/dialogue.wav
+video:
+  height: 1080
+  width: 1920
+  fps: 30.0
+  subtitle_path: outputs/subtitile.ass
+  dst_tmp_video_path: outputs/dst_wo_audio.mp4
+  layers:
+  - type: image
+    name: bg
+    img_path: ../../assets/bg2.png
+    position:
+    - 0
+    - 0
+    scale: 1.0
+  - type: slide
+    name: slide
+    slide_path: slide.pdf
+    position:
+    - 250
+    - 22
+    scale: 0.71
+  - type: character
+    name: zunda
+    character_dir: ../../assets/character/zunda
+    blink_per_minute: 3
+    blink_duration: 0.2
+    position:
+    - 1400
+    - 300
+    scale: 0.7
+  - type: character
+    name: metan
+    character_dir: ../../assets/character/metan
+    blink_per_minute: 3
+    blink_duration: 0.2
+    position:
+    - -300
+    - 400
+    scale: 0.7
+dst_video_path: outputs/dst.mp4
+timeline_path: outputs/timeline.csv
