@@ -213,7 +213,7 @@ def init(args: argparse.Namespace):
         },
         'dst_video_path': 'outputs/dst.mp4',
         'timeline_path': 'outputs/timeline.csv',
-        'font': "Hiragino Maru Gothic",
+        'font': "Hiragino Maru Gothic Pro",
     }
     config_file_path = os.path.join(current_directory, 'config.yaml')
     with open(config_file_path, 'w') as config_file:
