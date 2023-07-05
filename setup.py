@@ -11,6 +11,7 @@ setup(
     package_data={
         'zunda': ['assets/*'],
     },
+    python_requires=">3.9.0",
     install_requires=[
         'pandas>=1.0.1',
         'numpy>=1.18.1',
