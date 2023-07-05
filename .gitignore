@@ -1,3 +1,9 @@
+# Output files
+*.wav
+*.mp4
+*.ass
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

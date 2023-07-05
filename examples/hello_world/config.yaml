@@ -46,3 +46,4 @@ video:
     scale: 0.7
 dst_video_path: outputs/dst.mp4
 timeline_path: outputs/timeline.csv
+font: Hiragino Maru Gothic Pro
