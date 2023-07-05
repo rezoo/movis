@@ -1,8 +1,8 @@
 audio:
-  bgm_path: /home/kmatoya/zunda/zunda/assets/bgm2.wav
+  bgm_path: ../../assets/bgm2.wav
   bgm_volume: -20
   fadein_duration: 0
-  fadeout_duration: 0
+  fadeout_duration: 0  # set to 5000 if you want to fade out 5 seconds before the end of the video
   audio_dir: audio
   dst_audio_path: outputs/dialogue.wav
 video:
@@ -14,7 +14,7 @@ video:
   layers:
   - type: image
     name: bg
-    img_path: /home/kmatoya/zunda/zunda/assets/bg2.png
+    img_path: ../../assets/bg2.png
     position:
     - 0
     - 0
@@ -28,7 +28,7 @@ video:
     scale: 0.71
   - type: character
     name: zunda
-    character_dir: /home/kmatoya/zunda/zunda/assets/character/zunda
+    character_dir: ../../assets/character/zunda
     blink_per_minute: 3
     blink_duration: 0.2
     position:
@@ -37,7 +37,7 @@ video:
     scale: 0.7
   - type: character
     name: metan
-    character_dir: /home/kmatoya/zunda/zunda/assets/character/metan
+    character_dir: ../../assets/character/metan
     blink_per_minute: 3
     blink_duration: 0.2
     position:
@@ -46,4 +46,4 @@ video:
     scale: 0.7
 dst_video_path: outputs/dst.mp4
 timeline_path: outputs/timeline.csv
-font: IPAexGothic
+font: Hiragino Maru Gothic
