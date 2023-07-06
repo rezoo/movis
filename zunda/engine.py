@@ -1,5 +1,5 @@
 import os
-from typing import Optional
+from typing import Optional, Callable
 
 from cachetools import LRUCache
 import ffmpeg
@@ -24,9 +24,9 @@ class Layer(object):
         self.position = position
         self.scale = transform_scale(scale)
         self.opacity = opacity
-        self.animations = []
+        self.animations: list[Callable[[float], AnimationProperty]] = []
 
-    def add_animation(self, animation: callable):
+    def add_animation(self, animation: Callable[[float], AnimationProperty]):
         self.animations.append(animation)
 
     def get_keys(self, time: float):
@@ -165,12 +165,12 @@ class Scene(object):
 
     def __init__(
             self, layers_config: list[dict], timeline: pd.DataFrame, size: tuple[int, int] = (1920, 1080)):
-        self.layers = []
-        self.name_to_layer = {}
+        self.layers: list[Layer] = []
+        self.name_to_layer: dict[str, Layer] = {}
         self.size = size
         self.timeline = timeline
 
-        self.cache = LRUCache(maxsize=128)
+        self.cache: LRUCache = LRUCache(maxsize=128)
 
         for layer in layers_config:
             kwargs = {
@@ -191,7 +191,7 @@ class Scene(object):
                 for layer_name, animation in animations:
                     self.name_to_layer[layer_name].add_animation(animation)
 
-    def add_layer(self, layer: any):
+    def add_layer(self, layer: Layer):
         if layer.name in self.name_to_layer:
             raise KeyError(f'Layer with name {layer.name} already exists')
         self.name_to_layer[layer.name] = layer

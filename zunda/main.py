@@ -54,7 +54,7 @@ def _insert_newlines(text: str, max_length: int) -> str:
     tagger = MeCab.Tagger()
     parsed = tagger.parse(text).split("\n")
     words = [p.split("\t")[0] for p in parsed[:-2]]
-    lines = []
+    lines: list[str] = []
     for w in words:
         if len(lines) == 0 or max_length < len(lines[-1]) + len(w):
             lines.append('')
@@ -98,7 +98,7 @@ def make_timeline_file(audio_dir: str, dst_timeline_path: str, max_length: int =
         return result
 
     txt_files = get_paths(audio_dir, '.txt')
-    frame = []
+    lines = []
     for txt_file in txt_files:
         raw_text = open(txt_file, 'r', encoding='utf-8-sig').read()
         if raw_text == '':
@@ -115,8 +115,8 @@ def make_timeline_file(audio_dir: str, dst_timeline_path: str, max_length: int =
             'hash': _get_hash_prefix(raw_text),
         }
         dic.update(get_extra_columns(raw_text))
-        frame.append(dic)
-    frame = pd.DataFrame(frame)
+        lines.append(dic)
+    frame = pd.DataFrame(lines)
     frame.to_csv(dst_timeline_path, index=False)
 
 

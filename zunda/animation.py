@@ -65,6 +65,7 @@ def parse_animation_command(
     animations = []
     for string in command.split(';'):
         match = re.match(pattern, string)
+        assert match is not None, f'Invalid command: {string}'
         layer_name = match.group(1)
         animation_name = match.group(2)
         duration = float(match.group(3))
