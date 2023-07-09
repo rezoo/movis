@@ -181,14 +181,16 @@ def init(args: argparse.Namespace):
                     'type': 'image',
                     'name': 'bg',
                     'img_path': os.path.join(asset_dir, 'bg2.png'),
-                    'position': [0, 0],
+                    'anchor_point': [0, 0],
+                    'position': [960, 540],
                     'scale': 1.0,
                 },
                 {
                     'type': 'slide',
                     'name': 'slide',
                     'slide_path': 'slide.pdf',
-                    'position': [250, 22],
+                    'anchor_point': [0, 0],
+                    'position': [960, 421],
                     'scale': 0.71,
                 },
                 {
@@ -197,7 +199,8 @@ def init(args: argparse.Namespace):
                     'character_dir': os.path.join(asset_dir, 'character', 'zunda'),
                     'blink_per_minute': 3,
                     'blink_duration': 0.2,
-                    'position': [1400, 300],
+                    'anchor_point': [0, 0],
+                    'position': [1779, 878],
                     'scale': 0.7,
                 },
                 {
@@ -206,7 +209,8 @@ def init(args: argparse.Namespace):
                     'character_dir': os.path.join(asset_dir, 'character', 'metan'),
                     'blink_per_minute': 3,
                     'blink_duration': 0.2,
-                    'position': [-300, 400],
+                    'anchor_point': [0, 0],
+                    'position': [79, 1037],
                     'scale': 0.7,
                 }
             ],

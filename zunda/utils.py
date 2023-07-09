@@ -5,7 +5,6 @@ from typing import Union
 import numpy as np
 import pandas as pd
 from pydub import AudioSegment
-from PIL import Image
 
 
 def get_paths(src_dir: str, ext: str) -> list[str]:
@@ -42,17 +41,7 @@ def rand_from_string(string: str, seed: int = 0) -> float:
     return np.random.RandomState(x).rand()
 
 
-def transform_position(x: Union[int, tuple[int, int], list[int]]) -> tuple[int, int]:
-    if isinstance(x, int):
-        return (x, x)
-    elif isinstance(x, list):
-        if len(x) != 2:
-            raise ValueError(f'len(x) must be 2: {len(x)}')
-        return (x[0], x[1])
-    return x
-
-
-def transform_scale(x: Union[float, tuple[float, float], list[float]]) -> tuple[float, float]:
+def normalize_2dvector(x: Union[float, tuple[float, float], list[float]]) -> tuple[float, float]:
     if isinstance(x, float):
         return (x, x)
     elif isinstance(x, list):
@@ -64,11 +53,3 @@ def transform_scale(x: Union[float, tuple[float, float], list[float]]) -> tuple[
             raise ValueError(f'len(x) must be 2: {len(x)}')
         return x
     raise TypeError(f'x must be float, tuple or list: {type(x)}')
-
-
-def resize(img: Image.Image, scale: tuple[float, float] = (1., 1.)) -> Image.Image:
-    if scale == (1., 1.):
-        return img
-    w, h = img.size
-    return img.resize(
-        (round(w * scale[0]), round(h * scale[1])), Image.Resampling.BICUBIC)

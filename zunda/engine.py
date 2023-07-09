@@ -9,38 +9,46 @@ import pandas as pd
 from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
-from zunda.utils import get_audio_dataframe, rand_from_string, resize, transform_scale, transform_position
-from zunda.animation import AnimationProperty, parse_animation_command
+
+from zunda.animation import parse_animation_command
+from zunda.utils import get_audio_dataframe, rand_from_string, normalize_2dvector
+from zunda.transform import TransformProperties, resize, alpha_composite
 
 
 class Layer(object):
 
     def __init__(
             self, name: str, timeline: pd.DataFrame,
-            scale: tuple[float, float] = (1., 1.), position: tuple[float, float] = (0., 0.),
+            anchor_point: tuple[float, float] = (0., 0.,),
+            position: tuple[float, float] = (0., 0.),
+            scale: tuple[float, float] = (1., 1.),
             opacity: float = 1.0):
         self.name = name
         self.timeline = timeline
-        self.position = position
-        self.scale = transform_scale(scale)
-        self.opacity = opacity
-        self.animations: list[Callable[[float], AnimationProperty]] = []
+        self.transform = TransformProperties(
+            anchor_point=normalize_2dvector(anchor_point),
+            position=normalize_2dvector(position),
+            scale=normalize_2dvector(scale),
+            opacity=opacity,
+        )
+        self.animations: list[Callable[[float], TransformProperties]] = []
 
-    def add_animation(self, animation: Callable[[float], AnimationProperty]):
+    def add_animation(self, animation: Callable[[float], TransformProperties]):
         self.animations.append(animation)
 
     def get_keys(self, time: float):
         return self.get_layer_property(time)
 
-    def get_layer_property(self, time: float) -> AnimationProperty:
-        prop = AnimationProperty(
-            position=self.position, scale=self.scale, opacity=self.opacity)
+    def get_layer_property(self, time: float) -> TransformProperties:
+        prop = self.transform
         for anim in self.animations:
             p = anim(time)
+            anchor_point = (prop.anchor_point[0] + p.anchor_point[0], prop.anchor_point[1] + p.anchor_point[1])
             position = (prop.position[0] + p.position[0], prop.position[1] + p.position[1])
             scale = (prop.scale[0] * p.scale[0], prop.scale[1] * p.scale[1])
             opacity = prop.opacity * p.opacity
-            prop = AnimationProperty(position=position, scale=scale, opacity=opacity)
+            prop = TransformProperties(
+                anchor_point=anchor_point, position=position, scale=scale, opacity=opacity)
         return prop
 
     def get_state(self, time: float) -> pd.Series:
@@ -176,8 +184,9 @@ class Scene(object):
             kwargs = {
                 'timeline': self.timeline,
                 'name': layer.pop('name'),
-                'position': transform_position(layer.pop('position')),
-                'scale': transform_scale(layer.pop('scale')),
+                'anchor_point': normalize_2dvector(layer.pop('anchor_point')),
+                'position': normalize_2dvector(layer.pop('position')),
+                'scale': normalize_2dvector(layer.pop('scale')),
             }
             cls = type_to_class[layer.pop('type')]
             kwargs.update(layer)
@@ -202,9 +211,13 @@ class Scene(object):
         if state is None:
             return base_img
         component = layer.render(time, state)
+        w, h = component.size
         p = layer.get_layer_property(time)
         component = resize(component, p.scale)
-        base_img.alpha_composite(component, (round(p.position[0]), round(p.position[1])))
+        x = p.position[0] - p.scale[0] * w / 2 - p.anchor_point[0]
+        y = p.position[1] - p.scale[1] * h / 2 - p.anchor_point[1]
+        alpha_composite(
+            base_img, component, position=(round(x), round(y)), opacity=p.opacity)
         return base_img
 
     def get_frame(self, time: float) -> Image.Image:
@@ -235,7 +248,7 @@ class Scene(object):
 
 def render_video(
         video_config: dict, timeline_path: str,
-        audio_dir: str, dst_video_path: str, fps: float = 30.0) -> None:
+        audio_dir: str, dst_video_path: str) -> None:
     timeline = pd.read_csv(timeline_path)
     audio_df = get_audio_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
