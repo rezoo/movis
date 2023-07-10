@@ -1,5 +1,5 @@
 import os
-from typing import Optional, Callable
+from typing import Optional, Callable, Any
 
 from cachetools import LRUCache
 import ffmpeg
@@ -36,7 +36,7 @@ class Layer(object):
     def add_animation(self, animation: Callable[[float], TransformProperty]):
         self.animations.append(animation)
 
-    def get_keys(self, time: float):
+    def get_keys(self, time: float) -> tuple[Any, ...]:
         return self.get_tranform_property(time)
 
     def get_tranform_property(self, time: float) -> TransformProperty:
@@ -85,9 +85,9 @@ class SlideLayer(Layer):
             slide_images.append(img)
         return slide_images
 
-    def get_keys(self, time: float):
+    def get_keys(self, time: float) -> tuple[Any, ...]:
         state = self.get_state(time)
-        slide_number = self.slide_timeline[state.name]
+        slide_number = int(self.slide_timeline[state.name])
         return super().get_keys(time) + (slide_number,)
 
     def render(self, time: float, state: pd.Series) -> Image.Image:
@@ -145,7 +145,7 @@ class CharacterLayer(Layer):
         else:
             return 0
 
-    def get_keys(self, time: float):
+    def get_keys(self, time: float) -> tuple[Any, ...]:
         state = self.get_state(time)
         emotion = self.character_timeline[state.name]
         eye = self.get_eye_state(time, state)
@@ -200,7 +200,7 @@ class Scene(object):
                 for layer_name, animation in animations:
                     self.name_to_layer[layer_name].add_animation(animation)
 
-    def add_layer(self, layer: Layer):
+    def add_layer(self, layer: Layer) -> None:
         if layer.name in self.name_to_layer:
             raise KeyError(f'Layer with name {layer.name} already exists')
         self.name_to_layer[layer.name] = layer
