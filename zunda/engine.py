@@ -51,13 +51,14 @@ class Layer(object):
                 anchor_point=anchor_point, position=position, scale=scale, opacity=opacity)
         return prop
 
-    def get_state(self, time: float) -> pd.Series:
-        subset = self.timeline[(self.timeline['start_time'] <= time) & (time < self.timeline['end_time'])]
-        if subset.empty:
+    def get_state(self, time: float) -> Optional[pd.Series]:
+        idx = self.timeline['start_time'].searchsorted(time, side='right') - 1
+        if idx >= 0 and self.timeline['end_time'].iloc[idx] > time:
+            return self.timeline.iloc[idx]
+        else:
             return None
-        return subset.iloc[0]
 
-    def render(self, time: float, state: pd.Series) -> Image.Image:
+    def render(self, time: float) -> Image.Image:
         raise NotImplementedError
 
 
@@ -67,7 +68,7 @@ class ImageLayer(Layer):
         super().__init__(*args, **kwargs)
         self.image = Image.open(img_path).convert('RGBA')
 
-    def render(self, time: float, state: pd.Series) -> Image.Image:
+    def render(self, time: float) -> Image.Image:
         return self.image
 
 
@@ -87,10 +88,12 @@ class SlideLayer(Layer):
 
     def get_keys(self, time: float) -> tuple[Any, ...]:
         state = self.get_state(time)
-        slide_number = int(self.slide_timeline[state.name])
-        return super().get_keys(time) + (slide_number,)
+        key = int(self.slide_timeline[state.name]) if state is not None else None
+        return super().get_keys(time) + (key,)
 
-    def render(self, time: float, state: pd.Series) -> Image.Image:
+    def render(self, time: float) -> Image.Image:
+        state = self.get_state(time)
+        assert state is not None
         slide_number = self.slide_timeline[state.name]
         return self.slide_images[slide_number]
 
@@ -147,11 +150,15 @@ class CharacterLayer(Layer):
 
     def get_keys(self, time: float) -> tuple[Any, ...]:
         state = self.get_state(time)
+        if state is None:
+            return super().get_keys(time) + (None, None)
         emotion = self.character_timeline[state.name]
         eye = self.get_eye_state(time, state)
         return super().get_keys(time) + (emotion, eye)
 
-    def render(self, time: float, state: pd.Series) -> Image.Image:
+    def render(self, time: float) -> Image.Image:
+        state = self.get_state(time)
+        assert state is not None
         emotion = self.character_timeline[state.name]
         base_img = self.character_imgs[emotion]
         if emotion in self.eye_imgs:
@@ -210,7 +217,7 @@ class Scene(object):
         state = layer.get_state(time)
         if state is None:
             return base_img
-        component = layer.render(time, state)
+        component = layer.render(time)
         w, h = component.size
         p = layer.get_tranform_property(time)
         component = resize(component, p.scale)
