@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 
 
-class TransformProperties(NamedTuple):
+class TransformProperty(NamedTuple):
 
     anchor_point: tuple[float, float] = (0., 0.)
     position: tuple[float, float] = (0., 0.)

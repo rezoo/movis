@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 from zunda.animation import parse_animation_command
 from zunda.utils import get_audio_dataframe, rand_from_string, normalize_2dvector
-from zunda.transform import TransformProperties, resize, alpha_composite
+from zunda.transform import TransformProperty, resize, alpha_composite
 
 
 class Layer(object):
@@ -25,21 +25,21 @@ class Layer(object):
             opacity: float = 1.0):
         self.name = name
         self.timeline = timeline
-        self.transform = TransformProperties(
+        self.transform = TransformProperty(
             anchor_point=normalize_2dvector(anchor_point),
             position=normalize_2dvector(position),
             scale=normalize_2dvector(scale),
             opacity=opacity,
         )
-        self.animations: list[Callable[[float], TransformProperties]] = []
+        self.animations: list[Callable[[float], TransformProperty]] = []
 
-    def add_animation(self, animation: Callable[[float], TransformProperties]):
+    def add_animation(self, animation: Callable[[float], TransformProperty]):
         self.animations.append(animation)
 
     def get_keys(self, time: float):
-        return self.get_layer_property(time)
+        return self.get_tranform_property(time)
 
-    def get_layer_property(self, time: float) -> TransformProperties:
+    def get_tranform_property(self, time: float) -> TransformProperty:
         prop = self.transform
         for anim in self.animations:
             p = anim(time)
@@ -47,7 +47,7 @@ class Layer(object):
             position = (prop.position[0] + p.position[0], prop.position[1] + p.position[1])
             scale = (prop.scale[0] * p.scale[0], prop.scale[1] * p.scale[1])
             opacity = prop.opacity * p.opacity
-            prop = TransformProperties(
+            prop = TransformProperty(
                 anchor_point=anchor_point, position=position, scale=scale, opacity=opacity)
         return prop
 
@@ -212,7 +212,7 @@ class Scene(object):
             return base_img
         component = layer.render(time, state)
         w, h = component.size
-        p = layer.get_layer_property(time)
+        p = layer.get_tranform_property(time)
         component = resize(component, p.scale)
         x = p.position[0] - p.scale[0] * w / 2 - p.anchor_point[0]
         y = p.position[1] - p.scale[1] * h / 2 - p.anchor_point[1]
@@ -220,7 +220,7 @@ class Scene(object):
             base_img, component, position=(round(x), round(y)), opacity=p.opacity)
         return base_img
 
-    def get_frame(self, time: float) -> Image.Image:
+    def render(self, time: float) -> Image.Image:
         keys = tuple([layer.get_keys(time) for layer in self.layers])
         if keys in self.cache:
             return self.cache[keys]
@@ -231,7 +231,7 @@ class Scene(object):
         self.cache[keys] = frame
         return frame
 
-    def render(
+    def make_video(
             self, dst_path: str, start_time: float = 0.0, end_time: Optional[float] = None,
             codec: str = 'libx264', fps: float = 30.0) -> None:
         if end_time is None:
@@ -240,7 +240,7 @@ class Scene(object):
         writer = imageio.get_writer(
             dst_path, fps=fps, codec=codec, macro_block_size=None)
         for t in tqdm(times, total=len(times)):
-            frame = np.asarray(self.get_frame(t))
+            frame = np.asarray(self.render(t))
             writer.append_data(frame)
         writer.close()
         self.cache.clear()
@@ -254,7 +254,7 @@ def render_video(
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
     size = (video_config['width'], video_config['height'])
     scene = Scene(video_config['layers'], timeline, size=size)
-    scene.render(dst_video_path, fps=video_config['fps'])
+    scene.make_video(dst_video_path, fps=video_config['fps'])
 
 
 def render_subtitle_video(
