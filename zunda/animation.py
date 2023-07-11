@@ -7,6 +7,8 @@ from zunda.transform import TransformProperty
 
 class Animation(object):
 
+    timing: str = 'in'
+
     def __init__(self, start_time: float, end_time: float, scale: float = 1.):
         self.start_time = start_time
         self.end_time = end_time
@@ -38,6 +40,8 @@ class FadeIn(Animation):
 
 class FadeOut(Animation):
 
+    timing: str = 'out'
+
     def animation_func(self, t: float) -> TransformProperty:
         return TransformProperty(opacity=1. - t)
 
@@ -62,7 +66,7 @@ class VerticalShake(Animation):
 
 def parse_animation_command(
         start_time: float, end_time: float, command: str) -> list[tuple[str, Animation]]:
-    pattern = r'(\w+)\.(\w+)\(([\d.e+-]+)\s+([\d.e+-]+)\)'
+    pattern = r'(\w+)\.(\w+)\(([\d.e+-]+)(?:\s+([\d.e+-]+))?\)'
     name_to_class = {
         'FadeIn': FadeIn,
         'FadeOut': FadeOut,
@@ -77,8 +81,22 @@ def parse_animation_command(
         layer_name = match.group(1)
         animation_name = match.group(2)
         duration = float(match.group(3))
-        scale = float(match.group(4))
+        scale = match.group(4)
         cls = name_to_class[animation_name]
-        obj = cls(start_time, start_time + duration, scale)
+        if cls.timing == 'in':
+            s0 = start_time
+            s1 = start_time + duration
+            assert s1 <= end_time, f'Invalid command: {string}'
+        elif cls.timing == 'out':
+            s0 = end_time - duration
+            s1 = end_time
+            assert start_time <= s0, f'Invalid command: {string}'
+        else:
+            raise ValueError(f'Invalid timing: {cls.timing}')
+
+        if scale is None:
+            obj = cls(s0, s1)
+        else:
+            obj = cls(s0, s1, float(scale))
         animations.append((layer_name, obj))
     return animations
