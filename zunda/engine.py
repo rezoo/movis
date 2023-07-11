@@ -169,24 +169,23 @@ class CharacterLayer(Layer):
         return base_img
 
 
-type_to_class = {
+type_to_layer_cls = {
     'image': ImageLayer,
     'slide': SlideLayer,
     'character': CharacterLayer,
 }
 
 
-class Scene(object):
+class Composition(Layer):
 
-    def __init__(
-            self, layers_config: list[dict], timeline: pd.DataFrame, size: tuple[int, int] = (1920, 1080)):
+    def __init__(self, size: tuple[int, int] = (1920, 1080), *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.layers: list[Layer] = []
         self.name_to_layer: dict[str, Layer] = {}
         self.size = size
-        self.timeline = timeline
-
         self.cache: LRUCache = LRUCache(maxsize=128)
 
+    def init_from_config(self, layers_config: list[dict]) -> None:
         for layer in layers_config:
             kwargs = {
                 'timeline': self.timeline,
@@ -195,12 +194,13 @@ class Scene(object):
                 'position': normalize_2dvector(layer.pop('position')),
                 'scale': normalize_2dvector(layer.pop('scale')),
             }
-            cls = type_to_class[layer.pop('type')]
+            cls = type_to_layer_cls[layer.pop('type')]
             kwargs.update(layer)
             self.add_layer(cls(**kwargs))
 
-        if 'animation' in timeline.columns:
-            anim_frame = timeline[timeline['animation'].notnull() & (timeline['animation'] != '')]
+        if 'animation' in self.timeline.columns:
+            anim_frame = self.timeline[
+                self.timeline['animation'].notnull() & (self.timeline['animation'] != '')]
             for _, row in anim_frame.iterrows():
                 animations = parse_animation_command(
                     row['start_time'], row['end_time'], row['animation'])
@@ -260,7 +260,8 @@ def render_video(
     audio_df = get_audio_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
     size = (video_config['width'], video_config['height'])
-    scene = Scene(video_config['layers'], timeline, size=size)
+    scene = Composition(name='main', timeline=timeline, size=size)
+    scene.init_from_config(video_config['layers'])
     scene.make_video(dst_video_path, fps=video_config['fps'])
 
 
