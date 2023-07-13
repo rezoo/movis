@@ -22,7 +22,7 @@ class Layer(object):
             anchor_point: tuple[float, float] = (0., 0.,),
             position: tuple[float, float] = (0., 0.),
             scale: tuple[float, float] = (1., 1.),
-            opacity: float = 1.0):
+            opacity: float = 1.0) -> None:
         self.name = name
         self.timeline = timeline
         self.transform = TransformProperty(
@@ -74,7 +74,7 @@ class ImageLayer(Layer):
 
 class SlideLayer(Layer):
 
-    def __init__(self, slide_path: str, slide_column: str = 'slide', *args, **kwargs):
+    def __init__(self, slide_path: str, slide_column: str = 'slide', *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.slide_timeline = np.cumsum(self.timeline[slide_column])
         self.slide_images = self._get_slide_imgs(slide_path)
@@ -103,7 +103,7 @@ class CharacterLayer(Layer):
     def __init__(
             self, character_dir: str, character_column: str = 'character',
             status_column: str = 'status', initial_status: str = 'n',
-            blink_per_minute: int = 3, blink_duration: float = 0.2, *args, **kwargs):
+            blink_per_minute: int = 3, blink_duration: float = 0.2, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.character_imgs = {}
         self.eye_imgs = {}
@@ -178,7 +178,7 @@ type_to_layer_cls = {
 
 class Composition(Layer):
 
-    def __init__(self, size: tuple[int, int] = (1920, 1080), *args, **kwargs):
+    def __init__(self, size: tuple[int, int] = (1920, 1080), *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.layers: list[Layer] = []
         self.name_to_layer: dict[str, Layer] = {}
@@ -206,6 +206,11 @@ class Composition(Layer):
                     row['start_time'], row['end_time'], row['animation'])
                 for layer_name, animation in animations:
                     self.name_to_layer[layer_name].add_animation(animation)
+
+    def get_keys(self, time: float) -> tuple[Any, ...]:
+        self_key = super().get_keys(time)
+        layer_keys = tuple(layer.get_keys(time) for layer in self.layers)
+        return self_key + layer_keys
 
     def add_layer(self, layer: Layer) -> None:
         if layer.name in self.name_to_layer:
