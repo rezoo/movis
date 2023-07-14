@@ -19,18 +19,10 @@ class Layer(object):
 
     def __init__(
             self, name: str, timeline: pd.DataFrame,
-            anchor_point: tuple[float, float] = (0., 0.,),
-            position: tuple[float, float] = (0., 0.),
-            scale: tuple[float, float] = (1., 1.),
-            opacity: float = 1.0) -> None:
+            transform: TransformProperty = TransformProperty()) -> None:
         self.name = name
         self.timeline = timeline
-        self.transform = TransformProperty(
-            anchor_point=normalize_2dvector(anchor_point),
-            position=normalize_2dvector(position),
-            scale=normalize_2dvector(scale),
-            opacity=opacity,
-        )
+        self.transform = transform
         self.animations: list[Callable[[float], TransformProperty]] = []
 
     def add_animation(self, animation: Callable[[float], TransformProperty]):
@@ -64,8 +56,10 @@ class Layer(object):
 
 class ImageLayer(Layer):
 
-    def __init__(self, img_path: str, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(
+            self, name: str, timeline: pd.DataFrame,
+            img_path: str, *args, **kwargs) -> None:
+        super().__init__(name, timeline, *args, **kwargs)
         self.image = Image.open(img_path).convert('RGBA')
 
     def render(self, time: float) -> Image.Image:
@@ -74,8 +68,10 @@ class ImageLayer(Layer):
 
 class SlideLayer(Layer):
 
-    def __init__(self, slide_path: str, slide_column: str = 'slide', *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(
+            self, name: str, timeline: pd.DataFrame,
+            slide_path: str, slide_column: str = 'slide', *args, **kwargs) -> None:
+        super().__init__(name, timeline, *args, **kwargs)
         self.slide_timeline = np.cumsum(self.timeline[slide_column])
         self.slide_images = self._get_slide_imgs(slide_path)
 
@@ -101,10 +97,11 @@ class SlideLayer(Layer):
 class CharacterLayer(Layer):
 
     def __init__(
-            self, character_dir: str, character_column: str = 'character',
+            self, name: str, timeline: pd.DataFrame,
+            character_dir: str, character_column: str = 'character',
             status_column: str = 'status', initial_status: str = 'n',
             blink_per_minute: int = 3, blink_duration: float = 0.2, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(name, timeline, *args, **kwargs)
         self.character_imgs = {}
         self.eye_imgs = {}
         emotions = set(self.timeline[self.timeline[character_column] == self.name][status_column].unique())
@@ -178,8 +175,10 @@ type_to_layer_cls = {
 
 class Composition(Layer):
 
-    def __init__(self, size: tuple[int, int] = (1920, 1080), *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(
+            self, name: str, timeline: pd.DataFrame,
+            size: tuple[int, int] = (1920, 1080), *args, **kwargs) -> None:
+        super().__init__(name, timeline, *args, **kwargs)
         self.layers: list[Layer] = []
         self.name_to_layer: dict[str, Layer] = {}
         self.size = size
@@ -190,9 +189,12 @@ class Composition(Layer):
             kwargs = {
                 'timeline': self.timeline,
                 'name': layer.pop('name'),
-                'anchor_point': normalize_2dvector(layer.pop('anchor_point')),
-                'position': normalize_2dvector(layer.pop('position')),
-                'scale': normalize_2dvector(layer.pop('scale')),
+                'transform': TransformProperty(
+                    anchor_point=normalize_2dvector(layer.pop('anchor_point', 0.)),
+                    position=normalize_2dvector(layer.pop('position', (self.size[0] / 2, self.size[1] / 2))),
+                    scale=normalize_2dvector(layer.pop('scale', 1.)),
+                    opacity=layer.pop('opacity', 1.),
+                ),
             }
             cls = type_to_layer_cls[layer.pop('type')]
             kwargs.update(layer)
