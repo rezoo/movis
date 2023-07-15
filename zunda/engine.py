@@ -11,7 +11,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from zunda.animation import parse_animation_command
-from zunda.utils import get_audio_dataframe, rand_from_string, normalize_2dvector
+from zunda.utils import get_voicevox_dataframe, rand_from_string, normalize_2dvector
 from zunda.transform import TransformProperty, resize, alpha_composite
 
 
@@ -50,6 +50,10 @@ class Layer(object):
         else:
             return None
 
+    @property
+    def duration(self):
+        return self.timeline['end_time'].max()
+
     def render(self, time: float) -> Image.Image:
         raise NotImplementedError
 
@@ -58,8 +62,8 @@ class ImageLayer(Layer):
 
     def __init__(
             self, name: str, timeline: pd.DataFrame,
-            img_path: str, *args, **kwargs) -> None:
-        super().__init__(name, timeline, *args, **kwargs)
+            img_path: str, transform: TransformProperty = TransformProperty()) -> None:
+        super().__init__(name, timeline, transform)
         self.image = Image.open(img_path).convert('RGBA')
 
     def render(self, time: float) -> Image.Image:
@@ -70,8 +74,9 @@ class SlideLayer(Layer):
 
     def __init__(
             self, name: str, timeline: pd.DataFrame,
-            slide_path: str, slide_column: str = 'slide', *args, **kwargs) -> None:
-        super().__init__(name, timeline, *args, **kwargs)
+            slide_path: str, slide_column: str = 'slide',
+            transform: TransformProperty = TransformProperty()) -> None:
+        super().__init__(name, timeline, transform)
         self.slide_timeline = np.cumsum(self.timeline[slide_column])
         self.slide_images = self._get_slide_imgs(slide_path)
 
@@ -100,8 +105,9 @@ class CharacterLayer(Layer):
             self, name: str, timeline: pd.DataFrame,
             character_dir: str, character_column: str = 'character',
             status_column: str = 'status', initial_status: str = 'n',
-            blink_per_minute: int = 3, blink_duration: float = 0.2, *args, **kwargs) -> None:
-        super().__init__(name, timeline, *args, **kwargs)
+            blink_per_minute: int = 3, blink_duration: float = 0.2,
+            transform: TransformProperty = TransformProperty()) -> None:
+        super().__init__(name, timeline, transform)
         self.character_imgs = {}
         self.eye_imgs = {}
         emotions = set(self.timeline[self.timeline[character_column] == self.name][status_column].unique())
@@ -249,7 +255,7 @@ class Composition(Layer):
             self, dst_path: str, start_time: float = 0.0, end_time: Optional[float] = None,
             codec: str = 'libx264', fps: float = 30.0) -> None:
         if end_time is None:
-            end_time = self.timeline['end_time'].max()
+            end_time = self.duration
         times = np.arange(start_time, end_time, 1. / fps)
         writer = imageio.get_writer(
             dst_path, fps=fps, codec=codec, macro_block_size=None)
@@ -264,7 +270,7 @@ def render_video(
         video_config: dict, timeline_path: str,
         audio_dir: str, dst_video_path: str) -> None:
     timeline = pd.read_csv(timeline_path)
-    audio_df = get_audio_dataframe(audio_dir)
+    audio_df = get_voicevox_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
     size = (video_config['width'], video_config['height'])
     scene = Composition(name='main', timeline=timeline, size=size)

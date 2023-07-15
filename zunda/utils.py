@@ -18,7 +18,7 @@ def get_audio_length(filename: str) -> float:
     return audio.duration_seconds
 
 
-def get_audio_dataframe(audio_dir: str) -> pd.DataFrame:
+def get_voicevox_dataframe(audio_dir: str) -> pd.DataFrame:
     wav_files = get_paths(audio_dir, '.wav')
     frame = []
     start_time = 0.0
