@@ -186,7 +186,7 @@ class Composition(Layer):
         self.size = size
         self.cache: LRUCache = LRUCache(maxsize=128)
 
-    def init_from_config(self, layers_config: list[dict]) -> None:
+    def add_layers_from_config(self, layers_config: list[dict]) -> None:
         for cfg in layers_config:
             name = cfg.pop('name')
             kwargs = {'timeline': self.timeline}
@@ -294,7 +294,7 @@ def render_video(
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
     size = (video_config['width'], video_config['height'])
     scene = Composition(timeline=timeline, size=size)
-    scene.init_from_config(video_config['layers'])
+    scene.add_layers_from_config(video_config['layers'])
     scene.make_video(dst_video_path, fps=video_config['fps'])
 
 
