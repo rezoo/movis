@@ -207,10 +207,6 @@ class Composition(Layer):
             layer = layer_cls(**kwargs)
             self.add_layer(layer, name, transform)
 
-        animations = make_animations_from_timeline(self.timeline)
-        for layer_name, animation in animations:
-            self.add_animation(layer_name, animation)
-
     def get_keys(self, time: float) -> tuple[Any, ...]:
         layer_keys = []
         for layer_with_prop in self.layers:
@@ -301,6 +297,9 @@ def render_video(
     size = (video_config['width'], video_config['height'])
     scene = Composition(timeline=timeline, size=size)
     scene.add_layers_from_config(video_config['layers'])
+    animations = make_animations_from_timeline(timeline)
+    for layer_name, animation in animations:
+        scene.add_animation(layer_name, animation)
     scene.make_video(dst_video_path, fps=video_config['fps'])
 
 
