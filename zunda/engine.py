@@ -11,8 +11,8 @@ from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
 
-from zunda.animation import Animation, parse_animation_command
-from zunda.utils import get_voicevox_dataframe, rand_from_string, normalize_2dvector
+from zunda.animation import Animation, make_animations_from_timeline, parse_animation_command
+from zunda.utils import get_voicevox_dataframe, rand_from_string
 from zunda.transform import Transform, resize, alpha_composite
 
 
@@ -190,10 +190,10 @@ class Composition(Layer):
         for cfg in layers_config:
             name = cfg.pop('name')
             kwargs = {'timeline': self.timeline}
-            transform = Transform(
-                anchor_point=normalize_2dvector(cfg.pop('anchor_point', 0.)),
-                position=normalize_2dvector(cfg.pop('position', (self.size[0] / 2, self.size[1] / 2))),
-                scale=normalize_2dvector(cfg.pop('scale', 1.)),
+            transform = Transform.create(
+                anchor_point=cfg.pop('anchor_point', 0.),
+                position=cfg.pop('position', (self.size[0] / 2, self.size[1] / 2)),
+                scale=cfg.pop('scale', 1.),
                 opacity=cfg.pop('opacity', 1.),
             )
             layer_cls = type_to_layer_cls[cfg.pop('type')]
@@ -201,14 +201,9 @@ class Composition(Layer):
             layer = layer_cls(**kwargs)
             self.add_layer(layer, name, transform)
 
-        if 'animation' in self.timeline.columns:
-            anim_frame = self.timeline[
-                self.timeline['animation'].notnull() & (self.timeline['animation'] != '')]
-            for _, row in anim_frame.iterrows():
-                animations = parse_animation_command(
-                    row['start_time'], row['end_time'], row['animation'])
-                for layer_name, animation in animations:
-                    self.add_animation(layer_name, animation)
+        animations = make_animations_from_timeline(self.timeline)
+        for layer_name, animation in animations:
+            self.add_animation(layer_name, animation)
 
     def get_keys(self, time: float) -> tuple[Any, ...]:
         layer_keys = []

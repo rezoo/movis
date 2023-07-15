@@ -3,6 +3,7 @@ from zunda.animation import ( # noqa
     FadeIn, FadeOut,
     BounceUp,
     HorizontalShake, VerticalShake,
+    make_animations_from_timeline,
 )
 
 from zunda.engine import ( # noqa

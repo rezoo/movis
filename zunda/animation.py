@@ -1,6 +1,7 @@
 import re
 
 import numpy as np
+import pandas as pd
 
 from zunda.transform import Transform
 
@@ -99,4 +100,17 @@ def parse_animation_command(
         else:
             obj = cls(s0, s1, float(scale))
         animations.append((layer_name, obj))
+    return animations
+
+
+def make_animations_from_timeline(timeline: pd.DataFrame, animation_column: str = 'animation') -> list[tuple[str, Animation]]:
+    animations: list[tuple[str, Animation]] = []
+    if animation_column not in timeline.columns:
+        return animations
+    anim_frame = timeline[
+        timeline[animation_column].notnull() & (timeline[animation_column] != '')]
+    for _, row in anim_frame.iterrows():
+        anim_t = parse_animation_command(row['start_time'], row['end_time'], row[animation_column])
+        for layer_name, animation in anim_t:
+            animations.append((layer_name, animation))
     return animations
