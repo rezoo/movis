@@ -51,7 +51,8 @@ class ImageLayer(Layer):
 
     def __init__(self, timeline: pd.DataFrame, img_path: str) -> None:
         super().__init__(timeline)
-        self.image = Image.open(img_path).convert('RGBA')
+        self.image: Optional[Image.Image] = None
+        self.img_path = img_path
 
     def get_keys(self, time: float) -> tuple[int]:
         state = self.get_state(time)
@@ -59,6 +60,8 @@ class ImageLayer(Layer):
         return (key,)
 
     def render(self, time: float) -> Image.Image:
+        if self.image is None:
+            self.image = Image.open(self.img_path).convert('RGBA')
         return self.image
 
 
@@ -69,11 +72,8 @@ class SlideLayer(Layer):
             slide_path: str, slide_column: str = 'slide') -> None:
         super().__init__(timeline)
         self.slide_timeline = np.cumsum(self.timeline[slide_column])
-        slide_images = []
-        for img in convert_from_path(slide_path):
-            img = img.convert('RGBA')
-            slide_images.append(img)
-        self.slide_images = slide_images
+        self.slide_path = slide_path
+        self.slide_images: Optional[list[Image.Image]] = None
 
     def get_keys(self, time: float) -> tuple[Any, ...]:
         state = self.get_state(time)
@@ -84,6 +84,12 @@ class SlideLayer(Layer):
         state = self.get_state(time)
         assert state is not None
         slide_number = self.slide_timeline[state.name]
+        if self.slide_images is None:
+            slide_images = []
+            for img in convert_from_path(self.slide_path):
+                img = img.convert('RGBA')
+                slide_images.append(img)
+            self.slide_images = slide_images
         return self.slide_images[slide_number]
 
 
@@ -96,8 +102,8 @@ class CharacterLayer(Layer):
             blink_per_minute: int = 3, blink_duration: float = 0.2) -> None:
         super().__init__(timeline)
         self.character_name = character_name
-        self.character_imgs = {}
-        self.eye_imgs = {}
+        self.character_imgs: dict[str, Image.Image] = {}
+        self.eye_imgs: dict[str, list[Image.Image]] = {}
         emotions = set(self.timeline[
             self.timeline[character_column] == character_name][status_column].unique())
         emotions.add(initial_status)
@@ -113,7 +119,7 @@ class CharacterLayer(Layer):
                         eyes.append(Image.open(os.path.join(character_dir, f)).convert('RGBA'))
                 self.eye_imgs[emotion] = eyes
 
-        self.character_timeline = []
+        self.character_timeline: list[str] = []
         status = initial_status
         for _, row in self.timeline.iterrows():
             if row[character_column] == character_name:
