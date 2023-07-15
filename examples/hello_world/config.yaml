@@ -35,6 +35,7 @@ video:
   - type: character
     name: zunda
     character_dir: ../../assets/character/zunda
+    character_name: zunda
     blink_per_minute: 3
     blink_duration: 0.2
     anchor_point:
@@ -47,6 +48,7 @@ video:
   - type: character
     name: metan
     character_dir: ../../assets/character/metan
+    character_name: metan
     blink_per_minute: 3
     blink_duration: 0.2
     anchor_point:
