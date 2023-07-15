@@ -10,7 +10,7 @@ from zunda.engine import ( # noqa
 )
 
 from zunda.transform import ( # noqa
-    TransformProperty,
+    Transform,
     resize, alpha_composite,
 )
 

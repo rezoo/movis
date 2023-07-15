@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 from zunda.animation import Animation, parse_animation_command
 from zunda.utils import get_voicevox_dataframe, rand_from_string, normalize_2dvector
-from zunda.transform import TransformProperty, resize, alpha_composite
+from zunda.transform import Transform, resize, alpha_composite
 
 
 class Layer(object):
@@ -172,7 +172,7 @@ class LayerWithProperty(NamedTuple):
 
     name: str
     layer: Layer
-    transform: TransformProperty = TransformProperty()
+    transform: Transform = Transform()
     offset: float = 0.
 
 
@@ -190,7 +190,7 @@ class Composition(Layer):
         for cfg in layers_config:
             name = cfg.pop('name')
             kwargs = {'timeline': self.timeline}
-            transform = TransformProperty(
+            transform = Transform(
                 anchor_point=normalize_2dvector(cfg.pop('anchor_point', 0.)),
                 position=normalize_2dvector(cfg.pop('position', (self.size[0] / 2, self.size[1] / 2))),
                 scale=normalize_2dvector(cfg.pop('scale', 1.)),
@@ -199,7 +199,7 @@ class Composition(Layer):
             layer_cls = type_to_layer_cls[cfg.pop('type')]
             kwargs.update(cfg)
             layer = layer_cls(**kwargs)
-            self.add_layer(name, layer, transform)
+            self.add_layer(layer, name, transform)
 
         if 'animation' in self.timeline.columns:
             anim_frame = self.timeline[
@@ -218,11 +218,13 @@ class Composition(Layer):
 
             t = time - layer_with_prop.offset
             animations = self.animations[layer_with_prop.name]
-            prop = self.transform_property(transform, animations, t)
+            prop = self.animate_property(transform, animations, t)
             layer_keys.append(prop + layer.get_keys(t))
         return tuple(layer_keys)
 
-    def add_layer(self, name: str, layer: Layer, transform: TransformProperty) -> None:
+    def add_layer(self, layer: Layer, name: str = '', transform: Transform = Transform()) -> None:
+        if name == '':
+            name = f'layer_{len(self.layers)}'
         if name in self.name_to_layer:
             raise KeyError(f'Layer with name {name} already exists')
         layer_with_prop = LayerWithProperty(name, layer, transform)
@@ -234,7 +236,8 @@ class Composition(Layer):
             raise KeyError(f'Layer with name {name} does not exist')
         self.animations[name].append(animation)
 
-    def transform_property(self, transform: TransformProperty, animations: Iterable[Animation], time: float) -> TransformProperty:
+    def animate_property(
+            self, transform: Transform, animations: Iterable[Animation], time: float) -> Transform:
         prop = transform
         for anim in animations:
             p = anim(time)
@@ -242,7 +245,7 @@ class Composition(Layer):
             position = (prop.position[0] + p.position[0], prop.position[1] + p.position[1])
             scale = (prop.scale[0] * p.scale[0], prop.scale[1] * p.scale[1])
             opacity = prop.opacity * p.opacity
-            prop = TransformProperty(
+            prop = Transform(
                 anchor_point=anchor_point, position=position, scale=scale, opacity=opacity)
         return prop
 
@@ -253,7 +256,7 @@ class Composition(Layer):
             return base_img
         component = layer.layer.render(t)
         w, h = component.size
-        p = self.transform_property(layer.transform, animations, t)
+        p = self.animate_property(layer.transform, animations, t)
         component = resize(component, p.scale)
         x = p.position[0] - p.scale[0] * w / 2 - p.anchor_point[0]
         y = p.position[1] - p.scale[1] * h / 2 - p.anchor_point[1]

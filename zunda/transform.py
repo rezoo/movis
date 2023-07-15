@@ -1,15 +1,30 @@
-from typing import NamedTuple
+from typing import NamedTuple, Union
 
 import numpy as np
 from PIL import Image
 
+from zunda.utils import normalize_2dvector
 
-class TransformProperty(NamedTuple):
+
+class Transform(NamedTuple):
 
     anchor_point: tuple[float, float] = (0., 0.)
     position: tuple[float, float] = (0., 0.)
     scale: tuple[float, float] = (1., 1.)
     opacity: float = 1.
+
+    @staticmethod
+    def create(
+            anchor_point: Union[float, tuple[float, float], list[float]] = (0., 0.),
+            position: Union[float, tuple[float, float], list[float]] = (0., 0.),
+            scale: Union[float, tuple[float, float], list[float]] = (1., 1.),
+            opacity: float = 1.) -> 'Transform':
+        return Transform(
+            anchor_point=normalize_2dvector(anchor_point),
+            position=normalize_2dvector(position),
+            scale=normalize_2dvector(scale),
+            opacity=float(opacity),
+        )
 
 
 def resize(img: Image.Image, scale: tuple[float, float] = (1., 1.)) -> Image.Image:

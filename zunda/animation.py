@@ -2,7 +2,7 @@ import re
 
 import numpy as np
 
-from zunda.transform import TransformProperty
+from zunda.transform import Transform
 
 
 class Animation(object):
@@ -18,50 +18,50 @@ class Animation(object):
     def duration(self) -> float:
         return self.end_time - self.start_time
 
-    def __call__(self, time: float) -> TransformProperty:
+    def __call__(self, time: float) -> Transform:
         if time < self.start_time or self.end_time <= time:
-            return TransformProperty()
+            return Transform()
         p = self.animation_func((time - self.start_time) / self.duration)
-        return TransformProperty(
+        return Transform(
             position=(p.position[0] * self.scale, p.position[1] * self.scale),
             scale=(p.scale[0], p.scale[1]),
             opacity=p.opacity,
         )
 
-    def animation_func(self, t: float) -> TransformProperty:
-        return TransformProperty()
+    def animation_func(self, t: float) -> Transform:
+        return Transform()
 
 
 class FadeIn(Animation):
 
-    def animation_func(self, t: float) -> TransformProperty:
-        return TransformProperty(opacity=t)
+    def animation_func(self, t: float) -> Transform:
+        return Transform(opacity=t)
 
 
 class FadeOut(Animation):
 
     timing: str = 'out'
 
-    def animation_func(self, t: float) -> TransformProperty:
-        return TransformProperty(opacity=1. - t)
+    def animation_func(self, t: float) -> Transform:
+        return Transform(opacity=1. - t)
 
 
 class BounceUp(Animation):
 
-    def animation_func(self, t: float) -> TransformProperty:
-        return TransformProperty(position=(0., - float(np.abs(np.sin(t * np.pi * 2)))))
+    def animation_func(self, t: float) -> Transform:
+        return Transform(position=(0., - float(np.abs(np.sin(t * np.pi * 2)))))
 
 
 class HorizontalShake(Animation):
 
-    def animation_func(self, t: float) -> TransformProperty:
-        return TransformProperty(position=(np.sin(t * np.pi * 15), 0.))
+    def animation_func(self, t: float) -> Transform:
+        return Transform(position=(np.sin(t * np.pi * 15), 0.))
 
 
 class VerticalShake(Animation):
 
-    def animation_func(self, t: float) -> TransformProperty:
-        return TransformProperty(position=(0., np.sin(t * np.pi * 15)))
+    def animation_func(self, t: float) -> Transform:
+        return Transform(position=(0., np.sin(t * np.pi * 15)))
 
 
 def parse_animation_command(
