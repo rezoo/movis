@@ -11,7 +11,7 @@ from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
 
-from zunda.animation import Animation, make_animations_from_timeline, parse_animation_command
+from zunda.animation import Animation, make_animations_from_timeline
 from zunda.utils import get_voicevox_dataframe, rand_from_string
 from zunda.transform import Transform, resize, alpha_composite
 
