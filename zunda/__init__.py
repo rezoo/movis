@@ -15,4 +15,4 @@ from zunda.transform import ( # noqa
     resize, alpha_composite,
 )
 
-from zunda.utils import get_voicevox_dataframe  # noqa
+from zunda.utils import make_voicevox_dataframe  # noqa

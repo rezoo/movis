@@ -12,7 +12,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from zunda.animation import Animation, make_animations_from_timeline
-from zunda.utils import get_voicevox_dataframe, rand_from_string
+from zunda.utils import make_voicevox_dataframe, rand_from_string
 from zunda.transform import Transform, resize, alpha_composite
 
 
@@ -292,7 +292,7 @@ def render_video(
         video_config: dict, timeline_path: str,
         audio_dir: str, dst_video_path: str) -> None:
     timeline = pd.read_csv(timeline_path)
-    audio_df = get_voicevox_dataframe(audio_dir)
+    audio_df = make_voicevox_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
     size = (video_config['width'], video_config['height'])
     scene = Composition(timeline=timeline, size=size)
