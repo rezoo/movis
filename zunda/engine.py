@@ -255,8 +255,8 @@ class Composition(Layer):
         w, h = component.size
         p = self.animate_property(layer.transform, animations, t)
         component = resize(component, p.scale)
-        x = p.position[0] - p.scale[0] * w / 2 - p.anchor_point[0]
-        y = p.position[1] - p.scale[1] * h / 2 - p.anchor_point[1]
+        x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
+        y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
         alpha_composite(
             base_img, component, position=(round(x), round(y)), opacity=p.opacity)
         return base_img
