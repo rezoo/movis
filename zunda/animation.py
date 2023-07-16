@@ -1,4 +1,5 @@
 import re
+from typing import Optional, TypeVar, Union, Generic, Tuple
 
 import numpy as np
 import pandas as pd
@@ -6,31 +7,96 @@ import pandas as pd
 from zunda.transform import Transform
 
 
-class Animation(object):
+T = TypeVar('T', float, Tuple[float, float])
 
-    timing: str = 'in'
 
-    def __init__(self, start_time: float, end_time: float, scale: float = 1.):
-        self.start_time = start_time
-        self.end_time = end_time
-        self.scale = scale
+class SingleAnimation(Generic[T]):
+
+    def __init__(self, time_range: tuple[float, float], value_range: tuple[T, T], type: str = 'linear'):
+        self.time_range = time_range
+        self.value_range: tuple[T, T] = value_range
+        self.type = type
+        if type != 'linear':
+            raise NotImplementedError
 
     @property
     def duration(self) -> float:
-        return self.end_time - self.start_time
+        return self.time_range[1] - self.time_range[0]
 
-    def __call__(self, time: float) -> Transform:
-        if time < self.start_time or self.end_time <= time:
-            return Transform()
-        p = self.animation_func((time - self.start_time) / self.duration)
-        return Transform(
-            position=(p.position[0] * self.scale, p.position[1] * self.scale),
-            scale=(p.scale[0], p.scale[1]),
-            opacity=p.opacity,
-        )
+    def __call__(self, time: float) -> T:
+        m, M = self.value_range
+        if time < self.time_range[0]:
+            return m
+        elif self.time_range[1] <= time:
+            return M
+        p = (time - self.time_range[0]) / self.duration
 
-    def animation_func(self, t: float) -> Transform:
-        return Transform()
+        if isinstance(m, float) and isinstance(M, float):
+            return float(m + (M - m) * p)
+        elif isinstance(m, tuple) and isinstance(M, tuple):
+            return (m[0] + (M[0] - m[0]) * p, m[1] + (M[1] - m[1]) * p)
+        else:
+            raise ValueError(f'Unexpected value: {m}, {M}')
+
+
+class AnimationSequence(Generic[T]):
+
+    def __init__(self, timeline: pd.DataFrame):
+        if 'type' not in timeline.columns:
+            timeline['type'] = 'linear'
+        frame = pd.DataFrame({
+            'start_time': timeline['time'][:-1].values,
+            'end_time': timeline['time'][1:].values,
+        })
+        if 'value' in timeline.columns:
+            value_type = 'scalar'
+            frame['start_value'] = timeline['value'][:-1].values
+            frame['end_value'] = timeline['value'][1:].values
+        elif set(['value_x', 'value_y']).issubset(timeline.columns):
+            value_type = '2dvector'
+            frame['start_value_x'] = timeline['value_x'][:-1].values
+            frame['start_value_y'] = timeline['value_y'][:-1].values
+            frame['end_value_x'] = timeline['value_x'][1:].values
+            frame['end_value_y'] = timeline['value_y'][1:].values
+        else:
+            raise ValueError(f'{timeline.columns} do not contain (start_value, end_value) '
+                             'or (start_value_x, end_value_x, start_value_y, end_value_y))')
+        self.timeline = frame
+        self.animations: list[SingleAnimation[T]] = []
+        for _, row in self.timeline.iterrows():
+            time_range = (row['start_time'], row['end_time'])
+            if value_type == 'scalar':
+                value_range = (row['start_value'], row['end_value'])
+            elif value_type == '2dvector':
+                value_range = (
+                    (row['start_value_x'], row['start_value_y']),
+                    (row['end_value_x'], row['end_value_y']))
+            else:
+                raise ValueError(f'Unexpected value: {row}')
+            self.animations.append(SingleAnimation(time_range, value_range, type=row['type']))
+        self.time_range = (self.timeline['start_time'].min(), self.timeline['end_time'].max())
+
+    @property
+    def duration(self) -> float:
+        return self.time_range[1] - self.time_range[0]
+
+    def get_state(self, time: float) -> Optional[pd.Series]:
+        idx = self.timeline['start_time'].searchsorted(time, side='right') - 1
+        if idx >= 0 and self.timeline['end_time'].iloc[idx] > time:
+            return self.timeline.iloc[idx]
+        else:
+            return None
+
+    def __call__(self, time: float) -> T:
+        if time < self.time_range[0]:
+            return self.animations[0].value_range[0]
+        elif self.time_range[1] <= time:
+            return self.animations[-1].value_range[1]
+        else:
+            row = self.get_state(time)
+            assert row is not None, f'Unexpected error: {time}'
+            animation = self.animations[row.index]
+            return animation(time)
 
 
 class FadeIn(Animation):
