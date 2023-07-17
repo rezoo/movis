@@ -12,7 +12,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from zunda.animation import Animation, make_animations_from_timeline
-from zunda.utils import get_voicevox_dataframe, rand_from_string
+from zunda.utils import make_voicevox_dataframe, rand_from_string
 from zunda.transform import Transform, resize, alpha_composite
 
 
@@ -255,8 +255,8 @@ class Composition(Layer):
         w, h = component.size
         p = self.animate_property(layer.transform, animations, t)
         component = resize(component, p.scale)
-        x = p.position[0] - p.scale[0] * w / 2 - p.anchor_point[0]
-        y = p.position[1] - p.scale[1] * h / 2 - p.anchor_point[1]
+        x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
+        y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
         alpha_composite(
             base_img, component, position=(round(x), round(y)), opacity=p.opacity)
         return base_img
@@ -292,7 +292,7 @@ def render_video(
         video_config: dict, timeline_path: str,
         audio_dir: str, dst_video_path: str) -> None:
     timeline = pd.read_csv(timeline_path)
-    audio_df = get_voicevox_dataframe(audio_dir)
+    audio_df = make_voicevox_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
     size = (video_config['width'], video_config['height'])
     scene = Composition(timeline=timeline, size=size)
