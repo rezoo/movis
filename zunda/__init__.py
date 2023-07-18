@@ -9,7 +9,7 @@ from zunda.action import ( # noqa
 )
 
 from zunda.layer import ( # noqa
-    Composition, Layer, ImageLayer, SlideLayer, CharacterLayer,
+    Composition, Layer, ImageLayer, VideoLayer, SlideLayer, CharacterLayer,
 )
 
 from zunda.transform import ( # noqa

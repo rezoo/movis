@@ -10,11 +10,24 @@ from PIL import Image
 from tqdm import tqdm
 
 from zunda.motion import Motion, MotionSequence
-from zunda.utils import rand_from_string
+from zunda.utils import normalize_2dvector, rand_from_string
 from zunda.transform import Transform, resize, alpha_composite
 
 
 class Layer(object):
+
+    @property
+    def duration(self):
+        raise NotImplementedError
+
+    def get_keys(self, time: float) -> tuple[Any, ...]:
+        raise NotImplementedError
+
+    def render(self, time: float) -> Image.Image:
+        raise NotImplementedError
+
+
+class TimelineLayer(Layer):
 
     def __init__(self, timeline: pd.DataFrame) -> None:
         self.timeline = timeline
@@ -27,25 +40,11 @@ class Layer(object):
             return None
 
     @property
-    def start_time(self):
-        return self.timeline['start_time'].min()
-
-    @property
-    def end_time(self):
-        return self.timeline['end_time'].max()
-
-    @property
     def duration(self):
         return self.timeline['end_time'].max() - self.timeline['start_time'].min()
 
-    def get_keys(self, time: float) -> tuple[Any, ...]:
-        raise NotImplementedError
 
-    def render(self, time: float) -> Image.Image:
-        raise NotImplementedError
-
-
-class ImageLayer(Layer):
+class ImageLayer(TimelineLayer):
 
     def __init__(self, timeline: pd.DataFrame, img_path: str) -> None:
         super().__init__(timeline)
@@ -63,7 +62,33 @@ class ImageLayer(Layer):
         return self.image
 
 
-class SlideLayer(Layer):
+class VideoLayer(Layer):
+
+    def __init__(self, video_path: str) -> None:
+        self.video_path = video_path
+        self.reader = imageio.get_reader(video_path)
+        meta_data = self.reader.get_meta_data()
+        self.fps = meta_data['fps']
+        self.n_frames = meta_data['nframes']
+        self._duration = meta_data['duration']
+
+    @property
+    def duration(self):
+        return self._duration
+
+    def get_keys(self, time: float):
+        if time < 0 or self.duration < time:
+            return (-1,)
+        frame_index = int(time * self.fps)
+        return (frame_index,)
+
+    def render(self, time: float) -> Image.Image:
+        frame_index = int(time * self.fps)
+        frame = self.reader.get_data(frame_index)
+        return Image.fromarray(frame).convert('RGBA')
+
+
+class SlideLayer(TimelineLayer):
 
     def __init__(
             self, timeline: pd.DataFrame,
@@ -91,7 +116,7 @@ class SlideLayer(Layer):
         return self.slide_images[slide_number]
 
 
-class CharacterLayer(Layer):
+class CharacterLayer(TimelineLayer):
 
     def __init__(
             self, timeline: pd.DataFrame,
@@ -178,6 +203,8 @@ class LayerWithProperty(NamedTuple):
     layer: Layer
     transform: Transform = Transform()
     offset: float = 0.
+    start_time: float = 0.
+    end_time: float = 0.
 
 
 class Attribute(NamedTuple):
@@ -186,7 +213,7 @@ class Attribute(NamedTuple):
     value_type: str
 
 
-class Composition(Layer):
+class Composition(TimelineLayer):
 
     def __init__(self, timeline: pd.DataFrame, size: tuple[int, int] = (1920, 1080)) -> None:
         super().__init__(timeline)
@@ -212,25 +239,34 @@ class Composition(Layer):
             self.add_layer(layer, name, transform)
 
     def get_keys(self, time: float) -> tuple[Any, ...]:
-        layer_keys = []
+        layer_keys: list[Any] = []
         for layer_with_prop in self.layers:
             layer = layer_with_prop.layer
             layer_time = time - layer_with_prop.offset
-            p = self._get_current_transform(layer_with_prop, layer_time)
-            layer_keys.append(p + layer.get_keys(layer_time))
+            if layer_time < layer_with_prop.start_time or layer_with_prop.end_time <= layer_time:
+                layer_keys.append(f'__{layer_with_prop.name}__')
+            else:
+                p = self._get_current_transform(layer_with_prop, layer_time)
+                layer_keys.append(p + layer.get_keys(layer_time))
         return tuple(layer_keys)
 
     def get_layer(self, name: str) -> LayerWithProperty:
         return self._name_to_layer[name]
 
-    def add_layer(self, layer: Layer, name: str = '', transform: Transform = Transform()) -> None:
-        if name == '':
+    def add_layer(self, layer: Layer, name: Optional[str] = None,
+                  transform: Transform = Transform(), offset: float = 0.,
+                  start_time: float = 0., end_time: Optional[float] = None) -> LayerWithProperty:
+        if name is None:
             name = f'layer_{len(self.layers)}'
         if name in self.layers:
             raise KeyError(f'Layer with name {name} already exists')
-        layer_with_prop = LayerWithProperty(name, layer, transform)
+        end_time = end_time if end_time is not None else layer.duration
+        layer_with_prop = LayerWithProperty(
+            name, layer, transform,
+            offset=offset, start_time=start_time, end_time=end_time)
         self.layers.append(layer_with_prop)
         self._name_to_layer[name] = layer_with_prop
+        return layer_with_prop
 
     @property
     def attributes(self) -> list[tuple[str, list[Attribute]]]:
@@ -257,8 +293,9 @@ class Composition(Layer):
     def has_motion(self, layer_name: str, attr_name: str) -> bool:
         return (layer_name, attr_name) in self.motions
 
-    def set_motion(self, layer_name: str, attr_name: str, motion: Motion) -> None:
+    def set_motion(self, layer_name: str, attr_name: str, motion: Motion) -> Motion:
         self.motions[(layer_name, attr_name)] = motion
+        return motion
 
     def get_motion(self, layer_name: str, attr_name: str, auto_create: bool = False) -> Motion:
         if self.has_motion(layer_name, attr_name):
@@ -266,24 +303,23 @@ class Composition(Layer):
         else:
             if auto_create:
                 value = self.get_current_attr(layer_name, attr_name)
-                motion = MotionSequence(default_value=value)
-                self.set_motion(layer_name, attr_name, motion)
-                return motion
+                return self.set_motion(layer_name, attr_name, MotionSequence(default_value=value))
             raise KeyError(f'No motion for {layer_name}.{attr_name}')
 
     def _get_current_transform(
             self, layer_with_prop: LayerWithProperty, layer_time: float) -> Transform:
         name = layer_with_prop.name
+        opacity = self.get_current_attr(name, 'opacity', layer_time)
+        opacity = opacity if isinstance(opacity, float) else opacity[0]
         return Transform(
-            anchor_point=self.get_current_attr(name, 'anchor_point', layer_time),
-            position=self.get_current_attr(name, 'position', layer_time),
-            scale=self.get_current_attr(name, 'scale', layer_time),
-            opacity=self.get_current_attr(name, 'opacity', layer_time))
+            anchor_point=normalize_2dvector(self.get_current_attr(name, 'anchor_point', layer_time)),
+            position=normalize_2dvector(self.get_current_attr(name, 'position', layer_time)),
+            scale=normalize_2dvector(self.get_current_attr(name, 'scale', layer_time)),
+            opacity=opacity)
 
     def composite(self, base_img: Image.Image, layer_with_prop: LayerWithProperty, time: float) -> Image.Image:
         layer_time = time - layer_with_prop.offset
-        state = layer_with_prop.layer.get_state(layer_time)
-        if state is None:
+        if layer_time < layer_with_prop.start_time or layer_with_prop.end_time <= layer_time:
             return base_img
         component = layer_with_prop.layer.render(layer_time)
         w, h = component.size
