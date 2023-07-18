@@ -2,6 +2,7 @@ import argparse
 import os
 import hashlib
 import math
+import ffmpeg
 import pkg_resources
 import yaml
 
@@ -9,8 +10,10 @@ import MeCab
 import pandas as pd
 from pydub import AudioSegment
 
-from zunda.engine import render_subtitle_video, render_video
+from zunda.layer import Composition
 from zunda.utils import make_voicevox_dataframe, get_audio_length, get_paths
+
+from zunda.animator import make_animations_from_timeline
 
 
 def make_wav_file(
@@ -249,6 +252,32 @@ def make_video(args: argparse.Namespace):
     render_subtitle_video(
         config['video']['dst_tmp_video_path'], config['video']['subtitle_path'],
         config['audio']['dst_audio_path'], config['dst_video_path'])
+
+
+def render_video(
+        video_config: dict, timeline_path: str,
+        audio_dir: str, dst_video_path: str) -> None:
+    timeline = pd.read_csv(timeline_path)
+    audio_df = make_voicevox_dataframe(audio_dir)
+    timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
+    size = (video_config['width'], video_config['height'])
+    scene = Composition(timeline=timeline, size=size)
+    scene.add_layers_from_config(video_config['layers'])
+    animations = make_animations_from_timeline(timeline)
+    for layer_name, animation_func in animations:
+        animation_func(scene, layer_name)
+    scene.make_video(dst_video_path, fps=video_config['fps'])
+
+
+def render_subtitle_video(
+        video_path: str, subtitle_path: str, audio_path: str, dst_video_path: str) -> None:
+    video_option_str = f"ass={subtitle_path}"
+    video_input = ffmpeg.input(video_path)
+    audio_input = ffmpeg.input(audio_path)
+    output = ffmpeg.output(
+        video_input.video, audio_input.audio, dst_video_path,
+        vf=video_option_str, acodec='aac', ab='128k')
+    output.run(overwrite_output=True)
 
 
 def main():

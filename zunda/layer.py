@@ -1,9 +1,7 @@
-from collections import defaultdict
 import os
-from typing import Optional, NamedTuple, Iterable, Any, DefaultDict
+from typing import Optional, NamedTuple, Union, Any
 
 from cachetools import LRUCache
-import ffmpeg
 import imageio
 import numpy as np
 import pandas as pd
@@ -11,8 +9,8 @@ from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
 
-from zunda.animation import Animation, make_animations_from_timeline
-from zunda.utils import make_voicevox_dataframe, rand_from_string
+from zunda.motion import Motion, MotionSequence
+from zunda.utils import rand_from_string
 from zunda.transform import Transform, resize, alpha_composite
 
 
@@ -182,13 +180,19 @@ class LayerWithProperty(NamedTuple):
     offset: float = 0.
 
 
+class Attribute(NamedTuple):
+
+    attr_name: str
+    value_type: str
+
+
 class Composition(Layer):
 
     def __init__(self, timeline: pd.DataFrame, size: tuple[int, int] = (1920, 1080)) -> None:
         super().__init__(timeline)
         self.layers: list[LayerWithProperty] = []
-        self.name_to_layer: dict[str, LayerWithProperty] = {}
-        self.animations: DefaultDict[str, list[Animation]] = defaultdict(list)
+        self._name_to_layer: dict[str, LayerWithProperty] = {}
+        self.motions: dict[tuple[str, str], Motion] = {}
         self.size = size
         self.cache: LRUCache = LRUCache(maxsize=128)
 
@@ -210,50 +214,81 @@ class Composition(Layer):
     def get_keys(self, time: float) -> tuple[Any, ...]:
         layer_keys = []
         for layer_with_prop in self.layers:
-            transform = layer_with_prop.transform
             layer = layer_with_prop.layer
-
-            t = time - layer_with_prop.offset
-            animations = self.animations[layer_with_prop.name]
-            prop = self.animate_property(transform, animations, t)
-            layer_keys.append(prop + layer.get_keys(t))
+            layer_time = time - layer_with_prop.offset
+            p = self._get_current_transform(layer_with_prop, layer_time)
+            layer_keys.append(p + layer.get_keys(layer_time))
         return tuple(layer_keys)
+
+    def get_layer(self, name: str) -> LayerWithProperty:
+        return self._name_to_layer[name]
 
     def add_layer(self, layer: Layer, name: str = '', transform: Transform = Transform()) -> None:
         if name == '':
             name = f'layer_{len(self.layers)}'
-        if name in self.name_to_layer:
+        if name in self.layers:
             raise KeyError(f'Layer with name {name} already exists')
         layer_with_prop = LayerWithProperty(name, layer, transform)
-        self.name_to_layer[name] = layer_with_prop
         self.layers.append(layer_with_prop)
+        self._name_to_layer[name] = layer_with_prop
 
-    def add_animation(self, name: str, animation: Animation) -> None:
-        if name not in self.name_to_layer:
-            raise KeyError(f'Layer with name {name} does not exist')
-        self.animations[name].append(animation)
+    @property
+    def attributes(self) -> list[tuple[str, list[Attribute]]]:
+        attrs: list[tuple[str, list[Attribute]]] = []
+        for layer_with_prop in self.layers:
+            name = layer_with_prop.name
+            attrs.append((name, [
+                Attribute('anchor_point', 'vector2d'),
+                Attribute('position', 'vector2d'),
+                Attribute('scale', 'vector2d'),
+                Attribute('opacity', 'scalar'),
+            ]))
+        return attrs
 
-    def animate_property(
-            self, transform: Transform, animations: Iterable[Animation], time: float) -> Transform:
-        prop = transform
-        for anim in animations:
-            p = anim(time)
-            anchor_point = (prop.anchor_point[0] + p.anchor_point[0], prop.anchor_point[1] + p.anchor_point[1])
-            position = (prop.position[0] + p.position[0], prop.position[1] + p.position[1])
-            scale = (prop.scale[0] * p.scale[0], prop.scale[1] * p.scale[1])
-            opacity = prop.opacity * p.opacity
-            prop = Transform(
-                anchor_point=anchor_point, position=position, scale=scale, opacity=opacity)
-        return prop
+    def get_current_attr(self, layer_name: str, attr_name: str, time: float = 0.) -> Union[float, tuple[float, float]]:
+        layer_with_prop = self._name_to_layer[layer_name]
+        if (layer_name, attr_name) in self.motions:
+            motion = self.motions[(layer_name, attr_name)]
+            return motion(time)
+        else:
+            value = getattr(layer_with_prop.transform, attr_name)
+            return value
 
-    def composite(self, base_img: Image.Image, layer: LayerWithProperty, animations: Iterable[Animation], time: float) -> Image.Image:
-        t = time - layer.offset
-        state = layer.layer.get_state(t)
+    def has_motion(self, layer_name: str, attr_name: str) -> bool:
+        return (layer_name, attr_name) in self.motions
+
+    def set_motion(self, layer_name: str, attr_name: str, motion: Motion) -> None:
+        self.motions[(layer_name, attr_name)] = motion
+
+    def get_motion(self, layer_name: str, attr_name: str, auto_create: bool = False) -> Motion:
+        if self.has_motion(layer_name, attr_name):
+            return self.motions[(layer_name, attr_name)]
+        else:
+            if auto_create:
+                value = self.get_current_attr(layer_name, attr_name)
+                motion = MotionSequence(default_value=value)
+                self.set_motion(layer_name, attr_name, motion)
+                return motion
+            raise KeyError(f'No motion for {layer_name}.{attr_name}')
+
+    def _get_current_transform(
+            self, layer_with_prop: LayerWithProperty, layer_time: float) -> Transform:
+        name = layer_with_prop.name
+        return Transform(
+            anchor_point=self.get_current_attr(name, 'anchor_point', layer_time),
+            position=self.get_current_attr(name, 'position', layer_time),
+            scale=self.get_current_attr(name, 'scale', layer_time),
+            opacity=self.get_current_attr(name, 'opacity', layer_time))
+
+    def composite(self, base_img: Image.Image, layer_with_prop: LayerWithProperty, time: float) -> Image.Image:
+        layer_time = time - layer_with_prop.offset
+        state = layer_with_prop.layer.get_state(layer_time)
         if state is None:
             return base_img
-        component = layer.layer.render(t)
+        component = layer_with_prop.layer.render(layer_time)
         w, h = component.size
-        p = self.animate_property(layer.transform, animations, t)
+
+        p = self._get_current_transform(layer_with_prop, layer_time)
         component = resize(component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
@@ -267,9 +302,8 @@ class Composition(Layer):
             return self.cache[keys]
 
         frame = Image.new('RGBA', self.size)
-        for layer in self.layers:
-            animations = self.animations[layer.name]
-            self.composite(frame, layer, animations, time)
+        for layer_with_prop in self.layers:
+            self.composite(frame, layer_with_prop, time)
         self.cache[keys] = frame
         return frame
 
@@ -286,29 +320,3 @@ class Composition(Layer):
             writer.append_data(frame)
         writer.close()
         self.cache.clear()
-
-
-def render_video(
-        video_config: dict, timeline_path: str,
-        audio_dir: str, dst_video_path: str) -> None:
-    timeline = pd.read_csv(timeline_path)
-    audio_df = make_voicevox_dataframe(audio_dir)
-    timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
-    size = (video_config['width'], video_config['height'])
-    scene = Composition(timeline=timeline, size=size)
-    scene.add_layers_from_config(video_config['layers'])
-    animations = make_animations_from_timeline(timeline)
-    for layer_name, animation in animations:
-        scene.add_animation(layer_name, animation)
-    scene.make_video(dst_video_path, fps=video_config['fps'])
-
-
-def render_subtitle_video(
-        video_path: str, subtitle_path: str, audio_path: str, dst_video_path: str) -> None:
-    video_option_str = f"ass={subtitle_path}"
-    video_input = ffmpeg.input(video_path)
-    audio_input = ffmpeg.input(audio_path)
-    output = ffmpeg.output(
-        video_input.video, audio_input.audio, dst_video_path,
-        vf=video_option_str, acodec='aac', ab='128k')
-    output.run(overwrite_output=True)
