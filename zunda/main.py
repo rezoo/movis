@@ -13,7 +13,7 @@ from pydub import AudioSegment
 from zunda.layer import Composition
 from zunda.utils import make_voicevox_dataframe, get_audio_length, get_paths
 
-from zunda.animator import make_animations_from_timeline
+from zunda.action import make_action_functions_from_timeline
 
 
 def make_wav_file(
@@ -93,11 +93,11 @@ def make_timeline_file(audio_dir: str, dst_timeline_path: str, max_length: int =
         if row is not None:
             result['slide'] = row['slide']
             result['status'] = row['status']
-            result['animation'] = row['animation']
+            result['action'] = row['action']
         else:
             result['slide'] = 0
             result['status'] = 'n'
-            result['animation'] = ''
+            result['action'] = ''
         return result
 
     txt_files = get_paths(audio_dir, '.txt')
@@ -263,7 +263,7 @@ def render_video(
     size = (video_config['width'], video_config['height'])
     scene = Composition(timeline=timeline, size=size)
     scene.add_layers_from_config(video_config['layers'])
-    animations = make_animations_from_timeline(timeline)
+    animations = make_action_functions_from_timeline(timeline)
     for layer_name, animation_func in animations:
         animation_func(scene, layer_name)
     scene.make_video(dst_video_path, fps=video_config['fps'])
