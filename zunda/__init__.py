@@ -1,12 +1,14 @@
-from zunda.animation import ( # noqa
-    Animation,
-    FadeIn, FadeOut,
-    BounceUp,
-    HorizontalShake, VerticalShake,
+from zunda.motion import ( # noqa
+    Motion, MotionSequence,
+)
+
+from zunda.animator import ( # noqa
+    Animator,
+    parse_animation_command,
     make_animations_from_timeline,
 )
 
-from zunda.engine import ( # noqa
+from zunda.layer import ( # noqa
     Composition, Layer, ImageLayer, SlideLayer, CharacterLayer,
 )
 
