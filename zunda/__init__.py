@@ -2,10 +2,10 @@ from zunda.motion import ( # noqa
     Motion, MotionSequence,
 )
 
-from zunda.animator import ( # noqa
-    Animator,
-    parse_animation_command,
-    make_animations_from_timeline,
+from zunda.action import ( # noqa
+    Action,
+    parse_action_command,
+    make_action_functions_from_timeline,
 )
 
 from zunda.layer import ( # noqa
