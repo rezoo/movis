@@ -23,7 +23,7 @@ class Layer(object):
     def get_keys(self, time: float) -> tuple[Any, ...]:
         raise NotImplementedError
 
-    def __call__(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Optional[Image.Image]:
         raise NotImplementedError
 
 
@@ -56,7 +56,7 @@ class ImageLayer(TimelineLayer):
         key = 1 if state is not None else 0
         return (key,)
 
-    def __call__(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Optional[Image.Image]:
         if self.image is None:
             self.image = Image.open(self.img_path).convert('RGBA')
         return self.image
@@ -82,7 +82,7 @@ class VideoLayer(Layer):
         frame_index = int(time * self.fps)
         return (frame_index,)
 
-    def __call__(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Optional[Image.Image]:
         frame_index = int(time * self.fps)
         frame = self.reader.get_data(frame_index)
         return Image.fromarray(frame).convert('RGBA')
@@ -103,9 +103,10 @@ class SlideLayer(TimelineLayer):
         key = int(self.slide_timeline[state.name]) if state is not None else None
         return (key,)
 
-    def __call__(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Optional[Image.Image]:
         state = self.get_state(time)
-        assert state is not None
+        if state is None:
+            return None
         slide_number = self.slide_timeline[state.name]
         if self.slide_images is None:
             slide_images = []
@@ -177,9 +178,10 @@ class CharacterLayer(TimelineLayer):
         eye = self.get_eye_state(time, state)
         return (emotion, eye)
 
-    def __call__(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Optional[Image.Image]:
         state = self.get_state(time)
-        assert state is not None
+        if state is None:
+            return None
         emotion = self.character_timeline[state.name]
         base_img = self.character_imgs[emotion]
         if emotion in self.eye_imgs:
@@ -324,6 +326,8 @@ class Composition(TimelineLayer):
         if layer_time < layer_with_prop.start_time or layer_with_prop.end_time <= layer_time:
             return base_img
         component = layer_with_prop.layer(layer_time)
+        if component is None:
+            return base_img
         w, h = component.size
 
         p = self._get_current_transform(layer_with_prop, layer_time)
@@ -334,7 +338,7 @@ class Composition(TimelineLayer):
             base_img, component, position=(round(x), round(y)), opacity=p.opacity)
         return base_img
 
-    def __call__(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Optional[Image.Image]:
         keys = self.get_keys(time)
         if keys in self.cache:
             return self.cache[keys]
