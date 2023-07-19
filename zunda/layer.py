@@ -23,7 +23,7 @@ class Layer(object):
     def get_keys(self, time: float) -> tuple[Any, ...]:
         raise NotImplementedError
 
-    def render(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Image.Image:
         raise NotImplementedError
 
 
@@ -56,7 +56,7 @@ class ImageLayer(TimelineLayer):
         key = 1 if state is not None else 0
         return (key,)
 
-    def render(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Image.Image:
         if self.image is None:
             self.image = Image.open(self.img_path).convert('RGBA')
         return self.image
@@ -82,7 +82,7 @@ class VideoLayer(Layer):
         frame_index = int(time * self.fps)
         return (frame_index,)
 
-    def render(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Image.Image:
         frame_index = int(time * self.fps)
         frame = self.reader.get_data(frame_index)
         return Image.fromarray(frame).convert('RGBA')
@@ -103,7 +103,7 @@ class SlideLayer(TimelineLayer):
         key = int(self.slide_timeline[state.name]) if state is not None else None
         return (key,)
 
-    def render(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Image.Image:
         state = self.get_state(time)
         assert state is not None
         slide_number = self.slide_timeline[state.name]
@@ -177,7 +177,7 @@ class CharacterLayer(TimelineLayer):
         eye = self.get_eye_state(time, state)
         return (emotion, eye)
 
-    def render(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Image.Image:
         state = self.get_state(time)
         assert state is not None
         emotion = self.character_timeline[state.name]
@@ -321,7 +321,7 @@ class Composition(TimelineLayer):
         layer_time = time - layer_with_prop.offset
         if layer_time < layer_with_prop.start_time or layer_with_prop.end_time <= layer_time:
             return base_img
-        component = layer_with_prop.layer.render(layer_time)
+        component = layer_with_prop.layer(layer_time)
         w, h = component.size
 
         p = self._get_current_transform(layer_with_prop, layer_time)
@@ -332,7 +332,7 @@ class Composition(TimelineLayer):
             base_img, component, position=(round(x), round(y)), opacity=p.opacity)
         return base_img
 
-    def render(self, time: float) -> Image.Image:
+    def __call__(self, time: float) -> Image.Image:
         keys = self.get_keys(time)
         if keys in self.cache:
             return self.cache[keys]
@@ -352,7 +352,7 @@ class Composition(TimelineLayer):
         writer = imageio.get_writer(
             dst_path, fps=fps, codec=codec, macro_block_size=None)
         for t in tqdm(times, total=len(times)):
-            frame = np.asarray(self.render(t))
+            frame = np.asarray(self(t))
             writer.append_data(frame)
         writer.close()
         self.cache.clear()
