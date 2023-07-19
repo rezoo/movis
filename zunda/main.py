@@ -255,10 +255,8 @@ def main():
 
     make_parser = subparsers.add_parser("make", help="Make Zunda-related files")
     make_subparsers = make_parser.add_subparsers(dest="make_command")
-    make_subparsers.add_parser(
-        "timeline", help="Make timeline").set_defaults(func=make_timeline)
-    make_subparsers.add_parser(
-        "video", help="Make video").set_defaults(func=make_video)
+    make_subparsers.add_parser("timeline", help="Make timeline").set_defaults(func=make_timeline)
+    make_subparsers.add_parser("video", help="Make video").set_defaults(func=make_video)
 
     args = parser.parse_args()
     if hasattr(args, "func"):
