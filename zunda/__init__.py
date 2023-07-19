@@ -1,5 +1,5 @@
 from zunda.motion import ( # noqa
-    Motion, MotionSequence,
+    Motion,
 )
 
 from zunda.action import ( # noqa

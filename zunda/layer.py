@@ -9,7 +9,7 @@ from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
 
-from zunda.motion import Motion, MotionSequence
+from zunda.motion import Motion
 from zunda.utils import normalize_2dvector, rand_from_string
 from zunda.transform import Transform, resize, alpha_composite
 
@@ -297,14 +297,16 @@ class Composition(TimelineLayer):
         self.motions[(layer_name, attr_name)] = motion
         return motion
 
-    def get_motion(self, layer_name: str, attr_name: str, auto_create: bool = False) -> Motion:
+    def enable_motion(self, layer_name: str, attr_name: str) -> Motion:
         if self.has_motion(layer_name, attr_name):
             return self.motions[(layer_name, attr_name)]
         else:
-            if auto_create:
-                value = self.get_current_attr(layer_name, attr_name)
-                return self.set_motion(layer_name, attr_name, MotionSequence(default_value=value))
-            raise KeyError(f'No motion for {layer_name}.{attr_name}')
+            value = self.get_current_attr(layer_name, attr_name)
+            return self.set_motion(layer_name, attr_name, Motion(default_value=value))
+
+    def disable_motion(self, layer_name: str, attr_name: str) -> None:
+        if self.has_motion(layer_name, attr_name):
+            del self.motions[(layer_name, attr_name)]
 
     def _get_current_transform(
             self, layer_with_prop: LayerWithProperty, layer_time: float) -> Transform:
