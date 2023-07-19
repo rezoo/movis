@@ -1,5 +1,5 @@
 import os
-from typing import Optional, NamedTuple, Union, Any
+from typing import Optional, NamedTuple, Union, Hashable, Protocol
 
 from cachetools import LRUCache
 import imageio
@@ -14,20 +14,20 @@ from zunda.utils import normalize_2dvector, rand_from_string
 from zunda.transform import Transform, resize, alpha_composite
 
 
-class Layer(object):
+class Layer(Protocol):
 
     @property
     def duration(self):
         raise NotImplementedError
 
-    def get_keys(self, time: float) -> tuple[Any, ...]:
+    def get_keys(self, time: float) -> tuple[Hashable, ...]:
         raise NotImplementedError
 
     def __call__(self, time: float) -> Optional[Image.Image]:
         raise NotImplementedError
 
 
-class TimelineLayer(Layer):
+class TimelineMixin:
 
     def __init__(self, timeline: pd.DataFrame) -> None:
         self.timeline = timeline
@@ -44,7 +44,7 @@ class TimelineLayer(Layer):
         return self.timeline['end_time'].max() - self.timeline['start_time'].min()
 
 
-class ImageLayer(TimelineLayer):
+class ImageLayer(TimelineMixin):
 
     def __init__(self, timeline: pd.DataFrame, img_path: str) -> None:
         super().__init__(timeline)
@@ -62,7 +62,7 @@ class ImageLayer(TimelineLayer):
         return self.image
 
 
-class VideoLayer(Layer):
+class VideoLayer:
 
     def __init__(self, video_path: str) -> None:
         self.video_path = video_path
@@ -88,7 +88,7 @@ class VideoLayer(Layer):
         return Image.fromarray(frame).convert('RGBA')
 
 
-class SlideLayer(TimelineLayer):
+class SlideLayer(TimelineMixin):
 
     def __init__(
             self, timeline: pd.DataFrame,
@@ -98,7 +98,7 @@ class SlideLayer(TimelineLayer):
         self.slide_path = slide_path
         self.slide_images: Optional[list[Image.Image]] = None
 
-    def get_keys(self, time: float) -> tuple[Any, ...]:
+    def get_keys(self, time: float) -> tuple[Hashable, ...]:
         state = self.get_state(time)
         key = int(self.slide_timeline[state.name]) if state is not None else None
         return (key,)
@@ -117,7 +117,7 @@ class SlideLayer(TimelineLayer):
         return self.slide_images[slide_number]
 
 
-class CharacterLayer(TimelineLayer):
+class CharacterLayer(TimelineMixin):
 
     def __init__(
             self, timeline: pd.DataFrame,
@@ -170,7 +170,7 @@ class CharacterLayer(TimelineLayer):
         else:
             return 0
 
-    def get_keys(self, time: float) -> tuple[Any, ...]:
+    def get_keys(self, time: float) -> tuple[Hashable, ...]:
         state = self.get_state(time)
         if state is None:
             return (None, None)
@@ -215,7 +215,7 @@ class Attribute(NamedTuple):
     value_type: str
 
 
-class Composition(TimelineLayer):
+class Composition(TimelineMixin):
 
     def __init__(self, timeline: pd.DataFrame, size: tuple[int, int] = (1920, 1080)) -> None:
         super().__init__(timeline)
@@ -240,8 +240,8 @@ class Composition(TimelineLayer):
             layer = layer_cls(**kwargs)
             self.add_layer(layer, name, transform)
 
-    def get_keys(self, time: float) -> tuple[Any, ...]:
-        layer_keys: list[Any] = []
+    def get_keys(self, time: float) -> tuple[Hashable, ...]:
+        layer_keys: list[Hashable] = []
         for layer_with_prop in self.layers:
             layer = layer_with_prop.layer
             layer_time = time - layer_with_prop.offset
