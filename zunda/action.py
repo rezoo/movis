@@ -1,7 +1,5 @@
 import re
-from typing import Optional
-
-import pandas as pd
+from typing import Optional, Sequence
 
 from zunda.layer import Composition
 
@@ -72,14 +70,15 @@ def parse_action_command(
     return actions
 
 
-def make_action_functions_from_timeline(timeline: pd.DataFrame, action_column: str = 'action') -> list[tuple[str, Action]]:
+def make_action_functions(
+        start_time: Sequence[float], end_time: Sequence[float], actions: Sequence[str]) -> list[tuple[str, Action]]:
+    assert len(start_time) == len(end_time) == len(actions)
     animations: list[tuple[str, Action]] = []
-    if action_column not in timeline.columns:
-        return animations
-    anim_frame = timeline[
-        timeline[action_column].notnull() & (timeline[action_column] != '')]
-    for _, row in anim_frame.iterrows():
-        anim_t = parse_action_command(row['start_time'], row['end_time'], row[action_column])
-        for layer_name, action_func in anim_t:
+    start_time = [t for (t, a) in zip(start_time, actions) if isinstance(a, str) and a != '']
+    end_time = [t for (t, a) in zip(end_time, actions) if isinstance(a, str) and a != '']
+    actions = [a for a in actions if isinstance(a, str) and a != '']
+    for t0, t1, action_str in zip(start_time, end_time, actions):
+        actions_t = parse_action_command(t0, t1, action_str)
+        for layer_name, action_func in actions_t:
             animations.append((layer_name, action_func))
     return animations

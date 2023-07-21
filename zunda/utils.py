@@ -1,5 +1,5 @@
 import hashlib
-import os
+from pathlib import Path
 from typing import Union
 
 import numpy as np
@@ -7,19 +7,18 @@ import pandas as pd
 from pydub import AudioSegment
 
 
-def get_paths(src_dir: str, ext: str) -> list[str]:
-    return sorted([
-        os.path.join(src_dir, f)
-        for f in os.listdir(src_dir) if f.endswith(ext)])
+def get_paths(src_dir: Union[str, Path], ext: str) -> list[Path]:
+    src_dir = Path(src_dir)
+    return sorted(f for f in src_dir.iterdir() if f.suffix == ext)
 
 
-def get_audio_length(filename: str) -> float:
-    audio = AudioSegment.from_file(filename, format="wav")
+def get_audio_length(filename: Path) -> float:
+    audio = AudioSegment.from_file(str(filename), format="wav")
     return audio.duration_seconds
 
 
-def make_voicevox_dataframe(audio_dir: str) -> pd.DataFrame:
-    wav_files = get_paths(audio_dir, '.wav')
+def make_voicevox_dataframe(audio_dir: Union[str, Path]) -> pd.DataFrame:
+    wav_files = sorted(f for f in Path(audio_dir).iterdir() if f.suffix == '.wav')
     frame = []
     start_time = 0.0
     for wav_file in wav_files:

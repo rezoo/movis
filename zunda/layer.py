@@ -1,5 +1,5 @@
-import os
-from typing import Optional, NamedTuple, Union, Hashable, Protocol
+from pathlib import Path, PurePath
+from typing import Optional, NamedTuple, Union, Hashable, Protocol, Sequence
 
 from cachetools import LRUCache
 import imageio
@@ -29,43 +29,47 @@ class Layer(Protocol):
 
 class TimelineMixin:
 
-    def __init__(self, timeline: pd.DataFrame) -> None:
-        self.timeline = timeline
+    def __init__(self, start_time: Sequence[float], end_time: Sequence[float]) -> None:
+        assert len(start_time) == len(end_time), f'{len(start_time)} != {len(end_time)}'
+        self.start_time: np.ndarray = np.asarray(start_time, dtype=float)
+        self.end_time: np.ndarray = np.asarray(end_time, dtype=float)
 
-    def get_state(self, time: float) -> Optional[pd.Series]:
-        idx = self.timeline['start_time'].searchsorted(time, side='right') - 1
-        if idx >= 0 and self.timeline['end_time'].iloc[idx] > time:
-            return self.timeline.iloc[idx]
+    def get_state(self, time: float) -> int:
+        idx = self.start_time.searchsorted(time, side='right') - 1
+        if idx >= 0 and self.end_time[idx] > time:
+            return int(idx)
         else:
-            return None
+            return -1
 
     @property
     def duration(self):
-        return self.timeline['end_time'].max() - self.timeline['start_time'].min()
+        return self.end_time[-1] - self.start_time[0]
 
 
-class ImageLayer(TimelineMixin):
+class ImageLayer:
 
-    def __init__(self, timeline: pd.DataFrame, img_path: str) -> None:
-        super().__init__(timeline)
+    def __init__(self, duration: float, img_path: Union[str, Path]) -> None:
         self.image: Optional[Image.Image] = None
-        self.img_path = img_path
+        self._img_path = Path(img_path)
+        self._duration = duration
+
+    @property
+    def duration(self):
+        return self._duration
 
     def get_keys(self, time: float) -> tuple[int]:
-        state = self.get_state(time)
-        key = 1 if state is not None else 0
-        return (key,)
+        return (1,) if 0 <= time < self.duration else (0,)
 
     def __call__(self, time: float) -> Optional[Image.Image]:
         if self.image is None:
-            self.image = Image.open(self.img_path).convert('RGBA')
+            self.image = Image.open(self._img_path).convert('RGBA')
         return self.image
 
 
 class VideoLayer:
 
-    def __init__(self, video_path: str) -> None:
-        self.video_path = video_path
+    def __init__(self, video_path: Union[str, Path]) -> None:
+        self.video_path = Path(video_path)
         self.reader = imageio.get_reader(video_path)
         meta_data = self.reader.get_meta_data()
         self.fps = meta_data['fps']
@@ -91,23 +95,23 @@ class VideoLayer:
 class SlideLayer(TimelineMixin):
 
     def __init__(
-            self, timeline: pd.DataFrame,
-            slide_path: str, slide_column: str = 'slide') -> None:
-        super().__init__(timeline)
-        self.slide_timeline = np.cumsum(self.timeline[slide_column])
+            self, start_time: Sequence[float], end_time: Sequence[float],
+            slide_path: Union[str, Path], slide_counter: Sequence[int]) -> None:
+        super().__init__(start_time, end_time)
+        self.slide_timeline = np.cumsum(slide_counter)
         self.slide_path = slide_path
         self.slide_images: Optional[list[Image.Image]] = None
 
     def get_keys(self, time: float) -> tuple[Hashable, ...]:
-        state = self.get_state(time)
-        key = int(self.slide_timeline[state.name]) if state is not None else None
+        idx = self.get_state(time)
+        key = int(self.slide_timeline[idx]) if 0 < idx else -1
         return (key,)
 
     def __call__(self, time: float) -> Optional[Image.Image]:
-        state = self.get_state(time)
-        if state is None:
+        idx = self.get_state(time)
+        if idx < 0:
             return None
-        slide_number = self.slide_timeline[state.name]
+        slide_number = self.slide_timeline[idx]
         if self.slide_images is None:
             slide_images = []
             for img in convert_from_path(self.slide_path):
@@ -120,41 +124,45 @@ class SlideLayer(TimelineMixin):
 class CharacterLayer(TimelineMixin):
 
     def __init__(
-            self, timeline: pd.DataFrame,
-            character_name: str, character_dir: str, character_column: str = 'character',
-            status_column: str = 'status', initial_status: str = 'n',
+            self, start_time: Sequence[float], end_time: Sequence[float],
+            character_name: str, character_dir: Union[str, Path], characters: Sequence[str],
+            character_status: Sequence[str], initial_status: str = 'n',
             blink_per_minute: int = 3, blink_duration: float = 0.2) -> None:
-        super().__init__(timeline)
+        assert len(start_time) == len(characters) == len(character_status)
+        super().__init__(start_time, end_time)
         self.character_name = character_name
         self.character_imgs: dict[str, Image.Image] = {}
         self.eye_imgs: dict[str, list[Image.Image]] = {}
-        emotions = set(self.timeline[
-            self.timeline[character_column] == character_name][status_column].unique())
+        character_dir = Path(character_dir)
+        emotions = set()
+        for character, status in zip(characters, character_status):
+            if character == character_name:
+                emotions.add(status)
         emotions.add(initial_status)
         for emotion in emotions:
-            path = os.path.join(character_dir, f'{emotion}.png')
+            path = Path(character_dir) / f'{emotion}.png'
             self.character_imgs[emotion] = Image.open(path).convert('RGBA')
-            eye_path = os.path.join(character_dir, f'{emotion}.eye.png')
-            if os.path.exists(eye_path):
+            eye_path = Path(character_dir) / f'{emotion}.eye.png'
+            if eye_path.exists():
                 eyes = [Image.open(eye_path).convert('RGBA')]
-                for f in sorted(os.listdir(character_dir)):
-                    x = f.split('.')
-                    if f.startswith(f'{emotion}.eye.') and len(x) == 4:
-                        eyes.append(Image.open(os.path.join(character_dir, f)).convert('RGBA'))
+                for f in character_dir.iterdir():
+                    x = f.name.split('.')
+                    if f.name.startswith(f'{emotion}.eye.') and len(x) == 4:
+                        eyes.append(Image.open(f).convert('RGBA'))
                 self.eye_imgs[emotion] = eyes
 
         self.character_timeline: list[str] = []
         status = initial_status
-        for _, row in self.timeline.iterrows():
-            if row[character_column] == character_name:
-                status = row[status_column]
+        for current_character, current_status in zip(characters, character_status):
+            if current_character == character_name:
+                status = current_status
             self.character_timeline.append(status)
 
         self.blink_per_minute = blink_per_minute
         self.blink_duration = blink_duration
 
-    def get_eye_state(self, time: float, state: pd.Series) -> int:
-        emotion = self.character_timeline[state.name]
+    def get_eye_state(self, time: float, idx: int) -> int:
+        emotion = self.character_timeline[idx]
         if emotion not in self.eye_imgs:
             return -1
         elif len(self.eye_imgs[emotion]) == 1:
@@ -171,21 +179,21 @@ class CharacterLayer(TimelineMixin):
             return 0
 
     def get_keys(self, time: float) -> tuple[Hashable, ...]:
-        state = self.get_state(time)
-        if state is None:
+        idx = self.get_state(time)
+        if idx < 0:
             return (None, None)
-        emotion = self.character_timeline[state.name]
-        eye = self.get_eye_state(time, state)
+        emotion = self.character_timeline[idx]
+        eye = self.get_eye_state(time, idx)
         return (emotion, eye)
 
     def __call__(self, time: float) -> Optional[Image.Image]:
-        state = self.get_state(time)
-        if state is None:
+        idx = self.get_state(time)
+        if idx < 0:
             return None
-        emotion = self.character_timeline[state.name]
+        emotion = self.character_timeline[idx]
         base_img = self.character_imgs[emotion]
         if emotion in self.eye_imgs:
-            eye_number = self.get_eye_state(time, state)
+            eye_number = self.get_eye_state(time, idx)
             eye_img = self.eye_imgs[emotion][eye_number]
             base_img = base_img.copy()
             base_img.alpha_composite(eye_img)
@@ -215,20 +223,23 @@ class Attribute(NamedTuple):
     value_type: str
 
 
-class Composition(TimelineMixin):
+class Composition:
 
-    def __init__(self, timeline: pd.DataFrame, size: tuple[int, int] = (1920, 1080)) -> None:
-        super().__init__(timeline)
+    def __init__(self, size: tuple[int, int] = (1920, 1080)) -> None:
         self.layers: list[LayerWithProperty] = []
         self._name_to_layer: dict[str, LayerWithProperty] = {}
         self.motions: dict[tuple[str, str], Motion] = {}
         self.size = size
         self.cache: LRUCache = LRUCache(maxsize=128)
 
-    def add_layers_from_config(self, layers_config: list[dict]) -> None:
+    @property
+    def duration(self):
+        return max(layer.end_time for layer in self.layers)
+
+    def add_layers_from_config(self, timeline: pd.DataFrame, layers_config: list[dict]) -> None:
         for cfg in layers_config:
             name = cfg.pop('name')
-            kwargs = {'timeline': self.timeline}
+            kwargs = {'timeline': timeline}
             transform = Transform.create(
                 anchor_point=cfg.pop('anchor_point', 0.),
                 position=cfg.pop('position', (self.size[0] / 2, self.size[1] / 2)),
@@ -350,7 +361,7 @@ class Composition(TimelineMixin):
         return frame
 
     def make_video(
-            self, dst_path: str, start_time: float = 0.0, end_time: Optional[float] = None,
+            self, dst_path: Union[str, Path], start_time: float = 0.0, end_time: Optional[float] = None,
             codec: str = 'libx264', fps: float = 30.0) -> None:
         if end_time is None:
             end_time = self.duration

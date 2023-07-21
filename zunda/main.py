@@ -10,7 +10,7 @@ import MeCab
 import pandas as pd
 from pydub import AudioSegment
 
-from zunda.action import make_action_functions_from_timeline
+from zunda.action import make_action_functions
 from zunda.layer import Composition
 from zunda.subtitle import make_ass_file
 from zunda.utils import make_voicevox_dataframe, get_audio_length, get_paths
@@ -229,7 +229,7 @@ def render_video(
     size = (video_config['width'], video_config['height'])
     scene = Composition(timeline=timeline, size=size)
     scene.add_layers_from_config(video_config['layers'])
-    animations = make_action_functions_from_timeline(timeline)
+    animations = make_action_functions(timeline)
     for layer_name, animation_func in animations:
         animation_func(scene, layer_name)
     scene.make_video(dst_video_path, fps=video_config['fps'])
