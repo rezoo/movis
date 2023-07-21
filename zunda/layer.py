@@ -1,4 +1,4 @@
-from pathlib import Path, PurePath
+from pathlib import Path
 from typing import Optional, NamedTuple, Union, Hashable, Protocol, Sequence
 
 from cachetools import LRUCache
@@ -207,7 +207,7 @@ type_to_layer_cls = {
 }
 
 
-class LayerWithProperty(NamedTuple):
+class LayerProperty(NamedTuple):
 
     name: str
     layer: Layer
@@ -226,8 +226,8 @@ class Attribute(NamedTuple):
 class Composition:
 
     def __init__(self, size: tuple[int, int] = (1920, 1080)) -> None:
-        self.layers: list[LayerWithProperty] = []
-        self._name_to_layer: dict[str, LayerWithProperty] = {}
+        self.layers: list[LayerProperty] = []
+        self._name_to_layer: dict[str, LayerProperty] = {}
         self.motions: dict[tuple[str, str], Motion] = {}
         self.size = size
         self.cache: LRUCache = LRUCache(maxsize=128)
@@ -253,39 +253,39 @@ class Composition:
 
     def get_keys(self, time: float) -> tuple[Hashable, ...]:
         layer_keys: list[Hashable] = []
-        for layer_with_prop in self.layers:
-            layer = layer_with_prop.layer
-            layer_time = time - layer_with_prop.offset
-            if layer_time < layer_with_prop.start_time or layer_with_prop.end_time <= layer_time:
-                layer_keys.append(f'__{layer_with_prop.name}__')
+        for layer_prop in self.layers:
+            layer = layer_prop.layer
+            layer_time = time - layer_prop.offset
+            if layer_time < layer_prop.start_time or layer_prop.end_time <= layer_time:
+                layer_keys.append(f'__{layer_prop.name}__')
             else:
-                p = self._get_current_transform(layer_with_prop, layer_time)
+                p = self._get_current_transform(layer_prop, layer_time)
                 layer_keys.append(p + layer.get_keys(layer_time))
         return tuple(layer_keys)
 
-    def get_layer(self, name: str) -> LayerWithProperty:
+    def get_layer(self, name: str) -> LayerProperty:
         return self._name_to_layer[name]
 
     def add_layer(self, layer: Layer, name: Optional[str] = None,
                   transform: Transform = Transform(), offset: float = 0.,
-                  start_time: float = 0., end_time: Optional[float] = None) -> LayerWithProperty:
+                  start_time: float = 0., end_time: Optional[float] = None) -> LayerProperty:
         if name is None:
             name = f'layer_{len(self.layers)}'
         if name in self.layers:
             raise KeyError(f'Layer with name {name} already exists')
         end_time = end_time if end_time is not None else layer.duration
-        layer_with_prop = LayerWithProperty(
+        layer_prop = LayerProperty(
             name, layer, transform,
             offset=offset, start_time=start_time, end_time=end_time)
-        self.layers.append(layer_with_prop)
-        self._name_to_layer[name] = layer_with_prop
-        return layer_with_prop
+        self.layers.append(layer_prop)
+        self._name_to_layer[name] = layer_prop
+        return layer_prop
 
     @property
     def attributes(self) -> list[tuple[str, list[Attribute]]]:
         attrs: list[tuple[str, list[Attribute]]] = []
-        for layer_with_prop in self.layers:
-            name = layer_with_prop.name
+        for layer_prop in self.layers:
+            name = layer_prop.name
             attrs.append((name, [
                 Attribute('anchor_point', 'vector2d'),
                 Attribute('position', 'vector2d'),
@@ -295,12 +295,12 @@ class Composition:
         return attrs
 
     def get_current_attr(self, layer_name: str, attr_name: str, time: float = 0.) -> Union[float, tuple[float, float]]:
-        layer_with_prop = self._name_to_layer[layer_name]
+        layer_prop = self._name_to_layer[layer_name]
         if (layer_name, attr_name) in self.motions:
             motion = self.motions[(layer_name, attr_name)]
             return motion(time)
         else:
-            value = getattr(layer_with_prop.transform, attr_name)
+            value = getattr(layer_prop.transform, attr_name)
             return value
 
     def has_motion(self, layer_name: str, attr_name: str) -> bool:
@@ -322,8 +322,8 @@ class Composition:
             del self.motions[(layer_name, attr_name)]
 
     def _get_current_transform(
-            self, layer_with_prop: LayerWithProperty, layer_time: float) -> Transform:
-        name = layer_with_prop.name
+            self, layer_prop: LayerProperty, layer_time: float) -> Transform:
+        name = layer_prop.name
         opacity = self.get_current_attr(name, 'opacity', layer_time)
         opacity = opacity if isinstance(opacity, float) else opacity[0]
         return Transform(
@@ -332,16 +332,16 @@ class Composition:
             scale=normalize_2dvector(self.get_current_attr(name, 'scale', layer_time)),
             opacity=opacity)
 
-    def composite(self, base_img: Image.Image, layer_with_prop: LayerWithProperty, time: float) -> Image.Image:
-        layer_time = time - layer_with_prop.offset
-        if layer_time < layer_with_prop.start_time or layer_with_prop.end_time <= layer_time:
+    def composite(self, base_img: Image.Image, layer_prop: LayerProperty, time: float) -> Image.Image:
+        layer_time = time - layer_prop.offset
+        if layer_time < layer_prop.start_time or layer_prop.end_time <= layer_time:
             return base_img
-        component = layer_with_prop.layer(layer_time)
+        component = layer_prop.layer(layer_time)
         if component is None:
             return base_img
         w, h = component.size
 
-        p = self._get_current_transform(layer_with_prop, layer_time)
+        p = self._get_current_transform(layer_prop, layer_time)
         component = resize(component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
@@ -355,8 +355,8 @@ class Composition:
             return self.cache[keys]
 
         frame = Image.new('RGBA', self.size)
-        for layer_with_prop in self.layers:
-            self.composite(frame, layer_with_prop, time)
+        for layer_prop in self.layers:
+            self.composite(frame, layer_prop, time)
         self.cache[keys] = frame
         return frame
 
