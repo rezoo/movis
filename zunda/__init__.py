@@ -1,3 +1,7 @@
+from zunda.audio import ( # noqa
+    concat_audio_files,
+    make_loop_music,
+)
 from zunda.motion import Motion # noqa
 from zunda.action import ( # noqa
     Action,
@@ -12,4 +16,6 @@ from zunda.transform import ( # noqa
     Transform,
     resize, alpha_composite,
 )
-from zunda.utils import make_voicevox_dataframe  # noqa
+from zunda.utils import (  # noqa
+    make_voicevox_dataframe, add_materials_to_video,
+)

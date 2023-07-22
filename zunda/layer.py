@@ -29,21 +29,21 @@ class Layer(Protocol):
 
 class TimelineMixin:
 
-    def __init__(self, start_time: Sequence[float], end_time: Sequence[float]) -> None:
-        assert len(start_time) == len(end_time), f'{len(start_time)} != {len(end_time)}'
-        self.start_time: np.ndarray = np.asarray(start_time, dtype=float)
-        self.end_time: np.ndarray = np.asarray(end_time, dtype=float)
+    def __init__(self, start_times: Sequence[float], end_times: Sequence[float]) -> None:
+        assert len(start_times) == len(end_times), f'{len(start_times)} != {len(end_times)}'
+        self.start_times: np.ndarray = np.asarray(start_times, dtype=float)
+        self.end_times: np.ndarray = np.asarray(end_times, dtype=float)
 
     def get_state(self, time: float) -> int:
-        idx = self.start_time.searchsorted(time, side='right') - 1
-        if idx >= 0 and self.end_time[idx] > time:
+        idx = self.start_times.searchsorted(time, side='right') - 1
+        if idx >= 0 and self.end_times[idx] > time:
             return int(idx)
         else:
             return -1
 
     @property
     def duration(self):
-        return self.end_time[-1] - self.start_time[0]
+        return self.end_times[-1] - self.start_times[0]
 
 
 class ImageLayer:
@@ -95,9 +95,9 @@ class VideoLayer:
 class SlideLayer(TimelineMixin):
 
     def __init__(
-            self, start_time: Sequence[float], end_time: Sequence[float],
+            self, start_times: Sequence[float], end_times: Sequence[float],
             slide_path: Union[str, Path], slide_counter: Sequence[int]) -> None:
-        super().__init__(start_time, end_time)
+        super().__init__(start_times, end_times)
         self.slide_timeline = np.cumsum(slide_counter)
         self.slide_path = slide_path
         self.slide_images: Optional[list[Image.Image]] = None
@@ -124,12 +124,12 @@ class SlideLayer(TimelineMixin):
 class CharacterLayer(TimelineMixin):
 
     def __init__(
-            self, start_time: Sequence[float], end_time: Sequence[float],
+            self, start_times: Sequence[float], end_times: Sequence[float],
             character_name: str, character_dir: Union[str, Path], characters: Sequence[str],
             character_status: Sequence[str], initial_status: str = 'n',
             blink_per_minute: int = 3, blink_duration: float = 0.2) -> None:
-        assert len(start_time) == len(characters) == len(character_status)
-        super().__init__(start_time, end_time)
+        assert len(start_times) == len(characters) == len(character_status)
+        super().__init__(start_times, end_times)
         self.character_name = character_name
         self.character_imgs: dict[str, Image.Image] = {}
         self.eye_imgs: dict[str, list[Image.Image]] = {}
