@@ -71,13 +71,13 @@ def parse_action_command(
 
 
 def make_action_functions(
-        start_time: Sequence[float], end_time: Sequence[float], actions: Sequence[str]) -> list[tuple[str, Action]]:
-    assert len(start_time) == len(end_time) == len(actions)
+        start_times: Sequence[float], end_times: Sequence[float], actions: Sequence[str]) -> list[tuple[str, Action]]:
+    assert len(start_times) == len(end_times) == len(actions)
     animations: list[tuple[str, Action]] = []
-    start_time = [t for (t, a) in zip(start_time, actions) if isinstance(a, str) and a != '']
-    end_time = [t for (t, a) in zip(end_time, actions) if isinstance(a, str) and a != '']
+    start_times = [t for (t, a) in zip(start_times, actions) if isinstance(a, str) and a != '']
+    end_times = [t for (t, a) in zip(end_times, actions) if isinstance(a, str) and a != '']
     actions = [a for a in actions if isinstance(a, str) and a != '']
-    for t0, t1, action_str in zip(start_time, end_time, actions):
+    for t0, t1, action_str in zip(start_times, end_times, actions):
         actions_t = parse_action_command(t0, t1, action_str)
         for layer_name, action_func in actions_t:
             animations.append((layer_name, action_func))

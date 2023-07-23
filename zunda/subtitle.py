@@ -2,7 +2,7 @@ from typing import Sequence
 
 
 def make_ass_file(
-        start_time: Sequence[float], end_time: Sequence[float],
+        start_times: Sequence[float], end_times: Sequence[float],
         characters: Sequence[str], texts: Sequence[str],
         dst_ass_path: str, font_name: str) -> None:
     header = f"""[Script Info]
@@ -29,7 +29,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             int(t / 3600), int((t / 60) % 60), int(t % 60), int((t % 1) * 100))
 
     lines = []
-    for t0, t1, character, text in zip(start_time, end_time, characters, texts):
+    for t0, t1, character, text in zip(start_times, end_times, characters, texts):
         text0, text1 = get_time(t0), get_time(t1)
         lines.append(line_template.format(
             start_time=text0, end_time=text1,

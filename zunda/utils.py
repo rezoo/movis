@@ -13,7 +13,7 @@ def get_paths(src_dir: Union[str, Path], ext: str) -> list[Path]:
     return sorted(f for f in src_dir.iterdir() if f.suffix == ext)
 
 
-def get_audio_length(filename: Path) -> float:
+def get_audio_length(filename: Union[Path, str]) -> float:
     audio = AudioSegment.from_file(str(filename), format="wav")
     return audio.duration_seconds
 
