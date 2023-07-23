@@ -2,10 +2,6 @@ import bisect
 import math
 from typing import Optional, TypeVar, Generic, Tuple, Callable
 
-
-T = TypeVar('T', float, Tuple[float, float])
-
-
 motion_types_to_func = {
     'linear': lambda t: t,
     'ease_in': lambda t: t ** 2,
@@ -14,6 +10,8 @@ motion_types_to_func = {
     'ease_in_expo': lambda t: math.exp(- 10. * (1 - t)),
     'ease_out_expo': lambda t: 1 - math.exp(- 10. * t),
 }
+
+T = TypeVar('T', float, Tuple[float, float])
 
 
 class Motion(Generic[T]):

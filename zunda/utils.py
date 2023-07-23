@@ -1,26 +1,26 @@
 import hashlib
-import os
+from pathlib import Path
 from typing import Union
+import ffmpeg
 
 import numpy as np
 import pandas as pd
 from pydub import AudioSegment
 
 
-def get_paths(src_dir: str, ext: str) -> list[str]:
-    return sorted([
-        os.path.join(src_dir, f)
-        for f in os.listdir(src_dir) if f.endswith(ext)])
+def get_paths(src_dir: Union[str, Path], ext: str) -> list[Path]:
+    src_dir = Path(src_dir)
+    return sorted(f for f in src_dir.iterdir() if f.suffix == ext)
 
 
-def get_audio_length(filename: str) -> float:
-    audio = AudioSegment.from_file(filename, format="wav")
+def get_audio_length(filename: Union[Path, str]) -> float:
+    audio = AudioSegment.from_file(str(filename), format="wav")
     return audio.duration_seconds
 
 
-def make_voicevox_dataframe(audio_dir: str) -> pd.DataFrame:
-    wav_files = get_paths(audio_dir, '.wav')
-    frame = []
+def make_voicevox_dataframe(audio_dir: Union[str, Path]) -> pd.DataFrame:
+    wav_files = sorted(f for f in Path(audio_dir).iterdir() if f.suffix == '.wav')
+    rows = []
     start_time = 0.0
     for wav_file in wav_files:
         duration = get_audio_length(wav_file)
@@ -29,9 +29,11 @@ def make_voicevox_dataframe(audio_dir: str) -> pd.DataFrame:
             'start_time': start_time,
             'end_time': end_time,
         }
-        frame.append(dic)
+        rows.append(dic)
         start_time = end_time
-    return pd.DataFrame(frame)
+    frame = pd.DataFrame(rows)
+    frame['audio_file'] = [str(p) for p in wav_files]
+    return frame
 
 
 def rand_from_string(string: str, seed: int = 0) -> float:
@@ -53,3 +55,18 @@ def normalize_2dvector(x: Union[float, tuple[float, float], list[float]]) -> tup
             raise ValueError(f'len(x) must be 2: {len(x)}')
         return x
     raise TypeError(f'x must be float, tuple or list: {type(x)}')
+
+
+def add_materials_to_video(
+        video_file: Union[str, Path], audio_file: Union[str, Path],
+        dst_file: Union[str, Path], subtitle_file: Union[str, Path, None] = None) -> None:
+    if subtitle_file is not None:
+        kwargs = {'vf': f"ass={str(subtitle_file)}"}
+    else:
+        kwargs = {}
+    video_input = ffmpeg.input(video_file)
+    audio_input = ffmpeg.input(audio_file)
+    output = ffmpeg.output(
+        video_input.video, audio_input.audio, dst_file,
+        **kwargs, acodec='aac', ab='128k')
+    output.run(overwrite_output=True)

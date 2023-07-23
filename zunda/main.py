@@ -10,7 +10,7 @@ import MeCab
 import pandas as pd
 from pydub import AudioSegment
 
-from zunda.action import make_action_functions_from_timeline
+from zunda.action import make_action_functions
 from zunda.layer import Composition
 from zunda.subtitle import make_ass_file
 from zunda.utils import make_voicevox_dataframe, get_audio_length, get_paths
@@ -212,7 +212,9 @@ def make_video(args: argparse.Namespace):
     timeline = pd.merge(
         timeline, make_voicevox_dataframe(config['audio']['audio_dir']),
         left_index=True, right_index=True)
-    make_ass_file(timeline, config['video']['subtitle_path'], config['font'])
+    make_ass_file(
+        timeline['start_time'], timeline['end_time'], timeline['character'], timeline['text'],
+        config['subtitle_path'], config['font'])
     render_video(
         config['video'], config['timeline_path'], config['audio']['audio_dir'], config['video']['dst_tmp_video_path'])
     render_subtitle_video(
@@ -227,9 +229,10 @@ def render_video(
     audio_df = make_voicevox_dataframe(audio_dir)
     timeline = pd.merge(timeline, audio_df, left_index=True, right_index=True)
     size = (video_config['width'], video_config['height'])
-    scene = Composition(timeline=timeline, size=size)
-    scene.add_layers_from_config(video_config['layers'])
-    animations = make_action_functions_from_timeline(timeline)
+    scene = Composition(size=size)
+    scene.add_layers_from_config(timeline, video_config['layers'])
+    animations = make_action_functions(
+        timeline['start_time'], timeline['end_time'], timeline['action'])
     for layer_name, animation_func in animations:
         animation_func(scene, layer_name)
     scene.make_video(dst_video_path, fps=video_config['fps'])
