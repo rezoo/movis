@@ -17,5 +17,8 @@ from zunda.transform import ( # noqa
     resize, alpha_composite,
 )
 from zunda.utils import (  # noqa
-    make_voicevox_dataframe, add_materials_to_video,
+    make_voicevox_dataframe,
+    make_timeline_from_voicevox,
+    merge_timeline,
+    add_materials_to_video,
 )

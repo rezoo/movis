@@ -1,10 +1,9 @@
 from pathlib import Path
-from typing import Optional, NamedTuple, Union, Hashable, Protocol, Sequence
+from typing import Hashable, NamedTuple, Protocol, Optional, Sequence, Union
 
 from cachetools import LRUCache
 import imageio
 import numpy as np
-import pandas as pd
 from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
@@ -225,31 +224,21 @@ class Attribute(NamedTuple):
 
 class Composition:
 
-    def __init__(self, size: tuple[int, int] = (1920, 1080)) -> None:
+    def __init__(self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0) -> None:
         self.layers: list[LayerProperty] = []
         self._name_to_layer: dict[str, LayerProperty] = {}
         self.motions: dict[tuple[str, str], Motion] = {}
         self.size = size
+        self._duration = duration
         self.cache: LRUCache = LRUCache(maxsize=128)
 
     @property
-    def duration(self):
-        return max(layer.end_time for layer in self.layers)
+    def duration(self) -> float:
+        return self._duration
 
-    def add_layers_from_config(self, timeline: pd.DataFrame, layers_config: list[dict]) -> None:
-        for cfg in layers_config:
-            name = cfg.pop('name')
-            kwargs = {'timeline': timeline}
-            transform = Transform.create(
-                anchor_point=cfg.pop('anchor_point', 0.),
-                position=cfg.pop('position', (self.size[0] / 2, self.size[1] / 2)),
-                scale=cfg.pop('scale', 1.),
-                opacity=cfg.pop('opacity', 1.),
-            )
-            layer_cls = type_to_layer_cls[cfg.pop('type')]
-            kwargs.update(cfg)
-            layer = layer_cls(**kwargs)
-            self.add_layer(layer, name, transform)
+    @property
+    def layer_names(self) -> list[str]:
+        return [layer.name for layer in self.layers]
 
     def get_keys(self, time: float) -> tuple[Hashable, ...]:
         layer_keys: list[Hashable] = []
