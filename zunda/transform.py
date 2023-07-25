@@ -13,6 +13,10 @@ class Transform(NamedTuple):
     scale: tuple[float, float] = (1., 1.)
     opacity: float = 1.
 
+    def __post_init__(self):
+        if self.opacity < 0. or 1. < self.opacity:
+            raise ValueError('opacity must be in the range [0, 1]')
+
     @staticmethod
     def create(
             anchor_point: Union[float, tuple[float, float], list[float]] = (0., 0.),
