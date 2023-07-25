@@ -1,7 +1,7 @@
 import difflib
 import hashlib
 from pathlib import Path
-from typing import Union
+from typing import Union, Hashable
 
 import ffmpeg
 import numpy as np
@@ -46,7 +46,8 @@ def _get_hash_prefix(text):
 
 
 def make_timeline_from_voicevox(
-        audio_dir: Union[str, Path], max_text_length: int = 25) -> pd.DataFrame:
+        audio_dir: Union[str, Path], max_text_length: int = 25,
+        extra_columns: list[tuple[str, Hashable]] = [('slide', 0), ('status', 'n'), ('action', '')]) -> pd.DataFrame:
     txt_files = get_paths(audio_dir, '.txt')
     lines = []
     for txt_file in txt_files:
@@ -66,10 +67,9 @@ def make_timeline_from_voicevox(
             'character': character_dict[character],
             'hash': _get_hash_prefix(raw_text),
             'text': text,
-            'slide': 0,
-            'status': 'n',
-            'action': '',
         }
+        for column_name, default_value in extra_columns:
+            dic[column_name] = default_value
         lines.append(dic)
     return pd.DataFrame(lines)
 
