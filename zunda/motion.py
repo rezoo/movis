@@ -47,11 +47,12 @@ class Motion(Generic[T]):
             else:
                 raise ValueError(f'Unexpected value: {m}, {M}')
 
-    def append(self, keyframe: float, value: T, type: str = 'linear') -> None:
+    def append(self, keyframe: float, value: T, type: str = 'linear') -> 'Motion[T]':
         i = bisect.bisect(self.keyframes, keyframe)
         self.keyframes.insert(i, keyframe)
         self.values.insert(i, value)
         self.motion_types.insert(i, motion_types_to_func[type])
+        return self
 
     def extend(self, keyframes: list[float], values: list[T], types: Optional[list[str]] = None) -> None:
         assert len(keyframes) == len(values)
