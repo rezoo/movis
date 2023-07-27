@@ -23,7 +23,7 @@ def main():
             characters=tl['character'], character_status=tl['status'],
             character_name='zunda', character_dir='../../assets/character/zunda'),
         name='zunda',
-        transform=Transform.create(position=(1779, 878), scale=0.7))
+        transform=Transform.create(position=(1779, 950), scale=0.7))
     scene.add_layer(
         zunda.CharacterLayer(
             tl['start_time'], tl['end_time'],
@@ -35,7 +35,22 @@ def main():
     for layer_name, action_func in actions:
         action_func(scene, layer_name)
 
-    bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 20
+    scene.add_layer(
+        zunda.ImageLayer(img_file='images/logo_zunda.png', duration=7.0),
+        name='zunda_logo', offset=0.5)
+    scene.add_layer(
+        zunda.ImageLayer(img_file='images/logo_metan.png', duration=7.0),
+        name='metan_logo', offset=0.5)
+
+    def set_motion(m: zunda.Motion, x: float, y: float, offset: float):
+        m.append(0.0, (x + offset, y), 'ease_out_expo')
+        m.append(1.0, (x, y)).append(5.0, (x, y), 'ease_in_expo')
+        m.append(6.0, (x + offset, y))
+
+    set_motion(scene['zunda_logo'].enable_motion('position'), 1755, 340, 500)
+    set_motion(scene['metan_logo'].enable_motion('position'), 170, 340, -500)
+
+    bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)
     voice = zunda.concat_audio_files(tl['start_time'], tl['audio_file'])
     bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
