@@ -62,14 +62,14 @@ class Motion(Generic[T]):
         self.motion_types.insert(i, motion_types_to_func[motion_type])
         return self
 
-    def extend(self, keyframes: Sequence[float], values: list[T], types: Optional[Sequence[str]] = None) -> 'Motion[T]':
+    def extend(self, keyframes: Sequence[float], values: list[T], motion_types: Optional[Sequence[str]] = None) -> 'Motion[T]':
         assert len(keyframes) == len(values)
-        if types is not None:
-            assert len(keyframes) == len(types)
-        types = ['linear'] * len(keyframes) if types is None else types
+        if motion_types is not None:
+            assert len(keyframes) == len(motion_types)
+        motion_types = ['linear'] * len(keyframes) if motion_types is None else motion_types
         keyframes = self.keyframes + [float(k) for k in keyframes]
         values = self.values + [self._cast(v) for v in values]
-        motion_types = self.motion_types + [motion_types_to_func[t] for t in types]
+        motion_types = self.motion_types + [motion_types_to_func[t] for t in motion_types]
         zipped = sorted(zip(keyframes, values, motion_types))
         keyframes_sorted, values_sorted, motion_types_sorted = zip(*zipped)
         self.keyframes = keyframes_sorted

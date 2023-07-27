@@ -53,7 +53,7 @@ def main():
             .append(6.0, (p[0] + offset, p[1]))
         lp.enable_motion('opacity').extend(
             keyframes=[0, 1, 5, 6], values=[0, 1, 1, 0],
-            types=['ease_out', 'linear', 'ease_in', 'linear'])
+            motion_types=['ease_out', 'linear', 'ease_in', 'linear'])
 
     slide_in_out(scene['zunda_logo'], 500)
     slide_in_out(scene['metan_logo'], -500)
