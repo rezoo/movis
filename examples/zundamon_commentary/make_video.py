@@ -44,15 +44,19 @@ def main():
         name='metan_logo', offset=0.5,
         transform=Transform.create(position=(170, 340)))
 
-    def set_motion(lp: zunda.LayerProperty, offset: float):
+    def slide_in_out(lp: zunda.LayerProperty, offset: float):
         p = lp.transform.position
-        lp.enable_motion('position').append(0.0, p) \
+        lp.enable_motion('position') \
+            .append(0.0, p) \
             .append(0.0, (p[0] + offset, p[1]), 'ease_out_expo') \
             .append(1.0, p).append(5.0, p, 'ease_in_expo') \
             .append(6.0, (p[0] + offset, p[1]))
+        lp.enable_motion('opacity').extend(
+            keyframes=[0, 1, 5, 6], values=[0, 1, 1, 0],
+            types=['ease_out', 'linear', 'ease_in', 'linear'])
 
-    set_motion(scene['zunda_logo'], 500)
-    set_motion(scene['metan_logo'], -500)
+    slide_in_out(scene['zunda_logo'], 500)
+    slide_in_out(scene['metan_logo'], -500)
 
     bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)

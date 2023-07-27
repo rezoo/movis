@@ -1,12 +1,14 @@
 import bisect
 import math
-from typing import Optional, TypeVar, Generic, Tuple, Callable
+from typing import Optional, Sequence, TypeVar, Generic, Tuple, Callable
 
 motion_types_to_func = {
     'linear': lambda t: t,
     'ease_in': lambda t: t ** 2,
     'ease_out': lambda t: 1. - (1. - t) ** 2,
     'ease_in_out': lambda t: t ** 2 * (3. - 2. * t),
+    'ease_in_cubic': lambda t: t ** 3,
+    'ease_out_cubic': lambda t: 1. - (1. - t) ** 3,
     'ease_in_expo': lambda t: math.exp(- 10. * (1 - t)),
     'ease_out_expo': lambda t: 1 - math.exp(- 10. * t),
 }
@@ -47,23 +49,30 @@ class Motion(Generic[T]):
             else:
                 raise ValueError(f'Unexpected value: {m}, {M}')
 
-    def append(self, keyframe: float, value: T, type: str = 'linear') -> 'Motion[T]':
+    def _cast(self, value: T) -> T:
+        if isinstance(value, tuple):
+            return (float(value[0]), float(value[1]))
+        else:
+            return float(value)
+
+    def append(self, keyframe: float, value: T, motion_type: str = 'linear') -> 'Motion[T]':
         i = bisect.bisect(self.keyframes, keyframe)
-        self.keyframes.insert(i, keyframe)
-        self.values.insert(i, value)
-        self.motion_types.insert(i, motion_types_to_func[type])
+        self.keyframes.insert(i, float(keyframe))
+        self.values.insert(i, self._cast(value))
+        self.motion_types.insert(i, motion_types_to_func[motion_type])
         return self
 
-    def extend(self, keyframes: list[float], values: list[T], types: Optional[list[str]] = None) -> None:
+    def extend(self, keyframes: Sequence[float], values: list[T], types: Optional[Sequence[str]] = None) -> 'Motion[T]':
         assert len(keyframes) == len(values)
         if types is not None:
             assert len(keyframes) == len(types)
         types = ['linear'] * len(keyframes) if types is None else types
-        keyframes = self.keyframes + keyframes
-        values = self.values + values
+        keyframes = self.keyframes + [float(k) for k in keyframes]
+        values = self.values + [self._cast(v) for v in values]
         motion_types = self.motion_types + [motion_types_to_func[t] for t in types]
         zipped = sorted(zip(keyframes, values, motion_types))
         keyframes_sorted, values_sorted, motion_types_sorted = zip(*zipped)
         self.keyframes = keyframes_sorted
         self.values = values_sorted
         self.motion_types = motion_types_sorted
+        return self
