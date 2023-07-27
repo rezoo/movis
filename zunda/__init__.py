@@ -8,7 +8,8 @@ from zunda.audio import ( # noqa
     make_loop_music,
 )
 from zunda.layer import ( # noqa
-    Composition, Layer, LayerProperty, ImageLayer, VideoLayer, SlideLayer, CharacterLayer,
+    Composition, Layer, LayerProperty,
+    ImageLayer, VideoLayer, SlideLayer, CharacterLayer,
 )
 from zunda.motion import Motion # noqa
 from zunda.subtitle import make_ass_file # noqa

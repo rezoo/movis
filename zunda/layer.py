@@ -135,8 +135,8 @@ class CharacterLayer(TimelineMixin):
         assert len(start_times) == len(characters) == len(character_status)
         super().__init__(start_times, end_times)
         self.character_name = character_name
-        self.character_imgs: dict[str, Image.Image] = {}
-        self.eye_imgs: dict[str, list[Image.Image]] = {}
+        self.character_imgs: dict[str, Union[Path, Image.Image]] = {}
+        self.eye_imgs: dict[str, list[Union[Path, Image.Image]]] = {}
         character_dir = Path(character_dir)
         emotions = set()
         for character, status in zip(characters, character_status):
@@ -145,14 +145,14 @@ class CharacterLayer(TimelineMixin):
         emotions.add(initial_status)
         for emotion in emotions:
             path = Path(character_dir) / f'{emotion}.png'
-            self.character_imgs[emotion] = Image.open(path).convert('RGBA')
+            self.character_imgs[emotion] = path
             eye_path = Path(character_dir) / f'{emotion}.eye.png'
             if eye_path.exists():
-                eyes = [Image.open(eye_path).convert('RGBA')]
+                eyes = [eye_path]
                 for f in character_dir.iterdir():
                     x = f.name.split('.')
                     if f.name.startswith(f'{emotion}.eye.') and len(x) == 4:
-                        eyes.append(Image.open(f).convert('RGBA'))
+                        eyes.append(f)
                 self.eye_imgs[emotion] = eyes
 
         self.character_timeline: list[str] = []
@@ -195,10 +195,21 @@ class CharacterLayer(TimelineMixin):
         if idx < 0:
             return None
         emotion = self.character_timeline[idx]
-        base_img = self.character_imgs[emotion]
+        character = self.character_imgs[emotion]
+        if isinstance(character, Path):
+            base_img = Image.open(character).convert('RGBA')
+            self.character_imgs[emotion] = base_img
+        else:
+            base_img = character
+
         if emotion in self.eye_imgs:
             eye_number = self.get_eye_state(time, idx)
-            eye_img = self.eye_imgs[emotion][eye_number]
+            eye = self.eye_imgs[emotion][eye_number]
+            if isinstance(eye, Path):
+                eye_img = Image.open(eye).convert('RGBA')
+                self.eye_imgs[emotion][eye_number] = eye_img
+            else:
+                eye_img = eye
             base_img = base_img.copy()
             base_img.alpha_composite(eye_img)
         return base_img
@@ -210,7 +221,7 @@ class Attribute(NamedTuple):
     value_type: str
 
 
-@dataclass
+@dataclass(eq=False)
 class LayerProperty:
 
     name: str
@@ -315,13 +326,6 @@ class Composition:
         self.layers.append(layer_prop)
         self._name_to_layer[name] = layer_prop
         return layer_prop
-
-    @property
-    def attributes(self) -> list[tuple[str, list[Attribute]]]:
-        attrs: list[tuple[str, list[Attribute]]] = []
-        for layer_prop in self.layers:
-            attrs.append((layer_prop.name, layer_prop.attributes))
-        return attrs
 
     def composite(self, base_img: Image.Image, layer_prop: LayerProperty, time: float) -> Image.Image:
         layer_time = time - layer_prop.offset
