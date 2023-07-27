@@ -37,18 +37,22 @@ def main():
 
     scene.add_layer(
         zunda.ImageLayer(img_file='images/logo_zunda.png', duration=7.0),
-        name='zunda_logo', offset=0.5)
+        name='zunda_logo', offset=0.5,
+        transform=Transform.create(position=(1755, 340)))
     scene.add_layer(
         zunda.ImageLayer(img_file='images/logo_metan.png', duration=7.0),
-        name='metan_logo', offset=0.5)
+        name='metan_logo', offset=0.5,
+        transform=Transform.create(position=(170, 340)))
 
-    def set_motion(m: zunda.Motion, x: float, y: float, offset: float):
-        m.append(0.0, (x + offset, y), 'ease_out_expo')
-        m.append(1.0, (x, y)).append(5.0, (x, y), 'ease_in_expo')
-        m.append(6.0, (x + offset, y))
+    def set_motion(lp: zunda.LayerProperty, offset: float):
+        p = lp.transform.position
+        lp.enable_motion('position').append(0.0, p) \
+            .append(0.0, (p[0] + offset, p[1]), 'ease_out_expo') \
+            .append(1.0, p).append(5.0, p, 'ease_in_expo') \
+            .append(6.0, (p[0] + offset, p[1]))
 
-    set_motion(scene['zunda_logo'].enable_motion('position'), 1755, 340, 500)
-    set_motion(scene['metan_logo'].enable_motion('position'), 170, 340, -500)
+    set_motion(scene['zunda_logo'], 500)
+    set_motion(scene['metan_logo'], -500)
 
     bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)
