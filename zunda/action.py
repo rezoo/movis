@@ -19,7 +19,7 @@ class Action(object):
 class FadeIn(Action):
 
     def __call__(self, scene: Composition, layer_name: str) -> None:
-        motion = scene.enable_motion(layer_name, 'opacity')
+        motion = scene[layer_name].enable_motion('opacity')
         value = float(motion(self.start_time + self.duration))
         motion.append(self.start_time, 0.0, 'linear')
         motion.append(self.start_time + self.duration, value)
@@ -28,7 +28,7 @@ class FadeIn(Action):
 class FadeOut(Action):
 
     def __call__(self, scene: Composition, layer_name: str) -> None:
-        motion = scene.enable_motion(layer_name, 'opacity')
+        motion = scene[layer_name].enable_motion('opacity')
         value = float(motion(self.end_time - self.duration))
         motion.append(self.end_time - self.duration, value, 'linear')
         motion.append(self.end_time, 0.0)
@@ -37,7 +37,7 @@ class FadeOut(Action):
 class BounceUp(Action):
 
     def __call__(self, scene: Composition, layer_name: str) -> None:
-        motion = scene.enable_motion(layer_name, 'position')
+        motion = scene[layer_name].enable_motion('position')
         p0 = motion(self.start_time)
         p1 = (p0[0], p0[1] - self.scale)
         t0, T = self.start_time, self.duration

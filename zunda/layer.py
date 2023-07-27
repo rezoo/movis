@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Hashable, NamedTuple, Protocol, Optional, Sequence, Union
 
@@ -203,7 +204,14 @@ class CharacterLayer(TimelineMixin):
         return base_img
 
 
-class LayerProperty(NamedTuple):
+class Attribute(NamedTuple):
+
+    attr_name: str
+    value_type: str
+
+
+@dataclass
+class LayerProperty:
 
     name: str
     layer: Layer
@@ -212,11 +220,53 @@ class LayerProperty(NamedTuple):
     start_time: float = 0.
     end_time: float = 0.
 
+    def __post_init__(self) -> None:
+        self.end_time = self.end_time if self.end_time == 0. else self.layer.duration
+        self._motions: dict[str, Motion] = {}
 
-class Attribute(NamedTuple):
+    @property
+    def attributes(self) -> list[Attribute]:
+        return [
+            Attribute('anchor_point', 'vector2d'),
+            Attribute('position', 'vector2d'),
+            Attribute('scale', 'vector2d'),
+            Attribute('opacity', 'scalar'),
+        ]
 
-    attr_name: str
-    value_type: str
+    def __call__(self, attr_name: str, time: float = 0.) -> Union[float, tuple[float, float]]:
+        if attr_name in self._motions:
+            motion = self._motions[attr_name]
+            return motion(time)
+        else:
+            value = getattr(self.transform, attr_name)
+            return value
+
+    def has_motion(self, attr_name: str) -> bool:
+        return attr_name in self._motions
+
+    def set_motion(self, attr_name: str, motion: Motion) -> Motion:
+        self._motions[attr_name] = motion
+        return motion
+
+    def enable_motion(self, attr_name: str) -> Motion:
+        if self.has_motion(attr_name):
+            return self._motions[attr_name]
+        else:
+            value = self(attr_name)
+            return self.set_motion(attr_name, Motion(default_value=value))
+
+    def disable_motion(self, attr_name: str) -> None:
+        if self.has_motion(attr_name):
+            del self._motions[attr_name]
+
+    def get_current_transform(self, layer_time: float) -> Transform:
+        opacity = self('opacity', layer_time)
+        opacity = opacity if isinstance(opacity, float) else opacity[0]
+        return Transform(
+            anchor_point=normalize_2dvector(self('anchor_point', layer_time)),
+            position=normalize_2dvector(self('position', layer_time)),
+            scale=normalize_2dvector(self('scale', layer_time)),
+            opacity=opacity)
 
 
 class Composition:
@@ -224,7 +274,6 @@ class Composition:
     def __init__(self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0) -> None:
         self.layers: list[LayerProperty] = []
         self._name_to_layer: dict[str, LayerProperty] = {}
-        self.motions: dict[tuple[str, str], Motion] = {}
         self.size = size
         self._duration = duration
         self.cache: LRUCache = LRUCache(maxsize=128)
@@ -237,6 +286,9 @@ class Composition:
     def layer_names(self) -> list[str]:
         return [layer.name for layer in self.layers]
 
+    def __getitem__(self, key: str) -> LayerProperty:
+        return self._name_to_layer[key]
+
     def get_keys(self, time: float) -> tuple[Hashable, ...]:
         layer_keys: list[Hashable] = []
         for layer_prop in self.layers:
@@ -245,12 +297,9 @@ class Composition:
             if layer_time < layer_prop.start_time or layer_prop.end_time <= layer_time:
                 layer_keys.append(f'__{layer_prop.name}__')
             else:
-                p = self._get_current_transform(layer_prop, layer_time)
+                p = layer_prop.get_current_transform(layer_time)
                 layer_keys.append(p + layer.get_keys(layer_time))
         return tuple(layer_keys)
-
-    def get_layer(self, name: str) -> LayerProperty:
-        return self._name_to_layer[name]
 
     def add_layer(self, layer: Layer, name: Optional[str] = None,
                   transform: Transform = Transform(), offset: float = 0.,
@@ -271,52 +320,8 @@ class Composition:
     def attributes(self) -> list[tuple[str, list[Attribute]]]:
         attrs: list[tuple[str, list[Attribute]]] = []
         for layer_prop in self.layers:
-            name = layer_prop.name
-            attrs.append((name, [
-                Attribute('anchor_point', 'vector2d'),
-                Attribute('position', 'vector2d'),
-                Attribute('scale', 'vector2d'),
-                Attribute('opacity', 'scalar'),
-            ]))
+            attrs.append((layer_prop.name, layer_prop.attributes))
         return attrs
-
-    def get_current_attr(self, layer_name: str, attr_name: str, time: float = 0.) -> Union[float, tuple[float, float]]:
-        layer_prop = self._name_to_layer[layer_name]
-        if (layer_name, attr_name) in self.motions:
-            motion = self.motions[(layer_name, attr_name)]
-            return motion(time)
-        else:
-            value = getattr(layer_prop.transform, attr_name)
-            return value
-
-    def has_motion(self, layer_name: str, attr_name: str) -> bool:
-        return (layer_name, attr_name) in self.motions
-
-    def set_motion(self, layer_name: str, attr_name: str, motion: Motion) -> Motion:
-        self.motions[(layer_name, attr_name)] = motion
-        return motion
-
-    def enable_motion(self, layer_name: str, attr_name: str) -> Motion:
-        if self.has_motion(layer_name, attr_name):
-            return self.motions[(layer_name, attr_name)]
-        else:
-            value = self.get_current_attr(layer_name, attr_name)
-            return self.set_motion(layer_name, attr_name, Motion(default_value=value))
-
-    def disable_motion(self, layer_name: str, attr_name: str) -> None:
-        if self.has_motion(layer_name, attr_name):
-            del self.motions[(layer_name, attr_name)]
-
-    def _get_current_transform(
-            self, layer_prop: LayerProperty, layer_time: float) -> Transform:
-        name = layer_prop.name
-        opacity = self.get_current_attr(name, 'opacity', layer_time)
-        opacity = opacity if isinstance(opacity, float) else opacity[0]
-        return Transform(
-            anchor_point=normalize_2dvector(self.get_current_attr(name, 'anchor_point', layer_time)),
-            position=normalize_2dvector(self.get_current_attr(name, 'position', layer_time)),
-            scale=normalize_2dvector(self.get_current_attr(name, 'scale', layer_time)),
-            opacity=opacity)
 
     def composite(self, base_img: Image.Image, layer_prop: LayerProperty, time: float) -> Image.Image:
         layer_time = time - layer_prop.offset
@@ -327,7 +332,7 @@ class Composition:
             return base_img
         w, h = component.size
 
-        p = self._get_current_transform(layer_prop, layer_time)
+        p = layer_prop.get_current_transform(layer_time)
         component = resize(component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
