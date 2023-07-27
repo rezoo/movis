@@ -10,12 +10,12 @@ def main():
 
     scene = zunda.Composition(size=(1920, 1080), duration=tl['end_time'].max())
     scene.add_layer(
-        zunda.ImageLayer(img_path='../../assets/bg2.png', duration=tl['end_time'].max()),
+        zunda.ImageLayer(img_file='../../assets/bg2.png', duration=tl['end_time'].max()),
         transform=Transform.create(position=(960, 540)))
     scene.add_layer(
         zunda.SlideLayer(
             tl['start_time'], tl['end_time'],
-            slide_path='slide.pdf', slide_counter=tl['slide']),
+            slide_file='slide.pdf', slide_counter=tl['slide']),
         transform=Transform.create(position=(960, 421), scale=0.71))
     scene.add_layer(
         zunda.CharacterLayer(

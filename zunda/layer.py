@@ -47,9 +47,13 @@ class TimelineMixin:
 
 class ImageLayer:
 
-    def __init__(self, duration: float, img_path: Union[str, Path]) -> None:
+    def __init__(self, duration: float, img_file: Union[str, Path, Image.Image]) -> None:
         self.image: Optional[Image.Image] = None
-        self._img_path = Path(img_path)
+        self._img_file: Optional[Path] = None
+        if isinstance(img_file, (str, Path)):
+            self._img_file = Path(img_file)
+        elif isinstance(img_file, Image.Image):
+            self.image = img_file.convert('RGBA')
         self._duration = duration
 
     @property
@@ -61,15 +65,15 @@ class ImageLayer:
 
     def __call__(self, time: float) -> Optional[Image.Image]:
         if self.image is None:
-            self.image = Image.open(self._img_path).convert('RGBA')
+            self.image = Image.open(self._img_file).convert('RGBA')
         return self.image
 
 
 class VideoLayer:
 
-    def __init__(self, video_path: Union[str, Path]) -> None:
-        self.video_path = Path(video_path)
-        self.reader = imageio.get_reader(video_path)
+    def __init__(self, video_file: Union[str, Path]) -> None:
+        self.video_file = Path(video_file)
+        self.reader = imageio.get_reader(video_file)
         meta_data = self.reader.get_meta_data()
         self.fps = meta_data['fps']
         self.n_frames = meta_data['nframes']
@@ -95,10 +99,10 @@ class SlideLayer(TimelineMixin):
 
     def __init__(
             self, start_times: Sequence[float], end_times: Sequence[float],
-            slide_path: Union[str, Path], slide_counter: Sequence[int]) -> None:
+            slide_file: Union[str, Path], slide_counter: Sequence[int]) -> None:
         super().__init__(start_times, end_times)
         self.slide_timeline = np.cumsum(slide_counter)
-        self.slide_path = slide_path
+        self.slide_file = slide_file
         self.slide_images: Optional[list[Image.Image]] = None
 
     def get_keys(self, time: float) -> tuple[Hashable, ...]:
@@ -113,7 +117,7 @@ class SlideLayer(TimelineMixin):
         slide_number = self.slide_timeline[idx]
         if self.slide_images is None:
             slide_images = []
-            for img in convert_from_path(self.slide_path):
+            for img in convert_from_path(self.slide_file):
                 img = img.convert('RGBA')
                 slide_images.append(img)
             self.slide_images = slide_images
@@ -197,13 +201,6 @@ class CharacterLayer(TimelineMixin):
             base_img = base_img.copy()
             base_img.alpha_composite(eye_img)
         return base_img
-
-
-type_to_layer_cls = {
-    'image': ImageLayer,
-    'slide': SlideLayer,
-    'character': CharacterLayer,
-}
 
 
 class LayerProperty(NamedTuple):
@@ -350,13 +347,13 @@ class Composition:
         return frame
 
     def make_video(
-            self, dst_path: Union[str, Path], start_time: float = 0.0, end_time: Optional[float] = None,
+            self, dst_file: Union[str, Path], start_time: float = 0.0, end_time: Optional[float] = None,
             codec: str = 'libx264', fps: float = 30.0) -> None:
         if end_time is None:
             end_time = self.duration
         times = np.arange(start_time, end_time, 1. / fps)
         writer = imageio.get_writer(
-            dst_path, fps=fps, codec=codec, macro_block_size=None)
+            dst_file, fps=fps, codec=codec, macro_block_size=None)
         for t in tqdm(times, total=len(times)):
             frame = np.asarray(self(t))
             writer.append_data(frame)
