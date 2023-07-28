@@ -68,11 +68,9 @@ def make_timeline_from_voicevox(
             "春日部つむぎ": "tsumugi",
         }
         character = txt_file.stem.split("_")[1].split("（")[0]
-        text = "\\n".join(
-            [
-                raw_text[i : i + max_text_length]
-                for i in range(0, len(raw_text), max_text_length)
-            ]
+        text = "\\n".join([
+            raw_text[i: i + max_text_length]
+            for i in range(0, len(raw_text), max_text_length)]
         )
         dic = {
             "character": character_dict[character],
