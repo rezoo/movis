@@ -5,7 +5,9 @@ from typing import Union
 from pydub import AudioSegment
 
 
-def concat_audio_files(start_times: list[float], audio_files: list[Union[str, Path]]) -> AudioSegment:
+def concat_audio_files(
+    start_times: list[float], audio_files: list[Union[str, Path]]
+) -> AudioSegment:
     assert len(audio_files) == len(start_times)
     audio = AudioSegment.empty()
     silence = AudioSegment.silent(duration=1000)
@@ -23,5 +25,5 @@ def make_loop_music(audio_file: Union[str, Path], duration: float) -> AudioSegme
     bgm: AudioSegment = AudioSegment.from_wav(path)
     bgm_repeat_times = int(math.ceil(duration / bgm.duration_seconds))
     bgm = bgm * bgm_repeat_times
-    bgm = bgm[:int(duration * 1000)]
+    bgm = bgm[: int(duration * 1000)]
     return bgm

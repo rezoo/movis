@@ -1,7 +1,7 @@
 import difflib
 import hashlib
 from pathlib import Path
-from typing import Any, Sequence, Union, Hashable
+from typing import Any, Hashable, Sequence, Union
 
 import ffmpeg
 import numpy as np
@@ -20,20 +20,20 @@ def get_audio_length(filename: Union[Path, str]) -> float:
 
 
 def make_voicevox_dataframe(audio_dir: Union[str, Path]) -> pd.DataFrame:
-    wav_files = sorted(f for f in Path(audio_dir).iterdir() if f.suffix == '.wav')
+    wav_files = sorted(f for f in Path(audio_dir).iterdir() if f.suffix == ".wav")
     rows = []
     start_time = 0.0
     for wav_file in wav_files:
         duration = get_audio_length(wav_file)
         end_time = start_time + duration
         dic = {
-            'start_time': start_time,
-            'end_time': end_time,
+            "start_time": start_time,
+            "end_time": end_time,
         }
         rows.append(dic)
         start_time = end_time
     frame = pd.DataFrame(rows)
-    frame['audio_file'] = [str(p) for p in wav_files]
+    frame["audio_file"] = [str(p) for p in wav_files]
     return frame
 
 
@@ -46,27 +46,38 @@ def _get_hash_prefix(text):
 
 
 def make_timeline_from_voicevox(
-        audio_dir: Union[str, Path], max_text_length: int = 25,
-        extra_columns: list[tuple[str, Hashable]] = [('slide', 0), ('status', 'n'), ('action', '')]) -> pd.DataFrame:
-    txt_files = get_paths(audio_dir, '.txt')
+    audio_dir: Union[str, Path],
+    max_text_length: int = 25,
+    extra_columns: tuple[tuple[str, Hashable], ...] = (
+        ("slide", 0),
+        ("status", "n"),
+        ("action", ""),
+    ),
+) -> pd.DataFrame:
+    txt_files = get_paths(audio_dir, ".txt")
     lines = []
     for txt_file in txt_files:
-        raw_text = open(txt_file, 'r', encoding='utf-8-sig').read()
-        if raw_text == '':
+        raw_text = open(txt_file, "r", encoding="utf-8-sig").read()
+        if raw_text == "":
             raise RuntimeError(
-                f'Empty text file: {txt_file}. Please remove it and try again.')
+                f"Empty text file: {txt_file}. Please remove it and try again."
+            )
         character_dict = {
-            'ずんだもん': 'zunda',
-            '四国めたん': 'metan',
-            '春日部つむぎ': 'tsumugi',
+            "ずんだもん": "zunda",
+            "四国めたん": "metan",
+            "春日部つむぎ": "tsumugi",
         }
-        character = txt_file.stem.split('_')[1].split('（')[0]
-        text = '\\n'.join(
-            [raw_text[i: i + max_text_length] for i in range(0, len(raw_text), max_text_length)])
+        character = txt_file.stem.split("_")[1].split("（")[0]
+        text = "\\n".join(
+            [
+                raw_text[i : i + max_text_length]
+                for i in range(0, len(raw_text), max_text_length)
+            ]
+        )
         dic = {
-            'character': character_dict[character],
-            'hash': _get_hash_prefix(raw_text),
-            'text': text,
+            "character": character_dict[character],
+            "hash": _get_hash_prefix(raw_text),
+            "text": text,
         }
         for column_name, default_value in extra_columns:
             dic[column_name] = default_value
@@ -75,7 +86,11 @@ def make_timeline_from_voicevox(
 
 
 def merge_timeline(
-        old_timeline: pd.DataFrame, new_timeline: pd.DataFrame, key='hash', description='text') -> pd.DataFrame:
+    old_timeline: pd.DataFrame,
+    new_timeline: pd.DataFrame,
+    key="hash",
+    description="text",
+) -> pd.DataFrame:
     differ = difflib.Differ()
     diff = differ.compare(old_timeline[key].to_list(), new_timeline[key].tolist())
     result = []
@@ -83,14 +98,14 @@ def merge_timeline(
     new_indices = new_timeline.index.tolist()
     old_idx, new_idx = 0, 0
     for d in diff:
-        if d.startswith('-'):
+        if d.startswith("-"):
             row = old_timeline.iloc[old_indices[old_idx]].copy()
-            row[description] = f'<<<<< {row[description]}'
+            row[description] = f"<<<<< {row[description]}"
             result.append(row)
             old_idx += 1
-        elif d.startswith('+'):
+        elif d.startswith("+"):
             row = new_timeline.iloc[new_indices[new_idx]].copy()
-            row[description] = f'>>>>> {row[description]}'
+            row[description] = f">>>>> {row[description]}"
             result.append(row)
             new_idx += 1
         else:
@@ -101,8 +116,8 @@ def merge_timeline(
 
 
 def rand_from_string(string: str, seed: int = 0) -> float:
-    string = f'{seed}:{string}'
-    s = hashlib.sha224(f'{seed}:{string}'.encode('utf-8')).digest()
+    string = f"{seed}:{string}"
+    s = hashlib.sha224(f"{seed}:{string}".encode("utf-8")).digest()
     x = np.frombuffer(s, dtype=np.uint32)[0]
     return np.random.RandomState(x).rand()
 
@@ -113,10 +128,12 @@ def normalize_1dscalar(x: Union[float, Sequence[float]]) -> float:
     elif len(x) == 1:
         return float(x[0])
     else:
-        raise ValueError(f'Invalid value: {x}')
+        raise ValueError(f"Invalid value: {x}")
 
 
-def normalize_2dvector(x: Union[float, Sequence[float], np.ndarray[Any, Any]]) -> tuple[float, float]:
+def normalize_2dvector(
+    x: Union[float, Sequence[float], np.ndarray[Any, Any]]
+) -> tuple[float, float]:
     if isinstance(x, float):
         return (x, x)
     elif len(x) == 1:
@@ -126,15 +143,23 @@ def normalize_2dvector(x: Union[float, Sequence[float], np.ndarray[Any, Any]]) -
 
 
 def add_materials_to_video(
-        video_file: Union[str, Path], audio_file: Union[str, Path],
-        dst_file: Union[str, Path], subtitle_file: Union[str, Path, None] = None) -> None:
+    video_file: Union[str, Path],
+    audio_file: Union[str, Path],
+    dst_file: Union[str, Path],
+    subtitle_file: Union[str, Path, None] = None,
+) -> None:
     if subtitle_file is not None:
-        kwargs = {'vf': f"ass={str(subtitle_file)}"}
+        kwargs = {"vf": f"ass={str(subtitle_file)}"}
     else:
         kwargs = {}
     video_input = ffmpeg.input(video_file)
     audio_input = ffmpeg.input(audio_file)
     output = ffmpeg.output(
-        video_input.video, audio_input.audio, dst_file,
-        **kwargs, acodec='aac', ab='128k')
+        video_input.video,
+        audio_input.audio,
+        dst_file,
+        **kwargs,
+        acodec="aac",
+        ab="128k",
+    )
     output.run(overwrite_output=True)

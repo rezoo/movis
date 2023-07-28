@@ -1,21 +1,21 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Hashable, NamedTuple, Protocol, Optional, Sequence, Union
+from typing import (Any, Hashable, NamedTuple, Optional, Protocol, Sequence,
+                    Union)
 
-from cachetools import LRUCache
 import imageio
 import numpy as np
+from cachetools import LRUCache
 from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
 
 from zunda.motion import Motion
+from zunda.transform import Transform, alpha_composite, resize
 from zunda.utils import normalize_2dvector, rand_from_string
-from zunda.transform import Transform, resize, alpha_composite
 
 
 class Layer(Protocol):
-
     @property
     def duration(self):
         raise NotImplementedError
@@ -28,14 +28,17 @@ class Layer(Protocol):
 
 
 class TimelineMixin:
-
-    def __init__(self, start_times: Sequence[float], end_times: Sequence[float]) -> None:
-        assert len(start_times) == len(end_times), f'{len(start_times)} != {len(end_times)}'
+    def __init__(
+        self, start_times: Sequence[float], end_times: Sequence[float]
+    ) -> None:
+        assert len(start_times) == len(
+            end_times
+        ), f"{len(start_times)} != {len(end_times)}"
         self.start_times: np.ndarray = np.asarray(start_times, dtype=float)
         self.end_times: np.ndarray = np.asarray(end_times, dtype=float)
 
     def get_state(self, time: float) -> int:
-        idx = self.start_times.searchsorted(time, side='right') - 1
+        idx = self.start_times.searchsorted(time, side="right") - 1
         if idx >= 0 and self.end_times[idx] > time:
             return int(idx)
         else:
@@ -47,14 +50,15 @@ class TimelineMixin:
 
 
 class ImageLayer:
-
-    def __init__(self, duration: float, img_file: Union[str, Path, Image.Image]) -> None:
+    def __init__(
+        self, duration: float, img_file: Union[str, Path, Image.Image]
+    ) -> None:
         self.image: Optional[Image.Image] = None
         self._img_file: Optional[Path] = None
         if isinstance(img_file, (str, Path)):
             self._img_file = Path(img_file)
         elif isinstance(img_file, Image.Image):
-            self.image = img_file.convert('RGBA')
+            self.image = img_file.convert("RGBA")
         self._duration = duration
 
     @property
@@ -66,19 +70,18 @@ class ImageLayer:
 
     def __call__(self, time: float) -> Optional[Image.Image]:
         if self.image is None:
-            self.image = Image.open(self._img_file).convert('RGBA')
+            self.image = Image.open(self._img_file).convert("RGBA")
         return self.image
 
 
 class VideoLayer:
-
     def __init__(self, video_file: Union[str, Path]) -> None:
         self.video_file = Path(video_file)
         self.reader = imageio.get_reader(video_file)
         meta_data = self.reader.get_meta_data()
-        self.fps = meta_data['fps']
-        self.n_frames = meta_data['nframes']
-        self._duration = meta_data['duration']
+        self.fps = meta_data["fps"]
+        self.n_frames = meta_data["nframes"]
+        self._duration = meta_data["duration"]
 
     @property
     def duration(self):
@@ -93,14 +96,17 @@ class VideoLayer:
     def __call__(self, time: float) -> Optional[Image.Image]:
         frame_index = int(time * self.fps)
         frame = self.reader.get_data(frame_index)
-        return Image.fromarray(frame).convert('RGBA')
+        return Image.fromarray(frame).convert("RGBA")
 
 
 class SlideLayer(TimelineMixin):
-
     def __init__(
-            self, start_times: Sequence[float], end_times: Sequence[float],
-            slide_file: Union[str, Path], slide_counter: Sequence[int]) -> None:
+        self,
+        start_times: Sequence[float],
+        end_times: Sequence[float],
+        slide_file: Union[str, Path],
+        slide_counter: Sequence[int],
+    ) -> None:
         super().__init__(start_times, end_times)
         self.slide_timeline = np.cumsum(slide_counter)
         self.slide_file = slide_file
@@ -119,19 +125,25 @@ class SlideLayer(TimelineMixin):
         if self.slide_images is None:
             slide_images = []
             for img in convert_from_path(self.slide_file):
-                img = img.convert('RGBA')
+                img = img.convert("RGBA")
                 slide_images.append(img)
             self.slide_images = slide_images
         return self.slide_images[slide_number]
 
 
 class CharacterLayer(TimelineMixin):
-
     def __init__(
-            self, start_times: Sequence[float], end_times: Sequence[float],
-            character_name: str, character_dir: Union[str, Path], characters: Sequence[str],
-            character_status: Sequence[str], initial_status: str = 'n',
-            blink_per_minute: int = 3, blink_duration: float = 0.2) -> None:
+        self,
+        start_times: Sequence[float],
+        end_times: Sequence[float],
+        character_name: str,
+        character_dir: Union[str, Path],
+        characters: Sequence[str],
+        character_status: Sequence[str],
+        initial_status: str = "n",
+        blink_per_minute: int = 3,
+        blink_duration: float = 0.2,
+    ) -> None:
         assert len(start_times) == len(characters) == len(character_status)
         super().__init__(start_times, end_times)
         self.character_name = character_name
@@ -144,14 +156,14 @@ class CharacterLayer(TimelineMixin):
                 emotions.add(status)
         emotions.add(initial_status)
         for emotion in emotions:
-            path = Path(character_dir) / f'{emotion}.png'
+            path = Path(character_dir) / f"{emotion}.png"
             self.character_imgs[emotion] = path
-            eye_path = Path(character_dir) / f'{emotion}.eye.png'
+            eye_path = Path(character_dir) / f"{emotion}.eye.png"
             if eye_path.exists():
                 eyes = [eye_path]
                 for f in character_dir.iterdir():
-                    x = f.name.split('.')
-                    if f.name.startswith(f'{emotion}.eye.') and len(x) == 4:
+                    x = f.name.split(".")
+                    if f.name.startswith(f"{emotion}.eye.") and len(x) == 4:
                         eyes.append(f)
                 self.eye_imgs[emotion] = eyes
 
@@ -173,7 +185,7 @@ class CharacterLayer(TimelineMixin):
             return 0
         p_threshold = self.blink_per_minute * self.blink_duration / 60
         n = int(time / self.blink_duration)
-        p = rand_from_string(f'{self.character_name}:{n}')
+        p = rand_from_string(f"{self.character_name}:{n}")
         if p < p_threshold:
             frame_duration = self.blink_duration / (len(self.eye_imgs[emotion]) - 1)
             t1 = time - n * self.blink_duration
@@ -197,7 +209,7 @@ class CharacterLayer(TimelineMixin):
         emotion = self.character_timeline[idx]
         character = self.character_imgs[emotion]
         if isinstance(character, Path):
-            base_img = Image.open(character).convert('RGBA')
+            base_img = Image.open(character).convert("RGBA")
             self.character_imgs[emotion] = base_img
         else:
             base_img = character
@@ -206,7 +218,7 @@ class CharacterLayer(TimelineMixin):
             eye_number = self.get_eye_state(time, idx)
             eye = self.eye_imgs[emotion][eye_number]
             if isinstance(eye, Path):
-                eye_img = Image.open(eye).convert('RGBA')
+                eye_img = Image.open(eye).convert("RGBA")
                 self.eye_imgs[emotion][eye_number] = eye_img
             else:
                 eye_img = eye
@@ -227,24 +239,26 @@ class LayerProperty:
     name: str
     layer: Layer
     transform: Transform = Transform()
-    offset: float = 0.
-    start_time: float = 0.
-    end_time: float = 0.
+    offset: float = 0.0
+    start_time: float = 0.0
+    end_time: float = 0.0
 
     def __post_init__(self) -> None:
-        self.end_time = self.end_time if self.end_time == 0. else self.layer.duration
+        self.end_time = self.end_time if self.end_time == 0.0 else self.layer.duration
         self._motions: dict[str, Motion] = {}
 
     @property
     def attributes(self) -> list[Attribute]:
         return [
-            Attribute('anchor_point', 'vector2d'),
-            Attribute('position', 'vector2d'),
-            Attribute('scale', 'vector2d'),
-            Attribute('opacity', 'scalar'),
+            Attribute("anchor_point", "vector2d"),
+            Attribute("position", "vector2d"),
+            Attribute("scale", "vector2d"),
+            Attribute("opacity", "scalar"),
         ]
 
-    def __call__(self, attr_name: str, layer_time: float = 0.) -> np.ndarray[Any, np.dtype[np.float64]]:
+    def __call__(
+        self, attr_name: str, layer_time: float = 0.0
+    ) -> np.ndarray[Any, np.dtype[np.float64]]:
         if attr_name in self._motions:
             motion = self._motions[attr_name]
             return motion(layer_time)
@@ -271,17 +285,19 @@ class LayerProperty:
             del self._motions[attr_name]
 
     def get_current_transform(self, layer_time: float) -> Transform:
-        opacity = self('opacity', layer_time)
+        opacity = self("opacity", layer_time)
         return Transform(
-            anchor_point=normalize_2dvector(self('anchor_point', layer_time)),
-            position=normalize_2dvector(self('position', layer_time)),
-            scale=normalize_2dvector(self('scale', layer_time)),
-            opacity=float(opacity))
+            anchor_point=normalize_2dvector(self("anchor_point", layer_time)),
+            position=normalize_2dvector(self("position", layer_time)),
+            scale=normalize_2dvector(self("scale", layer_time)),
+            opacity=float(opacity),
+        )
 
 
 class Composition:
-
-    def __init__(self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0) -> None:
+    def __init__(
+        self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0
+    ) -> None:
         self.layers: list[LayerProperty] = []
         self._name_to_layer: dict[str, LayerProperty] = {}
         self.size = size
@@ -305,28 +321,42 @@ class Composition:
             layer = layer_prop.layer
             layer_time = time - layer_prop.offset
             if layer_time < layer_prop.start_time or layer_prop.end_time <= layer_time:
-                layer_keys.append(f'__{layer_prop.name}__')
+                layer_keys.append(f"__{layer_prop.name}__")
             else:
                 p = layer_prop.get_current_transform(layer_time)
                 layer_keys.append(p + layer.get_keys(layer_time))
         return tuple(layer_keys)
 
-    def add_layer(self, layer: Layer, name: Optional[str] = None,
-                  transform: Transform = Transform(), offset: float = 0.,
-                  start_time: float = 0., end_time: Optional[float] = None) -> LayerProperty:
+    def add_layer(
+        self,
+        layer: Layer,
+        name: Optional[str] = None,
+        transform: Optional[Transform] = None,
+        offset: float = 0.0,
+        start_time: float = 0.0,
+        end_time: Optional[float] = None,
+    ) -> LayerProperty:
         if name is None:
-            name = f'layer_{len(self.layers)}'
+            name = f"layer_{len(self.layers)}"
         if name in self.layers:
-            raise KeyError(f'Layer with name {name} already exists')
+            raise KeyError(f"Layer with name {name} already exists")
         end_time = end_time if end_time is not None else layer.duration
+        transform = transform if transform is not None else Transform()
         layer_prop = LayerProperty(
-            name, layer, transform,
-            offset=offset, start_time=start_time, end_time=end_time)
+            name,
+            layer,
+            transform,
+            offset=offset,
+            start_time=start_time,
+            end_time=end_time,
+        )
         self.layers.append(layer_prop)
         self._name_to_layer[name] = layer_prop
         return layer_prop
 
-    def composite(self, base_img: Image.Image, layer_prop: LayerProperty, time: float) -> Image.Image:
+    def composite(
+        self, base_img: Image.Image, layer_prop: LayerProperty, time: float
+    ) -> Image.Image:
         layer_time = time - layer_prop.offset
         if layer_time < layer_prop.start_time or layer_prop.end_time <= layer_time:
             return base_img
@@ -340,7 +370,8 @@ class Composition:
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
         alpha_composite(
-            base_img, component, position=(round(x), round(y)), opacity=p.opacity)
+            base_img, component, position=(round(x), round(y)), opacity=p.opacity
+        )
         return base_img
 
     def __call__(self, time: float) -> Optional[Image.Image]:
@@ -348,20 +379,26 @@ class Composition:
         if keys in self.cache:
             return self.cache[keys]
 
-        frame = Image.new('RGBA', self.size)
+        frame = Image.new("RGBA", self.size)
         for layer_prop in self.layers:
             self.composite(frame, layer_prop, time)
         self.cache[keys] = frame
         return frame
 
     def make_video(
-            self, dst_file: Union[str, Path], start_time: float = 0.0, end_time: Optional[float] = None,
-            codec: str = 'libx264', fps: float = 30.0) -> None:
+        self,
+        dst_file: Union[str, Path],
+        start_time: float = 0.0,
+        end_time: Optional[float] = None,
+        codec: str = "libx264",
+        fps: float = 30.0,
+    ) -> None:
         if end_time is None:
             end_time = self.duration
-        times = np.arange(start_time, end_time, 1. / fps)
+        times = np.arange(start_time, end_time, 1.0 / fps)
         writer = imageio.get_writer(
-            dst_file, fps=fps, codec=codec, macro_block_size=None)
+            dst_file, fps=fps, codec=codec, macro_block_size=None
+        )
         for t in tqdm(times, total=len(times)):
             frame = np.asarray(self(t))
             writer.append_data(frame)
