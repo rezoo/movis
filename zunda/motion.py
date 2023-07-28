@@ -1,6 +1,8 @@
 import bisect
 import math
-from typing import Optional, Sequence, TypeVar, Generic, Tuple, Callable
+from typing import Any, Optional, Sequence, Callable, Union
+
+import numpy as np
 
 motion_types_to_func = {
     'linear': lambda t: t,
@@ -13,18 +15,17 @@ motion_types_to_func = {
     'ease_out_expo': lambda t: 1 - math.exp(- 10. * t),
 }
 
-T = TypeVar('T', float, Tuple[float, float])
 
+class Motion:
 
-class Motion(Generic[T]):
-
-    def __init__(self, default_value: Optional[T] = None):
+    def __init__(self, default_value: Optional[Union[float, Sequence[float], np.ndarray[Any, Any]]] = None):
         self.keyframes: list[float] = []
-        self.values: list[T] = []
+        self.values: list[np.ndarray[Any, np.dtype[np.float64]]] = []
         self.motion_types: list[Callable[[float], float]] = []
-        self.default_value: Optional[T] = default_value
+        self.default_value: Optional[np.ndarray[Any, np.dtype[np.float64]]] = \
+            np.array(default_value, dtype=np.float64) if default_value is not None else None
 
-    def __call__(self, layer_time: float) -> T:
+    def __call__(self, layer_time: float) -> np.ndarray[Any, np.dtype[np.float64]]:
         if len(self.keyframes) == 0:
             if self.default_value is not None:
                 return self.default_value
@@ -42,35 +43,30 @@ class Motion(Generic[T]):
             duration = self.keyframes[i] - self.keyframes[i - 1]
             t = (layer_time - self.keyframes[i - 1]) / duration
             t = self.motion_types[i - 1](t)
-            if isinstance(m, float) and isinstance(M, float):
-                return float(m + (M - m) * t)
-            elif isinstance(m, tuple) and isinstance(M, tuple):
-                return (m[0] + (M[0] - m[0]) * t, m[1] + (M[1] - m[1]) * t)
-            else:
-                raise ValueError(f'Unexpected value: {m}, {M}')
+            return m + (M - m) * t
 
-    def _cast(self, value: T) -> T:
-        if isinstance(value, tuple):
-            return (float(value[0]), float(value[1]))
-        else:
-            return float(value)
-
-    def append(self, keyframe: float, value: T, motion_type: str = 'linear') -> 'Motion[T]':
+    def append(
+            self, keyframe: float,
+            value: Union[float, Sequence[float], np.ndarray[Any, Any]],
+            motion_type: str = 'linear') -> 'Motion':
         i = bisect.bisect(self.keyframes, keyframe)
         self.keyframes.insert(i, float(keyframe))
-        self.values.insert(i, self._cast(value))
+        self.values.insert(i, np.array(value, dtype=np.float64))
         self.motion_types.insert(i, motion_types_to_func[motion_type])
         return self
 
-    def extend(self, keyframes: Sequence[float], values: list[T], motion_types: Optional[Sequence[str]] = None) -> 'Motion[T]':
+    def extend(
+            self, keyframes: Sequence[float],
+            values: Sequence[Union[float, Sequence[float], np.ndarray[Any, Any]]],
+            motion_types: Optional[Sequence[str]] = None) -> 'Motion':
         assert len(keyframes) == len(values)
         if motion_types is not None:
             assert len(keyframes) == len(motion_types)
         motion_types = ['linear'] * len(keyframes) if motion_types is None else motion_types
-        keyframes = self.keyframes + [float(k) for k in keyframes]
-        values = self.values + [self._cast(v) for v in values]
-        motion_types = self.motion_types + [motion_types_to_func[t] for t in motion_types]
-        zipped = sorted(zip(keyframes, values, motion_types))
+        updated_keyframes: list[float] = self.keyframes + [float(k) for k in keyframes]
+        updated_values: list[np.ndarray[Any, np.dtype[np.float64]]] = self.values + [np.array(v, dtype=np.float64) for v in values]
+        updated_motion_types: list[Callable[[float], float]] = self.motion_types + [motion_types_to_func[t] for t in motion_types]
+        zipped = sorted(zip(updated_keyframes, updated_values, updated_motion_types))
         keyframes_sorted, values_sorted, motion_types_sorted = zip(*zipped)
         self.keyframes = keyframes_sorted
         self.values = values_sorted

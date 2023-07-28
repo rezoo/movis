@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Hashable, NamedTuple, Protocol, Optional, Sequence, Union
+from typing import Any, Hashable, NamedTuple, Protocol, Optional, Sequence, Union
 
 from cachetools import LRUCache
 import imageio
@@ -244,10 +244,10 @@ class LayerProperty:
             Attribute('opacity', 'scalar'),
         ]
 
-    def __call__(self, attr_name: str, time: float = 0.) -> Union[float, tuple[float, float]]:
+    def __call__(self, attr_name: str, layer_time: float = 0.) -> np.ndarray[Any, np.dtype[np.float64]]:
         if attr_name in self._motions:
             motion = self._motions[attr_name]
-            return motion(time)
+            return motion(layer_time)
         else:
             value = getattr(self.transform, attr_name)
             return value
@@ -272,12 +272,11 @@ class LayerProperty:
 
     def get_current_transform(self, layer_time: float) -> Transform:
         opacity = self('opacity', layer_time)
-        opacity = opacity if isinstance(opacity, float) else opacity[0]
         return Transform(
             anchor_point=normalize_2dvector(self('anchor_point', layer_time)),
             position=normalize_2dvector(self('position', layer_time)),
             scale=normalize_2dvector(self('scale', layer_time)),
-            opacity=opacity)
+            opacity=float(opacity))
 
 
 class Composition:
