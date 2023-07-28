@@ -36,11 +36,9 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     lines = []
     for t0, t1, character, text in zip(start_times, end_times, characters, texts):
         text0, text1 = get_time(t0), get_time(t1)
-        lines.append(
-            line_template.format(
-                start_time=text0, end_time=text1, character=character, text=text
-            )
-        )
+        x = line_template.format(
+            start_time=text0, end_time=text1, character=character, text=text)
+        lines.append(x)
     body = "\n".join(lines)
     with open(dst_ass_path, "w") as fp:
         fp.write(header + body)

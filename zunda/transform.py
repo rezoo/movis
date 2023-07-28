@@ -44,10 +44,7 @@ def resize(img: Image.Image, scale: tuple[float, float] = (1.0, 1.0)) -> Image.I
 def alpha_composite(
     base_img: Image.Image,
     component: Image.Image,
-    position: tuple[float, float] = (
-        0.0,
-        0.0,
-    ),
+    position: tuple[float, float] = (0.0, 0.0),
     opacity: float = 1.0,
 ) -> Image.Image:
     assert 0.0 <= opacity <= 1.0, f"opacity must be in [0, 1], but {opacity} is given."

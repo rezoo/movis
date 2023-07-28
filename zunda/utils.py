@@ -49,10 +49,7 @@ def make_timeline_from_voicevox(
     audio_dir: Union[str, Path],
     max_text_length: int = 25,
     extra_columns: tuple[tuple[str, Hashable], ...] = (
-        ("slide", 0),
-        ("status", "n"),
-        ("action", ""),
-    ),
+        ("slide", 0), ("status", "n"), ("action", "")),
 ) -> pd.DataFrame:
     txt_files = get_paths(audio_dir, ".txt")
     lines = []

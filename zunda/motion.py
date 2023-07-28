@@ -76,13 +76,13 @@ class Motion:
         motion_types = (
             ["linear"] * len(keyframes) if motion_types is None else motion_types
         )
-        updated_keyframes: list[float] = self.keyframes + [float(k) for k in keyframes]
-        updated_values: list[np.ndarray[Any, np.dtype[np.float64]]] = self.values + [
-            np.array(v, dtype=np.float64) for v in values
-        ]
-        updated_motion_types: list[Callable[[float], float]] = self.motion_types + [
-            motion_types_to_func[t] for t in motion_types
-        ]
+        converted_keyframes = [float(k) for k in keyframes]
+        updated_keyframes: list[float] = self.keyframes + converted_keyframes
+        converted_values = [np.array(v, dtype=np.float64) for v in values]
+        updated_values: list[np.ndarray[Any, np.dtype[np.float64]]] = self.values + converted_values
+        converted_motion_types = [motion_types_to_func[t] for t in motion_types]
+        updated_motion_types: list[Callable[[float], float]] = self.motion_types + converted_motion_types
+
         zipped = sorted(zip(updated_keyframes, updated_values, updated_motion_types))
         keyframes_sorted, values_sorted, motion_types_sorted = zip(*zipped)
         self.keyframes = keyframes_sorted
