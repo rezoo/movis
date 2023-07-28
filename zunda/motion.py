@@ -19,9 +19,7 @@ motion_types_to_func = {
 class Motion:
     def __init__(
         self,
-        default_value: Optional[
-            Union[float, Sequence[float], np.ndarray[Any, Any]]
-        ] = None,
+        default_value: Optional[Union[float, Sequence[float], np.ndarray[Any, Any]]] = None,
     ):
         self.keyframes: list[float] = []
         self.values: list[np.ndarray[Any, np.dtype[np.float64]]] = []

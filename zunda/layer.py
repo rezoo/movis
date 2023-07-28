@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import (Any, Hashable, NamedTuple, Optional, Protocol, Sequence,
-                    Union)
+from typing import Any, Hashable, NamedTuple, Optional, Protocol, Sequence, Union
 
 import imageio
 import numpy as np

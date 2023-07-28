@@ -5,9 +5,7 @@ from typing import Union
 from pydub import AudioSegment
 
 
-def concat_audio_files(
-    start_times: list[float], audio_files: list[Union[str, Path]]
-) -> AudioSegment:
+def concat_audio_files(start_times: list[float], audio_files: list[Union[str, Path]]) -> AudioSegment:
     assert len(audio_files) == len(start_times)
     audio = AudioSegment.empty()
     silence = AudioSegment.silent(duration=1000)
