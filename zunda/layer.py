@@ -19,7 +19,7 @@ class Layer(Protocol):
     def duration(self):
         raise NotImplementedError
 
-    def get_keys(self, time: float) -> tuple[Hashable, ...]:
+    def get_key(self, time: float) -> Hashable:
         raise NotImplementedError
 
     def __call__(self, time: float) -> Optional[Image.Image]:
@@ -64,8 +64,8 @@ class ImageLayer:
     def duration(self):
         return self._duration
 
-    def get_keys(self, time: float) -> tuple[int]:
-        return (1,) if 0 <= time < self.duration else (0,)
+    def get_key(self, time: float) -> int:
+        return 1 if 0 <= time < self.duration else 0
 
     def __call__(self, time: float) -> Optional[Image.Image]:
         if self.image is None:
@@ -86,11 +86,11 @@ class VideoLayer:
     def duration(self):
         return self._duration
 
-    def get_keys(self, time: float):
+    def get_key(self, time: float) -> int:
         if time < 0 or self.duration < time:
-            return (-1,)
+            return -1
         frame_index = int(time * self.fps)
-        return (frame_index,)
+        return frame_index
 
     def __call__(self, time: float) -> Optional[Image.Image]:
         frame_index = int(time * self.fps)
@@ -111,10 +111,10 @@ class SlideLayer(TimelineMixin):
         self.slide_file = slide_file
         self.slide_images: Optional[list[Image.Image]] = None
 
-    def get_keys(self, time: float) -> tuple[Hashable, ...]:
+    def get_key(self, time: float) -> int:
         idx = self.get_state(time)
         key = int(self.slide_timeline[idx]) if 0 < idx else -1
-        return (key,)
+        return key
 
     def __call__(self, time: float) -> Optional[Image.Image]:
         idx = self.get_state(time)
@@ -193,10 +193,10 @@ class CharacterLayer(TimelineMixin):
         else:
             return 0
 
-    def get_keys(self, time: float) -> tuple[Hashable, ...]:
+    def get_key(self, time: float) -> tuple[str, int]:
         idx = self.get_state(time)
         if idx < 0:
-            return (None, None)
+            return ('', -1)
         emotion = self.character_timeline[idx]
         eye = self.get_eye_state(time, idx)
         return (emotion, eye)
@@ -314,7 +314,7 @@ class Composition:
     def __getitem__(self, key: str) -> LayerProperty:
         return self._name_to_layer[key]
 
-    def get_keys(self, time: float) -> tuple[Hashable, ...]:
+    def get_key(self, time: float) -> tuple[Hashable, ...]:
         layer_keys: list[Hashable] = []
         for layer_prop in self.layers:
             layer = layer_prop.layer
@@ -323,7 +323,7 @@ class Composition:
                 layer_keys.append(f"__{layer_prop.name}__")
             else:
                 p = layer_prop.get_current_transform(layer_time)
-                layer_keys.append(p + layer.get_keys(layer_time))
+                layer_keys.append((p, layer.get_key(layer_time)))
         return tuple(layer_keys)
 
     def add_layer(
@@ -374,14 +374,14 @@ class Composition:
         return base_img
 
     def __call__(self, time: float) -> Optional[Image.Image]:
-        keys = self.get_keys(time)
-        if keys in self.cache:
-            return self.cache[keys]
+        key = self.get_key(time)
+        if key in self.cache:
+            return self.cache[key]
 
         frame = Image.new("RGBA", self.size)
         for layer_prop in self.layers:
             self.composite(frame, layer_prop, time)
-        self.cache[keys] = frame
+        self.cache[key] = frame
         return frame
 
     def make_video(
