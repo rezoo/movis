@@ -1,3 +1,4 @@
+from functools import partial
 from typing import NamedTuple, Union
 
 import numpy as np
@@ -39,20 +40,27 @@ def resize(img: jax.Array, scale: tuple[float, float] = (1.0, 1.0)) -> jax.Array
     return jax.image.resize(img, (round(h * scale[1]), round(w * scale[0]), c), method='cubic')
 
 
-@jax.jit
-def _overlay(bg_subset: jax.Array, fg_subset: jax.Array, opacity: float) -> jax.Array:
-    bg_subset = jax.device_put(bg_subset)
-    fg_subset = jax.device_put(fg_subset)
+@partial(jax.jit, static_argnums=(2, 3, 4))
+def _overlay(
+        bg: jax.Array, fg: jax.Array, p_bg: tuple[int, int], p_fg: tuple[int, int],
+        size: tuple[int, int], opacity: float) -> jax.Array:
+    bg = jax.device_put(bg)
+    fg = jax.device_put(fg)
+
+    x_bg, y_bg = p_bg
+    x_fg, y_fg = p_fg
+    w, h = size
+    bg_subset = bg[y_bg: (y_bg + h), x_bg: (x_bg + w)]
+    fg_subset = fg[y_fg: (y_fg + h), x_fg: (x_fg + w)]
 
     bg_a = bg_subset[..., 3] / 255
     fg_a = fg_subset[..., 3] * (opacity / 255)
-
     out_a = fg_a + bg_a * (1 - fg_a)
     out_rgb = \
         (fg_subset[..., :3] * fg_a[..., None] + bg_subset[..., :3] * bg_a[..., None] * (1 - fg_a[..., None])) / out_a[..., None]
     out_subset = jax.lax.concatenate((
         out_rgb.astype(np.uint8), (out_a[:, :, None] * 255).astype(np.uint8)), 2)
-    return out_subset
+    return bg.at[y_bg: y_bg + h, x_bg: x_bg + w].set(out_subset)
 
 
 def alpha_composite(base_img, component, position=(0, 0), opacity=1.0):
@@ -67,15 +75,4 @@ def alpha_composite(base_img, component, position=(0, 0), opacity=1.0):
     if w <= 0 or h <= 0:
         return base_img
 
-    bg = jax.device_put(base_img)
-    fg = jax.device_put(component)
-
-    x_bg, y_bg = x1, y1
-    x_fg, y_fg = x2, y2
-    bg_subset = jax.lax.dynamic_slice(bg, (y_bg, x_bg, 0), (h, w, 4))
-    fg_subset = jax.lax.dynamic_slice(fg, (y_fg, x_fg, 0), (h, w, 4))
-
-    out_subset = _overlay(bg_subset, fg_subset, opacity)
-
-    img = jax.lax.dynamic_update_slice(bg, out_subset, (y_bg, x_bg, 0))
-    return img
+    return _overlay(base_img, component, (x1, y1), (x2, y2), (w, h), opacity)
