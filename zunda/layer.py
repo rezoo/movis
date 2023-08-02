@@ -4,15 +4,13 @@ from typing import Any, Hashable, NamedTuple, Optional, Protocol, Sequence, Unio
 
 import imageio
 import numpy as np
-import jax
-import jax.numpy as jnp
 from cachetools import LRUCache
 from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
 
 from zunda.motion import Motion
-from zunda.transform import Transform, alpha_composite, resize
+from zunda.transform import Transform, alpha_composite, alpha_composite_numpy, resize
 from zunda.utils import normalize_2dvector, rand_from_string
 
 
@@ -24,7 +22,7 @@ class Layer(Protocol):
     def get_key(self, time: float) -> Hashable:
         raise NotImplementedError
 
-    def __call__(self, time: float) -> Optional[jax.Array]:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
         raise NotImplementedError
 
 
@@ -52,18 +50,18 @@ class TimelineMixin:
 
 class ImageLayer:
     def __init__(
-        self, duration: float, img_file: Union[str, Path, Image.Image, jax.Array, np.ndarray]
+        self, duration: float, img_file: Union[str, Path, Image.Image, np.ndarray]
     ) -> None:
-        self.image: Optional[jax.Array] = None
+        self.image: Optional[np.ndarray] = None
         self._img_file: Optional[Path] = None
         if isinstance(img_file, (str, Path)):
             self._img_file = Path(img_file)
             assert self._img_file.exists(), f"{self._img_file} does not exist"
         elif isinstance(img_file, Image.Image):
-            image = jnp.array(img_file.convert("RGBA"))
+            image = np.asarray(img_file.convert("RGBA"))
             self.image = image
-        elif isinstance(img_file, (jax.Array, np.ndarray)):
-            self.image = jnp.array(img_file)
+        elif isinstance(img_file, np.ndarray):
+            self.image = img_file
         else:
             raise ValueError(f"Invalid img_file type: {type(img_file)}")
 
@@ -76,9 +74,9 @@ class ImageLayer:
     def get_key(self, time: float) -> bool:
         return 0 <= time < self.duration
 
-    def __call__(self, time: float) -> Optional[jax.Array]:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
         if self.image is None:
-            image = jnp.array(Image.open(self._img_file).convert("RGBA"))
+            image = np.asarray(Image.open(self._img_file).convert("RGBA"))
             self.image = image
         return self.image
 
@@ -102,11 +100,11 @@ class VideoLayer:
         frame_index = int(time * self.fps)
         return frame_index
 
-    def __call__(self, time: float) -> Optional[jax.Array]:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
         frame_index = int(time * self.fps)
         frame = self.reader.get_data(frame_index)
         frame = Image.fromarray(frame).convert("RGBA")
-        return jnp.array(frame)
+        return np.asarray(frame)
 
 
 class SlideLayer(TimelineMixin):
@@ -120,14 +118,14 @@ class SlideLayer(TimelineMixin):
         super().__init__(start_times, end_times)
         self.slide_timeline = np.cumsum(slide_counter)
         self.slide_file = slide_file
-        self.slide_images: Optional[list[jax.Array]] = None
+        self.slide_images: Optional[list[np.ndarray]] = None
 
     def get_key(self, time: float) -> int:
         idx = self.get_state(time)
         key = int(self.slide_timeline[idx]) if 0 < idx else -1
         return key
 
-    def __call__(self, time: float) -> Optional[jax.Array]:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
         idx = self.get_state(time)
         if idx < 0:
             return None
@@ -135,7 +133,7 @@ class SlideLayer(TimelineMixin):
         if self.slide_images is None:
             slide_images = []
             for img in convert_from_path(self.slide_file):
-                img = jnp.array(img.convert("RGBA"))
+                img = np.asarray(img.convert("RGBA"))
                 slide_images.append(img)
             self.slide_images = slide_images
         return self.slide_images[slide_number]
@@ -157,8 +155,8 @@ class CharacterLayer(TimelineMixin):
         assert len(start_times) == len(characters) == len(character_status)
         super().__init__(start_times, end_times)
         self.character_name = character_name
-        self.character_imgs: dict[str, Union[Path, jax.Array]] = {}
-        self.eye_imgs: dict[str, list[Union[Path, jax.Array]]] = {}
+        self.character_imgs: dict[str, Union[Path, np.ndarray]] = {}
+        self.eye_imgs: dict[str, list[Union[Path, np.ndarray]]] = {}
         character_dir = Path(character_dir)
         emotions = set()
         for character, status in zip(characters, character_status):
@@ -170,7 +168,7 @@ class CharacterLayer(TimelineMixin):
             self.character_imgs[emotion] = path
             eye_path = Path(character_dir) / f"{emotion}.eye.png"
             if eye_path.exists():
-                eyes: list[Union[Path, jax.Array]] = [eye_path]
+                eyes: list[Union[Path, np.ndarray]] = [eye_path]
                 for f in character_dir.iterdir():
                     x = f.name.split(".")
                     if f.name.startswith(f"{emotion}.eye.") and len(x) == 4:
@@ -212,14 +210,14 @@ class CharacterLayer(TimelineMixin):
         eye = self.get_eye_state(time, idx)
         return (emotion, eye)
 
-    def __call__(self, time: float) -> Optional[jax.Array]:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
         idx = self.get_state(time)
         if idx < 0:
             return None
         emotion = self.character_timeline[idx]
         character = self.character_imgs[emotion]
         if isinstance(character, Path):
-            base_img = jnp.array(Image.open(character).convert("RGBA"))
+            base_img = np.asarray(Image.open(character).convert("RGBA"))
             self.character_imgs[emotion] = base_img
         else:
             base_img = character
@@ -228,11 +226,12 @@ class CharacterLayer(TimelineMixin):
             eye_number = self.get_eye_state(time, idx)
             eye = self.eye_imgs[emotion][eye_number]
             if isinstance(eye, Path):
-                eye_img = jnp.array(Image.open(eye).convert("RGBA"))
+                eye_img = np.asarray(Image.open(eye).convert("RGBA"))
                 self.eye_imgs[emotion][eye_number] = eye_img
             else:
                 eye_img = eye
-            base_img = alpha_composite(base_img, eye_img)
+            base_img = base_img.copy()
+            alpha_composite_numpy(base_img, eye_img)
         return base_img
 
 
@@ -364,8 +363,8 @@ class Composition:
         return layer_prop
 
     def composite(
-        self, base_img: jax.Array, layer_prop: LayerProperty, time: float
-    ) -> jax.Array:
+        self, base_img: np.ndarray, layer_prop: LayerProperty, time: float
+    ) -> np.ndarray:
         layer_time = time - layer_prop.offset
         if layer_time < layer_prop.start_time or layer_prop.end_time <= layer_time:
             return base_img
@@ -375,19 +374,19 @@ class Composition:
         h, w = component.shape[:2]
 
         p = layer_prop.get_current_transform(layer_time)
-        component = jnp.asarray(resize(component, p.scale), dtype=np.uint8)
+        component = resize(component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
         base_img = alpha_composite(
             base_img, component, position=(round(x), round(y)), opacity=p.opacity)
         return base_img
 
-    def __call__(self, time: float) -> Optional[jax.Array]:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
         key = self.get_key(time)
         if key in self.cache:
             return self.cache[key]
 
-        frame = jnp.zeros((self.size[1], self.size[0], 4), dtype=np.uint8)
+        frame = np.zeros((self.size[1], self.size[0], 4), dtype=np.uint8)
         for layer_prop in self.layers:
             frame = self.composite(frame, layer_prop, time)
         self.cache[key] = frame

@@ -1,8 +1,7 @@
-from functools import partial
 from typing import NamedTuple, Union
+from PIL import Image
 
 import numpy as np
-import jax
 
 from zunda.utils import normalize_2dvector
 
@@ -33,37 +32,40 @@ class Transform(NamedTuple):
         )
 
 
-def resize(img: jax.Array, scale: tuple[float, float] = (1.0, 1.0)) -> jax.Array:
+def resize(img: np.ndarray, scale: tuple[float, float] = (1.0, 1.0)) -> np.ndarray:
     if scale == (1.0, 1.0):
         return img
-    h, w, c = img.shape
-    return jax.image.resize(img, (round(h * scale[1]), round(w * scale[0]), c), method='cubic')
+    h, w = img.shape[:2]
+    return np.asarray(Image.fromarray(img).resize(
+        (round(w * scale[0]), round(h * scale[1])), Image.BILINEAR))
 
 
-@partial(jax.jit, static_argnums=(2, 3, 4))
 def _overlay(
-        bg: jax.Array, fg: jax.Array, p_bg: tuple[int, int], p_fg: tuple[int, int],
-        size: tuple[int, int], opacity: float) -> jax.Array:
-    bg = jax.device_put(bg)
-    fg = jax.device_put(fg)
-
+        bg: np.ndarray, fg: np.ndarray, p_bg: tuple[int, int], p_fg: tuple[int, int],
+        size: tuple[int, int], opacity: float) -> np.ndarray:
     x_bg, y_bg = p_bg
     x_fg, y_fg = p_fg
     w, h = size
-    bg_subset = bg[y_bg: (y_bg + h), x_bg: (x_bg + w)]
-    fg_subset = fg[y_fg: (y_fg + h), x_fg: (x_fg + w)]
+    bg_subset = bg[y_bg: (y_bg + h), x_bg: (x_bg + w)].astype(np.uint32)
+    fg_subset = fg[y_fg: (y_fg + h), x_fg: (x_fg + w)].astype(np.uint32)
 
-    bg_a = bg_subset[..., 3] / 255
-    fg_a = fg_subset[..., 3] * (opacity / 255)
-    out_a = fg_a + bg_a * (1 - fg_a)
+    bg_a = bg_subset[..., 3:]
+    fg_a = (fg_subset[..., 3:] * opacity).astype(np.uint32) if opacity < 1.0 else fg_subset[..., 3:]
+    out_a = 255 * fg_a + bg_a * (255 - fg_a)
+    bg_rgb, fg_rgb = bg_subset[..., :3], fg_subset[..., :3]
     out_rgb = \
-        (fg_subset[..., :3] * fg_a[..., None] + bg_subset[..., :3] * bg_a[..., None] * (1 - fg_a[..., None])) / out_a[..., None]
-    out_subset = jax.lax.concatenate((
-        out_rgb.astype(np.uint8), (out_a[:, :, None] * 255).astype(np.uint8)), 2)
-    return bg.at[y_bg: y_bg + h, x_bg: x_bg + w].set(out_subset)
+        (255 * fg_rgb * fg_a + bg_rgb * bg_a * (255 - fg_a)) // (out_a + (out_a == 0))
+    bg[y_bg: (y_bg + h), x_bg: (x_bg + w), :3] = out_rgb.astype(np.uint8)
+    bg[y_fg: (y_fg + h), x_fg: (x_fg + w), 3:] = (out_a // 255).astype(np.uint8)
+    return bg
 
 
-def alpha_composite(base_img, component, position=(0, 0), opacity=1.0):
+def alpha_composite_numpy(
+    base_img: np.ndarray,
+    component: np.ndarray,
+    position: tuple[int, int] = (0, 0),
+    opacity: float = 1.0,
+) -> np.ndarray:
     h1, w1 = base_img.shape[:2]
     h2, w2 = component.shape[:2]
 
@@ -76,3 +78,22 @@ def alpha_composite(base_img, component, position=(0, 0), opacity=1.0):
         return base_img
 
     return _overlay(base_img, component, (x1, y1), (x2, y2), (w, h), opacity)
+
+
+def alpha_composite(
+    base_img: np.ndarray,
+    component: np.ndarray,
+    position: tuple[float, float] = (0.0, 0.0),
+    opacity: float = 1.0,
+) -> np.ndarray:
+    assert 0.0 <= opacity <= 1.0, f"opacity must be in [0, 1], but {opacity} is given."
+    if opacity < 1.0:
+        component = component.copy()
+        c_alpha = component[:, :, 3].astype(np.uint16)
+        a = int(np.round(opacity * 256))
+        c_alpha = (c_alpha * a // 256).astype(np.uint8)
+        component[:, :, 3] = c_alpha
+    base_img_pil = Image.fromarray(base_img)
+    base_img_pil.alpha_composite(
+        Image.fromarray(component), (round(position[0]), round(position[1])))
+    return np.asarray(base_img_pil)
