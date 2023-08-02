@@ -10,7 +10,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from zunda.motion import Motion
-from zunda.transform import Transform, alpha_composite, alpha_composite_numpy, resize
+from zunda.transform import Transform, alpha_composite, resize
 from zunda.utils import normalize_2dvector, rand_from_string
 
 
@@ -230,8 +230,7 @@ class CharacterLayer(TimelineMixin):
                 self.eye_imgs[emotion][eye_number] = eye_img
             else:
                 eye_img = eye
-            base_img = base_img.copy()
-            alpha_composite_numpy(base_img, eye_img)
+            base_img = alpha_composite(base_img, eye_img)
         return base_img
 
 

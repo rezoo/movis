@@ -83,7 +83,7 @@ def alpha_composite_numpy(
 def alpha_composite(
     base_img: np.ndarray,
     component: np.ndarray,
-    position: tuple[float, float] = (0.0, 0.0),
+    position: tuple[int, int] = (0, 0),
     opacity: float = 1.0,
 ) -> np.ndarray:
     assert 0.0 <= opacity <= 1.0, f"opacity must be in [0, 1], but {opacity} is given."
@@ -95,5 +95,5 @@ def alpha_composite(
         component[:, :, 3] = c_alpha
     base_img_pil = Image.fromarray(base_img)
     base_img_pil.alpha_composite(
-        Image.fromarray(component), (round(position[0]), round(position[1])))
+        Image.fromarray(component), (position[0], position[1]))
     return np.asarray(base_img_pil)
