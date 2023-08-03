@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from enum import Enum
 from pathlib import Path
-from typing import Any, Hashable, NamedTuple, Optional, Protocol, Sequence, Union
+from typing import (Any, Hashable, NamedTuple, Optional, Protocol, Sequence,
+                    Union)
 
 import imageio
 import numpy as np
@@ -240,6 +242,11 @@ class Attribute(NamedTuple):
     value_type: str
 
 
+class CacheType(Enum):
+    COMPOSITION = 0
+    LAYER = 1
+
+
 @dataclass(eq=False)
 class LayerProperty:
 
@@ -323,7 +330,7 @@ class Composition:
         return self._name_to_layer[key]
 
     def get_key(self, time: float) -> tuple[Hashable, ...]:
-        layer_keys: list[Hashable] = []
+        layer_keys: list[Hashable] = [CacheType.COMPOSITION]
         for layer_prop in self.layers:
             layer = layer_prop.layer
             layer_time = time - layer_prop.offset
@@ -361,6 +368,18 @@ class Composition:
         self._name_to_layer[name] = layer_prop
         return layer_prop
 
+    def _resize(
+        self, layer_prop: LayerProperty, layer_time: float,
+        component: np.ndarray, scale: tuple[float, float]
+    ) -> np.ndarray:
+        layer_state = layer_prop.layer.get_key(layer_time)
+        key = (CacheType.LAYER, layer_prop.name, layer_state, scale)
+        if key in self.cache:
+            return self.cache[key]
+        img = resize(component, scale)
+        self.cache[key] = img
+        return img
+
     def composite(
         self, base_img: np.ndarray, layer_prop: LayerProperty, time: float
     ) -> np.ndarray:
@@ -373,7 +392,7 @@ class Composition:
         h, w = component.shape[:2]
 
         p = layer_prop.get_current_transform(layer_time)
-        component = resize(component, p.scale)
+        component = self._resize(layer_prop, layer_time, component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
         base_img = alpha_composite(

@@ -1,7 +1,7 @@
 from typing import NamedTuple, Union
-from PIL import Image
 
 import numpy as np
+from PIL import Image
 
 from zunda.utils import normalize_2dvector
 
