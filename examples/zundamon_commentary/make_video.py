@@ -44,7 +44,7 @@ def main():
         name='metan_logo', offset=0.5,
         transform=Transform(position=(170, 340)))
 
-    def slide_in_out(lp: zunda.LayerProperty, offset: float):
+    def slide_in_out(lp: zunda.LayerItem, offset: float):
         p = lp.transform.position.init_value
         lp.transform.position.enable_motion() \
             .append(0.0, p) \
@@ -58,17 +58,17 @@ def main():
     slide_in_out(scene['zunda_logo'], 500)
     slide_in_out(scene['metan_logo'], -500)
 
-    #bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
-    #bgm = bgm.fade_out(5 * 1000)
-    #voice = zunda.concat_audio_files(tl['start_time'], tl['audio_file'])
-    #bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
-    #zunda.make_ass_file(
-    #    tl['start_time'], tl['end_time'], tl['character'], tl['text'],
-    #    'outputs/subtitle.ass', font_name='Hiragino Maru Gothic Pro')
+    bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
+    bgm = bgm.fade_out(5 * 1000)
+    voice = zunda.concat_audio_files(tl['start_time'], tl['audio_file'])
+    bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
+    zunda.make_ass_file(
+        tl['start_time'], tl['end_time'], tl['character'], tl['text'],
+        'outputs/subtitle.ass', font_name='Hiragino Maru Gothic Pro')
     scene.make_video('outputs/video.mp4')
-    #zunda.add_materials_to_video(
-    #    'outputs/video.mp4', 'outputs/dialogue.wav',
-    #    subtitle_file='outputs/subtitle.ass', dst_file='outputs/video2.mp4')
+    zunda.add_materials_to_video(
+        'outputs/video.mp4', 'outputs/dialogue.wav',
+        subtitle_file='outputs/subtitle.ass', dst_file='outputs/video2.mp4')
 
 
 if __name__ == '__main__':

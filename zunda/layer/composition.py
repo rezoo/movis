@@ -8,8 +8,9 @@ from cachetools import LRUCache
 from tqdm import tqdm
 
 from zunda.attribute import Attribute
+from zunda.imgproc import alpha_composite_numpy, resize
 from zunda.layer.core import Layer
-from zunda.transform import Transform, alpha_composite_numpy, resize
+from zunda.transform import Transform
 
 
 class CacheType(Enum):
@@ -57,13 +58,13 @@ class Composition:
 
     def get_key(self, time: float) -> tuple[Hashable, ...]:
         layer_keys: list[Hashable] = [CacheType.COMPOSITION]
-        for layer_prop in self.layers:
-            layer = layer_prop.layer
-            layer_time = time - layer_prop.offset
-            if layer_time < layer_prop.start_time or layer_prop.end_time <= layer_time:
-                layer_keys.append(f"__{layer_prop.name}__")
+        for layer_item in self.layers:
+            layer = layer_item.layer
+            layer_time = time - layer_item.offset
+            if layer_time < layer_item.start_time or layer_item.end_time <= layer_time:
+                layer_keys.append(f"__{layer_item.name}__")
             else:
-                p = layer_prop.transform.get_current_value(layer_time)
+                p = layer_item.transform.get_current_value(layer_time)
                 layer_keys.append((p, layer.get_key(layer_time)))
         return tuple(layer_keys)
 
@@ -82,7 +83,7 @@ class Composition:
             raise KeyError(f"Layer with name {name} already exists")
         end_time = end_time if end_time is not None else layer.duration
         transform = transform if transform is not None else Transform()
-        layer_prop = LayerItem(
+        layer_item = LayerItem(
             name,
             layer,
             transform,
@@ -90,16 +91,16 @@ class Composition:
             start_time=start_time,
             end_time=end_time,
         )
-        self.layers.append(layer_prop)
-        self._name_to_layer[name] = layer_prop
-        return layer_prop
+        self.layers.append(layer_item)
+        self._name_to_layer[name] = layer_item
+        return layer_item
 
     def _get_or_resize(
-        self, layer_prop: LayerItem, layer_time: float,
+        self, layer_item: LayerItem, layer_time: float,
         component: np.ndarray, scale: tuple[float, float]
     ) -> np.ndarray:
-        layer_state = layer_prop.layer.get_key(layer_time)
-        key = (CacheType.LAYER, layer_prop.name, layer_state, scale)
+        layer_state = layer_item.layer.get_key(layer_time)
+        key = (CacheType.LAYER, layer_item.name, layer_state, scale)
         if key in self.cache:
             return self.cache[key]
         img = resize(component, scale)
@@ -107,18 +108,18 @@ class Composition:
         return img
 
     def composite(
-        self, base_img: np.ndarray, layer_prop: LayerItem, time: float
+        self, base_img: np.ndarray, layer_item: LayerItem, time: float
     ) -> np.ndarray:
-        layer_time = time - layer_prop.offset
-        if layer_time < layer_prop.start_time or layer_prop.end_time <= layer_time:
+        layer_time = time - layer_item.offset
+        if layer_time < layer_item.start_time or layer_item.end_time <= layer_time:
             return base_img
-        component = layer_prop.layer(layer_time)
+        component = layer_item.layer(layer_time)
         if component is None:
             return base_img
         h, w = component.shape[:2]
 
-        p = layer_prop.transform.get_current_value(layer_time)
-        component = self._get_or_resize(layer_prop, layer_time, component, p.scale)
+        p = layer_item.transform.get_current_value(layer_time)
+        component = self._get_or_resize(layer_item, layer_time, component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
         base_img = alpha_composite_numpy(
@@ -131,8 +132,8 @@ class Composition:
             return self.cache[key]
 
         frame = np.zeros((self.size[1], self.size[0], 4), dtype=np.uint8)
-        for layer_prop in self.layers:
-            frame = self.composite(frame, layer_prop, time)
+        for layer_item in self.layers:
+            frame = self.composite(frame, layer_item, time)
         self.cache[key] = frame
         return frame
 

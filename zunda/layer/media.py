@@ -6,8 +6,8 @@ import numpy as np
 from pdf2image import convert_from_path
 from PIL import Image
 
+from zunda.imgproc import alpha_composite
 from zunda.layer.core import TimelineMixin
-from zunda.transform import alpha_composite
 from zunda.utils import rand_from_string
 
 

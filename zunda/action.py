@@ -1,7 +1,8 @@
 import re
 from typing import Optional, Sequence
 
-from zunda.layer import Composition
+from zunda.attribute import Attribute
+from zunda.layer.composition import Composition
 from zunda.motion import Motion
 
 
@@ -38,7 +39,7 @@ class FadeOut(Action):
 
 class BounceUp(Action):
     def __call__(self, scene: Composition, layer_name: str) -> None:
-        attribute = scene[layer_name].transform.position
+        attribute: Attribute = scene[layer_name].transform.position
         motion: Motion = attribute.enable_motion()
         p0 = attribute(self.start_time)
         p1 = (p0[0], p0[1] - self.scale)
