@@ -9,6 +9,5 @@ from .layer.media import (CharacterLayer, ImageLayer, SlideLayer,  # noqa
 from .motion import Motion  # noqa
 from .subtitle import make_ass_file  # noqa
 from .transform import Transform  # noqa
-from .util import add_materials_to_video  # noqa; noqa
-from .util import make_timeline_from_voicevox  # noqa
-from .util import make_voicevox_dataframe, merge_timeline
+from .util import (add_materials_to_video, make_timeline_from_voicevox,  # noqa
+                   make_voicevox_dataframe, merge_timeline)
