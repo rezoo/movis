@@ -1,7 +1,7 @@
 import difflib
 import hashlib
 from pathlib import Path
-from typing import Any, Hashable, Sequence, Union
+from typing import Hashable, Union
 
 import ffmpeg
 import numpy as np
@@ -115,26 +115,6 @@ def rand_from_string(string: str, seed: int = 0) -> float:
     s = hashlib.sha224(f"{seed}:{string}".encode("utf-8")).digest()
     x = np.frombuffer(s, dtype=np.uint32)[0]
     return np.random.RandomState(x).rand()
-
-
-def normalize_1dscalar(x: Union[float, Sequence[float]]) -> float:
-    if isinstance(x, float):
-        return x
-    elif len(x) == 1:
-        return float(x[0])
-    else:
-        raise ValueError(f"Invalid value: {x}")
-
-
-def normalize_2dvector(
-    x: Union[float, Sequence[float], np.ndarray[Any, Any]]
-) -> tuple[float, float]:
-    if isinstance(x, float):
-        return (x, x)
-    elif len(x) == 1:
-        return (float(x[0]), float(x[0]))
-    else:
-        return (float(x[0]), float(x[1]))
 
 
 def add_materials_to_video(

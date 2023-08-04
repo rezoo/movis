@@ -1,8 +1,6 @@
-from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import (Any, Hashable, NamedTuple, Optional, Protocol, Sequence,
-                    Union)
+from typing import Hashable, Optional, Protocol, Sequence, Union
 
 import imageio
 import numpy as np
@@ -11,9 +9,9 @@ from pdf2image import convert_from_path
 from PIL import Image
 from tqdm import tqdm
 
-from zunda.motion import Motion
+from zunda.attribute import Attribute
 from zunda.transform import Transform, alpha_composite, alpha_composite_numpy, resize
-from zunda.utils import normalize_2dvector, rand_from_string
+from zunda.utils import rand_from_string
 
 
 class Layer(Protocol):
@@ -236,97 +234,26 @@ class CharacterLayer(TimelineMixin):
         return base_img
 
 
-class AttributeType(Enum):
-    SCALAR = 0
-    VECTOR2D = 1
-    VECTOR3D = 2
-    ANGLE = 3
-    COLOR = 4
-
-    @staticmethod
-    def from_string(s: str) -> "AttributeType":
-        if s == 'scalar':
-            return AttributeType.SCALAR
-        elif s == 'vector2d':
-            return AttributeType.VECTOR2D
-        elif s == 'vector3d':
-            return AttributeType.VECTOR3D
-        elif s == 'angle':
-            return AttributeType.ANGLE
-        else:
-            raise ValueError(f"Unknown attribute type: {s}")
-
-
-class Attribute(NamedTuple):
-
-    attr_name: str
-    value_type: AttributeType
-
-
 class CacheType(Enum):
     COMPOSITION = 0
     LAYER = 1
 
 
-@dataclass(eq=False)
 class LayerProperty:
 
-    name: str
-    layer: Layer
-    transform: Transform = Transform()
-    offset: float = 0.0
-    start_time: float = 0.0
-    end_time: float = 0.0
-
-    def __post_init__(self) -> None:
-        self.end_time = self.end_time if self.end_time == 0.0 else self.layer.duration
-        self._motions: dict[str, Motion] = {}
+    def __init__(
+            self, name: str, layer: Layer, transform: Optional[Transform] = None,
+            offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0):
+        self.name: str = name
+        self.layer: Layer = layer
+        self.transform: Transform = transform if transform is not None else Transform()
+        self.offset: float = offset
+        self.start_time: float = start_time
+        self.end_time: float = end_time if end_time == 0.0 else self.layer.duration
 
     @property
-    def attributes(self) -> tuple[Attribute, ...]:
-        return (
-            Attribute("anchor_point", AttributeType.VECTOR2D),
-            Attribute("position", AttributeType.VECTOR2D),
-            Attribute("scale", AttributeType.VECTOR2D),
-            Attribute("opacity", AttributeType.SCALAR),
-        )
-
-    def __call__(
-        self, attr_name: str, layer_time: float = 0.0
-    ) -> np.ndarray[Any, np.dtype[np.float64]]:
-        if attr_name in self._motions:
-            motion = self._motions[attr_name]
-            return motion(layer_time)
-        else:
-            value = getattr(self.transform, attr_name)
-            return value
-
-    def has_motion(self, attr_name: str) -> bool:
-        return attr_name in self._motions
-
-    def set_motion(self, attr_name: str, motion: Motion) -> Motion:
-        self._motions[attr_name] = motion
-        return motion
-
-    def enable_motion(self, attr_name: str) -> Motion:
-        if self.has_motion(attr_name):
-            return self._motions[attr_name]
-        else:
-            value = self(attr_name)
-            return self.set_motion(attr_name, Motion(default_value=value))
-
-    def disable_motion(self, attr_name: str) -> None:
-        if self.has_motion(attr_name):
-            del self._motions[attr_name]
-
-    def get_current_transform(self, layer_time: float) -> Transform:
-        opacity = self("opacity", layer_time)
-        return Transform(
-            anchor_point=normalize_2dvector(self("anchor_point", layer_time)),
-            position=normalize_2dvector(self("position", layer_time)),
-            scale=normalize_2dvector(self("scale", layer_time)),
-            opacity=float(opacity),
-        )
+    def attributes(self) -> dict[str, Attribute]:
+        return self.transform.attributes
 
 
 class Composition:
@@ -358,7 +285,7 @@ class Composition:
             if layer_time < layer_prop.start_time or layer_prop.end_time <= layer_time:
                 layer_keys.append(f"__{layer_prop.name}__")
             else:
-                p = layer_prop.get_current_transform(layer_time)
+                p = layer_prop.transform.get_current_value(layer_time)
                 layer_keys.append((p, layer.get_key(layer_time)))
         return tuple(layer_keys)
 
@@ -412,7 +339,7 @@ class Composition:
             return base_img
         h, w = component.shape[:2]
 
-        p = layer_prop.get_current_transform(layer_time)
+        p = layer_prop.transform.get_current_value(layer_time)
         component = self._get_or_resize(layer_prop, layer_time, component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]

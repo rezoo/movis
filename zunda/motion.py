@@ -19,21 +19,21 @@ motion_types_to_func = {
 class Motion:
     def __init__(
         self,
-        default_value: Optional[Union[float, Sequence[float], np.ndarray[Any, Any]]] = None,
+        init_value: Optional[Union[float, Sequence[float], np.ndarray]] = None,
     ):
         self.keyframes: list[float] = []
-        self.values: list[np.ndarray[Any, np.dtype[np.float64]]] = []
+        self.values: list[np.ndarray] = []
         self.motion_types: list[Callable[[float], float]] = []
-        self.default_value: Optional[np.ndarray[Any, np.dtype[np.float64]]] = (
-            np.array(default_value, dtype=np.float64)
-            if default_value is not None
+        self.init_value: Optional[np.ndarray] = (
+            np.array(init_value, dtype=np.float64)
+            if init_value is not None
             else None
         )
 
-    def __call__(self, layer_time: float) -> np.ndarray[Any, np.dtype[np.float64]]:
+    def __call__(self, layer_time: float, prev_value: np.ndarray) -> np.ndarray:
         if len(self.keyframes) == 0:
-            if self.default_value is not None:
-                return self.default_value
+            if self.init_value is not None:
+                return self.init_value
             raise ValueError("No keyframes")
         elif len(self.keyframes) == 1:
             return self.values[0]
@@ -53,7 +53,7 @@ class Motion:
     def append(
         self,
         keyframe: float,
-        value: Union[float, Sequence[float], np.ndarray[Any, Any]],
+        value: Union[float, Sequence[float], np.ndarray],
         motion_type: str = "linear",
     ) -> "Motion":
         i = bisect.bisect(self.keyframes, keyframe)
@@ -65,7 +65,7 @@ class Motion:
     def extend(
         self,
         keyframes: Sequence[float],
-        values: Sequence[Union[float, Sequence[float], np.ndarray[Any, Any]]],
+        values: Sequence[Union[float, Sequence[float], np.ndarray]],
         motion_types: Optional[Sequence[str]] = None,
     ) -> "Motion":
         assert len(keyframes) == len(values)
