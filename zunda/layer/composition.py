@@ -40,8 +40,10 @@ class LayerItem:
         }
 
     def get_key(self, layer_time: float) -> tuple[Hashable, ...]:
-        p = self.transform.get_current_value(layer_time)
-        return (p, self.layer.get_key(layer_time))
+        transform_key = self.transform.get_current_value(layer_time)
+        layer_key = self.layer.get_key(layer_time)
+        effects_key = None if len(self._effects) == 0 else tuple([e.get_key(layer_time) for e in self._effects])
+        return (transform_key, layer_key, effects_key)
 
     def __call__(self, layer_time: float) -> Optional[np.ndarray]:
         frame = self.layer(layer_time)
@@ -78,7 +80,7 @@ class Composition:
         for layer_item in self.layers:
             layer_time = time - layer_item.offset
             if layer_time < layer_item.start_time or layer_item.end_time <= layer_time:
-                layer_keys.append(f"__{layer_item.name}__")
+                layer_keys.append(None)
             else:
                 layer_keys.append(layer_item.get_key(layer_time))
         return tuple(layer_keys)
