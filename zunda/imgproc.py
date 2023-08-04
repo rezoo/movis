@@ -126,6 +126,8 @@ def alpha_composite(
     blending_mode: Union[str, BlendingMode] = BlendingMode.NORMAL,
 ) -> np.ndarray:
     if blending_mode == BlendingMode.NORMAL:
+        # Use PIL for normal blending mode
+        # because it is faster than my implementation
         return alpha_composite_pil(base_img, component, position, opacity)
     else:
         mode = BlendingMode.from_string(blending_mode) \
