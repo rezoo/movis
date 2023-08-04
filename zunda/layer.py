@@ -12,7 +12,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from zunda.motion import Motion
-from zunda.transform import Transform, alpha_composite, resize
+from zunda.transform import Transform, alpha_composite, alpha_composite_numpy, resize
 from zunda.utils import normalize_2dvector, rand_from_string
 
 
@@ -236,10 +236,31 @@ class CharacterLayer(TimelineMixin):
         return base_img
 
 
+class AttributeType(Enum):
+    SCALAR = 0
+    VECTOR2D = 1
+    VECTOR3D = 2
+    ANGLE = 3
+    COLOR = 4
+
+    @staticmethod
+    def from_string(s: str) -> "AttributeType":
+        if s == 'scalar':
+            return AttributeType.SCALAR
+        elif s == 'vector2d':
+            return AttributeType.VECTOR2D
+        elif s == 'vector3d':
+            return AttributeType.VECTOR3D
+        elif s == 'angle':
+            return AttributeType.ANGLE
+        else:
+            raise ValueError(f"Unknown attribute type: {s}")
+
+
 class Attribute(NamedTuple):
 
     attr_name: str
-    value_type: str
+    value_type: AttributeType
 
 
 class CacheType(Enum):
@@ -262,13 +283,13 @@ class LayerProperty:
         self._motions: dict[str, Motion] = {}
 
     @property
-    def attributes(self) -> list[Attribute]:
-        return [
-            Attribute("anchor_point", "vector2d"),
-            Attribute("position", "vector2d"),
-            Attribute("scale", "vector2d"),
-            Attribute("opacity", "scalar"),
-        ]
+    def attributes(self) -> tuple[Attribute, ...]:
+        return (
+            Attribute("anchor_point", AttributeType.VECTOR2D),
+            Attribute("position", AttributeType.VECTOR2D),
+            Attribute("scale", AttributeType.VECTOR2D),
+            Attribute("opacity", AttributeType.SCALAR),
+        )
 
     def __call__(
         self, attr_name: str, layer_time: float = 0.0
@@ -368,7 +389,7 @@ class Composition:
         self._name_to_layer[name] = layer_prop
         return layer_prop
 
-    def _resize(
+    def _get_or_resize(
         self, layer_prop: LayerProperty, layer_time: float,
         component: np.ndarray, scale: tuple[float, float]
     ) -> np.ndarray:
@@ -392,10 +413,10 @@ class Composition:
         h, w = component.shape[:2]
 
         p = layer_prop.get_current_transform(layer_time)
-        component = self._resize(layer_prop, layer_time, component, p.scale)
+        component = self._get_or_resize(layer_prop, layer_time, component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
-        base_img = alpha_composite(
+        base_img = alpha_composite_numpy(
             base_img, component, position=(round(x), round(y)), opacity=p.opacity)
         return base_img
 
