@@ -1,5 +1,6 @@
 import zunda
 from zunda import Transform
+import numpy as np
 import pandas as pd
 
 
@@ -44,19 +45,19 @@ def main():
         name='metan_logo', offset=0.5,
         transform=Transform(position=(170, 340)))
 
-    def slide_in_out(lp: zunda.LayerItem, offset: float):
-        p = lp.transform.position.init_value
-        lp.transform.position.enable() \
+    def slide_in_out(item: zunda.LayerItem, offset: np.ndarray):
+        p = item.transform.position.init_value
+        item.transform.position.enable() \
             .append(0.0, p) \
-            .append(0.0, (p[0] + offset, p[1]), 'ease_out_expo') \
+            .append(0.0, p + offset, 'ease_out_expo') \
             .append(1.0, p).append(5.0, p, 'ease_in_expo') \
-            .append(6.0, (p[0] + offset, p[1]))
-        lp.transform.opacity.enable().extend(
+            .append(6.0, p + offset)
+        item.transform.opacity.enable().extend(
             keyframes=[0, 1, 5, 6], values=[0, 1, 1, 0],
             motion_types=['ease_out', 'linear', 'ease_in', 'linear'])
 
-    slide_in_out(scene['zunda_logo'], 500)
-    slide_in_out(scene['metan_logo'], -500)
+    slide_in_out(scene['zunda_logo'], np.array([500, 0]))
+    slide_in_out(scene['metan_logo'], np.array([-500, 0]))
 
     bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)
