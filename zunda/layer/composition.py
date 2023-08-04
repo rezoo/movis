@@ -10,6 +10,7 @@ from tqdm import tqdm
 from zunda.attribute import Attribute
 from zunda.imgproc import alpha_composite_numpy, resize
 from zunda.layer.core import Layer
+from zunda.effect import Effect
 from zunda.transform import Transform
 
 
@@ -29,14 +30,26 @@ class LayerItem:
         self.offset: float = offset
         self.start_time: float = start_time
         self.end_time: float = end_time if end_time == 0.0 else self.layer.duration
+        self._effects: list[Effect] = []
 
     @property
-    def attributes(self) -> dict[str, Attribute]:
-        return self.transform.attributes
+    def attributes(self) -> dict[str, Union[tuple[dict[str, Attribute], ...], dict[str, Attribute]]]:
+        return {
+            'transform': self.transform.attributes,
+            'effects': tuple(effect.attributes for effect in self._effects),
+        }
 
     def get_key(self, layer_time: float) -> tuple[Hashable, ...]:
         p = self.transform.get_current_value(layer_time)
         return (p, self.layer.get_key(layer_time))
+
+    def __call__(self, layer_time: float) -> Optional[np.ndarray]:
+        frame = self.layer(layer_time)
+        if frame is None:
+            return None
+        for effect in self._effects:
+            frame = effect(layer_time, frame)
+        return frame
 
 
 class Composition:
@@ -115,7 +128,7 @@ class Composition:
         layer_time = time - layer_item.offset
         if layer_time < layer_item.start_time or layer_item.end_time <= layer_time:
             return base_img
-        component = layer_item.layer(layer_time)
+        component = layer_item(layer_time)
         if component is None:
             return base_img
         h, w = component.shape[:2]

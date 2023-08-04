@@ -87,14 +87,14 @@ class Attribute:
     def has_motion(self) -> bool:
         return 0 < len(self._motions)
 
-    def add_motion(self, motion: Callable[[float, np.ndarray], np.ndarray]) -> None:
+    def append(self, motion: Callable[[float, np.ndarray], np.ndarray]) -> None:
         self._motions.append(motion)
 
-    def enable_motion(self) -> Motion:
+    def enable(self) -> Motion:
         motions = [m for m in self._motions if isinstance(m, Motion)]
         if 0 < len(motions):
             return motions[-1]
         else:
             motion = Motion(init_value=self.init_value)
-            self.add_motion(motion)
+            self.append(motion)
             return motion

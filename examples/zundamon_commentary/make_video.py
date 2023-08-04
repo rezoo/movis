@@ -46,12 +46,12 @@ def main():
 
     def slide_in_out(lp: zunda.LayerItem, offset: float):
         p = lp.transform.position.init_value
-        lp.transform.position.enable_motion() \
+        lp.transform.position.enable() \
             .append(0.0, p) \
             .append(0.0, (p[0] + offset, p[1]), 'ease_out_expo') \
             .append(1.0, p).append(5.0, p, 'ease_in_expo') \
             .append(6.0, (p[0] + offset, p[1]))
-        lp.transform.opacity.enable_motion().extend(
+        lp.transform.opacity.enable().extend(
             keyframes=[0, 1, 5, 6], values=[0, 1, 1, 0],
             motion_types=['ease_out', 'linear', 'ease_in', 'linear'])
 

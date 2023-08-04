@@ -8,7 +8,7 @@ from PIL import Image
 
 from zunda.imgproc import alpha_composite
 from zunda.layer.core import TimelineMixin
-from zunda.utils import rand_from_string
+from zunda.util import rand_from_string
 
 
 class ImageLayer:
