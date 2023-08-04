@@ -34,6 +34,10 @@ class LayerItem:
     def attributes(self) -> dict[str, Attribute]:
         return self.transform.attributes
 
+    def get_key(self, layer_time: float) -> tuple[Hashable, ...]:
+        p = self.transform.get_current_value(layer_time)
+        return (p, self.layer.get_key(layer_time))
+
 
 class Composition:
     def __init__(
@@ -59,13 +63,11 @@ class Composition:
     def get_key(self, time: float) -> tuple[Hashable, ...]:
         layer_keys: list[Hashable] = [CacheType.COMPOSITION]
         for layer_item in self.layers:
-            layer = layer_item.layer
             layer_time = time - layer_item.offset
             if layer_time < layer_item.start_time or layer_item.end_time <= layer_time:
                 layer_keys.append(f"__{layer_item.name}__")
             else:
-                p = layer_item.transform.get_current_value(layer_time)
-                layer_keys.append((p, layer.get_key(layer_time)))
+                layer_keys.append(layer_item.get_key(layer_time))
         return tuple(layer_keys)
 
     def add_layer(
