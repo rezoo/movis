@@ -51,10 +51,10 @@ def _overlay(
 
     bg_a = bg_subset[..., 3:]
     fg_a = (fg_subset[..., 3:] * opacity).astype(np.uint32) if opacity < 1.0 else fg_subset[..., 3:]
-    out_a = 255 * fg_a + bg_a * (255 - fg_a)
+    coeff1, coeff2 = 255 * fg_a, bg_a * (255 - fg_a)
+    out_a = coeff1 + coeff2
     bg_rgb, fg_rgb = bg_subset[..., :3], fg_subset[..., :3]
-    out_rgb = \
-        (255 * fg_rgb * fg_a + bg_rgb * bg_a * (255 - fg_a)) // (out_a + (out_a == 0))
+    out_rgb = (coeff1 * fg_rgb + coeff2 * bg_rgb) // (out_a + (out_a == 0))
     bg[y_bg: (y_bg + h), x_bg: (x_bg + w), :3] = out_rgb.astype(np.uint8)
     bg[y_fg: (y_fg + h), x_fg: (x_fg + w), 3:] = (out_a // 255).astype(np.uint8)
     return bg
