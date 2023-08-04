@@ -8,7 +8,7 @@ from cachetools import LRUCache
 from tqdm import tqdm
 
 from zunda.attribute import Attribute
-from zunda.imgproc import alpha_composite_numpy, resize
+from zunda.imgproc import alpha_composite, resize
 from zunda.layer.core import Layer
 from zunda.effect import Effect
 from zunda.transform import Transform
@@ -137,7 +137,7 @@ class Composition:
         component = self._get_or_resize(layer_item, layer_time, component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
-        base_img = alpha_composite_numpy(
+        base_img = alpha_composite(
             base_img, component, position=(round(x), round(y)), opacity=p.opacity)
         return base_img
 

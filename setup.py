@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="zunda",
-    version="0.2",
+    version="0.3",
     author="Masaki Saito",
     author_email="msaito@preferred.jp",
     description="A simple python package for creating zunda-mon videos",
