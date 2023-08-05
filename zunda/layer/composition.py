@@ -8,7 +8,7 @@ from cachetools import LRUCache
 from tqdm import tqdm
 
 from zunda.attribute import Attribute
-from zunda.imgproc import alpha_composite, resize
+from zunda.imgproc import BlendingMode, alpha_composite, resize
 from zunda.layer.core import Layer
 from zunda.effect import Effect
 from zunda.transform import Transform
@@ -23,13 +23,16 @@ class LayerItem:
 
     def __init__(
             self, name: str, layer: Layer, transform: Optional[Transform] = None,
-            offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0):
+            offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0,
+            blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL):
         self.name: str = name
         self.layer: Layer = layer
         self.transform: Transform = transform if transform is not None else Transform()
         self.offset: float = offset
         self.start_time: float = start_time
         self.end_time: float = end_time if end_time == 0.0 else self.layer.duration
+        mode = BlendingMode.from_string(blending_mode) if isinstance(blending_mode, str) else blending_mode
+        self.blending_mode: BlendingMode = mode
         self._effects: list[Effect] = []
 
     @property
@@ -140,7 +143,8 @@ class Composition:
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
         base_img = alpha_composite(
-            base_img, component, position=(round(x), round(y)), opacity=p.opacity)
+            base_img, component, position=(round(x), round(y)),
+            opacity=p.opacity, blending_mode=layer_item.blending_mode)
         return base_img
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
