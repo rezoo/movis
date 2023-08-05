@@ -1,18 +1,50 @@
 import bisect
+from enum import Enum
 import math
 from typing import Any, Callable, Optional, Sequence, Union
 
 import numpy as np
 
-motion_types_to_func = {
-    "linear": lambda t: t,
-    "ease_in": lambda t: t**2,
-    "ease_out": lambda t: 1.0 - (1.0 - t) ** 2,
-    "ease_in_out": lambda t: t**2 * (3.0 - 2.0 * t),
-    "ease_in_cubic": lambda t: t**3,
-    "ease_out_cubic": lambda t: 1.0 - (1.0 - t) ** 3,
-    "ease_in_expo": lambda t: math.exp(-10.0 * (1 - t)),
-    "ease_out_expo": lambda t: 1 - math.exp(-10.0 * t),
+
+class MotionType(Enum):
+    LINEAR = 0
+    EASE_IN = 1
+    EASE_OUT = 2
+    EASE_IN_OUT = 3
+    EASE_IN_CUBIC = 4
+    EASE_OUT_CUBIC = 6
+    EASE_IN_EXPO = 7
+    EASE_OUT_EXPO = 8
+
+    @staticmethod
+    def from_string(s: str) -> "MotionType":
+        if s in STRING_TO_MOTION_TYPE:
+            return STRING_TO_MOTION_TYPE[s]
+        else:
+            raise ValueError(f"Unknown motion type: {s}")
+
+
+STRING_TO_MOTION_TYPE = {
+    "linear": MotionType.LINEAR,
+    "ease_in": MotionType.EASE_IN,
+    "ease_out": MotionType.EASE_OUT,
+    "ease_in_out": MotionType.EASE_IN_OUT,
+    "ease_in_cubic": MotionType.EASE_IN_CUBIC,
+    "ease_out_cubic": MotionType.EASE_OUT_CUBIC,
+    "ease_in_expo": MotionType.EASE_IN_EXPO,
+    "ease_out_expo": MotionType.EASE_OUT_EXPO,
+}
+
+
+MOTION_TYPES_TO_FUNC = {
+    MotionType.LINEAR: lambda t: t,
+    MotionType.EASE_IN: lambda t: t**2,
+    MotionType.EASE_OUT: lambda t: 1.0 - (1.0 - t) ** 2,
+    MotionType.EASE_IN_OUT: lambda t: t**2 * (3.0 - 2.0 * t),
+    MotionType.EASE_IN_CUBIC: lambda t: t**3,
+    MotionType.EASE_OUT_CUBIC: lambda t: 1.0 - (1.0 - t) ** 3,
+    MotionType.EASE_IN_EXPO: lambda t: math.exp(-10.0 * (1 - t)),
+    MotionType.EASE_OUT_EXPO: lambda t: 1 - math.exp(-10.0 * t),
 }
 
 
@@ -54,19 +86,21 @@ class Motion:
         self,
         keyframe: float,
         value: Union[float, Sequence[float], np.ndarray],
-        motion_type: str = "linear",
+        motion_type: Union[str, MotionType] = MotionType.LINEAR,
     ) -> "Motion":
         i = bisect.bisect(self.keyframes, keyframe)
         self.keyframes.insert(i, float(keyframe))
         self.values.insert(i, np.array(value, dtype=np.float64))
-        self.motion_types.insert(i, motion_types_to_func[motion_type])
+        motion_type = MotionType.from_string(motion_type) \
+            if isinstance(motion_type, str) else motion_type
+        self.motion_types.insert(i, MOTION_TYPES_TO_FUNC[motion_type])
         return self
 
     def extend(
         self,
         keyframes: Sequence[float],
         values: Sequence[Union[float, Sequence[float], np.ndarray]],
-        motion_types: Optional[Sequence[str]] = None,
+        motion_types: Optional[Sequence[Union[str, MotionType]]] = None,
     ) -> "Motion":
         assert len(keyframes) == len(values)
         if motion_types is not None:
@@ -78,7 +112,12 @@ class Motion:
         updated_keyframes: list[float] = self.keyframes + converted_keyframes
         converted_values = [np.array(v, dtype=np.float64) for v in values]
         updated_values: list[np.ndarray[Any, np.dtype[np.float64]]] = self.values + converted_values
-        converted_motion_types = [motion_types_to_func[t] for t in motion_types]
+
+        def convert(t: Union[str, MotionType]) -> Callable[[float], float]:
+            return MOTION_TYPES_TO_FUNC[MotionType.from_string(t)] \
+                if isinstance(t, str) else MOTION_TYPES_TO_FUNC[t]
+
+        converted_motion_types = [convert(t) for t in motion_types]
         updated_motion_types: list[Callable[[float], float]] = self.motion_types + converted_motion_types
 
         zipped = sorted(zip(updated_keyframes, updated_values, updated_motion_types))

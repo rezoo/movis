@@ -23,20 +23,20 @@ class BlendingMode(Enum):
 
     @staticmethod
     def from_string(s: str) -> "BlendingMode":
-        if s == "normal":
-            return BlendingMode.NORMAL
-        elif s == "multiply":
-            return BlendingMode.MULTIPLY
-        elif s == "screen":
-            return BlendingMode.SCREEN
-        elif s == "overlay":
-            return BlendingMode.OVERLAY
-        elif s == "hard_light":
-            return BlendingMode.HARD_LIGHT
-        elif s == "soft_light":
-            return BlendingMode.SOFT_LIGHT
+        if s in STRING_TO_BLENDING_MODE:
+            return STRING_TO_BLENDING_MODE[s]
         else:
             raise ValueError(f"Unknown blending mode: {s}")
+
+
+STRING_TO_BLENDING_MODE = {
+    "normal": BlendingMode.NORMAL,
+    "multiply": BlendingMode.MULTIPLY,
+    "screen": BlendingMode.SCREEN,
+    "overlay": BlendingMode.OVERLAY,
+    "hard_light": BlendingMode.HARD_LIGHT,
+    "soft_light": BlendingMode.SOFT_LIGHT,
+}
 
 
 def _blend_overlay(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
