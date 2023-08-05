@@ -1,6 +1,6 @@
 from .action import Action, make_action_functions  # noqa
 from .audio import concat_audio_files, make_loop_music  # noqa
-from .effect import Effect  # noqa
+from .effect import BasicEffectMixin, Effect  # noqa
 from .imgproc import BlendingMode, alpha_composite, resize  # noqa
 from .layer.composition import Composition, LayerItem  # noqa
 from .layer.core import Layer  # noqa
