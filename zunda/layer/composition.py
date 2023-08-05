@@ -1,6 +1,6 @@
 from enum import Enum
 from pathlib import Path
-from typing import Hashable, Optional, Union
+from typing import Hashable, Optional, Sequence, Union
 
 import imageio
 import numpy as np
@@ -41,6 +41,14 @@ class LayerItem:
             'transform': self.transform.attributes,
             'effects': tuple(effect.attributes for effect in self._effects),
         }
+
+    @property
+    def composition_start_time(self) -> float:
+        return self.offset + self.start_time
+
+    @property
+    def composition_end_time(self) -> float:
+        return self.offset + self.end_time
 
     def get_key(self, layer_time: float) -> tuple[Hashable, ...]:
         transform_key = self.transform.get_current_value(layer_time)
@@ -177,3 +185,24 @@ class Composition:
             writer.append_data(frame)
         writer.close()
         self.cache.clear()
+
+
+def concatenate(
+        compositions: Sequence[Composition],
+        size: Optional[tuple[int, int]] = None,
+        duration: Optional[float] = None,
+        names: Optional[Sequence[str]] = None) -> Composition:
+    if size is None:
+        size = compositions[0].size
+    if duration is None:
+        duration = sum([c.duration for c in compositions])
+    if names is None:
+        names = [f"scene_{i}" for i in range(len(compositions))]
+    else:
+        assert len(names) == len(compositions)
+
+    composition = Composition(size=size, duration=duration)
+    offsets = np.cumsum([0] + [c.duration for c in compositions])
+    for c, name, offset in zip(compositions, names, offsets):
+        composition.add_layer(c, name=name, offset=offset)
+    return composition
