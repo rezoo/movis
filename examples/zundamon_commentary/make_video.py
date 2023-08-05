@@ -66,14 +66,16 @@ def main():
 
     styles = (
         zunda.ASSStyleType(
-            'zunda'),
+            'zunda', font_name='Hiragino Maru Gothic Pro', font_size=96,
+            outline_color='&H38a65e', back_color='&HA0000000', outline=5, shadow=3),
         zunda.ASSStyleType(
-            'metan'),
+            'metan', font_name='Hiragino Maru Gothic Pro', font_size=96,
+            outline_color='&H734aab', back_color='&HA0000000', outline=5, shadow=3),
     )
     zunda.make_ass_file(
         tl['start_time'], tl['end_time'], tl['text'], 'outputs/subtitle.ass',
         size=scene.size, characters=tl['character'], styles=styles)
-    scene.make_video('outputs/video.mp4')
+    #scene.make_video('outputs/video.mp4')
     zunda.add_materials_to_video(
         'outputs/video.mp4', 'outputs/dialogue.wav',
         subtitle_file='outputs/subtitle.ass', dst_file='outputs/video2.mp4')
