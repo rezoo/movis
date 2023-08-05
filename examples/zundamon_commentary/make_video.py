@@ -75,7 +75,7 @@ def main():
     zunda.make_ass_file(
         tl['start_time'], tl['end_time'], tl['text'], 'outputs/subtitle.ass',
         size=scene.size, characters=tl['character'], styles=styles)
-    #scene.make_video('outputs/video.mp4')
+    scene.make_video('outputs/video.mp4')
     zunda.add_materials_to_video(
         'outputs/video.mp4', 'outputs/dialogue.wav',
         subtitle_file='outputs/subtitle.ass', dst_file='outputs/video2.mp4')
