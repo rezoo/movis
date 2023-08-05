@@ -8,9 +8,9 @@ from cachetools import LRUCache
 from tqdm import tqdm
 
 from zunda.attribute import Attribute
+from zunda.effect import Effect
 from zunda.imgproc import BlendingMode, alpha_composite, resize
 from zunda.layer.core import Layer
-from zunda.effect import Effect
 from zunda.transform import Transform
 
 
