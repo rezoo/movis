@@ -1,6 +1,6 @@
 import bisect
-from enum import Enum
 import math
+from enum import Enum
 from typing import Any, Callable, Optional, Sequence, Union
 
 import numpy as np
