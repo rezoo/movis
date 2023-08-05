@@ -24,13 +24,14 @@ class LayerItem:
     def __init__(
             self, name: str, layer: Layer, transform: Optional[Transform] = None,
             offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0,
-            blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL):
+            visible: bool = True, blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL):
         self.name: str = name
         self.layer: Layer = layer
         self.transform: Transform = transform if transform is not None else Transform()
         self.offset: float = offset
         self.start_time: float = start_time
         self.end_time: float = end_time if end_time == 0.0 else self.layer.duration
+        self.visible: bool = visible
         mode = BlendingMode.from_string(blending_mode) if isinstance(blending_mode, str) else blending_mode
         self.blending_mode: BlendingMode = mode
         self._effects: list[Effect] = []
@@ -51,12 +52,16 @@ class LayerItem:
         return self.offset + self.end_time
 
     def get_key(self, layer_time: float) -> tuple[Hashable, ...]:
+        if not self.visible:
+            return (None, None, None)
         transform_key = self.transform.get_current_value(layer_time)
         layer_key = self.layer.get_key(layer_time)
         effects_key = None if len(self._effects) == 0 else tuple([e.get_key(layer_time) for e in self._effects])
         return (transform_key, layer_key, effects_key)
 
     def __call__(self, layer_time: float) -> Optional[np.ndarray]:
+        if not self.visible:
+            return None
         frame = self.layer(layer_time)
         if frame is None:
             return None
@@ -109,6 +114,8 @@ class Composition:
         offset: float = 0.0,
         start_time: float = 0.0,
         end_time: Optional[float] = None,
+        visible: bool = True,
+        blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
     ) -> LayerItem:
         if name is None:
             name = f"layer_{len(self.layers)}"
@@ -123,6 +130,8 @@ class Composition:
             offset=offset,
             start_time=start_time,
             end_time=end_time,
+            visible=visible,
+            blending_mode=blending_mode,
         )
         self.layers.append(layer_item)
         self._name_to_layer[name] = layer_item

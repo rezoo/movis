@@ -6,7 +6,7 @@ from .layer.composition import Composition, LayerItem, concatenate  # noqa
 from .layer.core import Layer  # noqa
 from .layer.media import (CharacterLayer, ImageLayer, SlideLayer,  # noqa
                           VideoLayer)
-from .motion import Motion  # noqa
+from .motion import Motion, MotionType  # noqa
 from .subtitle import ASSStyleType, make_ass_file, rgb_to_ass_color  # noqa
 from .transform import Transform  # noqa
 from .util import (add_materials_to_video, make_timeline_from_voicevox,  # noqa
