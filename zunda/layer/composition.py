@@ -194,13 +194,14 @@ class Composition:
         start_time: float = 0.0,
         end_time: Optional[float] = None,
         codec: str = "libx264",
+        pixelformat: str = "yuv420p",
         fps: float = 30.0,
     ) -> None:
         if end_time is None:
             end_time = self.duration
         times = np.arange(start_time, end_time, 1.0 / fps)
         writer = imageio.get_writer(
-            dst_file, fps=fps, codec=codec, macro_block_size=None
+            dst_file, fps=fps, codec=codec, pixelformat=pixelformat, macro_block_size=None
         )
         for t in tqdm(times, total=len(times)):
             frame = np.asarray(self(t))
