@@ -7,7 +7,7 @@ from .layer.core import Layer  # noqa
 from .layer.media import (CharacterLayer, ImageLayer, SlideLayer,  # noqa
                           VideoLayer)
 from .motion import Motion  # noqa
-from .subtitle import make_ass_file  # noqa
+from .subtitle import ASSStyleType, make_ass_file, rgb_to_ass_color  # noqa
 from .transform import Transform  # noqa
 from .util import (add_materials_to_video, make_timeline_from_voicevox,  # noqa
                    make_voicevox_dataframe, merge_timeline)

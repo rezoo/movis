@@ -63,9 +63,16 @@ def main():
     bgm = bgm.fade_out(5 * 1000)
     voice = zunda.concat_audio_files(tl['start_time'], tl['audio_file'])
     bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
+
+    styles = (
+        zunda.ASSStyleType(
+            'zunda'),
+        zunda.ASSStyleType(
+            'metan'),
+    )
     zunda.make_ass_file(
-        tl['start_time'], tl['end_time'], tl['character'], tl['text'],
-        'outputs/subtitle.ass', font_name='Hiragino Maru Gothic Pro')
+        tl['start_time'], tl['end_time'], tl['text'], 'outputs/subtitle.ass',
+        size=scene.size, characters=tl['character'], styles=styles)
     scene.make_video('outputs/video.mp4')
     zunda.add_materials_to_video(
         'outputs/video.mp4', 'outputs/dialogue.wav',
