@@ -79,9 +79,14 @@ class Composition:
     def duration(self) -> float:
         return self._duration
 
-    @property
-    def layer_names(self) -> list[str]:
+    def keys(self) -> list[str]:
         return [layer.name for layer in self.layers]
+
+    def values(self) -> list[LayerItem]:
+        return self.layers
+
+    def items(self) -> list[tuple[str, LayerItem]]:
+        return [(layer.name, layer) for layer in self.layers]
 
     def __getitem__(self, key: str) -> LayerItem:
         return self._name_to_layer[key]
@@ -121,6 +126,14 @@ class Composition:
         )
         self.layers.append(layer_item)
         self._name_to_layer[name] = layer_item
+        return layer_item
+
+    def pop_layer(self, name: str) -> LayerItem:
+        if name not in self._name_to_layer:
+            raise KeyError(f"Layer with name {name} does not exist")
+        index = next(i for i in range(len(self.layers)) if self.layers[i].name == name)
+        self.layers.pop(index)
+        layer_item = self._name_to_layer.pop(name)
         return layer_item
 
     def _get_or_resize(
@@ -201,8 +214,8 @@ def concatenate(
     else:
         assert len(names) == len(compositions)
 
-    composition = Composition(size=size, duration=duration)
+    main = Composition(size=size, duration=duration)
     offsets = np.cumsum([0] + [c.duration for c in compositions])
-    for c, name, offset in zip(compositions, names, offsets):
-        composition.add_layer(c, name=name, offset=offset)
-    return composition
+    for composition, name, offset in zip(compositions, names, offsets):
+        main.add_layer(composition, name=name, offset=offset)
+    return main
