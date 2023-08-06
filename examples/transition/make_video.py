@@ -19,15 +19,22 @@ class OriginalTransitionLayer:
         elif self.effect_time <= time <= self.duration - self.effect_time:
             return 1.0
         else:
-            return (self.duration - time) / self.effect_time
+            return 1.0 + (time - (self.duration - self.effect_time)) / self.effect_time
 
     def __call__(self, time: float) -> np.ndarray:
         t = self.get_key(time)
-        return self._draw(t)
-
-    def _draw(self, t: float) -> np.ndarray:
+        if t == 1.0:
+            return self.image
         img = self.image.copy()
-        img[:, :, 3] = 0
+        if 0 <= t < 1:
+            img[:, :, 3] = self._alpha(t)
+        else:
+            alpha = self._alpha(t - 1.0)
+            img[:, :, 3] = 255 - alpha
+        return img
+
+    def _alpha(self, t: float) -> np.ndarray:
+        alpha = np.zeros(self.image.shape[:2], dtype=np.uint8)
         ri = self.size[0] / self.N
         for i in range(self.N):
             start_time = i * (1 - self.rect_time) / (self.N - 1)
@@ -36,8 +43,8 @@ class OriginalTransitionLayer:
             w = weight * self.size[0]
             r0 = round(i * ri)
             r1 = round((i + 1) * ri)
-            img[r0:r1, :int(np.round(w)), 3] = 255
-        return img
+            alpha[r0:r1, :int(np.round(w))] = 255
+        return alpha
 
 
 def main():
