@@ -68,7 +68,7 @@ class LayerItem:
         for effect in self._effects:
             frame = effect(layer_time, frame)
         return frame
-    
+
     def __repr__(self) -> str:
         return f"LayerItem(name={self.name!r}, layer={self.layer!r}, transform={self.transform!r}, " \
             f"offset={self.offset}, blending_mode={self.blending_mode})"
@@ -109,7 +109,7 @@ class Composition:
             else:
                 layer_keys.append(layer_item.get_key(layer_time))
         return tuple(layer_keys)
-    
+
     def __repr__(self) -> str:
         return f"Composition(size={self.size}, duration={self.duration}, layers={self.layers!r})"
 
