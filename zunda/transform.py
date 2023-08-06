@@ -49,3 +49,6 @@ class Transform:
             scale=normalize_to_2dvector(self.scale(layer_time)),
             opacity=float(self.opacity(layer_time)),
         )
+
+    def __repr__(self) -> str:
+        return f"Transform(anchor_point={self.anchor_point}, position={self.position}, scale={self.scale}, opacity={self.opacity})"

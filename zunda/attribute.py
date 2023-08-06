@@ -109,3 +109,9 @@ class Attribute:
             motion = Motion(init_value=self.init_value)
             self.append(motion)
             return motion
+
+    def __repr__(self) -> str:
+        if len(self._motions) == 0:
+            return f"{self.init_value}"
+        else:
+            return f"Attribute(value_type={self.value_type})"
