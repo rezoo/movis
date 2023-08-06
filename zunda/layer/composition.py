@@ -177,6 +177,8 @@ class Composition:
         h, w = component.shape[:2]
 
         p = layer_item.transform.get_current_value(layer_time)
+        if round(component.shape[1] * p.scale[0]) == 0 or round(component.shape[0] * p.scale[1]) == 0:
+            return base_img
         component = self._get_or_resize(layer_item, layer_time, component, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]

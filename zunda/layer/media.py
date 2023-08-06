@@ -13,7 +13,7 @@ from zunda.util import rand_from_string
 
 class ImageLayer:
     def __init__(
-        self, duration: float, img_file: Union[str, Path, Image.Image, np.ndarray]
+        self, img_file: Union[str, Path, Image.Image, np.ndarray], duration: float = 1.0
     ) -> None:
         self.image: Optional[np.ndarray] = None
         self._img_file: Optional[Path] = None
