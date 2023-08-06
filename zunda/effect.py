@@ -7,10 +7,10 @@ from zunda.attribute import Attribute
 
 class Effect(Protocol):
 
-    def get_key(self, time: float) -> Hashable:
+    def __call__(self, time: float, prev_image: np.ndarray) -> np.ndarray:
         raise NotImplementedError
 
-    def __call__(self, time: float, prev_value: np.ndarray) -> np.ndarray:
+    def get_key(self, time: float) -> Hashable:
         raise NotImplementedError
 
     @property

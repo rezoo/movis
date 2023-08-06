@@ -51,12 +51,20 @@ class LayerItem:
     def composition_end_time(self) -> float:
         return self.offset + self.end_time
 
-    def get_key(self, layer_time: float) -> tuple[Hashable, ...]:
+    def add_effect(self, effect: Effect) -> Effect:
+        self._effects.append(effect)
+        return effect
+
+    def get_key(self, layer_time: float) -> tuple[Hashable, Hashable, Hashable]:
         if not self.visible:
             return (None, None, None)
         transform_key = self.transform.get_current_value(layer_time)
-        layer_key = self.layer.get_key(layer_time)
-        effects_key = None if len(self._effects) == 0 else tuple([e.get_key(layer_time) for e in self._effects])
+        layer_key = self.layer.get_key(layer_time) if hasattr(self.layer, 'get_key') else layer_time
+
+        def get_effect_key(e: Effect) -> Optional[Hashable]:
+            return e.get_key(layer_time) if hasattr(e, 'get_key') else None
+
+        effects_key = None if len(self._effects) == 0 else tuple([get_effect_key(e) for e in self._effects])
         return (transform_key, layer_key, effects_key)
 
     def __call__(self, layer_time: float) -> Optional[np.ndarray]:
@@ -157,7 +165,7 @@ class Composition:
         self, layer_item: LayerItem, layer_time: float,
         component: np.ndarray, scale: tuple[float, float]
     ) -> np.ndarray:
-        layer_state = layer_item.layer.get_key(layer_time)
+        layer_state = layer_item.get_key(layer_time)
         key = (CacheType.LAYER, layer_item.name, layer_state, scale)
         if key in self.cache:
             return self.cache[key]

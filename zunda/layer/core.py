@@ -8,10 +8,10 @@ class Layer(Protocol):
     def duration(self):
         raise NotImplementedError
 
-    def get_key(self, time: float) -> Hashable:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
         raise NotImplementedError
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def get_key(self, time: float) -> Hashable:
         raise NotImplementedError
 
 
