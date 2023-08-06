@@ -1,7 +1,10 @@
 # Output files
 *.wav
+*.mp3
 *.mp4
 *.ass
+*.psd
+*.afphoto
 .DS_Store
 /proj
 

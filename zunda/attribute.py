@@ -68,6 +68,17 @@ def normalize_to_2dvector(
         return (float(x[0]), float(x[1]))
 
 
+def normalize_to_tuple(
+    x: Union[float, Sequence[float], np.ndarray]
+) -> Union[float, tuple[float, ...]]:
+    if isinstance(x, (int, float)):
+        return float(x)
+    elif len(x) == 1:
+        return float(x[0])
+    else:
+        return tuple([float(v) for v in x])
+
+
 class Attribute:
 
     def __init__(self, init_value: Union[float, tuple[float, ...], np.ndarray], value_type: AttributeType):
