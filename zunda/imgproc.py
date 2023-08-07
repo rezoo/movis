@@ -44,7 +44,20 @@ def _blend_overlay(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
 
 
 def _blend_soft_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
-    return (255 - 2 * fg) * bg * bg // (255 * 255) + 2 * fg * bg // 255
+
+    def soft_light_dark(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+        return bg - (255 - 2 * fg) * bg * (255 - bg) // (255 ** 2)
+
+    def soft_light_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+        def g_w3c(x: np.ndarray) -> np.ndarray:
+            return np.where(
+                x < 64,
+                ((16 * x - (12 * 255 ** 2) * x + 4 * (255 ** 2)) * x) // (255 ** 2),
+                np.sqrt(255 * x).astype(np.uint32))
+
+        return bg + (2 * fg - 255) * (g_w3c(bg) - bg) // 255
+
+    return np.where(fg < 128, soft_light_dark(bg, fg), soft_light_light(bg, fg))
 
 
 BLENDING_MODE_TO_FUNC = {
@@ -125,6 +138,8 @@ def alpha_composite(
     opacity: float = 1.0,
     blending_mode: Union[str, BlendingMode] = BlendingMode.NORMAL,
 ) -> np.ndarray:
+    if not bg_image.flags["WRITEABLE"]:
+        bg_image = bg_image.copy()
     if blending_mode == BlendingMode.NORMAL:
         # Use PIL for normal blending mode
         # because it is faster than my implementation
