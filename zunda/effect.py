@@ -2,8 +2,6 @@ from typing import Hashable, Protocol
 
 import numpy as np
 
-from zunda.attribute import Attribute
-
 
 class Effect(Protocol):
 
@@ -12,7 +10,3 @@ class Effect(Protocol):
 
     def get_key(self, time: float) -> Hashable:
         return time
-
-    @property
-    def attributes(self) -> dict[str, Attribute]:
-        return dict()

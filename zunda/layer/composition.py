@@ -7,7 +7,6 @@ import numpy as np
 from cachetools import LRUCache
 from tqdm import tqdm
 
-from zunda.attribute import Attribute
 from zunda.effect import Effect
 from zunda.imgproc import BlendingMode, alpha_composite, resize
 from zunda.layer.core import Layer
@@ -35,13 +34,6 @@ class LayerItem:
         mode = BlendingMode.from_string(blending_mode) if isinstance(blending_mode, str) else blending_mode
         self.blending_mode: BlendingMode = mode
         self._effects: list[Effect] = []
-
-    @property
-    def attributes(self) -> dict[str, Union[tuple[dict[str, Attribute], ...], dict[str, Attribute]]]:
-        return {
-            'transform': self.transform.attributes,
-            'effects': tuple(effect.attributes for effect in self._effects),
-        }
 
     @property
     def composition_start_time(self) -> float:
@@ -95,10 +87,6 @@ class Composition:
     @property
     def duration(self) -> float:
         return self._duration
-
-    @property
-    def attributes(self) -> dict[str, Attribute]:
-        return dict()
 
     def keys(self) -> list[str]:
         return [layer.name for layer in self.layers]
