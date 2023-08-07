@@ -2,6 +2,8 @@ from typing import Hashable, Optional, Protocol, Sequence
 
 import numpy as np
 
+from zunda.attribute import Attribute
+
 
 class Layer(Protocol):
     @property
@@ -12,7 +14,11 @@ class Layer(Protocol):
         raise NotImplementedError
 
     def get_key(self, time: float) -> Hashable:
-        raise NotImplementedError
+        return time
+
+    @property
+    def attributes(self) -> dict[str, Attribute]:
+        return dict()
 
 
 class TimelineMixin:

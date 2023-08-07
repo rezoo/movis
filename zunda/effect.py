@@ -11,20 +11,8 @@ class Effect(Protocol):
         raise NotImplementedError
 
     def get_key(self, time: float) -> Hashable:
-        raise NotImplementedError
+        return time
 
     @property
     def attributes(self) -> dict[str, Attribute]:
-        raise NotImplementedError
-
-
-class BasicEffectMixin:
-
-    def get_key(self, time: float) -> Hashable:
-        # Assume that the effect is not time-dependent
-        return 0
-
-    @property
-    def attributes(self) -> dict[str, Attribute]:
-        # Assume that the effect has no attributes
-        return {}
+        return dict()

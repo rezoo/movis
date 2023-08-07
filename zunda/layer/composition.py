@@ -62,7 +62,7 @@ class LayerItem:
         layer_key = self.layer.get_key(layer_time) if hasattr(self.layer, 'get_key') else layer_time
 
         def get_effect_key(e: Effect) -> Optional[Hashable]:
-            return e.get_key(layer_time) if hasattr(e, 'get_key') else None
+            return e.get_key(layer_time) if hasattr(e, 'get_key') else layer_time
 
         effects_key = None if len(self._effects) == 0 else tuple([get_effect_key(e) for e in self._effects])
         return (transform_key, layer_key, effects_key)
@@ -165,6 +165,8 @@ class Composition:
         self, layer_item: LayerItem, layer_time: float,
         component: np.ndarray, scale: tuple[float, float]
     ) -> np.ndarray:
+        if scale == 1.0:
+            return component
         layer_state = layer_item.get_key(layer_time)
         key = (CacheType.LAYER, layer_item.name, layer_state, scale)
         if key in self.cache:
