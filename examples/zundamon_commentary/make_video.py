@@ -47,12 +47,12 @@ def main():
 
     def slide_in_out(item: zunda.LayerItem, offset: np.ndarray):
         p = item.transform.position.init_value
-        item.transform.position.enable() \
+        item.transform.position.enable_animation() \
             .append(0.0, p) \
             .append(0.0, p + offset, 'ease_out_expo') \
             .append(1.0, p).append(5.0, p, 'ease_in_expo') \
             .append(6.0, p + offset)
-        item.transform.opacity.enable().extend(
+        item.transform.opacity.enable_animation().extend(
             keyframes=[0, 1, 5, 6], values=[0, 1, 1, 0],
             motion_types=['ease_out', 'linear', 'ease_in', 'linear'])
 

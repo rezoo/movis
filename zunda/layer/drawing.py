@@ -3,7 +3,7 @@ from typing import Hashable, Union
 import numpy as np
 from PIL import Image, ImageDraw
 
-from zunda.attribute import Attribute, AttributeType, normalize_to_tuple
+from zunda.attribute import Attribute, AttributeType, convert_to_hashable
 
 
 class RectangleLayer:
@@ -34,7 +34,7 @@ class RectangleLayer:
         }
 
     def get_key(self, time: float) -> Hashable:
-        return tuple([normalize_to_tuple(attr(time)) for attr in self.attributes.values()])
+        return tuple([convert_to_hashable(attr(time)) for attr in self.attributes.values()])
 
     def __call__(self, time: float) -> np.ndarray:
         size = np.round(self.size(time))

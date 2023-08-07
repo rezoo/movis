@@ -2,7 +2,7 @@ from typing import NamedTuple, Union
 
 import numpy as np
 
-from zunda.attribute import Attribute, AttributeType, normalize_to_2dvector
+from zunda.attribute import Attribute, AttributeType, normalize_to_1dscalar, normalize_to_2dvector
 
 
 class TransformValue(NamedTuple):
@@ -47,7 +47,7 @@ class Transform:
             anchor_point=normalize_to_2dvector(self.anchor_point(layer_time)),
             position=normalize_to_2dvector(self.position(layer_time)),
             scale=normalize_to_2dvector(self.scale(layer_time)),
-            opacity=float(self.opacity(layer_time)),
+            opacity=normalize_to_1dscalar(self.opacity(layer_time)),
         )
 
     def __repr__(self) -> str:

@@ -48,13 +48,13 @@ def normalize_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], va
     raise ValueError(f"Invalid value type: {value_type}")
 
 
-def normalize_to_1dscalar(x: Union[float, Sequence[float]]) -> float:
+def normalize_to_1dscalar(x: Union[float, Sequence[float], np.ndarray]) -> float:
     if isinstance(x, float):
         return x
-    elif len(x) == 1:
-        return float(x[0])
+    elif isinstance(x, np.ndarray):
+        return float(x)
     else:
-        raise ValueError(f"Invalid value: {x}")
+        return float(x[0])
 
 
 def normalize_to_2dvector(
@@ -68,7 +68,7 @@ def normalize_to_2dvector(
         return (float(x[0]), float(x[1]))
 
 
-def normalize_to_tuple(
+def convert_to_hashable(
     x: Union[float, Sequence[float], np.ndarray]
 ) -> Union[float, tuple[float, ...]]:
     if isinstance(x, (int, float)):
@@ -101,7 +101,7 @@ class Attribute:
     def append(self, motion: Callable[[float, np.ndarray], np.ndarray]) -> None:
         self._motions.append(motion)
 
-    def enable(self) -> Motion:
+    def enable_animation(self) -> Motion:
         motions = [m for m in self._motions if isinstance(m, Motion)]
         if 0 < len(motions):
             return motions[-1]

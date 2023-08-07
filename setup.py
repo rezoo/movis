@@ -5,7 +5,7 @@ setup(
     version="0.3",
     author="Masaki Saito",
     author_email="msaito@preferred.jp",
-    description="A simple python package for creating zunda-mon videos",
+    description="A video editing library",
     packages=find_packages(),
     include_package_data=True,
     package_data={
