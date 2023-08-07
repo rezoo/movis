@@ -3,12 +3,17 @@ from typing import Optional, Sequence, Union
 
 import imageio
 import numpy as np
-from pdf2image import convert_from_path
 from PIL import Image as PILImage
 
 from zunda.imgproc import alpha_composite
 from zunda.layer.mixin import TimelineMixin
 from zunda.util import rand_from_string
+
+try:
+    from pdf2image import convert_from_path
+    pdf2image_available = True
+except ImportError:
+    pdf2image_available = False
 
 
 class Image:
@@ -45,15 +50,35 @@ class Image:
 
 
 class ImageSequence(TimelineMixin):
+
+    @classmethod
+    def from_files(cls, img_files: Sequence[Union[str, Path]], each_duration: float = 1.0) -> "ImageSequence":
+        start_times = np.arange(len(img_files)) * each_duration
+        end_times = start_times + each_duration
+        return cls(start_times.tolist(), end_times.tolist(), img_files)
+
+    @classmethod
+    def from_dir(cls, img_dir: Union[str, Path], each_duration: float = 1.0) -> "ImageSequence":
+        img_dir = Path(img_dir)
+        exts = set([".png", ".jpg", ".jpeg", ".bmp", ".tiff"])
+        img_files = [
+            p for p in sorted(img_dir.glob("*")) if p.is_file() and p.suffix in exts]
+        return cls.from_files(img_files, each_duration)
+
     def __init__(
-        self, start_times: Sequence[float], end_times: Sequence[float], img_files: Sequence[Union[str, Path]]
+        self, start_times: Sequence[float], end_times: Sequence[float], img_files: Sequence[Union[str, Path, np.ndarray]]
     ) -> None:
         super().__init__(start_times, end_times)
         self.img_files = img_files
-        # check if all files exist
-        for img_file in img_files:
-            assert Path(img_file).exists(), f"{img_file} does not exist"
         self.images: list[Optional[np.ndarray]] = [None] * len(img_files)
+        for i, img_file in enumerate(img_files):
+            if isinstance(img_file, (str, Path)):
+                img_file = Path(img_file)
+                assert Path(img_file).exists(), f"{img_file} does not exist"
+            elif isinstance(img_file, np.ndarray):
+                self.images[i] = img_file
+            else:
+                raise ValueError(f"Invalid img_file type: {type(img_file)}")
 
     def get_key(self, time: float) -> int:
         idx = self.get_state(time)
@@ -105,6 +130,8 @@ class Slide(TimelineMixin):
         slide_file: Union[str, Path],
         slide_counter: Sequence[int],
     ) -> None:
+        if not pdf2image_available:
+            raise ImportError("pdf2image is not installed")
         super().__init__(start_times, end_times)
         self.slide_timeline = np.cumsum(slide_counter)
         self.slide_file = slide_file
