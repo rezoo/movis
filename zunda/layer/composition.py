@@ -7,8 +7,8 @@ import numpy as np
 from cachetools import LRUCache
 from tqdm import tqdm
 
-from zunda.layer.component import Component
 from zunda.imgproc import BlendingMode, alpha_composite, resize
+from zunda.layer.component import Component
 from zunda.layer.layer import Layer
 from zunda.transform import Transform
 

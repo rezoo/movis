@@ -1,6 +1,7 @@
 from . import layer  # noqa
 from .action import Action, make_action_functions  # noqa
-from .attribute import Attribute, AttributeType, AttributesMixin, convert_to_hashable  # noqa
+from .attribute import (Attribute, AttributesMixin, AttributeType,  # noqa
+                        convert_to_hashable)
 from .audio import concat_audio_files, make_loop_music  # noqa
 from .effect import Effect  # noqa
 from .imgproc import BlendingMode, alpha_composite, resize  # noqa
