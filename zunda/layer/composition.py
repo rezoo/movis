@@ -96,6 +96,10 @@ class Composition:
     def duration(self) -> float:
         return self._duration
 
+    @property
+    def attributes(self) -> dict[str, Attribute]:
+        return dict()
+
     def keys(self) -> list[str]:
         return [layer.name for layer in self.layers]
 
