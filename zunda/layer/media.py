@@ -4,23 +4,23 @@ from typing import Optional, Sequence, Union
 import imageio
 import numpy as np
 from pdf2image import convert_from_path
-from PIL import Image
+from PIL import Image as PILImage
 
 from zunda.imgproc import alpha_composite
 from zunda.layer.mixin import TimelineMixin
 from zunda.util import rand_from_string
 
 
-class ImageLayer:
+class Image:
     def __init__(
-        self, img_file: Union[str, Path, Image.Image, np.ndarray], duration: float = 1.0
+        self, img_file: Union[str, Path, PILImage.Image, np.ndarray], duration: float = 1.0
     ) -> None:
         self.image: Optional[np.ndarray] = None
         self._img_file: Optional[Path] = None
         if isinstance(img_file, (str, Path)):
             self._img_file = Path(img_file)
             assert self._img_file.exists(), f"{self._img_file} does not exist"
-        elif isinstance(img_file, Image.Image):
+        elif isinstance(img_file, PILImage.Image):
             image = np.asarray(img_file.convert("RGBA"))
             self.image = image
         elif isinstance(img_file, np.ndarray):
@@ -39,12 +39,12 @@ class ImageLayer:
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
         if self.image is None:
-            image = np.asarray(Image.open(self._img_file).convert("RGBA"))
+            image = np.asarray(PILImage.open(self._img_file).convert("RGBA"))
             self.image = image
         return self.image
 
 
-class VideoLayer:
+class Video:
     def __init__(self, video_file: Union[str, Path]) -> None:
         self.video_file = Path(video_file)
         self.reader = imageio.get_reader(video_file)
@@ -66,11 +66,11 @@ class VideoLayer:
     def __call__(self, time: float) -> Optional[np.ndarray]:
         frame_index = int(time * self.fps)
         frame = self.reader.get_data(frame_index)
-        frame = Image.fromarray(frame).convert("RGBA")
+        frame = PILImage.fromarray(frame).convert("RGBA")
         return np.asarray(frame)
 
 
-class SlideLayer(TimelineMixin):
+class Slide(TimelineMixin):
     def __init__(
         self,
         start_times: Sequence[float],
@@ -102,7 +102,7 @@ class SlideLayer(TimelineMixin):
         return self.slide_images[slide_number]
 
 
-class CharacterLayer(TimelineMixin):
+class Character(TimelineMixin):
     def __init__(
         self,
         start_times: Sequence[float],
@@ -180,7 +180,7 @@ class CharacterLayer(TimelineMixin):
         emotion = self.character_timeline[idx]
         character = self.character_imgs[emotion]
         if isinstance(character, Path):
-            base_img = np.asarray(Image.open(character).convert("RGBA"))
+            base_img = np.asarray(PILImage.open(character).convert("RGBA"))
             self.character_imgs[emotion] = base_img
         else:
             base_img = character
@@ -189,7 +189,7 @@ class CharacterLayer(TimelineMixin):
             eye_number = self.get_eye_state(time, idx)
             eye = self.eye_imgs[emotion][eye_number]
             if isinstance(eye, Path):
-                eye_img = np.asarray(Image.open(eye).convert("RGBA"))
+                eye_img = np.asarray(PILImage.open(eye).convert("RGBA"))
                 self.eye_imgs[emotion][eye_number] = eye_img
             else:
                 eye_img = eye

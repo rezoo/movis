@@ -11,22 +11,22 @@ def main():
 
     scene = zunda.layer.Composition(size=(1920, 1080), duration=tl['end_time'].max())
     scene.add_layer(
-        zunda.layer.ImageLayer(img_file='../../assets/bg2.png', duration=tl['end_time'].max()),
+        zunda.layer.Image(img_file='../../assets/bg2.png', duration=tl['end_time'].max()),
         transform=Transform(position=(960, 540)))
     scene.add_layer(
-        zunda.layer.SlideLayer(
+        zunda.layer.Slide(
             tl['start_time'], tl['end_time'],
             slide_file='slide.pdf', slide_counter=tl['slide']),
         transform=Transform(position=(960, 421), scale=0.71))
     scene.add_layer(
-        zunda.layer.CharacterLayer(
+        zunda.layer.Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='zunda', character_dir='../../assets/character/zunda'),
         name='zunda',
         transform=Transform(position=(1779, 950), scale=0.7))
     scene.add_layer(
-        zunda.layer.CharacterLayer(
+        zunda.layer.Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='metan', character_dir='../../assets/character/metan'),
@@ -37,11 +37,11 @@ def main():
         action_func(scene, layer_name)
 
     scene.add_layer(
-        zunda.layer.ImageLayer(img_file='images/logo_zunda.png', duration=7.0),
+        zunda.layer.Image(img_file='images/logo_zunda.png', duration=7.0),
         name='zunda_logo', offset=0.5,
         transform=Transform(position=(1755, 340)))
     scene.add_layer(
-        zunda.layer.ImageLayer(img_file='images/logo_metan.png', duration=7.0),
+        zunda.layer.Image(img_file='images/logo_metan.png', duration=7.0),
         name='metan_logo', offset=0.5,
         transform=Transform(position=(170, 340)))
 

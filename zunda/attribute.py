@@ -115,3 +115,10 @@ class Attribute:
             return f"{self.init_value}"
         else:
             return f"Attribute(value_type={self.value_type})"
+
+
+class AttributesMixin:
+
+    @property
+    def attributes(self) -> dict[str, Attribute]:
+        return {key: attr for key, attr in vars(self).items() if isinstance(attr, Attribute)}

@@ -1,5 +1,6 @@
 from .composition import Component, Composition, concatenate  # noqa
-from .drawing import RectangleLayer  # noqa
+from .drawing import Rectangle  # noqa
 from .layer import Layer  # noqa
-from .media import CharacterLayer, ImageLayer, SlideLayer, VideoLayer  # noqa
+from .media import Character, Image, Slide, Video  # noqa
 from .mixin import TimelineMixin  # noqa
+from .component import Component  # noqa

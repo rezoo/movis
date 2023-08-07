@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 from zunda.attribute import Attribute, AttributeType, convert_to_hashable
 
 
-class RectangleLayer:
+class Rectangle:
 
     def __init__(
             self,
