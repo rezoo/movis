@@ -7,9 +7,9 @@ import numpy as np
 from cachetools import LRUCache
 from tqdm import tqdm
 
-from zunda.effect import Effect
+from zunda.component import Component
 from zunda.imgproc import BlendingMode, alpha_composite, resize
-from zunda.layer.core import Layer
+from zunda.layer.layer import Layer
 from zunda.transform import Transform
 
 
@@ -18,68 +18,12 @@ class CacheType(Enum):
     LAYER = 1
 
 
-class LayerItem:
-
-    def __init__(
-            self, name: str, layer: Layer, transform: Optional[Transform] = None,
-            offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0,
-            visible: bool = True, blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL):
-        self.name: str = name
-        self.layer: Layer = layer
-        self.transform: Transform = transform if transform is not None else Transform()
-        self.offset: float = offset
-        self.start_time: float = start_time
-        self.end_time: float = end_time if end_time == 0.0 else self.layer.duration
-        self.visible: bool = visible
-        mode = BlendingMode.from_string(blending_mode) if isinstance(blending_mode, str) else blending_mode
-        self.blending_mode: BlendingMode = mode
-        self._effects: list[Effect] = []
-
-    @property
-    def composition_start_time(self) -> float:
-        return self.offset + self.start_time
-
-    @property
-    def composition_end_time(self) -> float:
-        return self.offset + self.end_time
-
-    def add_effect(self, effect: Effect) -> Effect:
-        self._effects.append(effect)
-        return effect
-
-    def get_key(self, layer_time: float) -> tuple[Hashable, Hashable, Hashable]:
-        if not self.visible:
-            return (None, None, None)
-        transform_key = self.transform.get_current_value(layer_time)
-        layer_key = self.layer.get_key(layer_time) if hasattr(self.layer, 'get_key') else layer_time
-
-        def get_effect_key(e: Effect) -> Optional[Hashable]:
-            return e.get_key(layer_time) if hasattr(e, 'get_key') else layer_time
-
-        effects_key = None if len(self._effects) == 0 else tuple([get_effect_key(e) for e in self._effects])
-        return (transform_key, layer_key, effects_key)
-
-    def __call__(self, layer_time: float) -> Optional[np.ndarray]:
-        if not self.visible:
-            return None
-        frame = self.layer(layer_time)
-        if frame is None:
-            return None
-        for effect in self._effects:
-            frame = effect(layer_time, frame)
-        return frame
-
-    def __repr__(self) -> str:
-        return f"LayerItem(name={self.name!r}, layer={self.layer!r}, transform={self.transform!r}, " \
-            f"offset={self.offset}, blending_mode={self.blending_mode})"
-
-
 class Composition:
     def __init__(
         self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0
     ) -> None:
-        self.layers: list[LayerItem] = []
-        self._name_to_layer: dict[str, LayerItem] = {}
+        self.layers: list[Component] = []
+        self._name_to_layer: dict[str, Component] = {}
         self.size = size
         self._duration = duration
         self.cache: LRUCache = LRUCache(maxsize=128)
@@ -91,23 +35,23 @@ class Composition:
     def keys(self) -> list[str]:
         return [layer.name for layer in self.layers]
 
-    def values(self) -> list[LayerItem]:
+    def values(self) -> list[Component]:
         return self.layers
 
-    def items(self) -> list[tuple[str, LayerItem]]:
+    def items(self) -> list[tuple[str, Component]]:
         return [(layer.name, layer) for layer in self.layers]
 
-    def __getitem__(self, key: str) -> LayerItem:
+    def __getitem__(self, key: str) -> Component:
         return self._name_to_layer[key]
 
     def get_key(self, time: float) -> tuple[Hashable, ...]:
         layer_keys: list[Hashable] = [CacheType.COMPOSITION]
-        for layer_item in self.layers:
-            layer_time = time - layer_item.offset
-            if layer_time < layer_item.start_time or layer_item.end_time <= layer_time:
+        for component in self.layers:
+            layer_time = time - component.offset
+            if layer_time < component.start_time or component.end_time <= layer_time:
                 layer_keys.append(None)
             else:
-                layer_keys.append(layer_item.get_key(layer_time))
+                layer_keys.append(component.get_key(layer_time))
         return tuple(layer_keys)
 
     def __repr__(self) -> str:
@@ -123,7 +67,7 @@ class Composition:
         end_time: Optional[float] = None,
         visible: bool = True,
         blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
-    ) -> LayerItem:
+    ) -> Component:
         if name is None:
             name = f"layer_{len(self.layers)}"
         if name in self.layers:
@@ -131,7 +75,7 @@ class Composition:
         end_time = end_time if end_time is not None else layer.duration
         transform = transform if transform is not None \
             else Transform(position=(self.size[0] / 2, self.size[1] / 2))
-        layer_item = LayerItem(
+        component = Component(
             name,
             layer,
             transform,
@@ -141,53 +85,53 @@ class Composition:
             visible=visible,
             blending_mode=blending_mode,
         )
-        self.layers.append(layer_item)
-        self._name_to_layer[name] = layer_item
-        return layer_item
+        self.layers.append(component)
+        self._name_to_layer[name] = component
+        return component
 
-    def pop_layer(self, name: str) -> LayerItem:
+    def pop_layer(self, name: str) -> Component:
         if name not in self._name_to_layer:
             raise KeyError(f"Layer with name {name} does not exist")
         index = next(i for i in range(len(self.layers)) if self.layers[i].name == name)
         self.layers.pop(index)
-        layer_item = self._name_to_layer.pop(name)
-        return layer_item
+        component = self._name_to_layer.pop(name)
+        return component
 
     def _get_or_resize(
-        self, layer_item: LayerItem, layer_time: float,
-        component: np.ndarray, scale: tuple[float, float]
+        self, component: Component, layer_time: float,
+        image: np.ndarray, scale: tuple[float, float]
     ) -> np.ndarray:
         if scale == 1.0:
-            return component
-        layer_state = layer_item.get_key(layer_time)
-        key = (CacheType.LAYER, layer_item.name, layer_state, scale)
+            return image
+        layer_state = component.get_key(layer_time)
+        key = (CacheType.LAYER, component.name, layer_state, scale)
         if key in self.cache:
             return self.cache[key]
-        img = resize(component, scale)
-        self.cache[key] = img
-        return img
+        resized_image = resize(image, scale)
+        self.cache[key] = resized_image
+        return resized_image
 
     def composite(
-        self, base_img: np.ndarray, layer_item: LayerItem, time: float
+        self, bg_image: np.ndarray, component: Component, time: float
     ) -> np.ndarray:
-        layer_time = time - layer_item.offset
-        if layer_time < layer_item.start_time or layer_item.end_time <= layer_time:
-            return base_img
-        component = layer_item(layer_time)
-        if component is None:
-            return base_img
-        h, w = component.shape[:2]
+        layer_time = time - component.offset
+        if layer_time < component.start_time or component.end_time <= layer_time:
+            return bg_image
+        fg_image = component(layer_time)
+        if fg_image is None:
+            return bg_image
+        h, w = fg_image.shape[:2]
 
-        p = layer_item.transform.get_current_value(layer_time)
-        if round(component.shape[1] * p.scale[0]) == 0 or round(component.shape[0] * p.scale[1]) == 0:
-            return base_img
-        component = self._get_or_resize(layer_item, layer_time, component, p.scale)
+        p = component.transform.get_current_value(layer_time)
+        if round(fg_image.shape[1] * p.scale[0]) == 0 or round(fg_image.shape[0] * p.scale[1]) == 0:
+            return bg_image
+        fg_image = self._get_or_resize(component, layer_time, fg_image, p.scale)
         x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
-        base_img = alpha_composite(
-            base_img, component, position=(round(x), round(y)),
-            opacity=p.opacity, blending_mode=layer_item.blending_mode)
-        return base_img
+        bg_image = alpha_composite(
+            bg_image, fg_image, position=(round(x), round(y)),
+            opacity=p.opacity, blending_mode=component.blending_mode)
+        return bg_image
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
         key = self.get_key(time)
@@ -195,8 +139,8 @@ class Composition:
             return self.cache[key]
 
         frame = np.zeros((self.size[1], self.size[0], 4), dtype=np.uint8)
-        for layer_item in self.layers:
-            frame = self.composite(frame, layer_item, time)
+        for component in self.layers:
+            frame = self.composite(frame, component, time)
         self.cache[key] = frame
         return frame
 

@@ -5,12 +5,12 @@ def main():
     size = (640, 480)
     duration = 5.0
 
-    scene = zunda.Composition((640, 480), duration=duration)
+    scene = zunda.layer.Composition((640, 480), duration=duration)
     scene.add_layer(
-        zunda.RectangleLayer(
+        zunda.layer.RectangleLayer(
             size, color=(255, 186, 49), line_width=0, duration=duration),
         name='bg')
-    rectangle = zunda.RectangleLayer(
+    rectangle = zunda.layer.RectangleLayer(
         (10, 10), color=(255, 83, 49), line_width=5,
         line_color=(255, 255, 255), duration=duration)
     scene.add_layer(rectangle, name='rect')

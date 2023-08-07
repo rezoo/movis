@@ -7,7 +7,7 @@ from pdf2image import convert_from_path
 from PIL import Image
 
 from zunda.imgproc import alpha_composite
-from zunda.layer.core import TimelineMixin
+from zunda.layer.mixin import TimelineMixin
 from zunda.util import rand_from_string
 
 

@@ -47,12 +47,12 @@ class TransitionEffect:
 
 
 def main():
-    scene = zunda.Composition((1920, 1080), duration=6.0)
-    scene.add_layer(zunda.ImageLayer('scene_a.png', duration=3.0))
-    scene.add_layer(zunda.ImageLayer('scene_b.png', duration=3.0), offset=3.0)
+    scene = zunda.layer.Composition((1920, 1080), duration=6.0)
+    scene.add_layer(zunda.layer.ImageLayer('scene_a.png', duration=3.0))
+    scene.add_layer(zunda.layer.ImageLayer('scene_b.png', duration=3.0), offset=3.0)
 
     transition_time = 2.5
-    scene.add_layer(zunda.ImageLayer('logo.png', duration=transition_time), name='logo', offset=3.0 - transition_time / 2)
+    scene.add_layer(zunda.layer.ImageLayer('logo.png', duration=transition_time), name='logo', offset=3.0 - transition_time / 2)
     scene['logo'].add_effect(TransitionEffect(duration=transition_time))
 
     scene.make_video('transition.mp4')

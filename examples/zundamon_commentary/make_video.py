@@ -9,24 +9,24 @@ def main():
     audio_timeline = zunda.make_voicevox_dataframe('audio')
     tl = pd.merge(timeline, audio_timeline, left_index=True, right_index=True)
 
-    scene = zunda.Composition(size=(1920, 1080), duration=tl['end_time'].max())
+    scene = zunda.layer.Composition(size=(1920, 1080), duration=tl['end_time'].max())
     scene.add_layer(
-        zunda.ImageLayer(img_file='../../assets/bg2.png', duration=tl['end_time'].max()),
+        zunda.layer.ImageLayer(img_file='../../assets/bg2.png', duration=tl['end_time'].max()),
         transform=Transform(position=(960, 540)))
     scene.add_layer(
-        zunda.SlideLayer(
+        zunda.layer.SlideLayer(
             tl['start_time'], tl['end_time'],
             slide_file='slide.pdf', slide_counter=tl['slide']),
         transform=Transform(position=(960, 421), scale=0.71))
     scene.add_layer(
-        zunda.CharacterLayer(
+        zunda.layer.CharacterLayer(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='zunda', character_dir='../../assets/character/zunda'),
         name='zunda',
         transform=Transform(position=(1779, 950), scale=0.7))
     scene.add_layer(
-        zunda.CharacterLayer(
+        zunda.layer.CharacterLayer(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='metan', character_dir='../../assets/character/metan'),
@@ -37,15 +37,15 @@ def main():
         action_func(scene, layer_name)
 
     scene.add_layer(
-        zunda.ImageLayer(img_file='images/logo_zunda.png', duration=7.0),
+        zunda.layer.ImageLayer(img_file='images/logo_zunda.png', duration=7.0),
         name='zunda_logo', offset=0.5,
         transform=Transform(position=(1755, 340)))
     scene.add_layer(
-        zunda.ImageLayer(img_file='images/logo_metan.png', duration=7.0),
+        zunda.layer.ImageLayer(img_file='images/logo_metan.png', duration=7.0),
         name='metan_logo', offset=0.5,
         transform=Transform(position=(170, 340)))
 
-    def slide_in_out(item: zunda.LayerItem, offset: np.ndarray):
+    def slide_in_out(item: zunda.layer.Component, offset: np.ndarray):
         p = item.transform.position.init_value
         item.transform.position.enable_animation() \
             .append(0.0, p) \
