@@ -44,6 +44,33 @@ class Image:
         return self.image
 
 
+class ImageSequence(TimelineMixin):
+    def __init__(
+        self, start_times: Sequence[float], end_times: Sequence[float], img_files: Sequence[Union[str, Path]]
+    ) -> None:
+        super().__init__(start_times, end_times)
+        self.img_files = img_files
+        # check if all files exist
+        for img_file in img_files:
+            assert Path(img_file).exists(), f"{img_file} does not exist"
+        self.images: list[Optional[np.ndarray]] = [None] * len(img_files)
+
+    def get_key(self, time: float) -> int:
+        idx = self.get_state(time)
+        if idx < 0:
+            return -1
+        return idx
+
+    def __call__(self, time: float) -> Optional[np.ndarray]:
+        idx = self.get_state(time)
+        if idx < 0:
+            return None
+        if self.images[idx] is None:
+            image = np.asarray(PILImage.open(self.img_files[idx]).convert("RGBA"))
+            self.images[idx] = image
+        return self.images[idx]
+
+
 class Video:
     def __init__(self, video_file: Union[str, Path]) -> None:
         self.video_file = Path(video_file)
