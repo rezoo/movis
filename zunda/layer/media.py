@@ -66,7 +66,10 @@ class ImageSequence(TimelineMixin):
         return cls.from_files(img_files, each_duration)
 
     def __init__(
-        self, start_times: Sequence[float], end_times: Sequence[float], img_files: Sequence[Union[str, Path, np.ndarray]]
+        self,
+        start_times: Sequence[float],
+        end_times: Sequence[float],
+        img_files: Sequence[Union[str, Path, PILImage.Image, np.ndarray]]
     ) -> None:
         super().__init__(start_times, end_times)
         self.img_files = img_files
@@ -75,6 +78,8 @@ class ImageSequence(TimelineMixin):
             if isinstance(img_file, (str, Path)):
                 img_file = Path(img_file)
                 assert Path(img_file).exists(), f"{img_file} does not exist"
+            elif isinstance(img_file, PILImage.Image):
+                self.images[i] = np.asarray(img_file.convert("RGBA"))
             elif isinstance(img_file, np.ndarray):
                 self.images[i] = img_file
             else:
