@@ -21,6 +21,7 @@ def main():
     # but for the sake of clarity, the name "bg" is used here.
     scene.add_layer(zunda.layer.Rectangle(size, color=(55, 55, 55), duration=duration), name='bg')
     scene.add_layer(square, name='square', offset=duration / 2)
+    # Note that the image can be downloaded from: https://unsplash.com/photos/J6LMHbdW1k8
     scene.add_layer(zunda.layer.Image('image.jpg', duration=duration / 2))
     scene.add_layer(zunda.layer.Image('image.jpg', duration=duration / 2), name='image', offset=duration / 2)
     # Specify image as the target of the alpha matte of square.
