@@ -1,8 +1,9 @@
-from enum import Enum
 from typing import Union
 
 import numpy as np
 from PIL import Image
+
+from zunda.enum import BlendingMode
 
 
 def resize(img: np.ndarray, scale: tuple[float, float] = (1.0, 1.0)) -> np.ndarray:
@@ -11,32 +12,6 @@ def resize(img: np.ndarray, scale: tuple[float, float] = (1.0, 1.0)) -> np.ndarr
     h, w = img.shape[:2]
     return np.asarray(Image.fromarray(img).resize(
         (round(w * scale[0]), round(h * scale[1])), Image.BILINEAR))
-
-
-class BlendingMode(Enum):
-    NORMAL = 0
-    MULTIPLY = 1
-    SCREEN = 2
-    OVERLAY = 3
-    HARD_LIGHT = 4
-    SOFT_LIGHT = 5
-
-    @staticmethod
-    def from_string(s: str) -> "BlendingMode":
-        if s in STRING_TO_BLENDING_MODE:
-            return STRING_TO_BLENDING_MODE[s]
-        else:
-            raise ValueError(f"Unknown blending mode: {s}")
-
-
-STRING_TO_BLENDING_MODE = {
-    "normal": BlendingMode.NORMAL,
-    "multiply": BlendingMode.MULTIPLY,
-    "screen": BlendingMode.SCREEN,
-    "overlay": BlendingMode.OVERLAY,
-    "hard_light": BlendingMode.HARD_LIGHT,
-    "soft_light": BlendingMode.SOFT_LIGHT,
-}
 
 
 def _blend_overlay(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:

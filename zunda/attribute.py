@@ -1,33 +1,11 @@
 from __future__ import annotations
 
-from enum import Enum
 from typing import Callable, Sequence, Union
 
 import numpy as np
 
+from zunda.enum import AttributeType
 from zunda.motion import Motion
-
-
-class AttributeType(Enum):
-    ANY = -1
-    SCALAR = 0
-    VECTOR2D = 1
-    VECTOR3D = 2
-    ANGLE = 3
-    COLOR = 4
-
-    @staticmethod
-    def from_string(s: str) -> "AttributeType":
-        if s == 'scalar':
-            return AttributeType.SCALAR
-        elif s == 'vector2d':
-            return AttributeType.VECTOR2D
-        elif s == 'vector3d':
-            return AttributeType.VECTOR3D
-        elif s == 'angle':
-            return AttributeType.ANGLE
-        else:
-            raise ValueError(f"Unknown attribute type: {s}")
 
 
 def normalize_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], value_type: AttributeType) -> np.ndarray:

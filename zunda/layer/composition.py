@@ -1,4 +1,3 @@
-from enum import Enum
 from pathlib import Path
 from typing import Hashable, Optional, Sequence, Union
 
@@ -7,15 +6,11 @@ import numpy as np
 from cachetools import LRUCache
 from tqdm import tqdm
 
-from zunda.imgproc import BlendingMode, alpha_composite, resize
+from zunda.enum import CacheType
+from zunda.imgproc import BlendingMode
 from zunda.layer.component import Component
 from zunda.layer.layer import Layer
 from zunda.transform import Transform
-
-
-class CacheType(Enum):
-    COMPOSITION = 0
-    LAYER = 1
 
 
 class Composition:
@@ -97,41 +92,18 @@ class Composition:
         component = self._name_to_layer.pop(name)
         return component
 
-    def _get_or_resize(
-        self, component: Component, layer_time: float,
-        image: np.ndarray, scale: tuple[float, float]
-    ) -> np.ndarray:
-        if scale == 1.0:
-            return image
-        layer_state = component.get_key(layer_time)
-        key = (CacheType.LAYER, component.name, layer_state, scale)
-        if key in self.cache:
-            return self.cache[key]
-        resized_image = resize(image, scale)
-        self.cache[key] = resized_image
-        return resized_image
+    def enable_alpha_matte(self, source_name: str, target_name: str) -> Component:
+        assert source_name in self._name_to_layer and target_name in self._name_to_layer, \
+            "source and target must be in self.layers"
+        target = self.pop_layer(target_name)
+        source = self[source_name]
+        source.enable_alpha_matte(target)
+        return source
 
-    def composite(
-        self, bg_image: np.ndarray, component: Component, time: float
-    ) -> np.ndarray:
-        layer_time = time - component.offset
-        if layer_time < component.start_time or component.end_time <= layer_time:
-            return bg_image
-        fg_image = component(layer_time)
-        if fg_image is None:
-            return bg_image
-        h, w = fg_image.shape[:2]
-
-        p = component.transform.get_current_value(layer_time)
-        if round(fg_image.shape[1] * p.scale[0]) == 0 or round(fg_image.shape[0] * p.scale[1]) == 0:
-            return bg_image
-        fg_image = self._get_or_resize(component, layer_time, fg_image, p.scale)
-        x = p.position[0] + (p.anchor_point[0] - w / 2) * p.scale[0]
-        y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1]
-        bg_image = alpha_composite(
-            bg_image, fg_image, position=(round(x), round(y)),
-            opacity=p.opacity, blending_mode=component.blending_mode)
-        return bg_image
+    def disable_alpha_matte(self, name: str) -> Optional[Component]:
+        source = self[name]
+        target = source.disable_alpha_matte()
+        return target
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
         key = self.get_key(time)
@@ -140,7 +112,7 @@ class Composition:
 
         frame = np.zeros((self.size[1], self.size[0], 4), dtype=np.uint8)
         for component in self.layers:
-            frame = self.composite(frame, component, time)
+            frame = component._composite(frame, time, cache=self.cache)
         self.cache[key] = frame
         return frame
 

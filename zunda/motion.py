@@ -1,40 +1,10 @@
 import bisect
 import math
-from enum import Enum
 from typing import Any, Callable, Optional, Sequence, Union
 
 import numpy as np
 
-
-class MotionType(Enum):
-    LINEAR = 0
-    EASE_IN = 1
-    EASE_OUT = 2
-    EASE_IN_OUT = 3
-    EASE_IN_CUBIC = 4
-    EASE_OUT_CUBIC = 6
-    EASE_IN_EXPO = 7
-    EASE_OUT_EXPO = 8
-
-    @staticmethod
-    def from_string(s: str) -> "MotionType":
-        if s in STRING_TO_MOTION_TYPE:
-            return STRING_TO_MOTION_TYPE[s]
-        else:
-            raise ValueError(f"Unknown motion type: {s}")
-
-
-STRING_TO_MOTION_TYPE = {
-    "linear": MotionType.LINEAR,
-    "ease_in": MotionType.EASE_IN,
-    "ease_out": MotionType.EASE_OUT,
-    "ease_in_out": MotionType.EASE_IN_OUT,
-    "ease_in_cubic": MotionType.EASE_IN_CUBIC,
-    "ease_out_cubic": MotionType.EASE_OUT_CUBIC,
-    "ease_in_expo": MotionType.EASE_IN_EXPO,
-    "ease_out_expo": MotionType.EASE_OUT_EXPO,
-}
-
+from zunda.enum import MotionType
 
 MOTION_TYPES_TO_FUNC = {
     MotionType.LINEAR: lambda t: t,
