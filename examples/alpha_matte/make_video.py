@@ -19,7 +19,7 @@ def main():
     scene = zunda.layer.Composition(size, duration=duration)
     # There is no need to specify a name if no animation or filter is specified.
     # but for the sake of clarity, the name "bg" is used here.
-    scene.add_layer(zunda.layer.Rectangle(size, color=(55, 55, 55)), name='bg')
+    scene.add_layer(zunda.layer.Rectangle(size, color=(55, 55, 55), duration=duration), name='bg')
     scene.add_layer(square, name='square', offset=duration / 2)
     scene.add_layer(zunda.layer.Image('image.jpg', duration=duration / 2))
     scene.add_layer(zunda.layer.Image('image.jpg', duration=duration / 2), name='image', offset=duration / 2)
