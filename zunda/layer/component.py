@@ -84,6 +84,7 @@ class Component:
     def _composite(
         self, bg_image: np.ndarray, time: float,
         parent: tuple[float, float] = (0.0, 0.0),
+        alpha_matte_mode: bool = False,
         cache: Optional[LRUCache] = None,
     ) -> np.ndarray:
         layer_time = time - self.offset
@@ -102,7 +103,8 @@ class Component:
         y = p.position[1] + (p.anchor_point[1] - h / 2) * p.scale[1] - parent[1]
         bg_image = alpha_composite(
             bg_image, fg_image, position=(round(x), round(y)),
-            opacity=p.opacity, blending_mode=self.blending_mode)
+            opacity=p.opacity, blending_mode=self.blending_mode,
+            alpha_matte_mode=alpha_matte_mode)
         return bg_image
 
     def __call__(self, layer_time: float) -> Optional[np.ndarray]:
@@ -121,7 +123,7 @@ class Component:
             x = p.position[0] + (p.anchor_point[0] - frame.shape[1] / 2) * p.scale[0]
             y = p.position[1] + (p.anchor_point[1] - frame.shape[0] / 2) * p.scale[1]
             time = layer_time + self.offset
-            frame = self._alpha_matte._composite(frame, time, parent=(x, y))
+            frame = self._alpha_matte._composite(frame, time, parent=(x, y), alpha_matte_mode=True)
         return frame
 
     def __repr__(self) -> str:
