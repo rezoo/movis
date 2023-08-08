@@ -31,7 +31,7 @@ class TransitionEffect:
                 w = weight * prev_image.shape[1]
                 r0 = round(i * ri)
                 r1 = round((i + 1) * ri)
-                alpha[r0:r1, :int(np.round(w))] = 255
+                alpha[r0:r1, :round(w)] = 255
             return alpha
 
         if time < 0 or self.duration < time:
