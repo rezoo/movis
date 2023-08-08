@@ -51,10 +51,10 @@ def main():
     size = (1920, 1080)
     audio_img, duration = get_audio_image('nyancat.mp3')
     scene = zunda.layer.Composition(size, duration=duration)
-    scene.add_layer(zunda.layer.Image('bg.png', duration=duration))
+    scene.add_layer(zunda.layer.Image('bg.jpg', duration=duration))
     scene.add_layer(
         FrequencyLayer(audio_img, duration, (1920, 256)),
-        transform=zunda.Transform(position=(size[0] // 2, size[1] // 2 + 200)))
+        transform=zunda.Transform(position=(size[0] // 2, size[1] // 2 + 200), opacity=0.8))
     scene.make_video('output.mp4')
     zunda.add_materials_to_video('output.mp4', 'nyancat.mp3', dst_file='output2.mp4')
 
