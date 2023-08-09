@@ -73,7 +73,7 @@ def main():
     args = parser.parse_args()
 
     size = (1920, 1080)
-    audio_img, duration = get_audio_image('im_good.mp3')
+    audio_img, duration = get_audio_image('nyancat.mp3')
     scene = zunda.layer.Composition(size, duration=duration)
     scene.add_layer(zunda.layer.Image('bg.jpg', duration=duration))
 
@@ -90,7 +90,7 @@ def main():
         FrequencyLayer(audio_img, duration, freq_size, mode=args.type),
         transform=zunda.Transform(position=freq_position, opacity=0.8))
     scene.make_video('output.mp4')
-    zunda.add_materials_to_video('output.mp4', 'im_good.mp3', dst_file='output2.mp4')
+    zunda.add_materials_to_video('output.mp4', 'nyancat.mp3', dst_file='output2.mp4')
 
 
 if __name__ == '__main__':
