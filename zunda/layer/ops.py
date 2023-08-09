@@ -1,3 +1,5 @@
+from typing import Hashable
+
 from zunda.layer.layer import Layer
 
 
@@ -11,6 +13,11 @@ class Loop:
     @property
     def duration(self):
         return self.layer.duration * self.n_loop
+
+    def get_key(self, time: float) -> Hashable:
+        if hasattr(self.layer, 'get_key'):
+            return self.layer.get_key(time % self.layer.duration)
+        return time % self.layer.duration
 
     def __call__(self, time: float):
         return self.layer(time % self.layer.duration)
