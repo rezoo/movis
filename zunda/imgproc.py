@@ -119,7 +119,7 @@ def alpha_composite(
     blending_mode: Union[str, BlendingMode] = BlendingMode.NORMAL,
     alpha_matte_mode: bool = False,
 ) -> np.ndarray:
-    if not bg_image.flags["WRITEABLE"]:
+    if not bg_image.flags.writeable:
         bg_image = bg_image.copy()
     if blending_mode == BlendingMode.NORMAL and not alpha_matte_mode:
         # Use PIL for normal blending mode
