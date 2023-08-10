@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import NamedTuple, Optional, Sequence, Union
 
+from zunda.enum import Direction
+
 
 class ASSStyleType(NamedTuple):
 
@@ -22,7 +24,7 @@ class ASSStyleType(NamedTuple):
     border_style: int = 1
     outline: int = 5
     shadow: int = 0
-    alignment: int = 2
+    alignment: Direction = Direction.BOTTOM_CENTER
     margin_l: int = 10
     margin_r: int = 10
     margin_v: int = 30

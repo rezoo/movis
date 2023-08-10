@@ -3,7 +3,7 @@ from .action import Action, make_action_functions  # noqa
 from .attribute import Attribute, AttributesMixin, convert_to_hashable  # noqa
 from .audio import concat_audio_files, make_loop_music  # noqa
 from .effect import Effect  # noqa
-from .enum import AttributeType, BlendingMode, MotionType  # noqa
+from .enum import AttributeType, BlendingMode, Direction, MotionType  # noqa
 from .imgproc import alpha_composite, resize  # noqa
 from .motion import Motion  # noqa
 from .subtitle import ASSStyleType, make_ass_file, rgb_to_ass_color  # noqa

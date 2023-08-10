@@ -82,3 +82,58 @@ STRING_TO_BLENDING_MODE = {
     "hard_light": BlendingMode.HARD_LIGHT,
     "soft_light": BlendingMode.SOFT_LIGHT,
 }
+
+
+class Direction(Enum):
+    BOTTOM_LEFT = 1
+    BOTTOM_CENTER = 2
+    BOTTOM_RIGHT = 3
+    CENTER_LEFT = 4
+    CENTER = 5
+    CENTER_RIGHT = 6
+    TOP_LEFT = 7
+    TOP_CENTER = 8
+    TOP_RIGHT = 9
+
+    @staticmethod
+    def from_string(s: str) -> "Direction":
+        if s in STRING_TO_DIRECTION:
+            return STRING_TO_DIRECTION[s]
+        else:
+            raise ValueError(f"Unknown origin point: {s}")
+
+    @staticmethod
+    def to_vector(d: "Direction", size: tuple[float, float]) -> tuple[float, float]:
+        if d == Direction.BOTTOM_LEFT:
+            return (0, size[1])
+        elif d == Direction.BOTTOM_CENTER:
+            return (size[0] / 2, size[1])
+        elif d == Direction.BOTTOM_RIGHT:
+            return (size[0], size[1])
+        elif d == Direction.CENTER_LEFT:
+            return (0, size[1] / 2)
+        elif d == Direction.CENTER:
+            return (size[0] / 2, size[1] / 2)
+        elif d == Direction.CENTER_RIGHT:
+            return (size[0], size[1] / 2)
+        elif d == Direction.TOP_LEFT:
+            return (0, 0)
+        elif d == Direction.TOP_CENTER:
+            return (size[0] / 2, 0)
+        elif d == Direction.TOP_RIGHT:
+            return (size[0], 0)
+        else:
+            raise ValueError(f"Unknown direction: {d}")
+
+
+STRING_TO_DIRECTION = {
+    "bottom_left": Direction.BOTTOM_LEFT,
+    "bottom_center": Direction.BOTTOM_CENTER,
+    "bottom_right": Direction.BOTTOM_RIGHT,
+    "center_left": Direction.CENTER_LEFT,
+    "center": Direction.CENTER,
+    "center_right": Direction.CENTER_RIGHT,
+    "top_left": Direction.TOP_LEFT,
+    "top_center": Direction.TOP_CENTER,
+    "top_right": Direction.TOP_RIGHT,
+}
