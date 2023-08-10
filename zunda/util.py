@@ -123,10 +123,7 @@ def add_materials_to_video(
     dst_file: Union[str, Path],
     subtitle_file: Union[str, Path, None] = None,
 ) -> None:
-    if subtitle_file is not None:
-        kwargs = {"vf": f"ass={str(subtitle_file)}"}
-    else:
-        kwargs = {}
+    kwargs = {"vf": f"ass={str(subtitle_file)}"} if subtitle_file is not None else {'vcodec': 'copy'}
     video_input = ffmpeg.input(video_file)
     audio_input = ffmpeg.input(audio_file)
     output = ffmpeg.output(

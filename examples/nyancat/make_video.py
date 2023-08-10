@@ -69,19 +69,25 @@ class FrequencyLayer:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('type', choices=['line', 'circle'])
+    parser.add_argument('-t', '--type', choices=['line', 'circle'], default='line')
+    parser.add_argument('-i', '--input', default='nyancat.mp3')
+    parser.add_argument('-o', '--output', default='output.mp4')
+    parser.add_argument('--background', default='bg.jpg')
+    parser.add_argument('--no-logo', action='store_true')
     args = parser.parse_args()
 
     size = (1920, 1080)
-    audio_img, duration = get_audio_image('nyancat.mp3')
-    scene = zunda.layer.Composition(size, duration=duration)
-    scene.add_layer(zunda.layer.Image('bg.jpg', duration=duration))
+    eps = 0.1
+    audio_img, duration = get_audio_image(args.input)
+    scene = zunda.layer.Composition(size, duration=duration + eps)
+    scene.add_layer(zunda.layer.Image(args.background, duration=duration + eps))
 
-    logo_position = (size[0] // 2, size[1] // 2 - 200) if args.type == 'line' \
-        else (size[0] // 2, size[1] // 2)
-    scene.add_layer(
-        zunda.layer.Image('logo.png', duration=duration),
-        transform=zunda.Transform(position=logo_position))
+    if not args.no_logo:
+        logo_position = (size[0] // 2, size[1] // 2 - 200) if args.type == 'line' \
+            else (size[0] // 2, size[1] // 2)
+        scene.add_layer(
+            zunda.layer.Image('logo.png', duration=duration + eps),
+            transform=zunda.Transform(position=logo_position))
 
     freq_size = (1920, 256) if args.type == 'line' else (1080, 1080)
     freq_position = (size[0] // 2, size[1] // 2 + 200) if args.type == 'line' \
@@ -89,8 +95,8 @@ def main():
     scene.add_layer(
         FrequencyLayer(audio_img, duration, freq_size, mode=args.type),
         transform=zunda.Transform(position=freq_position, opacity=0.8))
-    scene.make_video('output.mp4')
-    zunda.add_materials_to_video('output.mp4', 'nyancat.mp3', dst_file='output2.mp4')
+    scene.make_video('no_audio.mp4')
+    zunda.add_materials_to_video('no_audio.mp4', args.input, dst_file=args.output)
 
 
 if __name__ == '__main__':
