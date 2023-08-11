@@ -23,6 +23,7 @@ setup(
         "imageio-ffmpeg>=0.4.8",
         "tqdm>=4.46.0",
         "cachetools>=4.2.2",
+        "opencv-python>=4.8.0.76",
     ],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
