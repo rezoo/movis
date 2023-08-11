@@ -84,8 +84,10 @@ class Component:
         h, w = fg_image.shape[:2]
 
         p = self.transform.get_current_value(layer_time)
-        T1 = _get_T1(p, (w, h))
-        SR_T2 = _get_SR_T2(p, (w, h), self.origin_point)
+        T1 = _get_T1(p)
+        SR = _get_SR(p)
+        T2 = _get_T2(p, (w, h), self.origin_point)
+        SR_T2 = SR @ T2
         affine_matrix = (T1 @ SR_T2)[:2]
 
         corners_layer = np.array([
@@ -101,7 +103,8 @@ class Component:
         if W == 0 or H == 0:
             return bg_image
         offset_x, offset_y = int(min_coords[0]), int(min_coords[1])
-        T1_fixed = _get_T1(p, (w, h), offset=(offset_x, offset_y))
+
+        T1_fixed = _get_T1(p, offset=(offset_x, offset_y))
         affine_matrix_fixed = (T1_fixed @ SR_T2)[:2]
         fg_image_transformed = cv2.warpAffine(
             fg_image, affine_matrix_fixed, dsize=(W, H),
@@ -137,24 +140,28 @@ class Component:
             f"offset={self.offset}, visible={self.visible}, blending_mode={self.blending_mode})"
 
 
-def _get_T1(p: TransformValue, size: tuple[int, int], offset: tuple[int, int] = (0, 0)) -> np.ndarray:
+def _get_T1(p: TransformValue, offset: tuple[int, int] = (0, 0)) -> np.ndarray:
     return np.array([
         [1, 0, p.position[0] + p.anchor_point[0] - offset[0]],
         [0, 1, p.position[1] + p.anchor_point[1] - offset[1]],
         [0, 0, 1]], dtype=np.float64)
 
 
-def _get_SR_T2(p: TransformValue, size: tuple[int, int], origin_point: Direction) -> np.ndarray:
+def _get_SR(p: TransformValue) -> np.ndarray:
     cos_t = np.cos((2 * np.pi * p.rotation) / 360)
     sin_t = np.sin((2 * np.pi * p.rotation) / 360)
-    center_point = Direction.to_vector(origin_point, (float(size[0]), float(size[1])))
     SR = np.array([
         [p.scale[0] * cos_t, - p.scale[0] * sin_t, 0],
         [p.scale[1] * sin_t, p.scale[1] * cos_t, 0],
         [0, 0, 1]], dtype=np.float64)
-    center_point = (size[0] / 2, size[1] / 2)
+    return SR
+
+
+def _get_T2(p: TransformValue, size: tuple[int, int], origin_point: Direction) -> np.ndarray:
+    center_point = Direction.to_vector(
+        origin_point, (float(size[0]), float(size[1])))
     T2 = np.array([
         [1, 0, - p.anchor_point[0] - center_point[0]],
         [0, 1, - p.anchor_point[1] - center_point[1]],
         [0, 0, 1]], dtype=np.float64)
-    return SR @ T2
+    return T2
