@@ -95,7 +95,7 @@ def main():
     scene.add_layer(
         FrequencyLayer(audio_img, duration, freq_size, mode=args.type),
         transform=zunda.Transform(position=freq_position, opacity=0.8))
-    scene.make_video('no_audio.mp4')
+    scene.write_video('no_audio.mp4')
     zunda.add_materials_to_video('no_audio.mp4', args.input, dst_file=args.output)
 
 

@@ -55,7 +55,7 @@ def main():
     scene.add_layer(zunda.layer.Image('logo.png', duration=transition_time), name='logo', offset=3.0 - transition_time / 2)
     scene['logo'].add_effect(TransitionEffect(duration=transition_time))
 
-    scene.make_video('transition.mp4')
+    scene.write_video('transition.mp4')
 
 
 if __name__ == '__main__':

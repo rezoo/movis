@@ -20,7 +20,7 @@ def main():
         values=[(10, 10), (400, 400), (10, 10), (100, 400), (400, 100)],
         motion_types=['ease_out_expo'] * 5)
 
-    scene.make_video('rectangles.mp4')
+    scene.write_video('rectangles.mp4')
 
 
 if __name__ == '__main__':

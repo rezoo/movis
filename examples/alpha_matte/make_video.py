@@ -28,7 +28,7 @@ def main():
     # It overwrites the color of square with image.
     scene.enable_alpha_matte('square', 'image')
     # Now let's make a video.
-    scene.make_video('alpha_matte.mp4')
+    scene.write_video('alpha_matte.mp4')
 
 
 if __name__ == '__main__':

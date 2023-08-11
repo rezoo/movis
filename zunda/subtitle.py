@@ -56,7 +56,7 @@ def _make_ass_style(s: ASSStyleType):
     return style_str
 
 
-def make_ass_file(
+def write_ass_file(
     start_times: Sequence[float],
     end_times: Sequence[float],
     texts: Sequence[str],

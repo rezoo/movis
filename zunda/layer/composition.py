@@ -116,7 +116,7 @@ class Composition:
         self.cache[key] = frame
         return frame
 
-    def make_video(
+    def write_video(
         self,
         dst_file: Union[str, Path],
         start_time: float = 0.0,
