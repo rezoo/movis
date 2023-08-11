@@ -17,12 +17,12 @@ setup(
         "numpy>=1.18.1",
         "pydub>=0.25.1",
         "Pillow>=8.2.0",
-        "pdf2image>=1.16.3",
         "ffmpeg-python>=0.2.0",
         "imageio>=2.31.1",
         "imageio-ffmpeg>=0.4.8",
         "tqdm>=4.46.0",
         "cachetools>=4.2.2",
+        "opencv-python>=4.8.0.76",
     ],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
