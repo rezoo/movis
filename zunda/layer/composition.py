@@ -6,7 +6,7 @@ import numpy as np
 from cachetools import LRUCache
 from tqdm import tqdm
 
-from zunda.enum import CacheType
+from zunda.enum import CacheType, Direction
 from zunda.imgproc import BlendingMode
 from zunda.layer.component import Component
 from zunda.layer.layer import Layer
@@ -62,6 +62,7 @@ class Composition:
         end_time: Optional[float] = None,
         visible: bool = True,
         blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
+        origin_point: Direction = Direction.CENTER,
     ) -> Component:
         if name is None:
             name = f"layer_{len(self.layers)}"
@@ -79,6 +80,7 @@ class Composition:
             end_time=end_time,
             visible=visible,
             blending_mode=blending_mode,
+            origin_point=origin_point,
         )
         self.layers.append(component)
         self._name_to_layer[name] = component
@@ -112,7 +114,7 @@ class Composition:
 
         frame = np.zeros((self.size[1], self.size[0], 4), dtype=np.uint8)
         for component in self.layers:
-            frame = component._composite(frame, time, cache=self.cache)
+            frame = component._composite(frame, time)
         self.cache[key] = frame
         return frame
 

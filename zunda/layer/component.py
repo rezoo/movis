@@ -2,9 +2,9 @@ from typing import Hashable, Optional, Union
 
 import cv2
 import numpy as np
-from cachetools import LRUCache
 
 from zunda.effect import Effect
+from zunda.enum import Direction
 from zunda.imgproc import BlendingMode, alpha_composite
 from zunda.layer.layer import Layer
 from zunda.transform import Transform, TransformValue
@@ -15,7 +15,9 @@ class Component:
     def __init__(
             self, name: str, layer: Layer, transform: Optional[Transform] = None,
             offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0,
-            visible: bool = True, blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
+            visible: bool = True,
+            blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
+            origin_point: Direction = Direction.CENTER,
             alpha_matte: Optional["Component"] = None):
         self.name: str = name
         self.layer: Layer = layer
@@ -26,6 +28,7 @@ class Component:
         self.visible: bool = visible
         mode = BlendingMode.from_string(blending_mode) if isinstance(blending_mode, str) else blending_mode
         self.blending_mode: BlendingMode = mode
+        self.origin_point = origin_point
         self._alpha_matte: Optional[Component] = alpha_matte
         self._effects: list[Effect] = []
 
@@ -70,8 +73,8 @@ class Component:
         self, bg_image: np.ndarray, time: float,
         parent: tuple[float, float] = (0.0, 0.0),
         alpha_matte_mode: bool = False,
-        cache: Optional[LRUCache] = None,
     ) -> np.ndarray:
+        # TODO: Implement parent option
         layer_time = time - self.offset
         if layer_time < self.start_time or self.end_time <= layer_time:
             return bg_image
@@ -82,7 +85,7 @@ class Component:
 
         p = self.transform.get_current_value(layer_time)
         T1 = _get_T1(p, (w, h))
-        SR_T2 = _get_SR_T2(p, (w, h))
+        SR_T2 = _get_SR_T2(p, (w, h), self.origin_point)
         affine_matrix = (T1 @ SR_T2)[:2]
 
         corners_layer = np.array([
@@ -131,7 +134,7 @@ class Component:
 
     def __repr__(self) -> str:
         return f"LayerItem(name={self.name!r}, layer={self.layer!r}, transform={self.transform!r}, " \
-            f"offset={self.offset}, blending_mode={self.blending_mode})"
+            f"offset={self.offset}, visible={self.visible}, blending_mode={self.blending_mode})"
 
 
 def _get_T1(p: TransformValue, size: tuple[int, int], offset: tuple[int, int] = (0, 0)) -> np.ndarray:
@@ -141,9 +144,10 @@ def _get_T1(p: TransformValue, size: tuple[int, int], offset: tuple[int, int] = 
         [0, 0, 1]], dtype=np.float64)
 
 
-def _get_SR_T2(p: TransformValue, size: tuple[int, int]) -> np.ndarray:
+def _get_SR_T2(p: TransformValue, size: tuple[int, int], origin_point: Direction) -> np.ndarray:
     cos_t = np.cos((2 * np.pi * p.rotation) / 360)
     sin_t = np.sin((2 * np.pi * p.rotation) / 360)
+    center_point = Direction.to_vector(origin_point, (float(size[0]), float(size[1])))
     SR = np.array([
         [p.scale[0] * cos_t, - p.scale[0] * sin_t, 0],
         [p.scale[1] * sin_t, p.scale[1] * cos_t, 0],
