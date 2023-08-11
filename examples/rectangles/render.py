@@ -8,7 +8,7 @@ def main():
     scene = zunda.layer.Composition(size, duration=duration)
     scene.add_layer(
         zunda.layer.Rectangle(
-            size, color=(255, 186, 49), line_width=0, duration=duration),
+            size, color=(127, 127, 127), line_width=0, duration=duration),
         name='bg')
     rectangle = zunda.layer.Rectangle(
         (10, 10), color=(255, 83, 49), line_width=5,

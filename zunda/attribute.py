@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, Sequence, Union
+from typing import Callable, Hashable, Sequence, Union
 
 import numpy as np
 
@@ -100,3 +100,6 @@ class AttributesMixin:
     @property
     def attributes(self) -> dict[str, Attribute]:
         return {key: attr for key, attr in vars(self).items() if isinstance(attr, Attribute)}
+
+    def get_key(self, time: float) -> tuple[Hashable, ...]:
+        return tuple([convert_to_hashable(attr(time)) for attr in self.attributes.values()])

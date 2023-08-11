@@ -1,12 +1,12 @@
-from typing import Hashable, Union
+from typing import Union
 
 import numpy as np
 from PIL import Image, ImageDraw
 
-from zunda.attribute import Attribute, AttributeType, convert_to_hashable
+from zunda.attribute import Attribute, AttributesMixin, AttributeType
 
 
-class Rectangle:
+class Rectangle(AttributesMixin):
 
     def __init__(
             self,
@@ -22,19 +22,6 @@ class Rectangle:
         self.line_width = Attribute(line_width, value_type=AttributeType.SCALAR)
         self.line_color = Attribute(line_color, value_type=AttributeType.COLOR)
         self.duration = duration
-
-    @property
-    def attributes(self) -> dict[str, Attribute]:
-        return {
-            'size': self.size,
-            'radius': self.radius,
-            'color': self.color,
-            'line_width': self.line_width,
-            'line_color': self.line_color,
-        }
-
-    def get_key(self, time: float) -> Hashable:
-        return tuple([convert_to_hashable(attr(time)) for attr in self.attributes.values()])
 
     def __call__(self, time: float) -> np.ndarray:
         size = np.round(self.size(time))
