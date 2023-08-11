@@ -17,7 +17,6 @@ setup(
         "numpy>=1.18.1",
         "pydub>=0.25.1",
         "Pillow>=8.2.0",
-        "pdf2image>=1.16.3",
         "ffmpeg-python>=0.2.0",
         "imageio>=2.31.1",
         "imageio-ffmpeg>=0.4.8",
