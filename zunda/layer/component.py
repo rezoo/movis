@@ -74,7 +74,7 @@ class Component:
         parent: tuple[float, float] = (0.0, 0.0),
         alpha_matte_mode: bool = False,
     ) -> np.ndarray:
-        # TODO: Implement parent option
+        # TODO: Implement alpha matte mode
         layer_time = time - self.offset
         if layer_time < self.start_time or self.end_time <= layer_time:
             return bg_image
@@ -126,6 +126,7 @@ class Component:
             frame = effect(layer_time, frame)
 
         if self._alpha_matte is not None:
+            raise NotImplementedError
             p = self.transform.get_current_value(layer_time)
             if round(frame.shape[1] * p.scale[0]) == 0 or round(frame.shape[0] * p.scale[1]) == 0:
                 return frame
