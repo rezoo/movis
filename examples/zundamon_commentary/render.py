@@ -1,7 +1,7 @@
-import zunda
-from zunda import Transform
 import numpy as np
 import pandas as pd
+import zunda
+from zunda import Transform
 
 
 def main():
@@ -48,7 +48,7 @@ def main():
             text: str, duration: float, font_path='/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc',
             margin: int = 20, line_margin: int = 4, font_size: int = 46, bg_color=(72, 172, 154), line_width=4):
         layer = zunda.layer.Text(
-            text, font=font_path, font_size=font_size, text_color=(255, 255, 255), duration=duration)
+            text, font=font_path, font_size=font_size, color=(255, 255, 255), duration=duration)
         W, H = layer.get_size()
         cp = zunda.layer.Composition(
             size=(W + 3 * (margin + line_margin), H + 2 * (margin + line_margin)), duration=duration)
@@ -72,7 +72,7 @@ def main():
         scene.add_layer(
             make_table_of_contents(
                 'イントロダクション', font_size=46, duration=100.0),
-            transform=Transform(position=(1920 + 20, 30)),
+            transform=Transform(position=(1920 + 20, 35)),
             origin_point='center_right',
             offset=tl[tl['slide'] == 1].iloc[0]['start_time']),
         np.array([500, 0]))
