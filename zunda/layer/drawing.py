@@ -36,14 +36,14 @@ class Rectangle(AttributesMixin):
         eps = 1
         H = h + line_width + 2 * eps
         W = w + line_width + 2 * eps
-        image = np.zeros((W, H, 4), dtype=np.uint8)
+        image = np.zeros((H, W, 4), dtype=np.uint8)
         if line_width == 0:
             image[:, :, :] = np.array(color.tolist() + [0], dtype=np.uint8).reshape(1, 1, 4)
         else:
             image[:, :, :] = np.array(line_color.tolist() + [0], dtype=np.uint8).reshape(1, 1, 4)
-        image = Image.new("RGBA", (W, H))
-        x, y = eps + line_width // 2, eps + line_width // 2
+        image = Image.fromarray(image)
         draw = ImageDraw.Draw(image)
+        x, y = eps + line_width // 2, eps + line_width // 2
         if radius == 0:
             draw.rectangle(
                 (x, y, x + w, y + h), fill=(r, g, b),

@@ -33,15 +33,6 @@ def main():
         name='metan',
         transform=Transform(position=(79, 1037), scale=0.7))
 
-    scene.add_layer(
-        zunda.layer.Image(img_file='images/logo_zunda.png', duration=6.0),
-        name='zunda_logo', offset=0.5,
-        transform=Transform(position=(1755, 340)))
-    scene.add_layer(
-        zunda.layer.Image(img_file='images/logo_metan.png', duration=6.0),
-        name='metan_logo', offset=0.5,
-        transform=Transform(position=(170, 340)))
-
     def slide_in_out(item: zunda.layer.Component, offset: np.ndarray):
         p = item.transform.position.init_value
         item.transform.position.enable_animation() \
@@ -51,32 +42,40 @@ def main():
         item.transform.opacity.enable_animation().extend(
             keyframes=[0, 1, item.duration - 1.0, item.duration], values=[0, 1, 1, 0],
             motion_types=['ease_out', 'linear', 'ease_in', 'linear'])
-
-    slide_in_out(scene['zunda_logo'], np.array([500, 0]))
-    slide_in_out(scene['metan_logo'], np.array([-500, 0]))
+        return item
 
     def make_logo_composition(
-            text: str, font_path: str, duration: float, margin: int = 15, line_margin: int = 4):
+            text: str, duration: float, font_path='/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc',
+            margin: int = 20, line_margin: int = 4, font_size: int = 46, bg_color=(72, 172, 154), line_width=4):
         layer = zunda.layer.Text(
-            text, font=font_path, font_size=46, text_color=(255, 255, 255), duration=duration)
+            text, font=font_path, font_size=font_size, text_color=(255, 255, 255), duration=duration)
         W, H = layer._size
         cp = zunda.layer.Composition(
             size=(W + 4 * (margin + line_margin), H + 2 * (margin + line_margin)), duration=duration)
         cp.add_layer(
             zunda.layer.Rectangle(
-                (W + 4 * margin, H + 2 * margin), radius=4,
-                color=(72, 172, 154), line_width=2, duration=duration))
+                (W + 4 * margin, H + 2 * margin), radius=8,
+                color=bg_color, line_width=line_width, duration=duration))
         cp.add_layer(layer)
         return cp
 
-    scene.add_layer(
-        make_logo_composition(
-            'Introduction', font_path='/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc', duration=100.0),
-        name='section1_text',
-        transform=Transform(position=(1920 + 10, 130)),
-        origin_point='center_right',
-        offset=tl[tl['slide'] == 1].iloc[0]['start_time'])
-    slide_in_out(scene['section1_text'], np.array([500, 0]))
+    slide_in_out(scene.add_layer(
+        zunda.layer.Image(img_file='images/logo_zunda.png', duration=6.0),
+        name='zunda_logo', offset=0.5,
+        transform=Transform(position=(1755, 340))), np.array([500, 0]))
+    slide_in_out(scene.add_layer(
+        zunda.layer.Image(img_file='images/logo_metan.png', duration=6.0),
+        name='metan_logo', offset=0.5,
+        transform=Transform(position=(170, 340))), np.array([-500, 0]))
+
+    slide_in_out(
+        scene.add_layer(
+            make_logo_composition(
+                'Introduction', font_size=46, duration=100.0),
+            transform=Transform(position=(1920 + 20, 130)),
+            origin_point='center_right',
+            offset=tl[tl['slide'] == 1].iloc[0]['start_time']),
+        np.array([500, 0]))
 
     bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)
