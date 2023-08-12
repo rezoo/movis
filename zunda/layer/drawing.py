@@ -4,7 +4,7 @@ from typing import Callable, Hashable, Optional, Sequence, Union
 import numpy as np
 from PySide6.QtCore import QCoreApplication, QPointF, QRectF, Qt
 from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase, QFontMetrics,
-                           QImage, QPainter, QPen)
+                           QImage, QPainter, QPainterPath, QPen)
 from PySide6.QtWidgets import QApplication
 
 from zunda.attribute import Attribute, AttributesMixin, AttributeType
@@ -19,17 +19,21 @@ class Rectangle(AttributesMixin):
             size: tuple[float, float] = (100., 100.),
             radius: float = 0.,
             color: Union[tuple[float, float, float], np.ndarray] = (0., 0., 0.),
+            is_filled: bool = True,
             line_width: float = 0.,
             line_color: Union[tuple[float, float, float], np.ndarray] = (255., 255., 255.),
             duration: float = 1.):
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D)
         self.radius = Attribute(radius, value_type=AttributeType.SCALAR)
         self.color = Attribute(color, value_type=AttributeType.COLOR)
+        self.is_filled = is_filled
         self.line_width = Attribute(line_width, value_type=AttributeType.SCALAR)
         self.line_color = Attribute(line_color, value_type=AttributeType.COLOR)
         self.duration = duration
 
-    def __call__(self, time: float) -> np.ndarray:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
+        if not self.is_filled and self.line_width == 0:
+            return None
         size = [float(x) for x in self.size(time)]
         w, h = float(size[0]), float(size[1])
         radius = float(self.radius(time))
@@ -50,8 +54,9 @@ class Rectangle(AttributesMixin):
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
 
-        brush = QBrush(QColor(b, g, r, 255))
-        painter.setBrush(brush)
+        if self.is_filled:
+            brush = QBrush(QColor(b, g, r, 255))
+            painter.setBrush(brush)
         pen = QPen(QColor(lb, lg, lr, 255), line_width)
         painter.setPen(pen)
 
@@ -87,6 +92,7 @@ class Text(AttributesMixin):
             font: str,
             font_size: float,
             color: Union[tuple[float, float, float], np.ndarray] = (0., 0., 0.),
+            is_filled: bool = True,
             line_width: float = 0.,
             line_color: Union[tuple[float, float, float], np.ndarray] = (255., 255., 255.),
             duration: float = 1.):
@@ -94,6 +100,7 @@ class Text(AttributesMixin):
         self.font = font
         self.font_size = Attribute(font_size, value_type=AttributeType.SCALAR)
         self.color = Attribute(color, value_type=AttributeType.COLOR)
+        self.is_filled = is_filled
         self.line_width = Attribute(line_width, value_type=AttributeType.SCALAR)
         self.line_color = Attribute(line_color, value_type=AttributeType.COLOR)
         self.duration = duration
@@ -124,6 +131,8 @@ class Text(AttributesMixin):
         return (self.get_text(time), key)
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
+        if not self.is_filled and self.line_width == 0:
+            return None
         text = self.get_text(time)
         if text is None or text == '':
             return None
@@ -147,12 +156,16 @@ class Text(AttributesMixin):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
 
         qfont = QFont(self._font_family, round(float(self.font_size(time))))
-        painter.setPen(QColor(b, g, r, 255))
         painter.setFont(qfont)
-        pen = QPen(QColor(lb, lg, lr, 255), line_width)
-        painter.setPen(pen)
 
         point = QPointF(0., eps + h)
-        painter.drawText(point, self.get_text(time))
+        text_path = QPainterPath()
+        text_path.addText(point, qfont, text)
+
+        painter.setPen(QPen(QColor(lb, lg, lr, 255), line_width))
+        painter.drawPath(text_path)
+
+        painter.setPen(QColor(b, g, r, 255))
+        painter.drawText(point, text)
         painter.end()
         return qimage_to_numpy(image)
