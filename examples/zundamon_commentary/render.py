@@ -93,10 +93,10 @@ def main():
     zunda.write_ass_file(
         tl['start_time'], tl['end_time'], tl['text'], 'outputs/subtitle.ass',
         size=scene.size, characters=tl['character'], styles=styles)
-    scene.write_video('outputs/video.mp4', end_time=10.0)
-    #zunda.add_materials_to_video(
-    #    'outputs/video.mp4', 'outputs/dialogue.wav',
-    #    subtitle_file='outputs/subtitle.ass', dst_file='outputs/video2.mp4')
+    scene.write_video('outputs/video.mp4')
+    zunda.add_materials_to_video(
+        'outputs/video.mp4', 'outputs/dialogue.wav',
+        subtitle_file='outputs/subtitle.ass', dst_file='outputs/video2.mp4')
 
 
 if __name__ == '__main__':
