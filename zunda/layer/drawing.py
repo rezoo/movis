@@ -1,5 +1,5 @@
 import sys
-from typing import Callable, Hashable, Union
+from typing import Callable, Hashable, Optional, Sequence, Union
 
 import numpy as np
 from PySide6.QtCore import QCoreApplication, QPointF, QRectF, Qt
@@ -8,6 +8,7 @@ from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase, QFontMetrics,
 from PySide6.QtWidgets import QApplication
 
 from zunda.attribute import Attribute, AttributesMixin, AttributeType
+from zunda.layer.mixin import TimelineMixin
 
 
 class Rectangle(AttributesMixin):
@@ -65,6 +66,24 @@ class Rectangle(AttributesMixin):
 
 class Text(AttributesMixin):
 
+    @classmethod
+    def from_timeline(cls, start_times: Sequence[float], end_times: Sequence[float], texts: Sequence[str], **kwargs):
+        assert len(start_times) == len(texts)
+
+        class TextWithTime(TimelineMixin):
+            def __init__(self):
+                super().__init__(start_times, end_times)
+                self.texts = texts
+
+            def __call__(self, time: float) -> str:
+                idx = self.get_state(time)
+                if idx >= 0:
+                    return texts[idx]
+                else:
+                    return ''
+
+        return cls(text=TextWithTime(), **kwargs)
+
     def __init__(
             self,
             text: Union[str, Callable[[float], str]],
@@ -107,7 +126,10 @@ class Text(AttributesMixin):
         key = super().get_key(time)
         return (self.get_text(time), key)
 
-    def __call__(self, time: float) -> np.ndarray:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
+        text = self.get_text(time)
+        if text is None or text == '':
+            return None
         size = [float(x) for x in self.get_size(time)]
         w, h = float(size[0]), float(size[1])
         color = np.round(self.color(time))
