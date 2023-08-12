@@ -2,8 +2,16 @@ from typing import Union
 
 import numpy as np
 from PIL import Image
+from PySide6.QtGui import QImage
 
 from zunda.enum import BlendingMode
+
+
+def qimage_to_numpy(image: QImage) -> np.ndarray:
+    assert image.format() == QImage.Format.Format_ARGB32
+    ptr = image.bits()
+    array_shape = (image.height(), image.width(), 4)
+    return np.array(ptr).reshape(array_shape)
 
 
 def resize(img: np.ndarray, scale: tuple[float, float] = (1.0, 1.0)) -> np.ndarray:

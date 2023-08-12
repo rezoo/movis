@@ -8,6 +8,7 @@ from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase, QFontMetrics,
 from PySide6.QtWidgets import QApplication
 
 from zunda.attribute import Attribute, AttributesMixin, AttributeType
+from zunda.imgproc import qimage_to_numpy
 from zunda.layer.mixin import TimelineMixin
 
 
@@ -57,11 +58,7 @@ class Rectangle(AttributesMixin):
         rect = QRectF(eps + line_width / 2, eps + line_width / 2, w, h)
         painter.drawRoundedRect(rect, radius, radius, mode=Qt.SizeMode.AbsoluteSize)
         painter.end()
-
-        assert image.format() == QImage.Format.Format_ARGB32
-        ptr = image.bits()
-        array_shape = (image.height(), image.width(), 4)
-        return np.array(ptr).reshape(array_shape)
+        return qimage_to_numpy(image)
 
 
 class Text(AttributesMixin):
@@ -158,8 +155,4 @@ class Text(AttributesMixin):
         point = QPointF(0., eps + h)
         painter.drawText(point, self.get_text(time))
         painter.end()
-
-        assert image.format() == QImage.Format.Format_ARGB32
-        ptr = image.bits()
-        array_shape = (image.height(), image.width(), 4)
-        return np.array(ptr).reshape(array_shape)
+        return qimage_to_numpy(image)
