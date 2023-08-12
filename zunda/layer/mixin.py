@@ -14,8 +14,8 @@ class TimelineMixin:
         self.end_times: np.ndarray = np.asarray(end_times, dtype=float)
 
     def get_state(self, time: float) -> int:
-        idx = self.start_times.searchsorted(time, side="right") - 1
-        if idx >= 0 and self.end_times[idx] > time:
+        idx = np.searchsorted(self.end_times, time)
+        if idx < len(self.start_times) and self.start_times[idx] <= time < self.end_times[idx]:
             return int(idx)
         else:
             return -1

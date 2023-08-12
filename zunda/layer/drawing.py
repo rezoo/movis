@@ -155,7 +155,7 @@ class Text(AttributesMixin):
         size = [float(x) for x in self.get_size(time)]
         w, h = float(size[0]), float(size[1])
 
-        eps = 5
+        eps = 10
         max_stroke = _get_max_stroke(self.contents)
         W = np.floor(w + max_stroke + 2 * eps)
         H = np.floor(h + max_stroke + 2 * eps)
