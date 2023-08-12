@@ -44,17 +44,17 @@ def main():
             motion_types=['ease_out', 'linear', 'ease_in', 'linear'])
         return item
 
-    def make_logo_composition(
+    def make_table_of_contents(
             text: str, duration: float, font_path='/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc',
             margin: int = 20, line_margin: int = 4, font_size: int = 46, bg_color=(72, 172, 154), line_width=4):
         layer = zunda.layer.Text(
             text, font=font_path, font_size=font_size, text_color=(255, 255, 255), duration=duration)
-        W, H = layer._size
+        W, H = layer.get_size()
         cp = zunda.layer.Composition(
-            size=(W + 4 * (margin + line_margin), H + 2 * (margin + line_margin)), duration=duration)
+            size=(W + 3 * (margin + line_margin), H + 2 * (margin + line_margin)), duration=duration)
         cp.add_layer(
             zunda.layer.Rectangle(
-                (W + 4 * margin, H + 2 * margin), radius=8,
+                (W + 3 * margin, H + 2 * margin), radius=8,
                 color=bg_color, line_width=line_width, duration=duration))
         cp.add_layer(layer)
         return cp
@@ -70,9 +70,9 @@ def main():
 
     slide_in_out(
         scene.add_layer(
-            make_logo_composition(
-                'Introduction', font_size=46, duration=100.0),
-            transform=Transform(position=(1920 + 20, 130)),
+            make_table_of_contents(
+                'イントロダクション', font_size=46, duration=100.0),
+            transform=Transform(position=(1920 + 20, 30)),
             origin_point='center_right',
             offset=tl[tl['slide'] == 1].iloc[0]['start_time']),
         np.array([500, 0]))
@@ -93,10 +93,10 @@ def main():
     zunda.write_ass_file(
         tl['start_time'], tl['end_time'], tl['text'], 'outputs/subtitle.ass',
         size=scene.size, characters=tl['character'], styles=styles)
-    scene.write_video('outputs/video.mp4')
-    zunda.add_materials_to_video(
-        'outputs/video.mp4', 'outputs/dialogue.wav',
-        subtitle_file='outputs/subtitle.ass', dst_file='outputs/video2.mp4')
+    scene.write_video('outputs/video.mp4', end_time=10.0)
+    #zunda.add_materials_to_video(
+    #    'outputs/video.mp4', 'outputs/dialogue.wav',
+    #    subtitle_file='outputs/subtitle.ass', dst_file='outputs/video2.mp4')
 
 
 if __name__ == '__main__':
