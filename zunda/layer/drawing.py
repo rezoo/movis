@@ -1,5 +1,5 @@
 import sys
-from typing import Callable, Hashable, Optional, Sequence, Union
+from typing import Callable, Hashable, NamedTuple, Optional, Sequence, Union
 
 import numpy as np
 from PySide6.QtCore import QCoreApplication, QPointF, QRectF, Qt
@@ -12,56 +12,74 @@ from zunda.imgproc import qimage_to_numpy
 from zunda.layer.mixin import TimelineMixin
 
 
+class FillProperty(NamedTuple):
+
+    color: tuple[int, int, int] = (0, 0, 0)
+    opacity: float = 1.
+
+
+class StrokeProperty(NamedTuple):
+
+    color: tuple[int, int, int] = (255, 255, 255)
+    width: float = 1.
+    opacity: float = 1.
+
+
+def _get_max_stroke(contents: Sequence[Union[FillProperty, StrokeProperty]]) -> float:
+    strokes = [c.width for c in contents if isinstance(c, StrokeProperty)]
+    return float(max(strokes)) if 0 < len(strokes) else 0.
+
+
 class Rectangle(AttributesMixin):
 
     def __init__(
             self,
             size: tuple[float, float] = (100., 100.),
             radius: float = 0.,
-            color: Union[tuple[float, float, float], np.ndarray] = (0., 0., 0.),
-            is_filled: bool = True,
-            line_width: float = 0.,
-            line_color: Union[tuple[float, float, float], np.ndarray] = (255., 255., 255.),
+            color: Optional[tuple[int, int, int]] = None,
+            contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
             duration: float = 1.):
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D)
         self.radius = Attribute(radius, value_type=AttributeType.SCALAR)
-        self.color = Attribute(color, value_type=AttributeType.COLOR)
-        self.is_filled = is_filled
-        self.line_width = Attribute(line_width, value_type=AttributeType.SCALAR)
-        self.line_color = Attribute(line_color, value_type=AttributeType.COLOR)
+        if color is None:
+            self.contents = contents
+        else:
+            self.contents = (FillProperty(color=color),)
         self.duration = duration
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
-        if not self.is_filled and self.line_width == 0:
+        if len(self.contents) == 0:
             return None
         size = [float(x) for x in self.size(time)]
         w, h = float(size[0]), float(size[1])
         radius = float(self.radius(time))
-        color = np.round(self.color(time))
-        r, g, b = int(color[0]), int(color[1]), int(color[2])
-        line_width = float(self.line_width(time))
-        line_color = np.round(self.line_color(time))
-        lr, lg, lb = int(line_color[0]), int(line_color[1]), int(line_color[2])
 
-        eps = 1
-        H = np.floor(h + line_width + 2 * eps)
-        W = np.floor(w + line_width + 2 * eps)
+        eps = 1.
+        max_stroke = _get_max_stroke(self.contents)
+        W = np.floor(w + max_stroke + 2 * eps)
+        H = np.floor(h + max_stroke + 2 * eps)
         image = QImage(W, H, QImage.Format.Format_ARGB32)
-        if line_width == 0:
-            image.fill(QColor(b, g, r, 0))
-        else:
-            image.fill(QColor(lb, lg, lr, 0))
+        image.fill(QColor(0, 0, 0, 0))
+
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-
-        if self.is_filled:
-            brush = QBrush(QColor(b, g, r, 255))
-            painter.setBrush(brush)
-        pen = QPen(QColor(lb, lg, lr, 255), line_width)
-        painter.setPen(pen)
-
-        rect = QRectF(eps + line_width / 2, eps + line_width / 2, w, h)
-        painter.drawRoundedRect(rect, radius, radius, mode=Qt.SizeMode.AbsoluteSize)
+        rect = QRectF(eps + max_stroke / 2, eps + max_stroke / 2, w, h)
+        for c in self.contents:
+            if isinstance(c, FillProperty):
+                r, g, b = c.color
+                a = round(255 * c.opacity)
+                brush = QBrush(QColor(b, g, r, a))
+                painter.setBrush(brush)
+                painter.drawRoundedRect(rect, radius, radius, mode=Qt.SizeMode.AbsoluteSize)
+            elif isinstance(c, StrokeProperty):
+                r, g, b = c.color
+                a = round(255 * c.opacity)
+                painter_path = QPainterPath()
+                painter_path.addRoundedRect(rect, radius, radius, mode=Qt.SizeMode.AbsoluteSize)
+                painter.setPen(QPen(QColor(b, g, r, a), c.width))
+                painter.drawPath(painter_path)
+            else:
+                raise ValueError(f"Invalid content type: {type(c)}")
         painter.end()
         return qimage_to_numpy(image)
 
@@ -91,18 +109,16 @@ class Text(AttributesMixin):
             text: Union[str, Callable[[float], str]],
             font: str,
             font_size: float,
-            color: Union[tuple[float, float, float], np.ndarray] = (0., 0., 0.),
-            is_filled: bool = True,
-            line_width: float = 0.,
-            line_color: Union[tuple[float, float, float], np.ndarray] = (255., 255., 255.),
+            color: Optional[tuple[int, int, int]] = None,
+            contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
             duration: float = 1.):
         self.text = text
         self.font = font
         self.font_size = Attribute(font_size, value_type=AttributeType.SCALAR)
-        self.color = Attribute(color, value_type=AttributeType.COLOR)
-        self.is_filled = is_filled
-        self.line_width = Attribute(line_width, value_type=AttributeType.SCALAR)
-        self.line_color = Attribute(line_color, value_type=AttributeType.COLOR)
+        if color is None:
+            self.contents = contents
+        else:
+            self.contents = (FillProperty(color=color),)
         self.duration = duration
         if QCoreApplication.instance() is None:
             self._app = QApplication(sys.argv[:1])
@@ -131,41 +147,38 @@ class Text(AttributesMixin):
         return (self.get_text(time), key)
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
-        if not self.is_filled and self.line_width == 0:
+        if len(self.contents) == 0:
             return None
         text = self.get_text(time)
         if text is None or text == '':
             return None
         size = [float(x) for x in self.get_size(time)]
         w, h = float(size[0]), float(size[1])
-        color = np.round(self.color(time))
-        r, g, b = int(color[0]), int(color[1]), int(color[2])
-        line_width = float(self.line_width(time))
-        line_color = np.round(self.line_color(time))
-        lr, lg, lb = int(line_color[0]), int(line_color[1]), int(line_color[2])
 
         eps = 5
-        H = np.floor(h + line_width + 2 * eps)
-        W = np.floor(w + line_width + 2 * eps)
+        max_stroke = _get_max_stroke(self.contents)
+        W = np.floor(w + max_stroke + 2 * eps)
+        H = np.floor(h + max_stroke + 2 * eps)
         image = QImage(W, H, QImage.Format.Format_ARGB32)
-        if line_width == 0:
-            image.fill(QColor(b, g, r, 0))
-        else:
-            image.fill(QColor(lb, lg, lr, 0))
+        image.fill(QColor(0, 0, 0, 0))
+
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-
         qfont = QFont(self._font_family, round(float(self.font_size(time))))
         painter.setFont(qfont)
-
         point = QPointF(0., eps + h)
-        text_path = QPainterPath()
-        text_path.addText(point, qfont, text)
-
-        painter.setPen(QPen(QColor(lb, lg, lr, 255), line_width))
-        painter.drawPath(text_path)
-
-        painter.setPen(QColor(b, g, r, 255))
-        painter.drawText(point, text)
+        for c in self.contents:
+            if isinstance(c, FillProperty):
+                r, g, b = c.color
+                a = round(255 * c.opacity)
+                painter.setPen(QColor(b, g, r, a))
+                painter.drawText(point, text)
+            elif isinstance(c, StrokeProperty):
+                r, g, b = c.color
+                a = round(255 * c.opacity)
+                painter_path = QPainterPath()
+                painter_path.addText(point, qfont, text)
+                painter.setPen(QPen(QColor(b, g, r, a), c.width))
+                painter.drawPath(painter_path)
         painter.end()
         return qimage_to_numpy(image)

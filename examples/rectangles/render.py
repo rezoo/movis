@@ -8,11 +8,15 @@ def main():
     scene = zunda.layer.Composition(size, duration=duration)
     scene.add_layer(
         zunda.layer.Rectangle(
-            size, color=(127, 127, 127), line_width=0, duration=duration),
+            size, color=(127, 127, 127), duration=duration),
         name='bg')
     rectangle = zunda.layer.Rectangle(
-        (10, 10), color=(255, 83, 49), line_width=5,
-        line_color=(255, 255, 255), duration=duration)
+        size=(10, 10),
+        contents=[
+            zunda.layer.FillProperty(color=(255, 83, 49)),
+            zunda.layer.StrokeProperty(color=(255, 255, 255), width=5),
+        ],
+        duration=duration)
     scene.add_layer(rectangle, name='rect')
 
     rectangle.size.enable_animation().extend(

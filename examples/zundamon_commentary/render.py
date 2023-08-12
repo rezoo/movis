@@ -47,6 +47,7 @@ def main():
     def make_table_of_contents(
             text: str, duration: float, font_path='/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc',
             margin: int = 20, line_margin: int = 4, font_size: int = 46, bg_color=(72, 172, 154), line_width=4):
+
         layer = zunda.layer.Text(
             text, font=font_path, font_size=font_size, color=(255, 255, 255), duration=duration)
         W, H = layer.get_size()
@@ -55,7 +56,10 @@ def main():
         cp.add_layer(
             zunda.layer.Rectangle(
                 (W + 3 * margin, H + 2 * margin), radius=8,
-                color=bg_color, line_width=line_width, duration=duration))
+                contents=[
+                    zunda.layer.FillProperty(color=bg_color),
+                    zunda.layer.StrokeProperty(color=(255, 255, 255), width=line_width)],
+                duration=duration))
         cp.add_layer(layer)
         return cp
 
