@@ -32,32 +32,51 @@ def main():
             character_name='metan', character_dir='../../assets/character/metan'),
         name='metan',
         transform=Transform(position=(79, 1037), scale=0.7))
-    actions = zunda.make_action_functions(tl['start_time'], tl['end_time'], tl['action'])
-    for layer_name, action_func in actions:
-        action_func(scene, layer_name)
 
     scene.add_layer(
-        zunda.layer.Image(img_file='images/logo_zunda.png', duration=7.0),
+        zunda.layer.Image(img_file='images/logo_zunda.png', duration=6.0),
         name='zunda_logo', offset=0.5,
         transform=Transform(position=(1755, 340)))
     scene.add_layer(
-        zunda.layer.Image(img_file='images/logo_metan.png', duration=7.0),
+        zunda.layer.Image(img_file='images/logo_metan.png', duration=6.0),
         name='metan_logo', offset=0.5,
         transform=Transform(position=(170, 340)))
 
     def slide_in_out(item: zunda.layer.Component, offset: np.ndarray):
         p = item.transform.position.init_value
         item.transform.position.enable_animation() \
-            .append(0.0, p) \
             .append(0.0, p + offset, 'ease_out_expo') \
-            .append(1.0, p).append(5.0, p, 'ease_in_expo') \
-            .append(6.0, p + offset)
+            .append(1.0, p).append(item.duration - 1.0, p, 'ease_in_expo') \
+            .append(item.duration, p + offset)
         item.transform.opacity.enable_animation().extend(
-            keyframes=[0, 1, 5, 6], values=[0, 1, 1, 0],
+            keyframes=[0, 1, item.duration - 1.0, item.duration], values=[0, 1, 1, 0],
             motion_types=['ease_out', 'linear', 'ease_in', 'linear'])
 
     slide_in_out(scene['zunda_logo'], np.array([500, 0]))
     slide_in_out(scene['metan_logo'], np.array([-500, 0]))
+
+    def make_logo_composition(
+            text: str, font_path: str, duration: float, margin: int = 15, line_margin: int = 4):
+        layer = zunda.layer.Text(
+            text, font=font_path, font_size=46, text_color=(255, 255, 255), duration=duration)
+        W, H = layer._size
+        cp = zunda.layer.Composition(
+            size=(W + 4 * (margin + line_margin), H + 2 * (margin + line_margin)), duration=duration)
+        cp.add_layer(
+            zunda.layer.Rectangle(
+                (W + 4 * margin, H + 2 * margin), radius=4,
+                color=(72, 172, 154), line_width=2, duration=duration))
+        cp.add_layer(layer)
+        return cp
+
+    scene.add_layer(
+        make_logo_composition(
+            'Introduction', font_path='/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc', duration=100.0),
+        name='section1_text',
+        transform=Transform(position=(1920 + 10, 130)),
+        origin_point='center_right',
+        offset=tl[tl['slide'] == 1].iloc[0]['start_time'])
+    slide_in_out(scene['section1_text'], np.array([500, 0]))
 
     bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)

@@ -1,7 +1,7 @@
 from typing import Union
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 from zunda.attribute import Attribute, AttributesMixin, AttributeType
 
@@ -36,6 +36,11 @@ class Rectangle(AttributesMixin):
         eps = 1
         H = h + line_width + 2 * eps
         W = w + line_width + 2 * eps
+        image = np.zeros((W, H, 4), dtype=np.uint8)
+        if line_width == 0:
+            image[:, :, :] = np.array(color.tolist() + [0], dtype=np.uint8).reshape(1, 1, 4)
+        else:
+            image[:, :, :] = np.array(line_color.tolist() + [0], dtype=np.uint8).reshape(1, 1, 4)
         image = Image.new("RGBA", (W, H))
         x, y = eps + line_width // 2, eps + line_width // 2
         draw = ImageDraw.Draw(image)
@@ -49,4 +54,30 @@ class Rectangle(AttributesMixin):
                 (x, y, x + w, y + h), radius=radius, fill=(r, g, b),
                 outline=None if line_width == 0 else (lr, lg, lb),
                 width=line_width)
+        return np.asarray(image)
+
+
+class Text:
+
+    def __init__(
+            self, text: str, font: str, font_size: int,
+            text_color: Union[tuple[float, float, float], np.ndarray] = (0., 0., 0.),
+            duration: float = 1.):
+        self.text = text
+        self.font = font
+        self.font_size = font_size
+        self.text_color = (int(text_color[0]), int(text_color[1]), int(text_color[2]))
+        self.duration = duration
+        self._font: ImageFont.FreeTypeFont = ImageFont.truetype(self.font, self.font_size)
+        self._size: tuple[int, int] = self._font.getsize(self.text)
+
+    def get_key(self, time: float) -> bool:
+        return True
+
+    def __call__(self, time: float) -> np.ndarray:
+        image = np.zeros((self._size[1], self._size[0], 4), dtype=np.uint8)
+        image[:, :, :] = np.array(self.text_color + (0,), dtype=np.uint8).reshape(1, 1, 4)
+        image = Image.fromarray(image)
+        draw = ImageDraw.Draw(image)
+        draw.text((0, 0), self.text, font=self._font, fill=self.text_color)
         return np.asarray(image)
