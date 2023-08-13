@@ -52,7 +52,12 @@ def main():
     scene.add_layer(zunda.layer.Image('scene_b.png', duration=3.0), offset=3.0)
 
     transition_time = 2.5
-    scene.add_layer(zunda.layer.Image('logo.png', duration=transition_time), name='logo', offset=3.0 - transition_time / 2)
+    logo = zunda.layer.Composition((1920, 1080), duration=transition_time)
+    logo.add_layer(zunda.layer.Rectangle((1920, 1080), color=(178, 217, 186), duration=transition_time))
+    logo.add_layer(zunda.layer.Image('logo.png', duration=transition_time), name='image')
+    logo['image'].transform.scale.enable_animation().extend(
+        keyframes=[0., transition_time], values=[0.9, 1.0])
+    scene.add_layer(logo, name='logo', offset=3.0 - transition_time / 2)
     scene['logo'].add_effect(TransitionEffect(duration=transition_time))
 
     scene.write_video('transition.mp4')
