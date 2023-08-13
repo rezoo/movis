@@ -93,7 +93,7 @@ def main():
                     zunda.layer.StrokeProperty(color=color_dict[character], width=12),
                     zunda.layer.FillProperty(color=(255, 255, 255))],
                 duration=character_tl['end_time'].max()),
-            transform=Transform(position=(960, 1080)),
+            transform=Transform(position=(960, 1040)),
             origin_point=zunda.Direction.BOTTOM_CENTER)
 
     bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
@@ -101,21 +101,9 @@ def main():
     voice = zunda.concat_audio_files(tl['start_time'], tl['audio_file'])
     bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
 
-    styles = (
-        zunda.ASSStyleType(
-            'zunda', font_name='Hiragino Maru Gothic Pro', font_size=96,
-            outline_color='&H38a65e', back_color='&HA0000000', outline=5, shadow=3),
-        zunda.ASSStyleType(
-            'metan', font_name='Hiragino Maru Gothic Pro', font_size=96,
-            outline_color='&H734aab', back_color='&HA0000000', outline=5, shadow=3),
-    )
-    #zunda.write_ass_file(
-    #    tl['start_time'], tl['end_time'], tl['text'], 'outputs/subtitle.ass',
-    #    size=scene.size, characters=tl['character'], styles=styles)
-    scene.write_video('outputs/video.mp4', end_time=10.0)
-    #zunda.add_materials_to_video(
-    #    'outputs/video.mp4', 'outputs/dialogue.wav',
-    #    subtitle_file='outputs/subtitle.ass', dst_file='outputs/video2.mp4')
+    scene.write_video('outputs/video.mp4')
+    zunda.add_materials_to_video(
+        'outputs/video.mp4', 'outputs/dialogue.wav', dst_file='outputs/video2.mp4')
 
 
 if __name__ == '__main__':

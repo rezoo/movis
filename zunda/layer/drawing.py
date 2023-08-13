@@ -8,6 +8,7 @@ from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase, QFontMetrics,
 from PySide6.QtWidgets import QApplication
 
 from zunda.attribute import Attribute, AttributesMixin, AttributeType
+from zunda.enum import TextAlignment
 from zunda.imgproc import qimage_to_numpy
 from zunda.layer.mixin import TimelineMixin
 
@@ -113,6 +114,7 @@ class Text(AttributesMixin):
             color: Optional[tuple[int, int, int]] = None,
             contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
             line_spacing: Optional[int] = None,
+            text_alignment: Union[TextAlignment, str] = TextAlignment.CENTER,
             duration: float = 1.):
         self.text = text
         self.font = font
@@ -122,6 +124,8 @@ class Text(AttributesMixin):
         else:
             self.contents = (FillProperty(color=color),)
         self.line_spacing = line_spacing
+        self.text_alignment = TextAlignment.from_string(text_alignment) \
+            if isinstance(text_alignment, str) else text_alignment
         self.duration = duration
         if QCoreApplication.instance() is None:
             self._app = QApplication(sys.argv[:1])
@@ -191,7 +195,16 @@ class Text(AttributesMixin):
                         cursor_y += (rect.height() - rect.y())
                     else:
                         cursor_y += self.line_spacing
-                    painter.drawText(QPointF(max_stroke + margin, cursor_y), line)
+
+                    if self.text_alignment == TextAlignment.LEFT:
+                        cursor_x = 0.
+                    elif self.text_alignment == TextAlignment.CENTER:
+                        cursor_x = (w - rect.width() - rect.x()) / 2
+                    elif self.text_alignment == TextAlignment.RIGHT:
+                        cursor_x = w - rect.width() - rect.x()
+                    else:
+                        raise ValueError(f"Invalid text alignment: {self.text_alignment}")
+                    painter.drawText(QPointF(max_stroke / 2 + margin + cursor_x, cursor_y), line)
             elif isinstance(c, StrokeProperty):
                 r, g, b = c.color
                 a = round(255 * c.opacity)
@@ -206,7 +219,16 @@ class Text(AttributesMixin):
                         cursor_y += (rect.height() - rect.y())
                     else:
                         cursor_y += self.line_spacing
-                    painter_path.addText(QPointF(max_stroke + margin, cursor_y), qfont, line)
+
+                    if self.text_alignment == TextAlignment.LEFT:
+                        cursor_x = 0.
+                    elif self.text_alignment == TextAlignment.CENTER:
+                        cursor_x = (w - rect.width() - rect.x()) / 2
+                    elif self.text_alignment == TextAlignment.RIGHT:
+                        cursor_x = w - rect.width() - rect.x()
+                    else:
+                        raise ValueError(f"Invalid text alignment: {self.text_alignment}")
+                    painter_path.addText(QPointF(max_stroke / 2 + margin + cursor_x, cursor_y), qfont, line)
                 painter.drawPath(painter_path)
         painter.end()
         array = qimage_to_numpy(image)
