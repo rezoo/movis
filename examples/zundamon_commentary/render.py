@@ -46,17 +46,17 @@ def main():
         return item
 
     def make_table_of_contents(
-            text: str, duration: float, margin: int = 20, line_margin: int = 4,
+            text: str, duration: float, margin: int = 60,
             font_size: int = 46, bg_color=(72, 172, 154), line_width=4):
 
         layer = zunda.layer.Text(
             text, font=font_path, font_size=font_size, color=(255, 255, 255), duration=duration)
         W, H = layer.get_size()
         cp = zunda.layer.Composition(
-            size=(W + 3 * (margin + line_margin), H + 2 * (margin + line_margin)), duration=duration)
+            size=(W + margin, H), duration=duration)
         cp.add_layer(
             zunda.layer.Rectangle(
-                (W + 3 * margin, H + 2 * margin), radius=8,
+                (W + margin - line_width // 2, H - line_width // 2), radius=8,
                 contents=[
                     zunda.layer.FillProperty(color=bg_color),
                     zunda.layer.StrokeProperty(color=(255, 255, 255), width=line_width)],
@@ -77,7 +77,7 @@ def main():
         scene.add_layer(
             make_table_of_contents(
                 'イントロダクション', font_size=46, duration=100.0),
-            transform=Transform(position=(1920 + 20, 35)),
+            transform=Transform(position=(1920 + 10, 35)),
             origin_point='center_right',
             offset=tl[tl['slide'] == 1].iloc[0]['start_time']),
         np.array([500, 0]))
@@ -89,11 +89,11 @@ def main():
         scene.add_layer(
             zunda.layer.Text.from_timeline(
                 character_tl['start_time'], character_tl['end_time'], texts,
-                font_size=72, font=font_path, contents=[
+                font_size=72, font=font_path, line_spacing=100, contents=[
                     zunda.layer.StrokeProperty(color=color_dict[character], width=12),
                     zunda.layer.FillProperty(color=(255, 255, 255))],
                 duration=character_tl['end_time'].max()),
-            transform=Transform(position=(960, 1000)),
+            transform=Transform(position=(960, 1080)),
             origin_point=zunda.Direction.BOTTOM_CENTER)
 
     bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
