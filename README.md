@@ -1,4 +1,4 @@
-# movis: Video Editing as a code
+# movis: Video Editing as a Code
 
 Movisは動画制作用のPythonエンジンである。このライブラリは以下を目的とする:
 
