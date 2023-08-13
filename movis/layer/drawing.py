@@ -85,6 +85,58 @@ class Rectangle(AttributesMixin):
         return qimage_to_numpy(image)
 
 
+class Ellipse(AttributesMixin):
+
+    def __init__(
+        self,
+        size: tuple[float, float] = (100., 100.),
+        color: Optional[tuple[int, int, int]] = None,
+        contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
+        duration: float = 1.
+    ):
+        self.size = Attribute(size, value_type=AttributeType.VECTOR2D)
+        if color is None:
+            self.contents = contents
+        else:
+            self.contents = (FillProperty(color=color),)
+        self.duration = duration
+
+    def __call__(self, time: float) -> Optional[np.ndarray]:
+        if len(self.contents) == 0:
+            return None
+        size = [float(x) for x in self.size(time)]
+        w, h = float(size[0]), float(size[1])
+
+        eps = 1.
+        max_stroke = _get_max_stroke(self.contents)
+        W = np.floor(w + max_stroke + 2 * eps)
+        H = np.floor(h + max_stroke + 2 * eps)
+        image = QImage(W, H, QImage.Format.Format_ARGB32)
+        image.fill(QColor(0, 0, 0, 0))
+
+        painter = QPainter(image)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        rect = QRectF(eps + max_stroke / 2, eps + max_stroke / 2, w, h)
+        for c in self.contents:
+            if isinstance(c, FillProperty):
+                r, g, b = c.color
+                a = round(255 * c.opacity)
+                brush = QBrush(QColor(b, g, r, a))
+                painter.setBrush(brush)
+                painter.drawEllipse(rect)
+            elif isinstance(c, StrokeProperty):
+                r, g, b = c.color
+                a = round(255 * c.opacity)
+                painter_path = QPainterPath()
+                painter_path.addEllipse(rect)
+                painter.setPen(QPen(QColor(b, g, r, a), c.width))
+                painter.drawPath(painter_path)
+            else:
+                raise ValueError(f"Invalid content type: {type(c)}")
+        painter.end()
+        return qimage_to_numpy(image)
+
+
 class Text(AttributesMixin):
 
     @classmethod
@@ -168,10 +220,11 @@ class Text(AttributesMixin):
         size = self.get_size(time)
         w, h = float(size[0]), float(size[1])
 
-        margin = 10.
+        # TODO (msaito): Fix this hack
+        margin = 20.
         max_stroke = _get_max_stroke(self.contents)
-        W = np.floor(w + max_stroke + 2 * margin)
-        H = np.floor(h + max_stroke + 2 * margin)
+        W = np.floor(w + 2 * max_stroke + 2 * margin)
+        H = np.floor(h + 2 * max_stroke + 2 * margin)
         image = QImage(W, H, QImage.Format.Format_ARGB32)
         image.fill(QColor(0, 0, 0, 0))
 
@@ -204,7 +257,7 @@ class Text(AttributesMixin):
                         cursor_x = w - rect.width() - rect.x()
                     else:
                         raise ValueError(f"Invalid text alignment: {self.text_alignment}")
-                    painter.drawText(QPointF(max_stroke / 2 + margin + cursor_x, cursor_y), line)
+                    painter.drawText(QPointF(max_stroke + margin + cursor_x, cursor_y), line)
             elif isinstance(c, StrokeProperty):
                 r, g, b = c.color
                 a = round(255 * c.opacity)
@@ -228,7 +281,7 @@ class Text(AttributesMixin):
                         cursor_x = w - rect.width() - rect.x()
                     else:
                         raise ValueError(f"Invalid text alignment: {self.text_alignment}")
-                    painter_path.addText(QPointF(max_stroke / 2 + margin + cursor_x, cursor_y), qfont, line)
+                    painter_path.addText(QPointF(max_stroke + margin + cursor_x, cursor_y), qfont, line)
                 painter.drawPath(painter_path)
         painter.end()
         array = qimage_to_numpy(image)
