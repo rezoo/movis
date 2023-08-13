@@ -8,6 +8,7 @@ from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase, QFontMetrics,
 from PySide6.QtWidgets import QApplication
 
 from zunda.attribute import Attribute, AttributesMixin, AttributeType
+from zunda.enum import TextAlignment
 from zunda.imgproc import qimage_to_numpy
 from zunda.layer.mixin import TimelineMixin
 
@@ -102,6 +103,7 @@ class Text(AttributesMixin):
                 else:
                     return ''
 
+        kwargs['duration'] = max(end_times)
         return cls(text=TextWithTime(), **kwargs)
 
     def __init__(
@@ -111,6 +113,8 @@ class Text(AttributesMixin):
             font_size: float,
             color: Optional[tuple[int, int, int]] = None,
             contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
+            line_spacing: Optional[int] = None,
+            text_alignment: Union[TextAlignment, str] = TextAlignment.CENTER,
             duration: float = 1.):
         self.text = text
         self.font = font
@@ -119,6 +123,9 @@ class Text(AttributesMixin):
             self.contents = contents
         else:
             self.contents = (FillProperty(color=color),)
+        self.line_spacing = line_spacing
+        self.text_alignment = TextAlignment.from_string(text_alignment) \
+            if isinstance(text_alignment, str) else text_alignment
         self.duration = duration
         if QCoreApplication.instance() is None:
             self._app = QApplication(sys.argv[:1])
@@ -137,10 +144,16 @@ class Text(AttributesMixin):
         qfont = QFont(self._font_family, round(float(self.font_size(time))))
         metrics = QFontMetrics(qfont)
         text = self.get_text(time)
-        rect = metrics.boundingRect(text)
-        text_width = rect.width()
-        text_height = rect.height()
-        return (text_width, text_height)
+        lines = text.split('\n')
+        W, H = 0, 0
+        for i, line in enumerate(lines):
+            rect = metrics.boundingRect(line)
+            W = max(W, rect.width() + rect.x())
+            if self.line_spacing is None or i == len(lines) - 1:
+                H += (rect.height() - rect.y())
+            else:
+                H += self.line_spacing
+        return (W, H)
 
     def get_key(self, time: float) -> tuple[str, Hashable]:
         key = super().get_key(time)
@@ -152,33 +165,84 @@ class Text(AttributesMixin):
         text = self.get_text(time)
         if text is None or text == '':
             return None
-        size = [float(x) for x in self.get_size(time)]
+        size = self.get_size(time)
         w, h = float(size[0]), float(size[1])
 
-        eps = 10
+        margin = 10.
         max_stroke = _get_max_stroke(self.contents)
-        W = np.floor(w + max_stroke + 2 * eps)
-        H = np.floor(h + max_stroke + 2 * eps)
+        W = np.floor(w + max_stroke + 2 * margin)
+        H = np.floor(h + max_stroke + 2 * margin)
         image = QImage(W, H, QImage.Format.Format_ARGB32)
         image.fill(QColor(0, 0, 0, 0))
 
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
         qfont = QFont(self._font_family, round(float(self.font_size(time))))
+        metrics = QFontMetrics(qfont)
         painter.setFont(qfont)
-        point = QPointF(0., eps + h)
+        lines = text.split('\n')
         for c in self.contents:
             if isinstance(c, FillProperty):
                 r, g, b = c.color
                 a = round(255 * c.opacity)
                 painter.setPen(QColor(b, g, r, a))
-                painter.drawText(point, text)
+                cursor_y = margin
+                for i, line in enumerate(lines):
+                    rect = metrics.boundingRect(line)
+                    if i == 0:
+                        cursor_y += rect.height()
+                    elif self.line_spacing is None:
+                        cursor_y += (rect.height() - rect.y())
+                    else:
+                        cursor_y += self.line_spacing
+
+                    if self.text_alignment == TextAlignment.LEFT:
+                        cursor_x = 0.
+                    elif self.text_alignment == TextAlignment.CENTER:
+                        cursor_x = (w - rect.width() - rect.x()) / 2
+                    elif self.text_alignment == TextAlignment.RIGHT:
+                        cursor_x = w - rect.width() - rect.x()
+                    else:
+                        raise ValueError(f"Invalid text alignment: {self.text_alignment}")
+                    painter.drawText(QPointF(max_stroke / 2 + margin + cursor_x, cursor_y), line)
             elif isinstance(c, StrokeProperty):
                 r, g, b = c.color
                 a = round(255 * c.opacity)
-                painter_path = QPainterPath()
-                painter_path.addText(point, qfont, text)
                 painter.setPen(QPen(QColor(b, g, r, a), c.width))
+                painter_path = QPainterPath()
+                cursor_y = margin
+                for i, line in enumerate(lines):
+                    rect = metrics.boundingRect(line)
+                    if i == 0:
+                        cursor_y += rect.height()
+                    elif self.line_spacing is None:
+                        cursor_y += (rect.height() - rect.y())
+                    else:
+                        cursor_y += self.line_spacing
+
+                    if self.text_alignment == TextAlignment.LEFT:
+                        cursor_x = 0.
+                    elif self.text_alignment == TextAlignment.CENTER:
+                        cursor_x = (w - rect.width() - rect.x()) / 2
+                    elif self.text_alignment == TextAlignment.RIGHT:
+                        cursor_x = w - rect.width() - rect.x()
+                    else:
+                        raise ValueError(f"Invalid text alignment: {self.text_alignment}")
+                    painter_path.addText(QPointF(max_stroke / 2 + margin + cursor_x, cursor_y), qfont, line)
                 painter.drawPath(painter_path)
         painter.end()
-        return qimage_to_numpy(image)
+        array = qimage_to_numpy(image)
+        return _clip_image(array)
+
+
+def _clip_image(image: np.ndarray) -> np.ndarray:
+    assert image.ndim == 3
+    assert image.shape[2] == 4
+    non_empty_pixels = np.all(image != np.array([0, 0, 0, 0]), axis=-1)
+    non_empty_row_indices, non_empty_col_indices = np.where(non_empty_pixels)
+    if non_empty_row_indices.size == 0 or non_empty_col_indices.size == 0:
+        return image
+    top, bottom = np.min(non_empty_row_indices), np.max(non_empty_row_indices)
+    left, right = np.min(non_empty_col_indices), np.max(non_empty_col_indices)
+    clipped_image = image[top: bottom + 1, left: right + 1]
+    return clipped_image

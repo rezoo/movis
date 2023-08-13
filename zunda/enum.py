@@ -137,3 +137,23 @@ STRING_TO_DIRECTION = {
     "top_center": Direction.TOP_CENTER,
     "top_right": Direction.TOP_RIGHT,
 }
+
+
+class TextAlignment(Enum):
+    LEFT = 0
+    CENTER = 1
+    RIGHT = 2
+
+    @staticmethod
+    def from_string(s: str) -> "TextAlignment":
+        if s in STRING_TO_TEXT_ALIGNMENT:
+            return STRING_TO_TEXT_ALIGNMENT[s]
+        else:
+            raise ValueError(f"Unknown text alignment: {s}")
+
+
+STRING_TO_TEXT_ALIGNMENT = {
+    "left": TextAlignment.LEFT,
+    "center": TextAlignment.CENTER,
+    "right": TextAlignment.RIGHT,
+}
