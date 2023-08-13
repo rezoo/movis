@@ -2,7 +2,7 @@ import argparse
 
 import librosa
 import numpy as np
-import zunda
+import movis as mv
 from PIL import Image as PILImage
 from PIL import ImageDraw as PILImageDraw
 from scipy.interpolate import RegularGridInterpolator
@@ -79,24 +79,24 @@ def main():
     size = (1920, 1080)
     eps = 0.1
     audio_img, duration = get_audio_image(args.input)
-    scene = zunda.layer.Composition(size, duration=duration + eps)
-    scene.add_layer(zunda.layer.Image(args.background, duration=duration + eps))
+    scene = mv.layer.Composition(size, duration=duration + eps)
+    scene.add_layer(mv.layer.Image(args.background, duration=duration + eps))
 
     if not args.no_logo:
         logo_position = (size[0] // 2, size[1] // 2 - 200) if args.type == 'line' \
             else (size[0] // 2, size[1] // 2)
         scene.add_layer(
-            zunda.layer.Image('logo.png', duration=duration + eps),
-            transform=zunda.Transform(position=logo_position))
+            mv.layer.Image('logo.png', duration=duration + eps),
+            transform=mv.Transform(position=logo_position))
 
     freq_size = (1920, 256) if args.type == 'line' else (1080, 1080)
     freq_position = (size[0] // 2, size[1] // 2 + 200) if args.type == 'line' \
         else (size[0] // 2, size[1] // 2)
     scene.add_layer(
         FrequencyLayer(audio_img, duration, freq_size, mode=args.type),
-        transform=zunda.Transform(position=freq_position, opacity=0.8))
+        transform=mv.Transform(position=freq_position, opacity=0.8))
     scene.write_video('no_audio.mp4')
-    zunda.add_materials_to_video('no_audio.mp4', args.input, dst_file=args.output)
+    mv.add_materials_to_video('no_audio.mp4', args.input, dst_file=args.output)
 
 
 if __name__ == '__main__':

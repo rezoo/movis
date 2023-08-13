@@ -1,20 +1,20 @@
-import zunda
+import movis as mv
 
 
 def main():
     size = (640, 480)
     duration = 5.0
 
-    scene = zunda.layer.Composition(size, duration=duration)
+    scene = mv.layer.Composition(size, duration=duration)
     scene.add_layer(
-        zunda.layer.Rectangle(
+        mv.layer.Rectangle(
             size, color=(127, 127, 127), duration=duration),
         name='bg')
-    rectangle = zunda.layer.Rectangle(
+    rectangle = mv.layer.Rectangle(
         size=(10, 10),
         contents=[
-            zunda.layer.FillProperty(color=(255, 83, 49)),
-            zunda.layer.StrokeProperty(color=(255, 255, 255), width=5),
+            mv.layer.FillProperty(color=(255, 83, 49)),
+            mv.layer.StrokeProperty(color=(255, 255, 255), width=5),
         ],
         duration=duration)
     scene.add_layer(rectangle, name='rect')

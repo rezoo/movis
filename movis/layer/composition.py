@@ -6,11 +6,11 @@ import numpy as np
 from cachetools import LRUCache
 from tqdm import tqdm
 
-from zunda.enum import CacheType, Direction
-from zunda.imgproc import BlendingMode
-from zunda.layer.component import Component
-from zunda.layer.layer import Layer
-from zunda.transform import Transform
+from ..enum import CacheType, Direction
+from ..imgproc import BlendingMode
+from ..transform import Transform
+from .component import Component
+from .layer import Layer
 
 
 class Composition:

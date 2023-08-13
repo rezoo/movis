@@ -1,40 +1,40 @@
 import numpy as np
 import pandas as pd
-import zunda
-from zunda import Transform
+import movis as mv
+from movis import Transform
 
 
 def main():
     timeline = pd.read_csv('outputs/timeline.tsv', sep='\t')
-    audio_timeline = zunda.make_voicevox_dataframe('audio')
+    audio_timeline = mv.make_voicevox_dataframe('audio')
     tl = pd.merge(timeline, audio_timeline, left_index=True, right_index=True)
     font_path = '/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc'
 
-    scene = zunda.layer.Composition(size=(1920, 1080), duration=tl['end_time'].max())
+    scene = mv.layer.Composition(size=(1920, 1080), duration=tl['end_time'].max())
     scene.add_layer(
-        zunda.layer.Image(img_file='../../assets/bg2.png', duration=tl['end_time'].max()),
+        mv.layer.Image(img_file='../../assets/bg2.png', duration=tl['end_time'].max()),
         transform=Transform(position=(960, 540)))
     scene.add_layer(
-        zunda.layer.Slide(
+        mv.layer.Slide(
             tl['start_time'], tl['end_time'],
             slide_file='slide.pdf', slide_counter=tl['slide']),
         transform=Transform(position=(960, 421), scale=0.71))
     scene.add_layer(
-        zunda.layer.Character(
+        mv.layer.Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='zunda', character_dir='../../assets/character/zunda'),
         name='zunda',
         transform=Transform(position=(1779, 950), scale=0.7))
     scene.add_layer(
-        zunda.layer.Character(
+        mv.layer.Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='metan', character_dir='../../assets/character/metan'),
         name='metan',
         transform=Transform(position=(79, 1037), scale=0.7))
 
-    def slide_in_out(item: zunda.layer.Component, offset: np.ndarray):
+    def slide_in_out(item: mv.layer.Component, offset: np.ndarray):
         p = item.transform.position.init_value
         item.transform.position.enable_animation() \
             .append(0.0, p + offset, 'ease_out_expo') \
@@ -49,27 +49,27 @@ def main():
             text: str, duration: float, margin: int = 60,
             font_size: int = 46, bg_color=(72, 172, 154), line_width=4):
 
-        layer = zunda.layer.Text(
+        layer = mv.layer.Text(
             text, font=font_path, font_size=font_size, color=(255, 255, 255), duration=duration)
         W, H = layer.get_size()
-        cp = zunda.layer.Composition(
+        cp = mv.layer.Composition(
             size=(W + margin, H), duration=duration)
         cp.add_layer(
-            zunda.layer.Rectangle(
+            mv.layer.Rectangle(
                 (W + margin - line_width // 2, H - line_width // 2), radius=8,
                 contents=[
-                    zunda.layer.FillProperty(color=bg_color),
-                    zunda.layer.StrokeProperty(color=(255, 255, 255), width=line_width)],
+                    mv.layer.FillProperty(color=bg_color),
+                    mv.layer.StrokeProperty(color=(255, 255, 255), width=line_width)],
                 duration=duration))
         cp.add_layer(layer)
         return cp
 
     slide_in_out(scene.add_layer(
-        zunda.layer.Image(img_file='images/logo_zunda.png', duration=6.0),
+        mv.layer.Image(img_file='images/logo_zunda.png', duration=6.0),
         name='zunda_logo', offset=0.5,
         transform=Transform(position=(1755, 340))), np.array([500, 0]))
     slide_in_out(scene.add_layer(
-        zunda.layer.Image(img_file='images/logo_metan.png', duration=6.0),
+        mv.layer.Image(img_file='images/logo_metan.png', duration=6.0),
         name='metan_logo', offset=0.5,
         transform=Transform(position=(170, 340))), np.array([-500, 0]))
 
@@ -87,22 +87,22 @@ def main():
         texts = [c.replace('\\n', '\n') for c in character_tl['text'].tolist()]
         color_dict = {'zunda': (94, 166, 56), 'metan': (171, 74, 115)}
         scene.add_layer(
-            zunda.layer.Text.from_timeline(
+            mv.layer.Text.from_timeline(
                 character_tl['start_time'], character_tl['end_time'], texts,
                 font_size=72, font=font_path, line_spacing=100, contents=[
-                    zunda.layer.StrokeProperty(color=color_dict[character], width=12),
-                    zunda.layer.FillProperty(color=(255, 255, 255))],
+                    mv.layer.StrokeProperty(color=color_dict[character], width=12),
+                    mv.layer.FillProperty(color=(255, 255, 255))],
                 duration=character_tl['end_time'].max()),
             transform=Transform(position=(960, 1040)),
-            origin_point=zunda.Direction.BOTTOM_CENTER)
+            origin_point=mv.Direction.BOTTOM_CENTER)
 
-    bgm = zunda.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
+    bgm = mv.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)
-    voice = zunda.concat_audio_files(tl['start_time'], tl['audio_file'])
+    voice = mv.concat_audio_files(tl['start_time'], tl['audio_file'])
     bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
 
     scene.write_video('outputs/video.mp4')
-    zunda.add_materials_to_video(
+    mv.add_materials_to_video(
         'outputs/video.mp4', 'outputs/dialogue.wav', dst_file='outputs/video2.mp4')
 
 

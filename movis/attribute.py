@@ -4,8 +4,8 @@ from typing import Callable, Hashable, Sequence, Union
 
 import numpy as np
 
-from zunda.enum import AttributeType
-from zunda.motion import Motion
+from movis.enum import AttributeType
+from movis.motion import Motion
 
 
 def normalize_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], value_type: AttributeType) -> np.ndarray:

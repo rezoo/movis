@@ -7,10 +7,10 @@ from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase, QFontMetrics,
                            QImage, QPainter, QPainterPath, QPen)
 from PySide6.QtWidgets import QApplication
 
-from zunda.attribute import Attribute, AttributesMixin, AttributeType
-from zunda.enum import TextAlignment
-from zunda.imgproc import qimage_to_numpy
-from zunda.layer.mixin import TimelineMixin
+from ..attribute import Attribute, AttributesMixin, AttributeType
+from ..enum import TextAlignment
+from ..imgproc import qimage_to_numpy
+from .mixin import TimelineMixin
 
 
 class FillProperty(NamedTuple):

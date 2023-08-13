@@ -2,8 +2,8 @@ from typing import NamedTuple, Union
 
 import numpy as np
 
-from zunda.attribute import (Attribute, AttributeType, normalize_to_1dscalar,
-                             normalize_to_2dvector)
+from .attribute import (Attribute, AttributeType, normalize_to_1dscalar,
+                        normalize_to_2dvector)
 
 
 class TransformValue(NamedTuple):

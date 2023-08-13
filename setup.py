@@ -1,15 +1,15 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="zunda",
-    version="0.3",
+    name="movis",
+    version="0.4",
     author="Masaki Saito",
     author_email="msaito@preferred.jp",
     description="A video editing library",
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        "zunda": ["assets/*", "py.typed"],
+        "movis": ["assets/*", "py.typed"],
     },
     python_requires=">3.9.0",
     install_requires=[
