@@ -92,7 +92,8 @@ def main():
                 font_size=72, font=font_path, line_spacing=100, contents=[
                     mv.layer.StrokeProperty(color=color_dict[character], width=12),
                     mv.layer.FillProperty(color=(255, 255, 255))],
-                duration=character_tl['end_time'].max()),
+                duration=character_tl['end_time'].max(),
+                text_alignment='center'),
             transform=Transform(position=(960, 1040)),
             origin_point=mv.Direction.BOTTOM_CENTER)
 
