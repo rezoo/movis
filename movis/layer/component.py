@@ -3,11 +3,11 @@ from typing import Hashable, Optional, Union
 import cv2
 import numpy as np
 
-from zunda.effect import Effect
-from zunda.enum import Direction
-from zunda.imgproc import BlendingMode, alpha_composite
-from zunda.layer.layer import Layer
-from zunda.transform import Transform, TransformValue
+from ..effect import Effect
+from ..enum import Direction
+from ..imgproc import BlendingMode, alpha_composite
+from .layer import Layer
+from ..transform import Transform, TransformValue
 
 
 class Component:

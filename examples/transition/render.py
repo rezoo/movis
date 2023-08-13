@@ -1,5 +1,5 @@
 import numpy as np
-import zunda
+import movis as mv
 
 
 class TransitionEffect:
@@ -50,13 +50,13 @@ def main():
     size = (1920, 1080)
     transition_time = 2.5
 
-    scene = zunda.layer.Composition(size, duration=6.0)
-    scene.add_layer(zunda.layer.Image('scene_a.png', duration=3.0))
-    scene.add_layer(zunda.layer.Image('scene_b.png', duration=3.0), offset=3.0)
+    scene = mv.layer.Composition(size, duration=6.0)
+    scene.add_layer(mv.layer.Image('scene_a.png', duration=3.0))
+    scene.add_layer(mv.layer.Image('scene_b.png', duration=3.0), offset=3.0)
 
-    logo = zunda.layer.Composition(size, duration=transition_time)
-    logo.add_layer(zunda.layer.Rectangle(size, color=(178, 217, 186), duration=transition_time))
-    logo.add_layer(zunda.layer.Image('logo.png', duration=transition_time), name='image')
+    logo = mv.layer.Composition(size, duration=transition_time)
+    logo.add_layer(mv.layer.Rectangle(size, color=(178, 217, 186), duration=transition_time))
+    logo.add_layer(mv.layer.Image('logo.png', duration=transition_time), name='image')
     logo['image'].transform.scale.enable_animation().extend(
         keyframes=[0., transition_time], values=[0.9, 1.0])
     scene.add_layer(logo, name='logo', offset=3.0 - transition_time / 2)

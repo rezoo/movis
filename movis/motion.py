@@ -4,7 +4,7 @@ from typing import Any, Callable, Optional, Sequence, Union
 
 import numpy as np
 
-from zunda.enum import MotionType
+from .enum import MotionType
 
 MOTION_TYPES_TO_FUNC = {
     MotionType.LINEAR: lambda t: t,

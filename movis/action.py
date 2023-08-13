@@ -1,9 +1,9 @@
 import re
 from typing import Optional, Sequence
 
-from zunda.attribute import Attribute
-from zunda.layer.composition import Composition
-from zunda.motion import Motion
+from .attribute import Attribute
+from .layer.composition import Composition
+from .motion import Motion
 
 
 class Action(object):

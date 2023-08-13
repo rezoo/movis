@@ -2,7 +2,7 @@ from typing import Callable, Hashable, Optional
 
 import numpy as np
 
-from zunda.layer.layer import Layer
+from .layer import Layer
 
 
 class Loop:

@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 from PySide6.QtGui import QImage
 
-from zunda.enum import BlendingMode
+from .enum import BlendingMode
 
 
 def qimage_to_numpy(image: QImage) -> np.ndarray:

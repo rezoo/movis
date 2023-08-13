@@ -5,9 +5,9 @@ import imageio
 import numpy as np
 from PIL import Image as PILImage
 
-from zunda.imgproc import alpha_composite
-from zunda.layer.mixin import TimelineMixin
-from zunda.util import rand_from_string
+from ..imgproc import alpha_composite
+from .mixin import TimelineMixin
+from ..util import rand_from_string
 
 try:
     from pdf2image import convert_from_path

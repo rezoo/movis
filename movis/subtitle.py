@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import NamedTuple, Optional, Sequence, Union
 
-from zunda.enum import Direction
+from .enum import Direction
 
 
 class ASSStyleType(NamedTuple):
