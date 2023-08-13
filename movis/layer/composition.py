@@ -8,9 +8,9 @@ from tqdm import tqdm
 
 from ..enum import CacheType, Direction
 from ..imgproc import BlendingMode
+from ..transform import Transform
 from .component import Component
 from .layer import Layer
-from ..transform import Transform
 
 
 class Composition:

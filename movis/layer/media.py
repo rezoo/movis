@@ -6,8 +6,8 @@ import numpy as np
 from PIL import Image as PILImage
 
 from ..imgproc import alpha_composite
-from .mixin import TimelineMixin
 from ..util import rand_from_string
+from .mixin import TimelineMixin
 
 try:
     from pdf2image import convert_from_path

@@ -6,8 +6,8 @@ import numpy as np
 from ..effect import Effect
 from ..enum import Direction
 from ..imgproc import BlendingMode, alpha_composite
-from .layer import Layer
 from ..transform import Transform, TransformValue
+from .layer import Layer
 
 
 class Component:
