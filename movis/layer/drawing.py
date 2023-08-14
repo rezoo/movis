@@ -20,21 +20,14 @@ except ImportError:
 
 
 class FillProperty(NamedTuple):
-
     color: tuple[int, int, int] = (0, 0, 0)
     opacity: float = 1.
 
 
 class StrokeProperty(NamedTuple):
-
     color: tuple[int, int, int] = (255, 255, 255)
     width: float = 1.
     opacity: float = 1.
-
-
-def _get_max_stroke(contents: Sequence[Union[FillProperty, StrokeProperty]]) -> float:
-    strokes = [c.width for c in contents if isinstance(c, StrokeProperty)]
-    return float(max(strokes)) if 0 < len(strokes) else 0.
 
 
 class Rectangle(AttributesMixin):
@@ -311,3 +304,8 @@ def _clip_image(image: np.ndarray) -> np.ndarray:
     left, right = np.min(non_empty_col_indices), np.max(non_empty_col_indices)
     clipped_image = image[top: bottom + 1, left: right + 1]
     return clipped_image
+
+
+def _get_max_stroke(contents: Sequence[Union[FillProperty, StrokeProperty]]) -> float:
+    strokes = [c.width for c in contents if isinstance(c, StrokeProperty)]
+    return float(max(strokes)) if 0 < len(strokes) else 0.

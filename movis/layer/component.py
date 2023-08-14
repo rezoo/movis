@@ -127,7 +127,7 @@ class Component:
         if frame is None:
             return None
         for effect in self._effects:
-            frame = effect(layer_time, frame)
+            frame = effect(frame, layer_time)
 
         if self._alpha_matte is not None:
             raise NotImplementedError

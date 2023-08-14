@@ -9,7 +9,7 @@ class GaussianBlur(AttributesMixin):
     def __init__(self, radius: float):
         self.radius = Attribute(radius, AttributeType.SCALAR)
 
-    def __call__(self, time: float, prev_image: np.ndarray) -> np.ndarray:
+    def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:
         def get_ksize(sigma):
             return 2 * int(np.ceil(max(1, (3 * sigma - 1) / 2))) + 1
         radius = float(self.radius(time))

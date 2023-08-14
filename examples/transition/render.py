@@ -20,7 +20,7 @@ class TransitionEffect:
         else:
             return 1.0 + (time - (self.duration - self.effect_time)) / self.effect_time
 
-    def __call__(self, time: float, prev_image: np.ndarray) -> np.ndarray:
+    def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:
         def get_alpha(t: float) -> np.ndarray:
             alpha = np.zeros(prev_image.shape[:2], dtype=np.uint8)
             ri = prev_image.shape[0] / self.N
