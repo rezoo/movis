@@ -2,15 +2,21 @@ import sys
 from typing import Callable, Hashable, NamedTuple, Optional, Sequence, Union
 
 import numpy as np
-from PySide6.QtCore import QCoreApplication, QPointF, QRectF, Qt
-from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase, QFontMetrics,
-                           QImage, QPainter, QPainterPath, QPen)
-from PySide6.QtWidgets import QApplication
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..enum import TextAlignment
 from ..imgproc import qimage_to_numpy
 from .mixin import TimelineMixin
+
+try:
+    from PySide6.QtCore import QCoreApplication, QPointF, QRectF, Qt
+    from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase,
+                               QFontMetrics, QImage, QPainter, QPainterPath,
+                               QPen)
+    from PySide6.QtWidgets import QApplication
+    pyside6_available = True
+except ImportError:
+    pyside6_available = False
 
 
 class FillProperty(NamedTuple):
@@ -40,6 +46,8 @@ class Rectangle(AttributesMixin):
             color: Optional[tuple[int, int, int]] = None,
             contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
             duration: float = 1.):
+        if not pyside6_available:
+            raise ImportError("PySide6 must be installed to use Rectangle")
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D)
         self.radius = Attribute(radius, value_type=AttributeType.SCALAR)
         if color is None:
@@ -94,6 +102,8 @@ class Ellipse(AttributesMixin):
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
         duration: float = 1.
     ):
+        if not pyside6_available:
+            raise ImportError("PySide6 must be installed to use Rectangle")
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D)
         if color is None:
             self.contents = contents
@@ -168,6 +178,8 @@ class Text(AttributesMixin):
             line_spacing: Optional[int] = None,
             text_alignment: Union[TextAlignment, str] = TextAlignment.CENTER,
             duration: float = 1.):
+        if not pyside6_available:
+            raise ImportError("PySide6 must be installed to use Rectangle")
         self.text = text
         self.font = font
         self.font_size = Attribute(font_size, value_type=AttributeType.SCALAR)
