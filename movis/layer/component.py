@@ -75,19 +75,36 @@ class Component:
 
     def _composite(
         self, bg_image: np.ndarray, time: float,
-        parent: tuple[float, float] = (0.0, 0.0),
+        parent: tuple[int, int] = (0, 0),
         alpha_matte_mode: bool = False,
     ) -> np.ndarray:
-        # TODO: Implement alpha matte mode
         layer_time = time - self.offset
         if layer_time < self.start_time or self.end_time <= layer_time:
             return bg_image
-        fg_image = self(layer_time)
+        fg_image = self(time)
         if fg_image is None:
             return bg_image
+        p = self.transform.get_current_value(layer_time)
+        result = self._get_fixed_affine_matrix(fg_image, p)
+        if result is None:
+            return bg_image
+        affine_matrix_fixed, (W, H), (offset_x, offset_y) = result
+        fg_image_transformed = cv2.warpAffine(
+            fg_image, affine_matrix_fixed, dsize=(W, H),
+            flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+
+        bg_image = alpha_composite(
+            bg_image, fg_image_transformed,
+            position=(offset_x - parent[0], offset_y - parent[1]),
+            opacity=p.opacity, blending_mode=self.blending_mode,
+            alpha_matte_mode=alpha_matte_mode)
+        return bg_image
+
+    def _get_fixed_affine_matrix(
+        self, fg_image: np.ndarray, p: TransformValue,
+    ) -> Optional[tuple[np.ndarray, tuple[int, int], tuple[int, int]]]:
         h, w = fg_image.shape[:2]
 
-        p = self.transform.get_current_value(layer_time)
         T1 = _get_T1(p)
         SR = _get_SR(p)
         T2 = _get_T2(p, (w, h), self.origin_point)
@@ -105,22 +122,15 @@ class Component:
         WH = (max_coords - min_coords).astype(np.int32)
         W, H = WH[0], WH[1]
         if W == 0 or H == 0:
-            return bg_image
+            return None
         offset_x, offset_y = int(min_coords[0]), int(min_coords[1])
 
         T1_fixed = _get_T1(p, offset=(offset_x, offset_y))
         affine_matrix_fixed = (T1_fixed @ SR_T2)[:2]
-        fg_image_transformed = cv2.warpAffine(
-            fg_image, affine_matrix_fixed, dsize=(W, H),
-            flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+        return affine_matrix_fixed, (W, H), (offset_x, offset_y)
 
-        bg_image = alpha_composite(
-            bg_image, fg_image_transformed, position=(offset_x, offset_y),
-            opacity=p.opacity, blending_mode=self.blending_mode,
-            alpha_matte_mode=alpha_matte_mode)
-        return bg_image
-
-    def __call__(self, layer_time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> Optional[np.ndarray]:
+        layer_time = time - self.offset
         if not self.visible:
             return None
         frame = self.layer(layer_time)
@@ -130,14 +140,13 @@ class Component:
             frame = effect(frame, layer_time)
 
         if self._alpha_matte is not None:
-            raise NotImplementedError
             p = self.transform.get_current_value(layer_time)
-            if round(frame.shape[1] * p.scale[0]) == 0 or round(frame.shape[0] * p.scale[1]) == 0:
+            result = self._get_fixed_affine_matrix(frame, p)
+            if result is None:
                 return frame
-            x = p.position[0] + (p.anchor_point[0] - frame.shape[1] / 2) * p.scale[0]
-            y = p.position[1] + (p.anchor_point[1] - frame.shape[0] / 2) * p.scale[1]
-            time = layer_time + self.offset
-            frame = self._alpha_matte._composite(frame, time, parent=(x, y), alpha_matte_mode=True)
+            _, _, (offset_x, offset_y) = result
+            frame = self._alpha_matte._composite(
+                frame, time, parent=(offset_x, offset_y), alpha_matte_mode=True)
         return frame
 
     def __repr__(self) -> str:
