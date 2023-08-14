@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Hashable, Optional, Sequence, Union
+from typing import Hashable, Optional, Union
 
 import imageio
 import numpy as np
@@ -138,24 +138,3 @@ class Composition:
             writer.append_data(frame)
         writer.close()
         self.cache.clear()
-
-
-def concatenate(
-        compositions: Sequence[Composition],
-        size: Optional[tuple[int, int]] = None,
-        duration: Optional[float] = None,
-        names: Optional[Sequence[str]] = None) -> Composition:
-    if size is None:
-        size = compositions[0].size
-    if duration is None:
-        duration = sum([c.duration for c in compositions])
-    if names is None:
-        names = [f"scene_{i}" for i in range(len(compositions))]
-    else:
-        assert len(names) == len(compositions)
-
-    main = Composition(size=size, duration=duration)
-    offsets = np.cumsum([0] + [c.duration for c in compositions])
-    for composition, name, offset in zip(compositions, names, offsets):
-        main.add_layer(composition, name=name, offset=offset)
-    return main

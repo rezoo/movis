@@ -39,14 +39,22 @@ class Image:
     def duration(self):
         return self._duration
 
+    @property
+    def size(self):
+        shape = self._read_image().shape[:2]
+        return shape[1], shape[0]
+
     def get_key(self, time: float) -> bool:
         return 0 <= time < self.duration
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def _read_image(self) -> np.ndarray:
         if self.image is None:
             image = np.asarray(PILImage.open(self._img_file).convert("RGBA"))
             self.image = image
         return self.image
+
+    def __call__(self, time: float) -> Optional[np.ndarray]:
+        return self._read_image()
 
 
 class ImageSequence(TimelineMixin):
@@ -107,6 +115,7 @@ class Video:
         self.reader = imageio.get_reader(video_file)
         meta_data = self.reader.get_meta_data()
         self.fps = meta_data["fps"]
+        self.size = meta_data["size"]
         self.n_frames = meta_data["nframes"]
         self._duration = meta_data["duration"]
 
