@@ -5,4 +5,4 @@ from .drawing import (Ellipse, FillProperty, Rectangle, StrokeProperty,  # noqa
 from .layer import Layer  # noqa
 from .media import Character, Image, Slide, Video  # noqa
 from .mixin import TimelineMixin  # noqa
-from .ops import Loop, TimeWarp, concatenate, trim  # noqa
+from .ops import Concatenate, Repeat, TimeWarp, Trim  # noqa
