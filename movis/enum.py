@@ -33,10 +33,12 @@ class MotionType(Enum):
     EASE_IN = 1
     EASE_OUT = 2
     EASE_IN_OUT = 3
-    EASE_IN_CUBIC = 4
-    EASE_OUT_CUBIC = 6
+    EASE_IN_MEDIUM = 4
+    EASE_OUT_MEDIUM = 5
+    EASE_IN_OUT_MEDIUM = 6
     EASE_IN_EXPO = 7
     EASE_OUT_EXPO = 8
+    EASE_IN_OUT_EXPO = 9
 
     @staticmethod
     def from_string(s: str) -> "MotionType":
@@ -51,10 +53,12 @@ STRING_TO_MOTION_TYPE = {
     "ease_in": MotionType.EASE_IN,
     "ease_out": MotionType.EASE_OUT,
     "ease_in_out": MotionType.EASE_IN_OUT,
-    "ease_in_cubic": MotionType.EASE_IN_CUBIC,
-    "ease_out_cubic": MotionType.EASE_OUT_CUBIC,
+    "ease_in_medium": MotionType.EASE_IN_MEDIUM,
+    "ease_out_medium": MotionType.EASE_OUT_MEDIUM,
+    "ease_in_out_medium": MotionType.EASE_IN_OUT_MEDIUM,
     "ease_in_expo": MotionType.EASE_IN_EXPO,
     "ease_out_expo": MotionType.EASE_OUT_EXPO,
+    "ease_in_out_expo": MotionType.EASE_IN_OUT_EXPO,
 }
 
 
