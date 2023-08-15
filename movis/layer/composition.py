@@ -3,7 +3,7 @@ from typing import Hashable, Optional, Union
 
 import imageio
 import numpy as np
-from cachetools import LRUCache
+from diskcache import Cache
 from tqdm import tqdm
 
 from ..enum import CacheType, Direction
@@ -21,7 +21,7 @@ class Composition:
         self._name_to_layer: dict[str, Component] = {}
         self.size = size
         self._duration = duration
-        self.cache: LRUCache = LRUCache(maxsize=128)
+        self.cache: Cache = Cache(size_limit=1024 * 1024 * 1024)
 
     @property
     def duration(self) -> float:

@@ -21,7 +21,7 @@ setup(
         "imageio>=2.31.1",
         "imageio-ffmpeg>=0.4.8",
         "tqdm>=4.46.0",
-        "cachetools>=4.2.2",
+        "diskcache>=5.6.1",
         "opencv-python>=4.8.0.76",
         "PySide6>=6.5.2"
     ],

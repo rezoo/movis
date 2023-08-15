@@ -1,7 +1,8 @@
 from . import effect  # noqa
 from . import layer  # noqa
 from .action import Action, make_action_functions  # noqa
-from .attribute import Attribute, AttributesMixin, transform_to_hashable  # noqa
+from .attribute import (Attribute, AttributesMixin,  # noqa
+                        transform_to_hashable)
 from .audio import concat_audio_files, make_loop_music  # noqa
 from .effect.effect import Effect  # noqa
 from .enum import (AttributeType, BlendingMode, Direction, MotionType,  # noqa
