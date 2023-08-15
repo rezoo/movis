@@ -2,8 +2,8 @@ from typing import NamedTuple, Union
 
 import numpy as np
 
-from .attribute import (Attribute, AttributeType, normalize_to_1dscalar,
-                        normalize_to_2dvector)
+from .attribute import (Attribute, AttributeType, transform_to_1dscalar,
+                        transform_to_2dvector)
 
 
 class TransformValue(NamedTuple):
@@ -48,11 +48,11 @@ class Transform:
 
     def get_current_value(self, layer_time: float) -> TransformValue:
         return TransformValue(
-            anchor_point=normalize_to_2dvector(self.anchor_point(layer_time)),
-            position=normalize_to_2dvector(self.position(layer_time)),
-            scale=normalize_to_2dvector(self.scale(layer_time)),
-            rotation=normalize_to_1dscalar(self.rotation(layer_time)),
-            opacity=normalize_to_1dscalar(self.opacity(layer_time)),
+            anchor_point=transform_to_2dvector(self.anchor_point(layer_time)),
+            position=transform_to_2dvector(self.position(layer_time)),
+            scale=transform_to_2dvector(self.scale(layer_time)),
+            rotation=transform_to_1dscalar(self.rotation(layer_time)),
+            opacity=transform_to_1dscalar(self.opacity(layer_time)),
         )
 
     def __repr__(self) -> str:

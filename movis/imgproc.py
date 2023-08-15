@@ -2,12 +2,18 @@ from typing import Union
 
 import numpy as np
 from PIL import Image
-from PySide6.QtGui import QImage
 
 from .enum import BlendingMode
 
+try:
+    from PySide6.QtGui import QImage
+    pyside6_available = True
+except ImportError:
+    pyside6_available = False
+
 
 def qimage_to_numpy(image: QImage) -> np.ndarray:
+    assert pyside6_available, "PySide6 is not available."
     assert image.format() == QImage.Format.Format_ARGB32
     ptr = image.bits()
     array_shape = (image.height(), image.width(), 4)

@@ -26,7 +26,7 @@ def normalize_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], va
     raise ValueError(f"Invalid value type: {value_type}")
 
 
-def normalize_to_1dscalar(x: Union[float, Sequence[float], np.ndarray]) -> float:
+def transform_to_1dscalar(x: Union[float, Sequence[float], np.ndarray]) -> float:
     if isinstance(x, float):
         return x
     elif isinstance(x, np.ndarray):
@@ -35,18 +35,34 @@ def normalize_to_1dscalar(x: Union[float, Sequence[float], np.ndarray]) -> float
         return float(x[0])
 
 
-def normalize_to_2dvector(
+def transform_to_2dvector(
     x: Union[float, Sequence[float], np.ndarray]
 ) -> tuple[float, float]:
     if isinstance(x, float):
         return (x, x)
     elif len(x) == 1:
         return (float(x[0]), float(x[0]))
-    else:
+    elif len(x) == 2:
         return (float(x[0]), float(x[1]))
+    else:
+        raise ValueError(f"Invalid value: {x}")
 
 
-def convert_to_hashable(
+def transform_to_3dvector(
+    x: Union[float, Sequence[float], np.ndarray]
+) -> tuple[float, float, float]:
+    if isinstance(x, float):
+        return (x, x, x)
+    elif len(x) == 1:
+        y = float(x[0])
+        return (y, y, y)
+    elif len(x) == 3:
+        return (float(x[0]), float(x[1]), float(x[2]))
+    else:
+        raise ValueError(f"Invalid value: {x}")
+
+
+def transform_to_hashable(
     x: Union[float, Sequence[float], np.ndarray]
 ) -> Union[float, tuple[float, ...]]:
     if isinstance(x, (int, float)):
@@ -102,4 +118,4 @@ class AttributesMixin:
         return {key: attr for key, attr in vars(self).items() if isinstance(attr, Attribute)}
 
     def get_key(self, time: float) -> tuple[Hashable, ...]:
-        return tuple([convert_to_hashable(attr(time)) for attr in self.attributes.values()])
+        return tuple([transform_to_hashable(attr(time)) for attr in self.attributes.values()])
