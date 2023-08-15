@@ -7,14 +7,14 @@ from .layer import Layer
 
 class Repeat:
 
-    def __init__(self, layer: Layer, n_loop: int = 1):
-        assert 0 < n_loop, f'n_loop must be positive integer, but {n_loop}'
+    def __init__(self, layer: Layer, n_repeat: int = 1):
+        assert 0 < n_repeat, f'n_loop must be positive integer, but {n_repeat}'
         self.layer = layer
-        self.n_loop = n_loop
+        self.n_repeat = n_repeat
 
     @property
     def duration(self) -> float:
-        return self.layer.duration * self.n_loop
+        return self.layer.duration * self.n_repeat
 
     def get_key(self, time: float) -> Hashable:
         if hasattr(self.layer, 'get_key'):

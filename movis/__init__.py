@@ -8,7 +8,8 @@ from .enum import (AttributeType, BlendingMode, Direction, MotionType,  # noqa
                    TextAlignment)
 from .imgproc import alpha_composite, resize  # noqa
 from .motion import Motion  # noqa
-from .subtitle import ASSStyleType, rgb_to_ass_color, write_ass_file  # noqa
+from .subtitle import (ASSStyleType, rgb_to_ass_color, write_ass_file,  # noqa
+                       write_srt_file)
 from .transform import Transform  # noqa
 from .util import (add_materials_to_video, make_timeline_from_voicevox,  # noqa
                    make_voicevox_dataframe, merge_timeline)

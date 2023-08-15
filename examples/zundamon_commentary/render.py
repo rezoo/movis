@@ -102,6 +102,8 @@ def main():
     voice = mv.concat_audio_files(tl['start_time'], tl['audio_file'])
     bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
 
+    mv.write_srt_file(
+        tl['start_time'], tl['end_time'], tl['text'], 'outputs/dialogue.srt')
     scene.write_video('outputs/video.mp4')
     mv.add_materials_to_video(
         'outputs/video.mp4', 'outputs/dialogue.wav', dst_file='outputs/video2.mp4')

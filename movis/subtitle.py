@@ -106,3 +106,20 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     body = "\n".join(lines)
     with open(dst_ass_file, "w") as fp:
         fp.write(header + body)
+
+
+def write_srt_file(
+        start_times: Sequence[float], end_times: Sequence[float], texts: Sequence[str],
+        dst_srt_file: Union[Path, str]) -> None:
+    assert len(start_times) == len(end_times) == len(texts)
+    with open(dst_srt_file, 'w') as srt:
+        for i, (start_time, end_time, text) in enumerate(zip(start_times, end_times, texts)):
+            srt.write('{}\n'.format(i + 1))
+            srt.write('{:02d}:{:02d}:{:02d},{:03d} --> {:02d}:{:02d}:{:02d},{:03d}\n'.format(
+                int(start_time / 3600), int((start_time / 60) % 60),
+                int(start_time % 60), int((start_time % 1) * 1000),
+                int(end_time / 3600), int((end_time / 60) % 60),
+                int(end_time % 60), int((end_time % 1) * 1000),
+            ))
+            cleaned_text = text.replace(r"\n", "").replace("\n", "")
+            srt.write(cleaned_text + '\n\n')
