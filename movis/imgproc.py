@@ -116,8 +116,8 @@ def alpha_composite_pil(
     if opacity < 1.0:
         fg_image = fg_image.copy()
         c_alpha = fg_image[:, :, 3].astype(np.uint16)
-        a = int(np.round(opacity * 256))
-        c_alpha = (c_alpha * a // 256).astype(np.uint8)
+        a = int(np.round(opacity * 255))
+        c_alpha = (c_alpha * a // 255).astype(np.uint8)
         fg_image[:, :, 3] = c_alpha
     base_img_pil = Image.fromarray(bg_image)
     base_img_pil.alpha_composite(
