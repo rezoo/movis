@@ -33,12 +33,13 @@ class StrokeProperty(NamedTuple):
 class Rectangle(AttributesMixin):
 
     def __init__(
-            self,
-            size: tuple[float, float] = (100., 100.),
-            radius: float = 0.,
-            color: Optional[tuple[int, int, int]] = None,
-            contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
-            duration: float = 1.):
+        self,
+        size: tuple[float, float] = (100., 100.),
+        radius: float = 0.,
+        color: Optional[tuple[int, int, int]] = None,
+        contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
+        duration: float = 1.
+    ) -> None:
         if not pyside6_available:
             raise ImportError("PySide6 must be installed to use Rectangle")
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D)
@@ -94,7 +95,7 @@ class Ellipse(AttributesMixin):
         color: Optional[tuple[int, int, int]] = None,
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
         duration: float = 1.
-    ):
+    ) -> None:
         if not pyside6_available:
             raise ImportError("PySide6 must be installed to use Rectangle")
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D)
@@ -143,7 +144,13 @@ class Ellipse(AttributesMixin):
 class Text(AttributesMixin):
 
     @classmethod
-    def from_timeline(cls, start_times: Sequence[float], end_times: Sequence[float], texts: Sequence[str], **kwargs):
+    def from_timeline(
+        cls,
+        start_times: Sequence[float],
+        end_times: Sequence[float],
+        texts: Sequence[str],
+        **kwargs
+    ) -> 'Text':
         assert len(start_times) == len(texts)
 
         class TextWithTime(TimelineMixin):
@@ -162,15 +169,16 @@ class Text(AttributesMixin):
         return cls(text=TextWithTime(), **kwargs)
 
     def __init__(
-            self,
-            text: Union[str, Callable[[float], str]],
-            font: str,
-            font_size: float,
-            color: Optional[tuple[int, int, int]] = None,
-            contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
-            line_spacing: Optional[int] = None,
-            text_alignment: Union[TextAlignment, str] = TextAlignment.CENTER,
-            duration: float = 1.):
+        self,
+        text: Union[str, Callable[[float], str]],
+        font: str,
+        font_size: float,
+        color: Optional[tuple[int, int, int]] = None,
+        contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
+        line_spacing: Optional[int] = None,
+        text_alignment: Union[TextAlignment, str] = TextAlignment.CENTER,
+        duration: float = 1.
+    ) -> None:
         if not pyside6_available:
             raise ImportError("PySide6 must be installed to use Rectangle")
         self.text = text

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Hashable, Optional, Union
+from typing import Hashable, Optional, Sequence, Union
 
 import imageio
 import numpy as np
@@ -17,7 +17,7 @@ class Composition:
     def __init__(
         self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0
     ) -> None:
-        self.layers: list[Component] = []
+        self._layers: list[Component] = []
         self._name_to_layer: dict[str, Component] = {}
         self.size = size
         self._duration = duration
@@ -27,21 +27,40 @@ class Composition:
     def duration(self) -> float:
         return self._duration
 
+    @property
+    def layers(self) -> Sequence[Component]:
+        return self._layers
+
     def keys(self) -> list[str]:
-        return [layer.name for layer in self.layers]
+        return [layer.name for layer in self._layers]
 
     def values(self) -> list[Component]:
-        return self.layers
+        return self._layers
 
     def items(self) -> list[tuple[str, Component]]:
-        return [(layer.name, layer) for layer in self.layers]
+        return [(layer.name, layer) for layer in self._layers]
+
+    def __len__(self) -> int:
+        return len(self._layers)
 
     def __getitem__(self, key: str) -> Component:
         return self._name_to_layer[key]
 
+    def __setitem__(self, key: str, value: Union[Component, Layer]) -> None:
+        if isinstance(value, Component):
+            self._layers.append(value)
+            self._name_to_layer[key] = value
+        elif callable(value):
+            self.add_layer(value, name=key)
+        else:
+            raise ValueError("value must be Component or Layer (i.e., callable)")
+
+    def __delitem__(self, key: str) -> None:
+        self.pop_layer(key)
+
     def get_key(self, time: float) -> tuple[Hashable, ...]:
         layer_keys: list[Hashable] = [CacheType.COMPOSITION]
-        for component in self.layers:
+        for component in self._layers:
             layer_time = time - component.offset
             if layer_time < component.start_time or component.end_time <= layer_time:
                 layer_keys.append(None)
@@ -50,7 +69,7 @@ class Composition:
         return tuple(layer_keys)
 
     def __repr__(self) -> str:
-        return f"Composition(size={self.size}, duration={self.duration}, layers={self.layers!r})"
+        return f"Composition(size={self.size}, duration={self.duration}, layers={self._layers!r})"
 
     def add_layer(
         self,
@@ -65,8 +84,8 @@ class Composition:
         origin_point: Direction = Direction.CENTER,
     ) -> Component:
         if name is None:
-            name = f"layer_{len(self.layers)}"
-        if name in self.layers:
+            name = f"layer_{len(self._layers)}"
+        if name in self._layers:
             raise KeyError(f"Layer with name {name} already exists")
         end_time = end_time if end_time is not None else layer.duration
         transform = transform if transform is not None \
@@ -82,15 +101,15 @@ class Composition:
             blending_mode=blending_mode,
             origin_point=origin_point,
         )
-        self.layers.append(component)
+        self._layers.append(component)
         self._name_to_layer[name] = component
         return component
 
     def pop_layer(self, name: str) -> Component:
         if name not in self._name_to_layer:
             raise KeyError(f"Layer with name {name} does not exist")
-        index = next(i for i in range(len(self.layers)) if self.layers[i].name == name)
-        self.layers.pop(index)
+        index = next(i for i in range(len(self._layers)) if self._layers[i].name == name)
+        self._layers.pop(index)
         component = self._name_to_layer.pop(name)
         return component
 
@@ -113,7 +132,7 @@ class Composition:
             return self.cache[key]
 
         frame = np.zeros((self.size[1], self.size[0], 4), dtype=np.uint8)
-        for component in self.layers:
+        for component in self._layers:
             frame = component._composite(frame, time)
         self.cache[key] = frame
         return frame

@@ -18,7 +18,9 @@ except ImportError:
 
 class Image:
     def __init__(
-        self, img_file: Union[str, Path, PILImage.Image, np.ndarray], duration: float = 1.0
+        self,
+        img_file: Union[str, Path, PILImage.Image, np.ndarray],
+        duration: float = 1.0
     ) -> None:
         self.image: Optional[np.ndarray] = None
         self._img_file: Optional[Path] = None
@@ -60,13 +62,21 @@ class Image:
 class ImageSequence(TimelineMixin):
 
     @classmethod
-    def from_files(cls, img_files: Sequence[Union[str, Path]], each_duration: float = 1.0) -> "ImageSequence":
+    def from_files(
+        cls,
+        img_files: Sequence[Union[str, Path]],
+        each_duration: float = 1.0
+    ) -> "ImageSequence":
         start_times = np.arange(len(img_files)) * each_duration
         end_times = start_times + each_duration
         return cls(start_times.tolist(), end_times.tolist(), img_files)
 
     @classmethod
-    def from_dir(cls, img_dir: Union[str, Path], each_duration: float = 1.0) -> "ImageSequence":
+    def from_dir(
+        cls,
+        img_dir: Union[str, Path],
+        each_duration: float = 1.0
+    ) -> "ImageSequence":
         img_dir = Path(img_dir)
         exts = set([".png", ".jpg", ".jpeg", ".bmp", ".tiff"])
         img_files = [
