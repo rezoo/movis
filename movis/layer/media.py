@@ -60,7 +60,6 @@ class Image:
 
 
 class ImageSequence(TimelineMixin):
-
     @classmethod
     def from_files(
         cls,

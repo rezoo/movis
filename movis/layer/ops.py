@@ -6,7 +6,6 @@ from .layer import Layer
 
 
 class Repeat:
-
     def __init__(self, layer: Layer, n_repeat: int = 1):
         assert 0 < n_repeat, f'n_loop must be positive integer, but {n_repeat}'
         self.layer = layer
@@ -26,7 +25,6 @@ class Repeat:
 
 
 class TimeWarp:
-
     def __init__(self, layer: Layer, warp_func: Callable[[float], float], duration: Optional[float] = None):
         self.layer = layer
         self.warp_func = warp_func
@@ -40,7 +38,6 @@ class TimeWarp:
 
 
 class Concatenate:
-
     def __init__(self, layers: Sequence[Layer]):
         self.layers = tuple(layers)
         self._timeline = np.cumsum([0.] + [layer.duration for layer in layers])
@@ -70,7 +67,6 @@ class Concatenate:
 
 
 class Trim:
-
     def __init__(self, layer: Layer, start_times: Sequence[float], end_times: Sequence[float]):
         assert len(start_times) == len(end_times)
         starts = np.array(start_times, dtype=np.float64)

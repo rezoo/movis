@@ -5,7 +5,6 @@ from .enum import Direction
 
 
 class ASSStyleType(NamedTuple):
-
     name: str = 'Default'
     font_name: str = 'Helvetica'
     font_size: int = 60

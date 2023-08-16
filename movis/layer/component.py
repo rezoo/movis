@@ -11,7 +11,6 @@ from .layer import Layer
 
 
 class Component:
-
     def __init__(
             self, name: str, layer: Layer, transform: Optional[Transform] = None,
             offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0,

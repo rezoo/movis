@@ -31,7 +31,6 @@ class StrokeProperty(NamedTuple):
 
 
 class Rectangle(AttributesMixin):
-
     def __init__(
         self,
         size: tuple[float, float] = (100., 100.),
@@ -88,7 +87,6 @@ class Rectangle(AttributesMixin):
 
 
 class Ellipse(AttributesMixin):
-
     def __init__(
         self,
         size: tuple[float, float] = (100., 100.),
@@ -142,7 +140,6 @@ class Ellipse(AttributesMixin):
 
 
 class Text(AttributesMixin):
-
     @classmethod
     def from_timeline(
         cls,

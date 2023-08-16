@@ -7,7 +7,6 @@ from .attribute import (Attribute, AttributeType, transform_to_1dscalar,
 
 
 class TransformValue(NamedTuple):
-
     anchor_point: tuple[float, float] = (0.0, 0.0)
     position: tuple[float, float] = (0.0, 0.0)
     scale: tuple[float, float] = (1.0, 1.0)
@@ -20,7 +19,6 @@ class TransformValue(NamedTuple):
 
 
 class Transform:
-
     def __init__(
         self,
         anchor_point: Union[float, tuple[float, float], np.ndarray] = (0.0, 0.0),

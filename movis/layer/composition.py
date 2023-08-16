@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Hashable, Optional, Sequence, Union
+from weakref import WeakValueDictionary
 
 import imageio
 import numpy as np
@@ -18,10 +19,10 @@ class Composition:
         self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0
     ) -> None:
         self._layers: list[Component] = []
-        self._name_to_layer: dict[str, Component] = {}
-        self.size = size
+        self._name_to_layer: WeakValueDictionary[str, Component] = WeakValueDictionary()
         self._duration = duration
-        self.cache: Cache = Cache(size_limit=1024 * 1024 * 1024)
+        self._cache: Cache = Cache(size_limit=1024 * 1024 * 1024)
+        self.size = size
 
     @property
     def duration(self) -> float:
@@ -109,8 +110,7 @@ class Composition:
         if name not in self._name_to_layer:
             raise KeyError(f"Layer with name {name} does not exist")
         index = next(i for i in range(len(self._layers)) if self._layers[i].name == name)
-        self._layers.pop(index)
-        component = self._name_to_layer.pop(name)
+        component = self._layers.pop(index)
         return component
 
     def enable_alpha_matte(self, source_name: str, target_name: str) -> Component:
@@ -128,13 +128,13 @@ class Composition:
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
         key = self.get_key(time)
-        if key in self.cache:
-            return self.cache[key]
+        if key in self._cache:
+            return self._cache[key]
 
         frame = np.zeros((self.size[1], self.size[0], 4), dtype=np.uint8)
         for component in self._layers:
             frame = component._composite(frame, time)
-        self.cache[key] = frame
+        self._cache[key] = frame
         return frame
 
     def write_video(
@@ -156,4 +156,4 @@ class Composition:
             frame = np.asarray(self(t))
             writer.append_data(frame)
         writer.close()
-        self.cache.clear()
+        self._cache.clear()

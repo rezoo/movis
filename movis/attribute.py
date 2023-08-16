@@ -74,7 +74,6 @@ def transform_to_hashable(
 
 
 class Attribute:
-
     def __init__(self, init_value: Union[float, tuple[float, ...], np.ndarray], value_type: AttributeType):
         self.init_value: np.ndarray = normalize_to_numpy(init_value, value_type)
         self.value_type = value_type
@@ -112,7 +111,6 @@ class Attribute:
 
 
 class AttributesMixin:
-
     @property
     def attributes(self) -> dict[str, Attribute]:
         return {key: attr for key, attr in vars(self).items() if isinstance(attr, Attribute)}
