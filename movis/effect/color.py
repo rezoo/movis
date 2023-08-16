@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from movis.attribute import Attribute, AttributesMixin, AttributeType
+from ..attribute import Attribute, AttributesMixin, AttributeType
 
 
 class FillColor(AttributesMixin):
