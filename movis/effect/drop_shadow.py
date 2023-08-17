@@ -1,5 +1,5 @@
-import numpy as np
 import cv2
+import numpy as np
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..imgproc import alpha_composite
