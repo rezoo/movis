@@ -61,7 +61,11 @@ class Rectangle(AttributesMixin):
         W = np.floor(w + max_stroke + 2 * eps)
         H = np.floor(h + max_stroke + 2 * eps)
         image = QImage(W, H, QImage.Format.Format_ARGB32)
-        image.fill(QColor(0, 0, 0, 0))
+        max_color = _get_max_color(self.contents)
+        if max_color is None:
+            image.fill(QColor(0, 0, 0, 0))
+        else:
+            image.fill(QColor(*max_color, 0))
 
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
@@ -114,7 +118,11 @@ class Ellipse(AttributesMixin):
         W = np.floor(w + max_stroke + 2 * eps)
         H = np.floor(h + max_stroke + 2 * eps)
         image = QImage(W, H, QImage.Format.Format_ARGB32)
-        image.fill(QColor(0, 0, 0, 0))
+        max_color = _get_max_color(self.contents)
+        if max_color is None:
+            image.fill(QColor(0, 0, 0, 0))
+        else:
+            image.fill(QColor(*max_color, 0))
 
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
@@ -236,7 +244,11 @@ class Text(AttributesMixin):
         W = np.floor(w + 2 * max_stroke + 2 * margin)
         H = np.floor(h + 2 * max_stroke + 2 * margin)
         image = QImage(W, H, QImage.Format.Format_ARGB32)
-        image.fill(QColor(0, 0, 0, 0))
+        max_color = _get_max_color(self.contents)
+        if max_color is None:
+            image.fill(QColor(0, 0, 0, 0))
+        else:
+            image.fill(QColor(*max_color, 0))
 
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
@@ -314,3 +326,14 @@ def _clip_image(image: np.ndarray) -> np.ndarray:
 def _get_max_stroke(contents: Sequence[Union[FillProperty, StrokeProperty]]) -> float:
     strokes = [c.width for c in contents if isinstance(c, StrokeProperty)]
     return float(max(strokes)) if 0 < len(strokes) else 0.
+
+
+def _get_max_color(
+    contents: Sequence[Union[FillProperty, StrokeProperty]]
+) -> Optional[tuple[int, int, int]]:
+    strokes = [(c.width, c.color) for c in contents if isinstance(c, StrokeProperty)]
+    if len(strokes) == 0:
+        fills = [c.color for c in contents if isinstance(c, FillProperty)]
+        return fills[-1] if 0 < len(fills) else None
+    else:
+        return max(strokes, key=lambda x: x[0])[1]
