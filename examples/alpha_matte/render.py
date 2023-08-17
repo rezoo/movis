@@ -17,15 +17,17 @@ def main():
         component.transform.scale.enable_animation().extend(
             keyframes=[0, box_duration], values=[1.8, 0.4], motion_types=['ease_in_out_medium', 'linear'])
 
+    text_kwargs = dict(font='Helvetica', font_size=60, color=(0, 0, 0), duration=duration)
+    text_ypos = size[1] / 2 - 150
     square.add_layer(
-        mv.layer.Text('Hello', 'Helvetica', font_size=60., color=(0, 0, 0), duration=duration),
-        transform=mv.Transform(position=(30 + 300, size[1] / 2 - 150)), name='text1')
+        mv.layer.Text('Hello', **text_kwargs), transform=mv.Transform(position=(30 + 300, text_ypos)),
+        name='text1')
     square.add_layer(
-        mv.layer.Text('Alpha', 'Helvetica', font_size=60., color=(0, 0, 0), duration=duration),
-        transform=mv.Transform(position=(size[0] / 2, size[1] / 2 - 150)), name='text2')
+        mv.layer.Text('Alpha', **text_kwargs), transform=mv.Transform(position=(size[0] / 2, text_ypos)),
+        name='text2')
     square.add_layer(
-        mv.layer.Text('Matte!', 'Helvetica', font_size=60., color=(0, 0, 0), duration=duration),
-        transform=mv.Transform(position=(size[0] - 30 - 300, size[1] / 2 - 150)), name='text3')
+        mv.layer.Text('Matte!', **text_kwargs), transform=mv.Transform(position=(size[0] - 30 - 300, text_ypos)),
+        name='text3')
 
     def move_text(component: mv.layer.Component):
         after = component.transform.position.init_value
