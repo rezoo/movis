@@ -13,15 +13,17 @@ def get_audio_image(path: str):
     duration = len(audio) / sampling_rate
     freq = np.abs(librosa.stft(audio, n_fft=2048, hop_length=512))
     db_array = librosa.amplitude_to_db(freq, ref=np.max)
+    m, M = db_array.min(), db_array.max()
+    db_array = (db_array - m) / (M - m)
+    p = np.percentile(db_array.mean(axis=1), 5)
+    db_array = db_array[db_array.mean(axis=1) > p, :]
 
-    y_linear = np.linspace(0, 1, 128)
+    y_linear = np.linspace(0, 1, 512)
     y = np.linspace(0, 1, db_array.shape[0])
     x = np.linspace(0, 1, db_array.shape[1])
     interpolator = RegularGridInterpolator((y, x), db_array)
     db_resampled = interpolator(np.array([[(yy, xx) for xx in x] for yy in y_linear]))
-    m, M = db_resampled.min(), db_resampled.max()
-    audio_img = (db_resampled - m) / (M - m)
-    return audio_img, duration
+    return db_resampled, duration
 
 
 class FrequencyLayer:
@@ -49,19 +51,19 @@ class FrequencyLayer:
                 h = v * (self.size[1] - self.margin * 2)
                 draw.line(
                     (px, (self.size[1] - h) // 2, px, (self.size[1] + h) // 2),
-                    fill=(255, 255, 255, 255), joint='curve', width=7)
+                    fill=(255, 255, 255, 255), joint='curve', width=3)
         elif self.mode == 'circle':
             n_point = len(array)
             theta = np.linspace(0., 2 * np.pi, n_point, endpoint=False)
             center = np.array([self.size[0] / 2, self.size[1] / 2], dtype=float)
             radius = min(self.size[0], self.size[1]) / 2 - self.length / 2 - self.margin
             points = np.concatenate([np.cos(theta)[:, None], np.sin(theta)[:, None]], axis=1)
-            points_start = np.round(center + (radius - array[:, None] * self.length / 2) * points)
+            points_start = np.round(center + radius * points)
             points_end = np.round(center + (radius + array[:, None] * self.length / 2) * points)
             for p0, p1 in zip(points_start, points_end):
                 draw.line(
                     (p0[0], p0[1], p1[0], p1[1]),
-                    fill=(255, 255, 255, 255), joint='curve', width=7)
+                    fill=(255, 255, 255, 255), joint='curve', width=3)
         else:
             raise ValueError
         return np.asarray(frame)
@@ -94,7 +96,7 @@ def main():
         else (size[0] // 2, size[1] // 2)
     scene.add_layer(
         FrequencyLayer(audio_img, duration, freq_size, mode=args.type),
-        transform=mv.Transform(position=freq_position, opacity=0.8))
+        transform=mv.Transform(position=freq_position, opacity=0.9))
     scene.write_video('no_audio.mp4')
     mv.add_materials_to_video('no_audio.mp4', args.input, dst_file=args.output)
 
