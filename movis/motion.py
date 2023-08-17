@@ -13,10 +13,10 @@ MOTION_TYPES_TO_FUNC = {
     MotionType.EASE_IN_OUT: lambda t: t**2 * (3.0 - 2.0 * t),
     MotionType.EASE_IN_MEDIUM: lambda t: t**3,
     MotionType.EASE_OUT_MEDIUM: lambda t: 1.0 - (1.0 - t) ** 3,
-    MotionType.EASE_IN_OUT_MEDIUM: lambda t: 1 / (1 + math.exp(- (t - 0.5) / 0.1)),
+    MotionType.EASE_IN_OUT_MEDIUM: lambda t: 1.0135673098126083 * (1 / (1 + math.exp(- (t - 0.5) / 0.1)) - 0.0066928509242848554),
     MotionType.EASE_IN_EXPO: lambda t: math.exp(-10.0 * (1 - t)),
     MotionType.EASE_OUT_EXPO: lambda t: 1 - math.exp(-10.0 * t),
-    MotionType.EASE_IN_OUT_EXPO: lambda t: 1 / (1 + math.exp(- (t - 0.5) / 0.05))
+    MotionType.EASE_IN_OUT_EXPO: lambda t: 1.0000908039820193 * (1 / (1 + math.exp(- (t - 0.5) / 0.05)) - 4.5397868702434395e-05)
 }
 
 
