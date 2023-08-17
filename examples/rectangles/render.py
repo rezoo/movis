@@ -21,7 +21,7 @@ def main():
 
     rectangle.size.enable_animation().extend(
         keyframes=[0, 1, 2, 3, 4],
-        values=[(10, 10), (400, 400), (10, 10), (100, 400), (400, 100)],
+        values=[(0, 0), (400, 400), (0, 0), (100, 400), (400, 100)],
         motion_types=['ease_out_expo'] * 5)
 
     scene.write_video('rectangles.mp4')

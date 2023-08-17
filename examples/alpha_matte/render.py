@@ -1,9 +1,11 @@
+import numpy as np
 import movis as mv
 
 
 def main():
     size = (1920, 1080)
-    duration = 1.0
+    duration = 3.0
+    box_duration = 1.0
 
     square = mv.layer.Composition(size, duration=duration)
     rect = mv.layer.Rectangle((600, 600), radius=10.0, color=(255, 255, 255), duration=duration)
@@ -13,7 +15,28 @@ def main():
 
     for component in square.layers:
         component.transform.scale.enable_animation().extend(
-            keyframes=[0, duration], values=[2.0, 0.5], motion_types=['ease_out', 'ease_in'])
+            keyframes=[0, box_duration], values=[1.8, 0.4], motion_types=['ease_in_out_medium', 'linear'])
+
+    square.add_layer(
+        mv.layer.Text('Hello', 'Helvetica', font_size=60., color=(0, 0, 0), duration=duration),
+        transform=mv.Transform(position=(30 + 300, size[1] / 2 - 150)), name='text1')
+    square.add_layer(
+        mv.layer.Text('Alpha', 'Helvetica', font_size=60., color=(0, 0, 0), duration=duration),
+        transform=mv.Transform(position=(size[0] / 2, size[1] / 2 - 150)), name='text2')
+    square.add_layer(
+        mv.layer.Text('Matte!', 'Helvetica', font_size=60., color=(0, 0, 0), duration=duration),
+        transform=mv.Transform(position=(size[0] - 30 - 300, size[1] / 2 - 150)), name='text3')
+
+    def move_text(component: mv.layer.Component):
+        after = component.transform.position.init_value
+        before = after + np.array([0, 100])
+        component.transform.position.enable_animation().extend(
+            keyframes=[box_duration - 0.5, duration],
+            values=[before, after],
+            motion_types=['ease_out_medium', 'linear'])
+    move_text(square['text1'])
+    move_text(square['text2'])
+    move_text(square['text3'])
 
     scene = mv.layer.Composition(size, duration=duration)
     scene.add_layer(mv.layer.Rectangle(size, color=(55, 55, 55), duration=duration), name='bg')
