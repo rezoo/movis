@@ -69,6 +69,7 @@ class BlendingMode(Enum):
     OVERLAY = 3
     HARD_LIGHT = 4
     SOFT_LIGHT = 5
+    ADD = 6
 
     @staticmethod
     def from_string(s: str) -> "BlendingMode":
@@ -85,6 +86,7 @@ STRING_TO_BLENDING_MODE = {
     "overlay": BlendingMode.OVERLAY,
     "hard_light": BlendingMode.HARD_LIGHT,
     "soft_light": BlendingMode.SOFT_LIGHT,
+    "add": BlendingMode.ADD,
 }
 
 

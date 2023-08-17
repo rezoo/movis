@@ -56,6 +56,7 @@ BLENDING_MODE_TO_FUNC = {
     BlendingMode.OVERLAY: lambda bg, fg: _blend_overlay(bg, fg),
     BlendingMode.HARD_LIGHT: lambda bg, fg: _blend_overlay(fg, bg),
     BlendingMode.SOFT_LIGHT: lambda bg, fg: _blend_soft_light(bg, fg),
+    BlendingMode.ADD: lambda bg, fg: np.clip(bg.astype(np.uint16) + fg.astype(np.uint16), 0, 255).astype(np.uint8)
 }
 
 
@@ -78,7 +79,7 @@ def _overlay(
     out_rgb = (coeff1 * target_rgb + coeff2 * bg_rgb) // (out_a + (out_a == 0))
     bg[y_bg: (y_bg + h), x_bg: (x_bg + w), :3] = out_rgb.astype(np.uint8)
     if not alpha_matte_mode:
-        bg[y_fg: (y_fg + h), x_fg: (x_fg + w), 3:] = (out_a // 255).astype(np.uint8)
+        bg[y_bg: (y_bg + h), x_bg: (x_bg + w), 3:] = (out_a // 255).astype(np.uint8)
     return bg
 
 
