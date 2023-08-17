@@ -40,6 +40,8 @@ def transform_to_2dvector(
 ) -> tuple[float, float]:
     if isinstance(x, float):
         return (x, x)
+    elif isinstance(x, np.ndarray) and x.shape == ():
+        return (float(x), float(x))
     elif len(x) == 1:
         return (float(x[0]), float(x[0]))
     elif len(x) == 2:
@@ -53,6 +55,8 @@ def transform_to_3dvector(
 ) -> tuple[float, float, float]:
     if isinstance(x, float):
         return (x, x, x)
+    elif isinstance(x, np.ndarray) and x.shape == ():
+        return (float(x), float(x), float(x))
     elif len(x) == 1:
         y = float(x[0])
         return (y, y, y)
