@@ -8,7 +8,7 @@ from movis.enum import AttributeType
 from movis.motion import Motion
 
 
-def normalize_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], value_type: AttributeType) -> np.ndarray:
+def transform_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], value_type: AttributeType) -> np.ndarray:
     if isinstance(value, (int, float)):
         if value_type in (AttributeType.SCALAR, AttributeType.ANGLE):
             return np.array([value], dtype=np.float64)
@@ -79,18 +79,18 @@ def transform_to_hashable(
 
 class Attribute:
     def __init__(self, init_value: Union[float, tuple[float, ...], np.ndarray], value_type: AttributeType):
-        self.init_value: np.ndarray = normalize_to_numpy(init_value, value_type)
+        self.init_value: np.ndarray = transform_to_numpy(init_value, value_type)
         self.value_type = value_type
         self._motions: list[Callable[[float, np.ndarray], np.ndarray]] = []
 
     def __call__(self, layer_time: float) -> np.ndarray:
         if len(self._motions) == 0:
-            return self.init_value
+            return transform_to_numpy(self.init_value, self.value_type)
         else:
             value = self.init_value
             for motion in self._motions:
                 value = motion(layer_time, value)
-            return value
+            return transform_to_numpy(value, self.value_type)
 
     def has_motion(self) -> bool:
         return 0 < len(self._motions)
