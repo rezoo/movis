@@ -34,7 +34,7 @@ class Motion:
             else None
         )
 
-    def __call__(self, layer_time: float, prev_value: np.ndarray) -> np.ndarray:
+    def __call__(self, prev_value: np.ndarray, layer_time: float) -> np.ndarray:
         if len(self.keyframes) == 0:
             if self.init_value is not None:
                 return self.init_value

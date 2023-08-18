@@ -89,7 +89,7 @@ class Attribute:
         self.init_value: np.ndarray = clipped_value
         self.value_type = value_type
         self.range = range
-        self._motions: list[Callable[[float, np.ndarray], np.ndarray]] = []
+        self._motions: list[Callable[[np.ndarray, float], np.ndarray]] = []
 
     def __call__(self, layer_time: float) -> np.ndarray:
         if len(self._motions) == 0:
@@ -97,7 +97,7 @@ class Attribute:
         else:
             value = self.init_value
             for motion in self._motions:
-                value = motion(layer_time, value)
+                value = motion(value, layer_time)
             np_value = transform_to_numpy(value, self.value_type)
             clipped_value = np.clip(np_value, self.range[0], self.range[1]) \
                 if self.range is not None else np_value
@@ -106,7 +106,7 @@ class Attribute:
     def has_motion(self) -> bool:
         return 0 < len(self._motions)
 
-    def append(self, motion: Callable[[float, np.ndarray], np.ndarray]) -> None:
+    def append(self, motion: Callable[[np.ndarray, float], np.ndarray]) -> None:
         self._motions.append(motion)
 
     def enable_animation(self) -> Motion:
