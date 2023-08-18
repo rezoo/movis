@@ -76,6 +76,8 @@ class Motion:
     ) -> "Motion":
         assert len(keyframes) == len(values)
         if motion_types is not None:
+            if len(motion_types) == len(keyframes) - 1:
+                motion_types = list(motion_types) + [MotionType.LINEAR]
             assert len(keyframes) == len(motion_types)
         motion_types = (
             ["linear"] * len(keyframes) if motion_types is None else motion_types
