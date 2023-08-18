@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, Hashable, Sequence, Union
+from typing import Callable, Hashable, Optional, Sequence, Union
 
 import numpy as np
 
@@ -78,9 +78,17 @@ def transform_to_hashable(
 
 
 class Attribute:
-    def __init__(self, init_value: Union[float, tuple[float, ...], np.ndarray], value_type: AttributeType):
-        self.init_value: np.ndarray = transform_to_numpy(init_value, value_type)
+    def __init__(
+        self,
+        init_value: Union[float, tuple[float, ...], np.ndarray],
+        value_type: AttributeType,
+        range: Optional[tuple[float, float]] = None,
+    ) -> None:
+        np_value = transform_to_numpy(init_value, value_type)
+        clipped_value = np.clip(np_value, range[0], range[1]) if range is not None else np_value
+        self.init_value: np.ndarray = clipped_value
         self.value_type = value_type
+        self.range = range
         self._motions: list[Callable[[float, np.ndarray], np.ndarray]] = []
 
     def __call__(self, layer_time: float) -> np.ndarray:
@@ -90,7 +98,10 @@ class Attribute:
             value = self.init_value
             for motion in self._motions:
                 value = motion(layer_time, value)
-            return transform_to_numpy(value, self.value_type)
+            np_value = transform_to_numpy(value, self.value_type)
+            clipped_value = np.clip(np_value, self.range[0], self.range[1]) \
+                if self.range is not None else np_value
+            return clipped_value
 
     def has_motion(self) -> bool:
         return 0 < len(self._motions)
