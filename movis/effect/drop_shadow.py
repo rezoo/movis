@@ -14,11 +14,11 @@ class DropShadow(AttributesMixin):
         color: tuple[int, int, int] = (0, 0, 0),
         opacity: float = 0.5
     ) -> None:
-        self.radius = Attribute(radius, AttributeType.SCALAR)
+        self.radius = Attribute(radius, AttributeType.SCALAR, range=(0., 1e6))
         self.angle = Attribute(angle, AttributeType.SCALAR)
         self.offset = Attribute(offset, AttributeType.SCALAR)
-        self.color = Attribute(color, AttributeType.COLOR)
-        self.opacity = Attribute(opacity, AttributeType.SCALAR)
+        self.color = Attribute(color, AttributeType.COLOR, range=(0., 255.))
+        self.opacity = Attribute(opacity, AttributeType.SCALAR, range=(0., 1.))
 
     def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:
         assert prev_image.ndim == 3

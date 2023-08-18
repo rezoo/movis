@@ -8,7 +8,7 @@ from ..imgproc import alpha_composite
 class GaussianBlur(AttributesMixin):
 
     def __init__(self, radius: float):
-        self.radius = Attribute(radius, AttributeType.SCALAR)
+        self.radius = Attribute(radius, AttributeType.SCALAR, range=(0., 1e6))
 
     def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:
         assert prev_image.ndim == 3
@@ -30,8 +30,8 @@ class GaussianBlur(AttributesMixin):
 class Glow(AttributesMixin):
 
     def __init__(self, radius: float, strength: float = 1.0):
-        self.radius = Attribute(radius, AttributeType.SCALAR)
-        self.strength = Attribute(strength, AttributeType.SCALAR)
+        self.radius = Attribute(radius, AttributeType.SCALAR, range=(0., 1e6))
+        self.strength = Attribute(strength, AttributeType.SCALAR, range=(0., 1.))
 
     def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:
         radius = float(self.radius(time))

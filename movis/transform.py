@@ -31,9 +31,7 @@ class Transform:
         self.position = Attribute(position, AttributeType.VECTOR2D)
         self.scale = Attribute(scale, AttributeType.VECTOR2D)
         self.rotation = Attribute(rotation, AttributeType.SCALAR)
-        self.opacity = Attribute(opacity, AttributeType.SCALAR)
-        if opacity < 0.0 or 1.0 < opacity:
-            raise ValueError("opacity must be in the range [0, 1]")
+        self.opacity = Attribute(opacity, AttributeType.SCALAR, range=(0., 1.))
 
     @property
     def attributes(self) -> dict[str, Attribute]:

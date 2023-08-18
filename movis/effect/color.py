@@ -6,7 +6,7 @@ from ..attribute import Attribute, AttributesMixin, AttributeType
 
 class FillColor(AttributesMixin):
     def __init__(self, color: tuple[int, int, int] = (255, 255, 255)):
-        self.color = Attribute(color, AttributeType.COLOR)
+        self.color = Attribute(color, AttributeType.COLOR, range=(0., 255.))
 
     def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:
         assert prev_image.ndim == 3
@@ -19,9 +19,9 @@ class FillColor(AttributesMixin):
 
 class HSLShift(AttributesMixin):
     def __init__(self, hue: float = 0.0, saturation: float = 0.0, luminance: float = 0.0):
-        self.hue = Attribute(hue, AttributeType.SCALAR)
-        self.saturation = Attribute(saturation, AttributeType.SCALAR)
-        self.luminance = Attribute(luminance, AttributeType.SCALAR)
+        self.hue = Attribute(hue, AttributeType.SCALAR, range=(-180., 180.))
+        self.saturation = Attribute(saturation, AttributeType.SCALAR, range=(-1., 1.))
+        self.luminance = Attribute(luminance, AttributeType.SCALAR, range=(-1., 1.))
 
     def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:
         assert prev_image.ndim == 3

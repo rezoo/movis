@@ -41,8 +41,8 @@ class Rectangle(AttributesMixin):
     ) -> None:
         if not pyside6_available:
             raise ImportError("PySide6 must be installed to use Rectangle")
-        self.size = Attribute(size, value_type=AttributeType.VECTOR2D)
-        self.radius = Attribute(radius, value_type=AttributeType.SCALAR)
+        self.size = Attribute(size, value_type=AttributeType.VECTOR2D, range=(0., 1e6))
+        self.radius = Attribute(radius, value_type=AttributeType.SCALAR, range=(0., 1e6,))
         if color is None:
             self.contents = contents
         else:
@@ -100,7 +100,7 @@ class Ellipse(AttributesMixin):
     ) -> None:
         if not pyside6_available:
             raise ImportError("PySide6 must be installed to use Rectangle")
-        self.size = Attribute(size, value_type=AttributeType.VECTOR2D)
+        self.size = Attribute(size, value_type=AttributeType.VECTOR2D, range=(0., 1e6))
         if color is None:
             self.contents = contents
         else:
@@ -188,7 +188,7 @@ class Text(AttributesMixin):
             raise ImportError("PySide6 must be installed to use Rectangle")
         self.text = text
         self.font = font
-        self.font_size = Attribute(font_size, value_type=AttributeType.SCALAR)
+        self.font_size = Attribute(font_size, value_type=AttributeType.SCALAR, range=(0., 1e6))
         if color is None:
             self.contents = contents
         else:
