@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, Hashable, Optional, Sequence, Union
+from typing import Hashable, Optional, Sequence, Union
 
 import numpy as np
 
@@ -89,37 +89,31 @@ class Attribute:
         self.init_value: np.ndarray = clipped_value
         self.value_type = value_type
         self.range = range
-        self._motions: list[Callable[[np.ndarray, float], np.ndarray]] = []
+        self._motion: Optional[Motion] = None
 
     def __call__(self, layer_time: float) -> np.ndarray:
-        if len(self._motions) == 0:
+        if self._motion is None:
             return transform_to_numpy(self.init_value, self.value_type)
         else:
             value = self.init_value
-            for motion in self._motions:
-                value = motion(value, layer_time)
+            if self._motion is not None:
+                value = self._motion(value, layer_time)
             np_value = transform_to_numpy(value, self.value_type)
             clipped_value = np.clip(np_value, self.range[0], self.range[1]) \
                 if self.range is not None else np_value
             return clipped_value
 
-    def has_motion(self) -> bool:
-        return 0 < len(self._motions)
-
-    def append(self, motion: Callable[[np.ndarray, float], np.ndarray]) -> None:
-        self._motions.append(motion)
-
-    def enable_animation(self) -> Motion:
-        motions = [m for m in self._motions if isinstance(m, Motion)]
-        if 0 < len(motions):
-            return motions[-1]
-        else:
+    def enable_motion(self) -> Motion:
+        if self._motion is None:
             motion = Motion(init_value=self.init_value)
-            self.append(motion)
-            return motion
+            self._motion = motion
+        return self._motion
+
+    def disable_motion(self) -> None:
+        self._motion = None
 
     def __repr__(self) -> str:
-        if len(self._motions) == 0:
+        if self._motion is None:
             return f"{self.init_value}"
         else:
             return f"Attribute(value_type={self.value_type})"

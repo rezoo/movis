@@ -36,11 +36,11 @@ def main():
 
     def slide_in_out(item: mv.layer.Component, offset: np.ndarray):
         p = item.transform.position.init_value
-        item.transform.position.enable_animation() \
+        item.transform.position.enable_motion() \
             .append(0.0, p + offset, 'ease_out_expo') \
             .append(1.0, p).append(item.duration - 1.0, p, 'ease_in_expo') \
             .append(item.duration, p + offset)
-        item.transform.opacity.enable_animation().extend(
+        item.transform.opacity.enable_motion().extend(
             keyframes=[0, 1, item.duration - 1.0, item.duration], values=[0, 1, 1, 0],
             motion_types=['ease_out', 'linear', 'ease_in', 'linear'])
         return item

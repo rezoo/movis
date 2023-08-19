@@ -14,7 +14,7 @@ def main():
     square.add_layer(rect, transform=mv.Transform(position=(size[0] - 30 - 300, size[1] / 2)))
 
     for component in square.layers:
-        component.transform.scale.enable_animation().extend(
+        component.transform.scale.enable_motion().extend(
             keyframes=[0, box_duration], values=[1.8, 0.4], motion_types=['ease_in_out_medium', 'linear'])
 
     text_kwargs = dict(font='Helvetica', font_size=60, color=(0, 0, 0), duration=duration)
@@ -32,7 +32,7 @@ def main():
     def move_text(component: mv.layer.Component):
         after = component.transform.position.init_value
         before = after + np.array([0, 100])
-        component.transform.position.enable_animation().extend(
+        component.transform.position.enable_motion().extend(
             keyframes=[box_duration - 0.5, duration],
             values=[before, after],
             motion_types=['ease_out_medium', 'linear'])

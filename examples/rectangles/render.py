@@ -19,7 +19,7 @@ def main():
         duration=duration)
     scene.add_layer(rectangle, name='rect')
 
-    rectangle.size.enable_animation().extend(
+    rectangle.size.enable_motion().extend(
         keyframes=[0, 1, 2, 3, 4],
         values=[(0, 0), (400, 400), (0, 0), (100, 400), (400, 100)],
         motion_types=['ease_out_expo'] * 5)
