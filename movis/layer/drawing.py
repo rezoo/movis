@@ -5,7 +5,6 @@ import numpy as np
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..enum import TextAlignment
-from ..imgproc import qimage_to_numpy
 from .mixin import TimelineMixin
 
 try:
@@ -87,7 +86,7 @@ class Rectangle(AttributesMixin):
             else:
                 raise ValueError(f"Invalid content type: {type(c)}")
         painter.end()
-        return qimage_to_numpy(image)
+        return _qimage_to_numpy(image)
 
 
 class Ellipse(AttributesMixin):
@@ -144,7 +143,7 @@ class Ellipse(AttributesMixin):
             else:
                 raise ValueError(f"Invalid content type: {type(c)}")
         painter.end()
-        return qimage_to_numpy(image)
+        return _qimage_to_numpy(image)
 
 
 class Text(AttributesMixin):
@@ -306,7 +305,7 @@ class Text(AttributesMixin):
                     painter_path.addText(QPointF(max_stroke + margin + cursor_x, cursor_y), qfont, line)
                 painter.drawPath(painter_path)
         painter.end()
-        array = qimage_to_numpy(image)
+        array = _qimage_to_numpy(image)
         return _clip_image(array)
 
 
@@ -337,3 +336,11 @@ def _get_max_color(
         return fills[-1] if 0 < len(fills) else None
     else:
         return max(strokes, key=lambda x: x[0])[1]
+
+
+def _qimage_to_numpy(image: QImage) -> np.ndarray:
+    assert pyside6_available, "PySide6 is not available."
+    assert image.format() == QImage.Format.Format_ARGB32
+    ptr = image.bits()
+    array_shape = (image.height(), image.width(), 4)
+    return np.array(ptr).reshape(array_shape)
