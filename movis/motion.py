@@ -4,7 +4,7 @@ from typing import Any, Callable, Optional, Sequence, Union
 
 import numpy as np
 
-from .enum import MotionType
+from .enum import AttributeType, MotionType
 
 MOTION_TYPES_TO_FUNC = {
     MotionType.LINEAR: lambda t: t,
@@ -24,15 +24,14 @@ class Motion:
     def __init__(
         self,
         init_value: Optional[Union[float, Sequence[float], np.ndarray]] = None,
+        value_type: AttributeType = AttributeType.SCALAR,
     ):
         self.keyframes: list[float] = []
         self.values: list[np.ndarray] = []
         self.motion_types: list[Callable[[float], float]] = []
-        self.init_value: Optional[np.ndarray] = (
-            np.array(init_value, dtype=np.float64)
-            if init_value is not None
-            else None
-        )
+        self.init_value: Optional[np.ndarray] = transform_to_numpy(init_value, value_type) \
+            if init_value is not None else None
+        self.value_type = value_type
 
     def __call__(self, prev_value: np.ndarray, layer_time: float) -> np.ndarray:
         if len(self.keyframes) == 0:
@@ -84,7 +83,8 @@ class Motion:
         )
         converted_keyframes = [float(k) for k in keyframes]
         updated_keyframes: list[float] = self.keyframes + converted_keyframes
-        converted_values = [np.array(v, dtype=np.float64) for v in values]
+        converted_values = [
+            transform_to_numpy(v, self.value_type) for v in values]
         updated_values: list[np.ndarray[Any, np.dtype[np.float64]]] = self.values + converted_values
 
         def convert(t: Union[str, MotionType]) -> Callable[[float], float]:
@@ -100,3 +100,72 @@ class Motion:
         self.values = values_sorted
         self.motion_types = motion_types_sorted
         return self
+
+
+def transform_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], value_type: AttributeType) -> np.ndarray:
+    if isinstance(value, (int, float)):
+        if value_type in (AttributeType.SCALAR, AttributeType.ANGLE):
+            return np.array([value], dtype=np.float64)
+        elif value_type == AttributeType.VECTOR2D:
+            return np.array([value, value], dtype=np.float64)
+        elif value_type in (AttributeType.VECTOR3D, AttributeType.COLOR):
+            return np.array([value, value, value], dtype=np.float64)
+    elif isinstance(value, (Sequence, np.ndarray)):
+        if len(value) == 2 and value_type == AttributeType.VECTOR2D or \
+                len(value) == 3 and value_type in (AttributeType.VECTOR3D, AttributeType.COLOR) or \
+                len(value) == 1 and value_type in (AttributeType.SCALAR, AttributeType.ANGLE):
+            return np.array(value, dtype=np.float64)
+        else:
+            raise ValueError(f"Invalid value type: {value_type}")
+    raise ValueError(f"Invalid value type: {value_type}")
+
+
+def transform_to_1dscalar(x: Union[float, Sequence[float], np.ndarray]) -> float:
+    if isinstance(x, float):
+        return x
+    elif isinstance(x, np.ndarray):
+        return float(x)
+    else:
+        return float(x[0])
+
+
+def transform_to_2dvector(
+    x: Union[float, Sequence[float], np.ndarray]
+) -> tuple[float, float]:
+    if isinstance(x, float):
+        return (x, x)
+    elif isinstance(x, np.ndarray) and x.shape == ():
+        return (float(x), float(x))
+    elif len(x) == 1:
+        return (float(x[0]), float(x[0]))
+    elif len(x) == 2:
+        return (float(x[0]), float(x[1]))
+    else:
+        raise ValueError(f"Invalid value: {x}")
+
+
+def transform_to_3dvector(
+    x: Union[float, Sequence[float], np.ndarray]
+) -> tuple[float, float, float]:
+    if isinstance(x, float):
+        return (x, x, x)
+    elif isinstance(x, np.ndarray) and x.shape == ():
+        return (float(x), float(x), float(x))
+    elif len(x) == 1:
+        y = float(x[0])
+        return (y, y, y)
+    elif len(x) == 3:
+        return (float(x[0]), float(x[1]), float(x[2]))
+    else:
+        raise ValueError(f"Invalid value: {x}")
+
+
+def transform_to_hashable(
+    x: Union[float, Sequence[float], np.ndarray]
+) -> Union[float, tuple[float, ...]]:
+    if isinstance(x, (int, float)):
+        return float(x)
+    elif len(x) == 1:
+        return float(x[0])
+    else:
+        return tuple([float(v) for v in x])
