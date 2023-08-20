@@ -199,12 +199,17 @@ class Composition:
         codec: str = "libx264",
         pixelformat: str = "yuv420p",
         fps: float = 30.0,
+        audio_path: Optional[Union[str, Path]] = None,
     ) -> None:
         if end_time is None:
             end_time = self.duration
         times = np.arange(start_time, end_time, 1.0 / fps)
+        if audio_path is not None:
+            audio_path = str(audio_path)
         writer = imageio.get_writer(
-            dst_file, fps=fps, codec=codec, pixelformat=pixelformat, macro_block_size=None
+            dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
+            macro_block_size=None, audio_path=audio_path,
+            ffmpeg_log_level="error",
         )
         for t in tqdm(times, total=len(times)):
             frame = np.asarray(self(t))
@@ -231,12 +236,13 @@ class Composition:
                 filename: str = fp.name
                 writer = imageio.get_writer(
                     filename, fps=fps, codec="libx264",
-                    ffmpeg_params=["-preset", "ultrafast"],
-                    pixelformat="yuv444p", macro_block_size=None)
+                    ffmpeg_params=["-preset", "veryfast"],
+                    pixelformat="yuv444p", macro_block_size=None,
+                    ffmpeg_log_level="error")
                 for t in tqdm(times, total=len(times)):
                     frame = np.asarray(self(t))
                     writer.append_data(frame)
                 writer.close()
                 self._cache.clear()
 
-                display(Video.from_file(filename))
+                display(Video.from_file(filename, autoplay=True, loop=True))
