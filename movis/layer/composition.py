@@ -219,8 +219,8 @@ class Composition:
         fps: float = 30.0,
         preview_level: int = 2
     ) -> None:
-        from ipywidgets import widgets, interactive_output, Play, HBox
         from IPython.display import display
+        from ipywidgets import HBox, Play, interactive_output, widgets
 
         if end_time is None:
             end_time = self.duration
