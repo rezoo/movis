@@ -6,6 +6,7 @@ from weakref import WeakValueDictionary
 import imageio
 import numpy as np
 from diskcache import Cache
+from PIL import Image
 from tqdm import tqdm
 
 from ..enum import CacheType, Direction
@@ -210,3 +211,43 @@ class Composition:
             writer.append_data(frame)
         writer.close()
         self._cache.clear()
+
+    def render_and_play(
+        self,
+        start_time: float = 0.0,
+        end_time: Optional[float] = None,
+        fps: float = 30.0,
+        preview_level: int = 2
+    ) -> None:
+        from ipywidgets import widgets, interactive_output, Play, HBox
+        from IPython.display import display
+
+        if end_time is None:
+            end_time = self.duration
+
+        times = np.arange(start_time, end_time, 1.0 / fps)
+        images = []
+        with self.preview(level=preview_level):
+            for t in times:
+                images.append(self(t))
+
+        def display_frame(t=0):
+            im = Image.fromarray(images[t])
+            display(im)
+
+        play = Play(
+            value=0,
+            min=0,
+            max=len(images) - 1,
+            step=1,
+            interval=1000 / fps,
+            description="Press play",
+            disabled=False,
+        )
+
+        slider = widgets.IntSlider(min=0, max=len(images) - 1)
+        widgets.jslink((play, 'value'), (slider, 'value'))
+
+        ui = HBox([play, slider])
+        out = interactive_output(display_frame, {'t': slider})
+        display(ui, out)

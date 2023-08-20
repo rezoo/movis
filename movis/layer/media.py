@@ -1,3 +1,4 @@
+import hashlib
 from pathlib import Path
 from typing import Optional, Sequence, Union
 
@@ -6,7 +7,6 @@ import numpy as np
 from PIL import Image as PILImage
 
 from ..imgproc import alpha_composite
-from ..util import rand_from_string
 from .mixin import TimelineMixin
 
 try:
@@ -226,6 +226,13 @@ class Character(TimelineMixin):
         self.blink_duration = blink_duration
 
     def get_eye_state(self, time: float, idx: int) -> int:
+
+        def rand_from_string(string: str, seed: int = 0) -> float:
+            string = f"{seed}:{string}"
+            s = hashlib.sha224(f"{seed}:{string}".encode("utf-8")).digest()
+            x = np.frombuffer(s, dtype=np.uint32)[0]
+            return np.random.RandomState(x).rand()
+
         emotion = self.character_timeline[idx]
         if emotion not in self.eye_imgs:
             return -1
