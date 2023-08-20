@@ -1,3 +1,4 @@
+import tempfile
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Hashable, Iterator, Optional, Sequence, Union
@@ -6,7 +7,6 @@ from weakref import WeakValueDictionary
 import imageio
 import numpy as np
 from diskcache import Cache
-from PIL import Image
 from tqdm import tqdm
 
 from ..enum import CacheType, Direction
@@ -220,34 +220,23 @@ class Composition:
         preview_level: int = 2
     ) -> None:
         from IPython.display import display
-        from ipywidgets import HBox, Play, interactive_output, widgets
+        from ipywidgets import Video
 
         if end_time is None:
             end_time = self.duration
 
         times = np.arange(start_time, end_time, 1.0 / fps)
-        images = []
-        with self.preview(level=preview_level):
-            for t in times:
-                images.append(self(t))
+        with tempfile.NamedTemporaryFile(suffix='.mp4') as fp:
+            with self.preview(level=preview_level):
+                filename: str = fp.name
+                writer = imageio.get_writer(
+                    filename, fps=fps, codec="libx264",
+                    ffmpeg_params=["-preset", "ultrafast"],
+                    pixelformat="yuv444p", macro_block_size=None)
+                for t in tqdm(times, total=len(times)):
+                    frame = np.asarray(self(t))
+                    writer.append_data(frame)
+                writer.close()
+                self._cache.clear()
 
-        def display_frame(t=0):
-            im = Image.fromarray(images[t])
-            display(im)
-
-        play = Play(
-            value=0,
-            min=0,
-            max=len(images) - 1,
-            step=1,
-            interval=1000 / fps,
-            description="Press play",
-            disabled=False,
-        )
-
-        slider = widgets.IntSlider(min=0, max=len(images) - 1)
-        widgets.jslink((play, 'value'), (slider, 'value'))
-
-        ui = HBox([play, slider])
-        out = interactive_output(display_frame, {'t': slider})
-        display(ui, out)
+                display(Video.from_file(filename))
