@@ -49,6 +49,11 @@ class Composition:
     def preview_level(self) -> int:
         return self._preview_level
 
+    @preview_level.setter
+    def preview_level(self, level: int) -> None:
+        assert level > 0
+        self._preview_level = level
+
     @contextmanager
     def preview(self, level: int = 2) -> Iterator[None]:
         assert level > 0
