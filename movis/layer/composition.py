@@ -1,5 +1,6 @@
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Hashable, Optional, Sequence, Union
+from typing import Hashable, Iterator, Optional, Sequence, Union
 from weakref import WeakValueDictionary
 
 import imageio
@@ -22,11 +23,50 @@ class Composition:
         self._name_to_layer: WeakValueDictionary[str, Component] = WeakValueDictionary()
         self._duration = duration
         self._cache: Cache = Cache(size_limit=1024 * 1024 * 1024)
-        self.size = size
+        self._preview_level: int = 1
+        self._size = size
+
+    @property
+    def size(self) -> tuple[int, int]:
+        return self._size
+
+    @size.setter
+    def size(self, size: tuple[int, int]) -> None:
+        assert len(size) == 2
+        assert size[0] > 0 and size[1] > 0
+        self._size = size
 
     @property
     def duration(self) -> float:
         return self._duration
+
+    @duration.setter
+    def duration(self, duration: float) -> None:
+        assert duration > 0
+        self._duration = duration
+
+    @property
+    def preview_level(self) -> int:
+        return self._preview_level
+
+    @contextmanager
+    def preview(self, level: int = 2) -> Iterator[None]:
+        assert level > 0
+        original_level = self._preview_level
+        self._preview_level = level
+        try:
+            yield
+        finally:
+            self._preview_level = original_level
+
+    @contextmanager
+    def final(self) -> Iterator[None]:
+        original_level = self._preview_level
+        self._preview_level = 1
+        try:
+            yield
+        finally:
+            self._preview_level = original_level
 
     @property
     def layers(self) -> Sequence[Component]:
@@ -127,13 +167,21 @@ class Composition:
         return target
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
+        L = self._preview_level
+        current_shape = self.size[1] // L, self.size[0] // L
+
         key = self.get_key(time)
         if key in self._cache:
-            return self._cache[key]
+            cached_frame: np.ndarray = self._cache[key]
+            if cached_frame.shape[:2] == current_shape:
+                return cached_frame
+            else:
+                del self._cache[key]
 
-        frame = np.zeros((self.size[1], self.size[0], 4), dtype=np.uint8)
+        frame = np.zeros(current_shape + (4,), dtype=np.uint8)
         for component in self._layers:
-            frame = component._composite(frame, time)
+            frame = component._composite(
+                frame, time, preview_level=self._preview_level)
         self._cache[key] = frame
         return frame
 
