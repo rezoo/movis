@@ -76,15 +76,19 @@ class Component:
         self, bg_image: np.ndarray, time: float,
         parent: tuple[int, int] = (0, 0),
         alpha_matte_mode: bool = False,
+        preview_level: int = 1,
     ) -> np.ndarray:
+        # Retrieve layer image
         layer_time = time - self.offset
         if layer_time < self.start_time or self.end_time <= layer_time:
             return bg_image
         fg_image = self(time)
         if fg_image is None:
             return bg_image
+
+        # Get affine matrix and transform layer image
         p = self.transform.get_current_value(layer_time)
-        result = self._get_fixed_affine_matrix(fg_image, p)
+        result = self._get_fixed_affine_matrix(fg_image, p, preview_level=preview_level)
         if result is None:
             return bg_image
         affine_matrix_fixed, (W, H), (offset_x, offset_y) = result
@@ -92,6 +96,7 @@ class Component:
             fg_image, affine_matrix_fixed, dsize=(W, H),
             flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
 
+        # Composite bg_image and fg_image
         bg_image = alpha_composite(
             bg_image, fg_image_transformed,
             position=(offset_x - parent[0], offset_y - parent[1]),
@@ -101,14 +106,18 @@ class Component:
 
     def _get_fixed_affine_matrix(
         self, fg_image: np.ndarray, p: TransformValue,
+        preview_level: int = 1
     ) -> Optional[tuple[np.ndarray, tuple[int, int], tuple[int, int]]]:
         h, w = fg_image.shape[:2]
 
-        T1 = _get_T1(p)
-        SR = _get_SR(p)
+        T1, SR = _get_T1(p), _get_SR(p)
         T2 = _get_T2(p, (w, h), self.origin_point)
-        SR_T2 = SR @ T2
-        affine_matrix = (T1 @ SR_T2)[:2]
+        M = T1 @ SR @ T2
+        P = np.array([
+            [1 / preview_level, 0, 0],
+            [0, 1 / preview_level, 0],
+            [0, 0, 1]], dtype=np.float64)
+        affine_matrix = (P @ M)[:2]
 
         corners_layer = np.array([
             [0, 0, 1],
@@ -124,8 +133,11 @@ class Component:
             return None
         offset_x, offset_y = int(min_coords[0]), int(min_coords[1])
 
-        T1_fixed = _get_T1(p, offset=(offset_x, offset_y))
-        affine_matrix_fixed = (T1_fixed @ SR_T2)[:2]
+        Pf = np.array([
+            [1 / preview_level, 0, - offset_x],
+            [0, 1 / preview_level, - offset_y],
+            [0, 0, 1]], dtype=np.float64)
+        affine_matrix_fixed = (Pf @ M)[:2]
         return affine_matrix_fixed, (W, H), (offset_x, offset_y)
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
@@ -153,10 +165,10 @@ class Component:
             f"offset={self.offset}, visible={self.visible}, blending_mode={self.blending_mode})"
 
 
-def _get_T1(p: TransformValue, offset: tuple[int, int] = (0, 0)) -> np.ndarray:
+def _get_T1(p: TransformValue) -> np.ndarray:
     return np.array([
-        [1, 0, p.position[0] + p.anchor_point[0] - offset[0]],
-        [0, 1, p.position[1] + p.anchor_point[1] - offset[1]],
+        [1, 0, p.position[0] + p.anchor_point[0]],
+        [0, 1, p.position[1] + p.anchor_point[1]],
         [0, 0, 1]], dtype=np.float64)
 
 

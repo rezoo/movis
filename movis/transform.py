@@ -2,8 +2,8 @@ from typing import NamedTuple, Union
 
 import numpy as np
 
-from .attribute import (Attribute, AttributeType, transform_to_1dscalar,
-                        transform_to_2dvector)
+from .attribute import Attribute, AttributeType
+from .motion import transform_to_1dscalar, transform_to_2dvector
 
 
 class TransformValue(NamedTuple):

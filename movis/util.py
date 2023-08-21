@@ -4,22 +4,15 @@ from pathlib import Path
 from typing import Hashable, Union
 
 import ffmpeg
-import numpy as np
 import pandas as pd
 from pydub import AudioSegment
 
 
-def get_paths(src_dir: Union[str, Path], ext: str) -> list[Path]:
-    src_dir = Path(src_dir)
-    return sorted(f for f in src_dir.iterdir() if f.suffix == ext)
-
-
-def get_audio_length(filename: Union[Path, str]) -> float:
-    audio = AudioSegment.from_file(str(filename), format="wav")
-    return audio.duration_seconds
-
-
 def make_voicevox_dataframe(audio_dir: Union[str, Path]) -> pd.DataFrame:
+    def get_audio_length(filename: Union[Path, str]) -> float:
+        audio = AudioSegment.from_file(str(filename), format="wav")
+        return audio.duration_seconds
+
     wav_files = sorted(f for f in Path(audio_dir).iterdir() if f.suffix == ".wav")
     rows = []
     start_time = 0.0
@@ -37,20 +30,24 @@ def make_voicevox_dataframe(audio_dir: Union[str, Path]) -> pd.DataFrame:
     return frame
 
 
-def _get_hash_prefix(text):
-    text_bytes = text.encode("utf-8")
-    sha1_hash = hashlib.sha1(text_bytes)
-    hashed_text = sha1_hash.hexdigest()
-    prefix = hashed_text[:6]
-    return prefix
-
-
 def make_timeline_from_voicevox(
     audio_dir: Union[str, Path],
     max_text_length: int = 25,
     extra_columns: tuple[tuple[str, Hashable], ...] = (
         ("slide", 0), ("status", "n"), ("action", "")),
 ) -> pd.DataFrame:
+
+    def get_paths(src_dir: Union[str, Path], ext: str) -> list[Path]:
+        src_dir = Path(src_dir)
+        return sorted(f for f in src_dir.iterdir() if f.suffix == ext)
+
+    def get_hash_prefix(text):
+        text_bytes = text.encode("utf-8")
+        sha1_hash = hashlib.sha1(text_bytes)
+        hashed_text = sha1_hash.hexdigest()
+        prefix = hashed_text[:6]
+        return prefix
+
     txt_files = get_paths(audio_dir, ".txt")
     lines = []
     for txt_file in txt_files:
@@ -71,7 +68,7 @@ def make_timeline_from_voicevox(
         )
         dic = {
             "character": character_dict[character],
-            "hash": _get_hash_prefix(raw_text),
+            "hash": get_hash_prefix(raw_text),
             "text": text,
         }
         for column_name, default_value in extra_columns:
@@ -110,13 +107,6 @@ def merge_timeline(
     return pd.DataFrame(result)
 
 
-def rand_from_string(string: str, seed: int = 0) -> float:
-    string = f"{seed}:{string}"
-    s = hashlib.sha224(f"{seed}:{string}".encode("utf-8")).digest()
-    x = np.frombuffer(s, dtype=np.uint32)[0]
-    return np.random.RandomState(x).rand()
-
-
 def add_materials_to_video(
     video_file: Union[str, Path],
     audio_file: Union[str, Path],
@@ -135,3 +125,11 @@ def add_materials_to_video(
         ab="128k",
     )
     output.run(overwrite_output=True)
+
+
+def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
+    hex_color = hex_color.lstrip('#')
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+    return (r, g, b)

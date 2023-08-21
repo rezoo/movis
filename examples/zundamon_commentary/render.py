@@ -104,9 +104,7 @@ def main():
 
     mv.write_srt_file(
         tl['start_time'], tl['end_time'], tl['text'], 'outputs/dialogue.srt')
-    scene.write_video('outputs/video.mp4')
-    mv.add_materials_to_video(
-        'outputs/video.mp4', 'outputs/dialogue.wav', dst_file='outputs/video2.mp4')
+    scene.write_video('outputs/video.mp4', audio_path='outputs/dialogue.wav')
 
 
 if __name__ == '__main__':
