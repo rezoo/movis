@@ -6,14 +6,6 @@ from PIL import Image
 from .enum import BlendingMode
 
 
-def resize(img: np.ndarray, scale: tuple[float, float] = (1.0, 1.0)) -> np.ndarray:
-    if scale == (1.0, 1.0):
-        return img
-    h, w = img.shape[:2]
-    return np.asarray(Image.fromarray(img).resize(
-        (round(w * scale[0]), round(h * scale[1])), Image.BILINEAR))
-
-
 def _blend_overlay(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
     return np.where(bg < 128, 2 * bg * fg // 255, 255 - 2 * (255 - bg) * (255 - fg) // 255)
 
@@ -69,7 +61,7 @@ def _overlay(
     return bg
 
 
-def alpha_composite_numpy(
+def _alpha_composite_numpy(
     bg_image: np.ndarray,
     fg_image: np.ndarray,
     position: tuple[int, int] = (0, 0),
@@ -93,7 +85,7 @@ def alpha_composite_numpy(
         blending_mode, alpha_matte_mode)
 
 
-def alpha_composite_pil(
+def _alpha_composite_pil(
     bg_image: np.ndarray,
     fg_image: np.ndarray,
     position: tuple[int, int] = (0, 0),
@@ -125,9 +117,9 @@ def alpha_composite(
     if blending_mode == BlendingMode.NORMAL and not alpha_matte_mode:
         # Use PIL for normal blending mode
         # because it is faster than my implementation
-        return alpha_composite_pil(bg_image, fg_image, position, opacity)
+        return _alpha_composite_pil(bg_image, fg_image, position, opacity)
     else:
         mode = BlendingMode.from_string(blending_mode) \
             if isinstance(blending_mode, str) else blending_mode
-        return alpha_composite_numpy(
+        return _alpha_composite_numpy(
             bg_image, fg_image, position, opacity, mode, alpha_matte_mode)
