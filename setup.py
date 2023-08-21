@@ -1,4 +1,14 @@
+import pathlib
+
 from setuptools import find_packages, setup
+
+BASE_DIR = pathlib.Path(__file__).resolve().parent
+
+
+def parse_requirements(name: str = "requirements.txt"):
+    with open(BASE_DIR / name) as f:
+        return f.read().splitlines()
+
 
 setup(
     name="movis",
@@ -12,26 +22,11 @@ setup(
         "movis": ["assets/*", "py.typed"],
     },
     python_requires=">3.9.0",
-    install_requires=[
-        "pandas>=1.0.1",
-        "numpy>=1.18.1",
-        "pydub>=0.25.1",
-        "Pillow>=8.2.0",
-        "ffmpeg-python>=0.2.0",
-        "imageio>=2.31.1",
-        "imageio-ffmpeg>=0.4.8",
-        "tqdm>=4.46.0",
-        "diskcache>=5.6.1",
-        "opencv-python>=4.8.0.76",
-        "PySide6>=6.5.2"
-    ],
+    install_requires=parse_requirements(),
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
-        "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
