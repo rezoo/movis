@@ -5,6 +5,7 @@ import numpy as np
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..enum import TextAlignment
+from ..util import hex_to_rgb
 from .mixin import TimelineMixin
 
 try:
@@ -34,7 +35,7 @@ class Rectangle(AttributesMixin):
         self,
         size: tuple[float, float] = (100., 100.),
         radius: float = 0.,
-        color: Optional[tuple[int, int, int]] = None,
+        color: Optional[Union[tuple[int, int, int], str]] = None,
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
         duration: float = 1.
     ) -> None:
@@ -45,7 +46,8 @@ class Rectangle(AttributesMixin):
         if color is None:
             self.contents = contents
         else:
-            self.contents = (FillProperty(color=color),)
+            c = color if isinstance(color, tuple) else hex_to_rgb(color)
+            self.contents = (FillProperty(color=c),)
         self.duration = duration
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
@@ -93,7 +95,7 @@ class Ellipse(AttributesMixin):
     def __init__(
         self,
         size: tuple[float, float] = (100., 100.),
-        color: Optional[tuple[int, int, int]] = None,
+        color: Optional[Union[tuple[int, int, int], str]] = None,
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
         duration: float = 1.
     ) -> None:
@@ -103,7 +105,8 @@ class Ellipse(AttributesMixin):
         if color is None:
             self.contents = contents
         else:
-            self.contents = (FillProperty(color=color),)
+            c = color if isinstance(color, tuple) else hex_to_rgb(color)
+            self.contents = (FillProperty(color=c),)
         self.duration = duration
 
     def __call__(self, time: float) -> Optional[np.ndarray]:

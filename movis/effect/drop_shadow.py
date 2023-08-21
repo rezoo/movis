@@ -1,8 +1,11 @@
+from typing import Union
+
 import cv2
 import numpy as np
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..imgproc import alpha_composite
+from ..util import hex_to_rgb
 
 
 class DropShadow(AttributesMixin):
@@ -11,13 +14,14 @@ class DropShadow(AttributesMixin):
         radius: float = 0.0,
         offset: float = 0.0,
         angle: float = 45.0,
-        color: tuple[int, int, int] = (0, 0, 0),
+        color: Union[tuple[int, int, int], str] = (0, 0, 0),
         opacity: float = 0.5
     ) -> None:
         self.radius = Attribute(radius, AttributeType.SCALAR, range=(0., 1e6))
         self.angle = Attribute(angle, AttributeType.SCALAR)
         self.offset = Attribute(offset, AttributeType.SCALAR)
-        self.color = Attribute(color, AttributeType.COLOR, range=(0., 255.))
+        c = hex_to_rgb(color) if isinstance(color, str) else color
+        self.color = Attribute(c, AttributeType.COLOR, range=(0., 255.))
         self.opacity = Attribute(opacity, AttributeType.SCALAR, range=(0., 1.))
 
     def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:

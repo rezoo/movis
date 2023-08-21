@@ -12,8 +12,8 @@ from tqdm import tqdm
 from ..enum import CacheType, Direction
 from ..imgproc import BlendingMode
 from ..transform import Transform
-from .layer_item import LayerItem
 from .layer import Layer
+from .layer_item import LayerItem
 
 
 class Composition:
