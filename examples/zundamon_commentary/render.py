@@ -34,7 +34,7 @@ def main():
         name='metan',
         transform=Transform(position=(79, 1037), scale=0.7))
 
-    def slide_in_out(item: mv.layer.Component, offset: np.ndarray):
+    def slide_in_out(item: mv.layer.LayerItem, offset: np.ndarray):
         p = item.transform.position.init_value
         item.transform.position.enable_motion() \
             .append(0.0, p + offset, 'ease_out_expo') \

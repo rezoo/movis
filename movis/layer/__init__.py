@@ -1,5 +1,5 @@
-from .component import Component  # noqa
-from .composition import Component, Composition  # noqa
+from .layer_item import LayerItem  # noqa
+from .composition import LayerItem, Composition  # noqa
 from .drawing import (Ellipse, FillProperty, Rectangle, StrokeProperty,  # noqa
                       Text)
 from .layer import Layer  # noqa

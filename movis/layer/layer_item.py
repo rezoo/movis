@@ -10,14 +10,14 @@ from ..transform import Transform, TransformValue
 from .layer import Layer
 
 
-class Component:
+class LayerItem:
     def __init__(
             self, name: str, layer: Layer, transform: Optional[Transform] = None,
             offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0,
             visible: bool = True,
             blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
             origin_point: Union[Direction, str] = Direction.CENTER,
-            alpha_matte: Optional["Component"] = None):
+            alpha_matte: Optional["LayerItem"] = None):
         self.name: str = name
         self.layer: Layer = layer
         self.transform: Transform = transform if transform is not None else Transform()
@@ -28,7 +28,7 @@ class Component:
         mode = BlendingMode.from_string(blending_mode) if isinstance(blending_mode, str) else blending_mode
         self.blending_mode: BlendingMode = mode
         self.origin_point = Direction.from_string(origin_point) if isinstance(origin_point, str) else origin_point
-        self._alpha_matte: Optional[Component] = alpha_matte
+        self._alpha_matte: Optional[LayerItem] = alpha_matte
         self._effects: list[Effect] = []
 
     @property
@@ -43,11 +43,11 @@ class Component:
     def composition_end_time(self) -> float:
         return self.offset + self.end_time
 
-    def enable_alpha_matte(self, alpha_matte: "Component") -> "Component":
+    def enable_alpha_matte(self, alpha_matte: "LayerItem") -> "LayerItem":
         self._alpha_matte = alpha_matte
         return alpha_matte
 
-    def disable_alpha_matte(self) -> Optional["Component"]:
+    def disable_alpha_matte(self) -> Optional["LayerItem"]:
         if self._alpha_matte is None:
             return None
         prev_alpha_matte = self._alpha_matte

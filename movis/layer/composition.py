@@ -12,7 +12,7 @@ from tqdm import tqdm
 from ..enum import CacheType, Direction
 from ..imgproc import BlendingMode
 from ..transform import Transform
-from .component import Component
+from .layer_item import LayerItem
 from .layer import Layer
 
 
@@ -20,8 +20,8 @@ class Composition:
     def __init__(
         self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0
     ) -> None:
-        self._layers: list[Component] = []
-        self._name_to_layer: WeakValueDictionary[str, Component] = WeakValueDictionary()
+        self._layers: list[LayerItem] = []
+        self._name_to_layer: WeakValueDictionary[str, LayerItem] = WeakValueDictionary()
         self._duration = duration
         self._cache: Cache = Cache(size_limit=1024 * 1024 * 1024)
         self._preview_level: int = 1
@@ -75,44 +75,44 @@ class Composition:
             self._preview_level = original_level
 
     @property
-    def layers(self) -> Sequence[Component]:
+    def layers(self) -> Sequence[LayerItem]:
         return self._layers
 
     def keys(self) -> list[str]:
         return [layer.name for layer in self._layers]
 
-    def values(self) -> list[Component]:
+    def values(self) -> list[LayerItem]:
         return self._layers
 
-    def items(self) -> list[tuple[str, Component]]:
+    def items(self) -> list[tuple[str, LayerItem]]:
         return [(layer.name, layer) for layer in self._layers]
 
     def __len__(self) -> int:
         return len(self._layers)
 
-    def __getitem__(self, key: str) -> Component:
+    def __getitem__(self, key: str) -> LayerItem:
         return self._name_to_layer[key]
 
-    def __setitem__(self, key: str, value: Union[Component, Layer]) -> None:
-        if isinstance(value, Component):
+    def __setitem__(self, key: str, value: Union[LayerItem, Layer]) -> None:
+        if isinstance(value, LayerItem):
             self._layers.append(value)
             self._name_to_layer[key] = value
         elif callable(value):
             self.add_layer(value, name=key)
         else:
-            raise ValueError("value must be Component or Layer (i.e., callable)")
+            raise ValueError("value must be LayerItem or Layer (i.e., callable)")
 
     def __delitem__(self, key: str) -> None:
         self.pop_layer(key)
 
     def get_key(self, time: float) -> tuple[Hashable, ...]:
         layer_keys: list[Hashable] = [CacheType.COMPOSITION]
-        for component in self._layers:
-            layer_time = time - component.offset
-            if layer_time < component.start_time or component.end_time <= layer_time:
+        for layer_item in self._layers:
+            layer_time = time - layer_item.offset
+            if layer_time < layer_item.start_time or layer_item.end_time <= layer_time:
                 layer_keys.append(None)
             else:
-                layer_keys.append(component.get_key(layer_time))
+                layer_keys.append(layer_item.get_key(layer_time))
         return tuple(layer_keys)
 
     def __repr__(self) -> str:
@@ -129,7 +129,7 @@ class Composition:
         visible: bool = True,
         blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
         origin_point: Direction = Direction.CENTER,
-    ) -> Component:
+    ) -> LayerItem:
         if name is None:
             name = f"layer_{len(self._layers)}"
         if name in self._layers:
@@ -137,7 +137,7 @@ class Composition:
         end_time = end_time if end_time is not None else layer.duration
         transform = transform if transform is not None \
             else Transform(position=(self.size[0] / 2, self.size[1] / 2))
-        component = Component(
+        layer_item = LayerItem(
             name,
             layer,
             transform,
@@ -148,18 +148,18 @@ class Composition:
             blending_mode=blending_mode,
             origin_point=origin_point,
         )
-        self._layers.append(component)
-        self._name_to_layer[name] = component
-        return component
+        self._layers.append(layer_item)
+        self._name_to_layer[name] = layer_item
+        return layer_item
 
-    def pop_layer(self, name: str) -> Component:
+    def pop_layer(self, name: str) -> LayerItem:
         if name not in self._name_to_layer:
             raise KeyError(f"Layer with name {name} does not exist")
         index = next(i for i in range(len(self._layers)) if self._layers[i].name == name)
-        component = self._layers.pop(index)
-        return component
+        layer_item = self._layers.pop(index)
+        return layer_item
 
-    def enable_alpha_matte(self, source_name: str, target_name: str) -> Component:
+    def enable_alpha_matte(self, source_name: str, target_name: str) -> LayerItem:
         assert source_name in self._name_to_layer and target_name in self._name_to_layer, \
             "source and target must be in self.layers"
         target = self.pop_layer(target_name)
@@ -167,7 +167,7 @@ class Composition:
         source.enable_alpha_matte(target)
         return source
 
-    def disable_alpha_matte(self, name: str) -> Optional[Component]:
+    def disable_alpha_matte(self, name: str) -> Optional[LayerItem]:
         source = self[name]
         target = source.disable_alpha_matte()
         return target
@@ -185,8 +185,8 @@ class Composition:
                 del self._cache[key]
 
         frame = np.zeros(current_shape + (4,), dtype=np.uint8)
-        for component in self._layers:
-            frame = component._composite(
+        for layer_item in self._layers:
+            frame = layer_item._composite(
                 frame, time, preview_level=self._preview_level)
         self._cache[key] = frame
         return frame
