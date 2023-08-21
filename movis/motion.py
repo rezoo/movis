@@ -6,6 +6,19 @@ import numpy as np
 
 from .enum import AttributeType, MotionType
 
+
+def __ease_in_out_medium(t: float):
+    alpha = 1.0135673098126083
+    beta = 0.0066928509242848554
+    return alpha * (1 / (1 + math.exp(- (t - 0.5) / 0.1)) - beta)
+
+
+def __ease_in_out_expo(t: float):
+    alpha = 1.0000908039820193
+    beta = 4.5397868702434395e-05
+    return alpha * (1 / (1 + math.exp(- (t - 0.5) / 0.05)) - beta)
+
+
 MOTION_TYPES_TO_FUNC = {
     MotionType.LINEAR: lambda t: t,
     MotionType.EASE_IN: lambda t: t**2,
@@ -13,10 +26,10 @@ MOTION_TYPES_TO_FUNC = {
     MotionType.EASE_IN_OUT: lambda t: t**2 * (3.0 - 2.0 * t),
     MotionType.EASE_IN_MEDIUM: lambda t: t**3,
     MotionType.EASE_OUT_MEDIUM: lambda t: 1.0 - (1.0 - t) ** 3,
-    MotionType.EASE_IN_OUT_MEDIUM: lambda t: 1.0135673098126083 * (1 / (1 + math.exp(- (t - 0.5) / 0.1)) - 0.0066928509242848554),
+    MotionType.EASE_IN_OUT_MEDIUM: __ease_in_out_medium,
     MotionType.EASE_IN_EXPO: lambda t: math.exp(-10.0 * (1 - t)),
     MotionType.EASE_OUT_EXPO: lambda t: 1 - math.exp(-10.0 * t),
-    MotionType.EASE_IN_OUT_EXPO: lambda t: 1.0000908039820193 * (1 / (1 + math.exp(- (t - 0.5) / 0.05)) - 4.5397868702434395e-05)
+    MotionType.EASE_IN_OUT_EXPO: __ease_in_out_expo,
 }
 
 

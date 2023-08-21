@@ -52,4 +52,5 @@ class Transform:
         )
 
     def __repr__(self) -> str:
-        return f"Transform(ap={self.anchor_point}, pos={self.position}, s={self.scale}, rot={self.rotation}, op={self.opacity})"
+        return f"Transform(ap={self.anchor_point}, pos={self.position}, " \
+            f"s={self.scale}, rot={self.rotation}, op={self.opacity})"
