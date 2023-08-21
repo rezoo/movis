@@ -22,8 +22,8 @@ class Attribute:
         self.init_value: np.ndarray = clipped_value
         self.value_type = value_type
         self.range = range
-        self._motion: Optional[Motion] = motion
-        self._function: Optional[Callable[[np.ndarray, float], np.ndarray]] = function
+        self._motion = motion
+        self._function = function
 
     def __call__(self, layer_time: float) -> np.ndarray:
         if self._motion is None:
