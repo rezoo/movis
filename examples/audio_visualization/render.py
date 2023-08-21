@@ -97,7 +97,7 @@ def main():
     scene.add_layer(
         FrequencyLayer(audio_img, duration, freq_size, mode=args.type),
         transform=mv.Transform(position=freq_position, opacity=0.9))
-    scene.write_video('no_audio.mp4', audio_path=args.input)
+    scene.write_video(args.output, audio_path=args.input)
 
 
 if __name__ == '__main__':
