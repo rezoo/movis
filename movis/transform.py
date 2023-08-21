@@ -39,6 +39,7 @@ class Transform:
             "anchor_point": self.anchor_point,
             "position": self.position,
             "scale": self.scale,
+            "rotation": self.rotation,
             "opacity": self.opacity,
         }
 
