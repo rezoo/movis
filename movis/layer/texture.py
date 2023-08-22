@@ -58,9 +58,11 @@ class Stripe(AttributesMixin):
         angle: float = 45.,
         color1: Union[tuple[int, int, int], str] = (0, 0, 0),
         color2: Union[tuple[int, int, int], str] = (255, 255, 255),
-        stripe_width: float = 32.,
+        mean_width: float = 32.,
         phase: float = 0.,
+        ratio: float = 0.5,
         duration: float = 1.0,
+        sampling_level: int = 1,
     ) -> None:
         self.size = size
         self.duration = duration
@@ -69,21 +71,38 @@ class Stripe(AttributesMixin):
         c2 = hex_to_rgb(color2) if isinstance(color2, str) else color2
         self.color1 = Attribute(c1, AttributeType.COLOR, range=(0., 255.))
         self.color2 = Attribute(c2, AttributeType.COLOR, range=(0., 255.))
-        self.stripe_width = Attribute(stripe_width, AttributeType.SCALAR, range=(0., 1e6))
+        self.mean_width = Attribute(mean_width, AttributeType.SCALAR, range=(0., 1e6))
         self.phase = Attribute(phase, AttributeType.SCALAR)
+        self.ratio = Attribute(ratio, AttributeType.SCALAR, range=(0., 1.0))
+        self.sampling_level = sampling_level
 
     def __call__(self, time: float) -> np.ndarray:
         width, height = self.size
-        inds = np.mgrid[:height, :width] - np.array([height / 2, width / 2])[:, None, None]
+        L = self.sampling_level
+        ratio = float(self.ratio(time))
+        c1 = np.round(self.color1(time)).astype(np.uint8).reshape(3, 1, 1)
+        c2 = np.round(self.color2(time)).astype(np.uint8).reshape(3, 1, 1)
+        alpha = np.full((height, width, 1), 255, dtype=np.uint8)
+        if ratio <= 0.0:
+            c1_img = np.broadcast_to(c1, (3, height, width)).transpose(1, 2, 0)
+            return np.concatenate([c1_img, alpha], axis=2)
+        elif ratio >= 1.0:
+            c2_img = np.broadcast_to(c2, (3, height, width)).transpose(1, 2, 0)
+            return np.concatenate([c2_img, alpha], axis=2)
+        center = np.array([height / 2, width / 2])[:, None, None]
+        L = self.sampling_level
+        inds = np.mgrid[:L * height, :L * width] / L - center
         theta = float(self.angle(time)) / 180.0 * np.pi
         phase = float(self.phase(time))
-        stripe_width = float(self.stripe_width(time))
+        stripe_width = float(self.mean_width(time))
 
         v = np.array([np.sin(theta), np.cos(theta)], dtype=np.float64)
         p = (v.reshape(2, 1, 1) * inds).sum(axis=0, keepdims=True)
         p = np.sin((p - phase / 180.0) * (np.pi / stripe_width))
-        c1 = np.round(self.color1(time)).astype(np.uint8).reshape(3, 1, 1)
-        c2 = np.round(self.color2(time)).astype(np.uint8).reshape(3, 1, 1)
-        color = np.where(p > 0, c1, c2).astype(np.uint8).transpose(1, 2, 0)
-        color = np.concatenate([color, np.full((height, width, 1), 255, dtype=np.uint8)], axis=2)
+        threshold = 2 * (ratio - 0.5)
+        color: np.ndarray = np.where(p > threshold, c1, c2)
+        color = color.reshape(3, height, L, width, L)
+        color = color.transpose(1, 3, 2, 4, 0).mean(axis=(2, 3))
+        color = color.astype(np.uint8)
+        color = np.concatenate([color, alpha], axis=2)
         return color
