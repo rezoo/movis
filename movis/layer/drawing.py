@@ -99,7 +99,7 @@ class Ellipse(AttributesMixin):
         duration: float = 1.
     ) -> None:
         if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Rectangle")
+            raise ImportError("PySide6 must be installed to use Ellipse")
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D, range=(0., 1e6))
         if color is None:
             self.contents = contents
@@ -152,7 +152,7 @@ class Text(AttributesMixin):
     @staticmethod
     def available_fonts() -> Sequence[str]:
         if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Rectangle")
+            raise ImportError("PySide6 must be installed to use Text")
         if QCoreApplication.instance() is None:
             QApplication(sys.argv[:1])
         return QFontDatabase.families()
@@ -160,7 +160,7 @@ class Text(AttributesMixin):
     @staticmethod
     def available_styles(font_name: str) -> Sequence[str]:
         if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Rectangle")
+            raise ImportError("PySide6 must be installed to use Text")
         if QCoreApplication.instance() is None:
             QApplication(sys.argv[:1])
         return QFontDatabase.styles(font_name)
@@ -203,7 +203,7 @@ class Text(AttributesMixin):
         duration: float = 1.
     ) -> None:
         if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Rectangle")
+            raise ImportError("PySide6 must be installed to use Text")
         self.text = text
         self.font_family = font_family
         self.font_style = font_style
