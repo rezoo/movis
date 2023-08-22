@@ -8,7 +8,7 @@ def main():
     timeline = pd.read_csv('outputs/timeline.tsv', sep='\t')
     audio_timeline = mv.make_voicevox_dataframe('audio')
     tl = pd.merge(timeline, audio_timeline, left_index=True, right_index=True)
-    font_path = '/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc'
+    font_name = 'Hiragino Maru Gothic ProN'
 
     scene = mv.layer.Composition(size=(1920, 1080), duration=tl['end_time'].max())
     scene.add_layer(
@@ -50,7 +50,7 @@ def main():
             font_size: int = 46, bg_color=(72, 172, 154), line_width=4):
 
         layer = mv.layer.Text(
-            text, font=font_path, font_size=font_size, color=(255, 255, 255), duration=duration)
+            text, font_family=font_name, font_size=font_size, color=(255, 255, 255), duration=duration)
         W, H = layer.get_size()
         cp = mv.layer.Composition(
             size=(W + margin, H), duration=duration)
@@ -89,7 +89,7 @@ def main():
         scene.add_layer(
             mv.layer.Text.from_timeline(
                 character_tl['start_time'], character_tl['end_time'], texts,
-                font_size=72, font=font_path, line_spacing=100, contents=[
+                font_size=72, font=font_name, line_spacing=100, contents=[
                     mv.layer.StrokeProperty(color=color_dict[character], width=12),
                     mv.layer.FillProperty(color=(255, 255, 255))],
                 duration=character_tl['end_time'].max(),

@@ -148,6 +148,23 @@ class Ellipse(AttributesMixin):
 
 
 class Text(AttributesMixin):
+
+    @staticmethod
+    def available_fonts() -> Sequence[str]:
+        if not pyside6_available:
+            raise ImportError("PySide6 must be installed to use Rectangle")
+        if QCoreApplication.instance() is None:
+            QApplication(sys.argv[:1])
+        return QFontDatabase.families()
+
+    @staticmethod
+    def available_styles(font_name: str) -> Sequence[str]:
+        if not pyside6_available:
+            raise ImportError("PySide6 must be installed to use Rectangle")
+        if QCoreApplication.instance() is None:
+            QApplication(sys.argv[:1])
+        return QFontDatabase.styles(font_name)
+
     @classmethod
     def from_timeline(
         cls,
@@ -176,8 +193,9 @@ class Text(AttributesMixin):
     def __init__(
         self,
         text: Union[str, Callable[[float], str]],
-        font: str,
         font_size: float,
+        font_family: str = 'Sans Serif',
+        font_style: Optional[str] = None,
         color: Optional[Union[tuple[int, int, int], str]] = None,
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
         line_spacing: Optional[int] = None,
@@ -187,7 +205,8 @@ class Text(AttributesMixin):
         if not pyside6_available:
             raise ImportError("PySide6 must be installed to use Rectangle")
         self.text = text
-        self.font = font
+        self.font_family = font_family
+        self.font_style = font_style
         self.font_size = Attribute(font_size, value_type=AttributeType.SCALAR, range=(0., 1e6))
         if color is None:
             self.contents = contents
@@ -198,9 +217,7 @@ class Text(AttributesMixin):
             if isinstance(text_alignment, str) else text_alignment
         self.duration = duration
         if QCoreApplication.instance() is None:
-            self._app = QApplication(sys.argv[:1])
-        self._fontid = QFontDatabase.addApplicationFont(self.font)
-        self._font_family = QFontDatabase.applicationFontFamilies(self._fontid)
+            QApplication(sys.argv[:1])
 
     def get_text(self, time: float = 0.) -> str:
         if isinstance(self.text, str):
@@ -210,8 +227,15 @@ class Text(AttributesMixin):
         else:
             raise ValueError(f"Invalid text type: {type(self.text)}")
 
+    def _get_qfont(self, time: float) -> QFont:
+        if self.font_style is None:
+            return QFont(self.font_family, round(float(self.font_size(time))))
+        else:
+            return QFontDatabase.font(
+                self.font_family, self.font_style, round(float(self.font_size(time))))
+
     def get_size(self, time: float = 0.) -> tuple[int, int]:
-        qfont = QFont(self._font_family, round(float(self.font_size(time))))
+        qfont = self._get_qfont(time)
         metrics = QFontMetrics(qfont)
         text = self.get_text(time)
         lines = text.split('\n')
@@ -252,7 +276,7 @@ class Text(AttributesMixin):
 
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-        qfont = QFont(self._font_family, round(float(self.font_size(time))))
+        qfont = self._get_qfont(time)
         metrics = QFontMetrics(qfont)
         painter.setFont(qfont)
         lines = text.split('\n')

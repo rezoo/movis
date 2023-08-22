@@ -3,7 +3,9 @@ import pandas as pd
 
 
 def make_logo(text: str, duration: float, font_size: int, margin_x: int = 20, margin_y: int = -20):
-    text_layer = mv.layer.Text(text, font='Helvetica Neue', font_size=font_size, color='#ffffff', duration=duration)
+    text_layer = mv.layer.Text(
+        text, font_family='Helvetica Neue', font_size=font_size,
+        font_style='Thin', color='#ffffff', duration=duration)
     w, h = text_layer.get_size(0.0)
     W, H = (w + 2 * margin_x, h + 2 * margin_y)
     title = mv.layer.Composition(size=(W, H), duration=duration)
