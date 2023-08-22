@@ -89,7 +89,7 @@ def main():
         scene.add_layer(
             mv.layer.Text.from_timeline(
                 character_tl['start_time'], character_tl['end_time'], texts,
-                font_size=72, font=font_name, line_spacing=100, contents=[
+                font_size=72, font_family=font_name, line_spacing=100, contents=[
                     mv.layer.StrokeProperty(color=color_dict[character], width=12),
                     mv.layer.FillProperty(color=(255, 255, 255))],
                 duration=character_tl['end_time'].max(),
