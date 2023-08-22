@@ -5,7 +5,7 @@ import numpy as np
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..enum import TextAlignment
-from ..util import to_color
+from ..util import to_rgb
 from .mixin import TimelineMixin
 
 try:
@@ -46,7 +46,7 @@ class Rectangle(AttributesMixin):
         if color is None:
             self.contents = contents
         else:
-            self.contents = (FillProperty(color=to_color(color)),)
+            self.contents = (FillProperty(color=to_rgb(color)),)
         self.duration = duration
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
@@ -104,7 +104,7 @@ class Ellipse(AttributesMixin):
         if color is None:
             self.contents = contents
         else:
-            self.contents = (FillProperty(color=to_color(color)),)
+            self.contents = (FillProperty(color=to_rgb(color)),)
         self.duration = duration
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
@@ -211,7 +211,7 @@ class Text(AttributesMixin):
         if color is None:
             self.contents = contents
         else:
-            self.contents = (FillProperty(color=to_color(color)),)
+            self.contents = (FillProperty(color=to_rgb(color)),)
         self.line_spacing = line_spacing
         self.text_alignment = TextAlignment.from_string(text_alignment) \
             if isinstance(text_alignment, str) else text_alignment
