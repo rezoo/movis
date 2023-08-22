@@ -109,9 +109,9 @@ class Motion:
 
         zipped = sorted(zip(updated_keyframes, updated_values, updated_motion_types))
         keyframes_sorted, values_sorted, motion_types_sorted = zip(*zipped)
-        self.keyframes = keyframes_sorted
-        self.values = values_sorted
-        self.motion_types = motion_types_sorted
+        self.keyframes = list(keyframes_sorted)
+        self.values = list(values_sorted)
+        self.motion_types = list(motion_types_sorted)
         return self
 
 

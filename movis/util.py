@@ -1,7 +1,7 @@
 import difflib
 import hashlib
 from pathlib import Path
-from typing import Hashable, Union
+from typing import Hashable, Sequence, Union
 
 import ffmpeg
 import pandas as pd
@@ -133,3 +133,12 @@ def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
     g = int(hex_color[2:4], 16)
     b = int(hex_color[4:6], 16)
     return (r, g, b)
+
+
+def to_color(color: Union[str, tuple[int, int, int], Sequence[int]]):
+    if isinstance(color, tuple):
+        return color
+    elif isinstance(color, str):
+        return hex_to_rgb(color)
+    else:
+        return (color[0], color[1], color[2])

@@ -3,11 +3,10 @@ from typing import Union
 import numpy as np
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
-from ..util import hex_to_rgb
+from ..util import to_color
 
 
 class Gradation(AttributesMixin):
-
     def __init__(
         self,
         size: tuple[int, int] = (100, 100),
@@ -22,8 +21,8 @@ class Gradation(AttributesMixin):
         self.duration = duration
         self.start_point = Attribute(start_point, AttributeType.VECTOR2D)
         self.end_point = Attribute(end_point, AttributeType.VECTOR2D)
-        cs = hex_to_rgb(start_color) if isinstance(start_color, str) else start_color
-        ce = hex_to_rgb(end_color) if isinstance(end_color, str) else end_color
+        cs = to_color(start_color)
+        ce = to_color(end_color)
         self.start_color = Attribute(cs, AttributeType.COLOR, range=(0., 255.))
         self.end_color = Attribute(ce, AttributeType.COLOR, range=(0., 255.))
         if gradation_type not in ('linear', 'radial'):
@@ -51,7 +50,6 @@ class Gradation(AttributesMixin):
 
 
 class Stripe(AttributesMixin):
-
     def __init__(
         self,
         size: tuple[int, int] = (100, 100),
@@ -69,8 +67,8 @@ class Stripe(AttributesMixin):
         self.size = size
         self.duration = duration
         self.angle = Attribute(angle, AttributeType.ANGLE)
-        c1 = hex_to_rgb(color1) if isinstance(color1, str) else color1
-        c2 = hex_to_rgb(color2) if isinstance(color2, str) else color2
+        c1 = to_color(color1)
+        c2 = to_color(color2)
         self.color1 = Attribute(c1, AttributeType.COLOR, range=(0., 255.))
         self.color2 = Attribute(c2, AttributeType.COLOR, range=(0., 255.))
         self.opacity1 = Attribute(opacity1, AttributeType.SCALAR, range=(0., 1.0))
