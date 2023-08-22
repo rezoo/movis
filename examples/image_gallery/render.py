@@ -10,7 +10,7 @@ def make_logo(text: str, duration: float, font_size: int, margin_x: int = 20, ma
     rect = title.add_layer(
         mv.layer.Rectangle(size=(W, H), color='#202020', duration=duration),
         name='bg', origin_point=mv.Direction.CENTER_RIGHT,
-        transform=mv.Transform(position=(W, H / 2)))
+        transform=mv.Transform(position=(W, H / 2), opacity=0.75))
     text_item = title.add_layer(text_layer, name='text')
 
     rect.transform.scale.enable_motion().extend(
