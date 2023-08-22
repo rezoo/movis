@@ -58,7 +58,7 @@ class Stripe(AttributesMixin):
         angle: float = 45.,
         color1: Union[tuple[int, int, int], str] = (0, 0, 0),
         color2: Union[tuple[int, int, int], str] = (255, 255, 255),
-        mean_width: float = 32.,
+        total_width: float = 64.,
         phase: float = 0.,
         ratio: float = 0.5,
         duration: float = 1.0,
@@ -71,7 +71,7 @@ class Stripe(AttributesMixin):
         c2 = hex_to_rgb(color2) if isinstance(color2, str) else color2
         self.color1 = Attribute(c1, AttributeType.COLOR, range=(0., 255.))
         self.color2 = Attribute(c2, AttributeType.COLOR, range=(0., 255.))
-        self.mean_width = Attribute(mean_width, AttributeType.SCALAR, range=(0., 1e6))
+        self.total_width = Attribute(total_width, AttributeType.SCALAR, range=(0., 1e6))
         self.phase = Attribute(phase, AttributeType.SCALAR)
         self.ratio = Attribute(ratio, AttributeType.SCALAR, range=(0., 1.0))
         self.sampling_level = sampling_level
@@ -94,13 +94,12 @@ class Stripe(AttributesMixin):
         inds = np.mgrid[:L * height, :L * width] / L - center
         theta = float(self.angle(time)) / 180.0 * np.pi
         phase = float(self.phase(time))
-        stripe_width = float(self.mean_width(time))
+        stripe_width = 2 * float(self.total_width(time))
 
         v = np.array([np.sin(theta), np.cos(theta)], dtype=np.float64)
-        p = (v.reshape(2, 1, 1) * inds).sum(axis=0, keepdims=True)
-        p = np.sin((p - phase / 180.0) * (np.pi / stripe_width))
-        threshold = 2 * (ratio - 0.5)
-        color: np.ndarray = np.where(p > threshold, c1, c2)
+        p = (v.reshape(2, 1, 1) * inds).sum(axis=0, keepdims=True) / stripe_width + phase
+        p = p - np.floor(p)
+        color: np.ndarray = np.where(p > ratio, c1, c2)
         color = color.reshape(3, height, L, width, L)
         color = color.transpose(1, 3, 2, 4, 0).mean(axis=(2, 3))
         color = color.astype(np.uint8)
