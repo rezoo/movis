@@ -58,6 +58,8 @@ class Stripe(AttributesMixin):
         angle: float = 45.,
         color1: Union[tuple[int, int, int], str] = (0, 0, 0),
         color2: Union[tuple[int, int, int], str] = (255, 255, 255),
+        opacity1: float = 1.0,
+        opacity2: float = 1.0,
         total_width: float = 64.,
         phase: float = 0.,
         ratio: float = 0.5,
@@ -71,6 +73,8 @@ class Stripe(AttributesMixin):
         c2 = hex_to_rgb(color2) if isinstance(color2, str) else color2
         self.color1 = Attribute(c1, AttributeType.COLOR, range=(0., 255.))
         self.color2 = Attribute(c2, AttributeType.COLOR, range=(0., 255.))
+        self.opacity1 = Attribute(opacity1, AttributeType.SCALAR, range=(0., 1.0))
+        self.opacity2 = Attribute(opacity2, AttributeType.SCALAR, range=(0., 1.0))
         self.total_width = Attribute(total_width, AttributeType.SCALAR, range=(0., 1e6))
         self.phase = Attribute(phase, AttributeType.SCALAR)
         self.ratio = Attribute(ratio, AttributeType.SCALAR, range=(0., 1.0))
@@ -80,28 +84,30 @@ class Stripe(AttributesMixin):
         width, height = self.size
         L = self.sampling_level
         ratio = float(self.ratio(time))
-        c1 = np.round(self.color1(time)).astype(np.uint8).reshape(3, 1, 1)
-        c2 = np.round(self.color2(time)).astype(np.uint8).reshape(3, 1, 1)
-        alpha = np.full((height, width, 1), 255, dtype=np.uint8)
+        c1 = np.concatenate([
+            np.round(self.color1(time)).reshape(3, 1, 1),
+            np.full((1, 1, 1), np.round(255 * float(self.opacity1(time))))], axis=0)
+        c2 = np.concatenate([
+            np.round(self.color2(time)).reshape(3, 1, 1),
+            np.full((1, 1, 1), np.round(255 * float(self.opacity2(time))))], axis=0)
         if ratio <= 0.0:
-            c1_img = np.broadcast_to(c1, (3, height, width)).transpose(1, 2, 0)
-            return np.concatenate([c1_img, alpha], axis=2)
+            c1_img = np.broadcast_to(c1, (4, height, width)).transpose(1, 2, 0)
+            return c1_img.astype(np.uint8)
         elif ratio >= 1.0:
-            c2_img = np.broadcast_to(c2, (3, height, width)).transpose(1, 2, 0)
-            return np.concatenate([c2_img, alpha], axis=2)
+            c2_img = np.broadcast_to(c2, (4, height, width)).transpose(1, 2, 0)
+            return c2_img.astype(np.uint8)
         center = np.array([height / 2, width / 2])[:, None, None]
         L = self.sampling_level
         inds = np.mgrid[:L * height, :L * width] / L - center
         theta = float(self.angle(time)) / 180.0 * np.pi
         phase = float(self.phase(time))
-        stripe_width = 2 * float(self.total_width(time))
+        stripe_width = float(self.total_width(time))
 
         v = np.array([np.sin(theta), np.cos(theta)], dtype=np.float64)
         p = (v.reshape(2, 1, 1) * inds).sum(axis=0, keepdims=True) / stripe_width + phase
         p = p - np.floor(p)
         color: np.ndarray = np.where(p > ratio, c1, c2)
-        color = color.reshape(3, height, L, width, L)
+        color = color.reshape(4, height, L, width, L)
         color = color.transpose(1, 3, 2, 4, 0).mean(axis=(2, 3))
         color = color.astype(np.uint8)
-        color = np.concatenate([color, alpha], axis=2)
         return color
