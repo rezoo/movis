@@ -112,6 +112,12 @@ def alpha_composite(
     blending_mode: Union[str, BlendingMode] = BlendingMode.NORMAL,
     alpha_matte_mode: bool = False,
 ) -> np.ndarray:
+    assert bg_image.ndim == 3
+    assert fg_image.ndim == 3
+    assert bg_image.shape[2] == 4
+    assert fg_image.shape[2] == 4
+    assert bg_image.dtype == np.uint8
+    assert fg_image.dtype == np.uint8
     if not bg_image.flags.writeable:
         bg_image = bg_image.copy()
     if blending_mode == BlendingMode.NORMAL and not alpha_matte_mode:
