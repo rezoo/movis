@@ -1,3 +1,4 @@
+from collections.abc import Sequence as SequenceType
 import difflib
 import hashlib
 from pathlib import Path
@@ -135,10 +136,10 @@ def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
     return (r, g, b)
 
 
-def to_color(color: Union[str, tuple[int, int, int], Sequence[int]]):
-    if isinstance(color, tuple):
-        return color
+def to_color(color: Union[str, tuple[int, int, int], Sequence[int]]) -> tuple[int, int, int]:
+    if isinstance(color, SequenceType) and all(isinstance(x, int) for x in color):
+        return (int(color[0]), int(color[1]), int(color[2]))
     elif isinstance(color, str):
         return hex_to_rgb(color)
     else:
-        return (color[0], color[1], color[2])
+        raise ValueError
