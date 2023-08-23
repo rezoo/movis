@@ -14,6 +14,7 @@ class TransformValue(NamedTuple):
     scale: tuple[float, float] = (1.0, 1.0)
     rotation: float = 0.0
     opacity: float = 1.0
+    origin_point: Direction = Direction.CENTER
 
     def __post_init__(self):
         if self.opacity < 0.0 or 1.0 < self.opacity:
@@ -54,6 +55,7 @@ class Transform:
             scale=transform_to_2dvector(self.scale(layer_time)),
             rotation=transform_to_1dscalar(self.rotation(layer_time)),
             opacity=transform_to_1dscalar(self.opacity(layer_time)),
+            origin_point=self.origin_point,
         )
 
     def __repr__(self) -> str:

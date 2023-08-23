@@ -109,7 +109,7 @@ class LayerItem:
         h, w = fg_image.shape[:2]
 
         T1, SR = _get_T1(p), _get_SR(p)
-        T2 = _get_T2(p, (w, h), self.transform.origin_point)
+        T2 = _get_T2(p, (w, h), p.origin_point)
         M = T1 @ SR @ T2
         P = np.array([
             [1 / preview_level, 0, 0],
