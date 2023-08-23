@@ -12,17 +12,17 @@ from .layer import Layer
 
 class LayerItem:
     def __init__(
-            self, name: str, layer: Layer, transform: Optional[Transform] = None,
-            offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0,
+            self, layer: Layer, name: str = 'layer', transform: Optional[Transform] = None,
+            offset: float = 0.0, start_time: float = 0.0, end_time: Optional[float] = None,
             visible: bool = True,
             blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
             alpha_matte: Optional["LayerItem"] = None):
-        self.name: str = name
         self.layer: Layer = layer
+        self.name: str = name
         self.transform: Transform = transform if transform is not None else Transform()
         self.offset: float = offset
         self.start_time: float = start_time
-        self.end_time: float = end_time if end_time == 0.0 else self.layer.duration
+        self.end_time: float = end_time if end_time is not None else layer.duration
         self.visible: bool = visible
         mode = BlendingMode.from_string(blending_mode) if isinstance(blending_mode, str) else blending_mode
         self.blending_mode: BlendingMode = mode

@@ -43,11 +43,13 @@ def main():
     scene = mv.layer.Composition(size, duration=duration)
     scene.add_layer(mv.layer.Rectangle(size, color=(55, 55, 55), duration=duration), name='bg')
     scene.add_layer(square, name='square')
-    # Note that the image can be downloaded from: https://unsplash.com/photos/J6LMHbdW1k8
-    scene.add_layer(mv.layer.Image('image.jpg', duration=duration), name='image')
     # Specify image as the target of the alpha matte of square.
     # It overwrites the color of square with image.
-    scene.enable_alpha_matte('square', 'image')
+    # Note that the image can be downloaded from: https://unsplash.com/photos/J6LMHbdW1k8
+    layer_item = mv.layer.LayerItem(
+        mv.layer.Image('image.jpg', duration=duration),
+        transform=mv.Transform(position=(size[0] / 2, size[1] / 2)))
+    scene['square'].enable_alpha_matte(layer_item)
     # Now let's make a video.
     scene.write_video('alpha_matte.mp4')
 

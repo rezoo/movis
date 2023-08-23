@@ -137,8 +137,8 @@ class Composition:
         transform = transform if transform is not None \
             else Transform(position=(self.size[0] / 2, self.size[1] / 2))
         layer_item = LayerItem(
-            name,
             layer,
+            name,
             transform,
             offset=offset,
             start_time=start_time,
