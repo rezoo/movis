@@ -51,6 +51,7 @@ class Image:
 
     def _read_image(self) -> np.ndarray:
         if self.image is None:
+            assert self._img_file is not None
             image = np.asarray(PILImage.open(self._img_file).convert("RGBA"))
             self.image = image
         return self.image
@@ -113,7 +114,9 @@ class ImageSequence(TimelineMixin):
         if idx < 0:
             return None
         if self.images[idx] is None:
-            image = np.asarray(PILImage.open(self.img_files[idx]).convert("RGBA"))
+            img_file = self.img_files[idx]
+            assert isinstance(img_file, (str, Path))
+            image = np.asarray(PILImage.open(img_file).convert("RGBA"))
             self.images[idx] = image
         return self.images[idx]
 
@@ -141,8 +144,8 @@ class Video:
     def __call__(self, time: float) -> Optional[np.ndarray]:
         frame_index = int(time * self.fps)
         frame = self.reader.get_data(frame_index)
-        frame = PILImage.fromarray(frame).convert("RGBA")
-        return np.asarray(frame)
+        pil_frame = PILImage.fromarray(frame).convert("RGBA")
+        return np.asarray(pil_frame)
 
 
 class Slide(TimelineMixin):
@@ -173,8 +176,8 @@ class Slide(TimelineMixin):
         if self.slide_images is None:
             slide_images = []
             for img in convert_from_path(self.slide_file):
-                img = np.asarray(img.convert("RGBA"))
-                slide_images.append(img)
+                img_np = np.asarray(img.convert("RGBA"))
+                slide_images.append(img_np)
             self.slide_images = slide_images
         return self.slide_images[slide_number]
 

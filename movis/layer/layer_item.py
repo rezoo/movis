@@ -33,14 +33,6 @@ class LayerItem:
     def duration(self) -> float:
         return self.end_time - self.start_time
 
-    @property
-    def composition_start_time(self) -> float:
-        return self.offset + self.start_time
-
-    @property
-    def composition_end_time(self) -> float:
-        return self.offset + self.end_time
-
     def enable_alpha_matte(self, alpha_matte: "LayerItem") -> "LayerItem":
         self._alpha_matte = alpha_matte
         return alpha_matte
