@@ -16,7 +16,6 @@ class LayerItem:
             offset: float = 0.0, start_time: float = 0.0, end_time: float = 0.0,
             visible: bool = True,
             blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
-            origin_point: Union[Direction, str] = Direction.CENTER,
             alpha_matte: Optional["LayerItem"] = None):
         self.name: str = name
         self.layer: Layer = layer
@@ -27,7 +26,6 @@ class LayerItem:
         self.visible: bool = visible
         mode = BlendingMode.from_string(blending_mode) if isinstance(blending_mode, str) else blending_mode
         self.blending_mode: BlendingMode = mode
-        self.origin_point = Direction.from_string(origin_point) if isinstance(origin_point, str) else origin_point
         self._alpha_matte: Optional[LayerItem] = alpha_matte
         self._effects: list[Effect] = []
 
@@ -111,7 +109,7 @@ class LayerItem:
         h, w = fg_image.shape[:2]
 
         T1, SR = _get_T1(p), _get_SR(p)
-        T2 = _get_T2(p, (w, h), self.origin_point)
+        T2 = _get_T2(p, (w, h), self.transform.origin_point)
         M = T1 @ SR @ T2
         P = np.array([
             [1 / preview_level, 0, 0],

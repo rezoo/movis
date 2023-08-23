@@ -17,7 +17,7 @@ def main():
         layer_item.transform.scale.enable_motion().extend(
             keyframes=[0, box_duration], values=[1.8, 0.4], motion_types=['ease_in_out_medium', 'linear'])
 
-    text_kwargs = dict(font='Helvetica', font_size=60, color=(0, 0, 0), duration=duration)
+    text_kwargs = dict(font_family='Helvetica', font_size=60, color=(0, 0, 0), duration=duration)
     text_ypos = size[1] / 2 - 150
     square.add_layer(
         mv.layer.Text('Hello', **text_kwargs), transform=mv.Transform(position=(30 + 300, text_ypos)),

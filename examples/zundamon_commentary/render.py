@@ -77,8 +77,7 @@ def main():
         scene.add_layer(
             make_table_of_contents(
                 'イントロダクション', font_size=46, duration=100.0),
-            transform=Transform(position=(1920 + 10, 35)),
-            origin_point='center_right',
+            transform=Transform(position=(1920 + 10, 35), origin_point='center_right'),
             offset=tl[tl['slide'] == 1].iloc[0]['start_time']),
         np.array([500, 0]))
 
@@ -94,8 +93,7 @@ def main():
                     mv.layer.FillProperty(color=(255, 255, 255))],
                 duration=character_tl['end_time'].max(),
                 text_alignment='center'),
-            transform=Transform(position=(960, 1040)),
-            origin_point=mv.Direction.BOTTOM_CENTER)
+            transform=Transform(position=(960, 1040), origin_point=mv.Direction.BOTTOM_CENTER))
 
     bgm = mv.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)

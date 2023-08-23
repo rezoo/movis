@@ -9,7 +9,7 @@ import numpy as np
 from diskcache import Cache
 from tqdm import tqdm
 
-from ..enum import CacheType, Direction
+from ..enum import CacheType
 from ..imgproc import BlendingMode
 from ..transform import Transform
 from .layer import Layer
@@ -128,7 +128,6 @@ class Composition:
         end_time: Optional[float] = None,
         visible: bool = True,
         blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
-        origin_point: Direction = Direction.CENTER,
     ) -> LayerItem:
         if name is None:
             name = f"layer_{len(self._layers)}"
@@ -146,7 +145,6 @@ class Composition:
             end_time=end_time,
             visible=visible,
             blending_mode=blending_mode,
-            origin_point=origin_point,
         )
         self._layers.append(layer_item)
         self._name_to_layer[name] = layer_item
