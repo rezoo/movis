@@ -47,10 +47,10 @@ def main():
 
     def make_table_of_contents(
             text: str, duration: float, margin: int = 60,
-            font_size: int = 46, bg_color=(72, 172, 154), line_width=4):
+            font_size: int = 46, bg_color="#48AC9A", line_width=4):
 
         layer = mv.layer.Text(
-            text, font_family=font_name, font_size=font_size, color=(255, 255, 255), duration=duration)
+            text, font_family=font_name, font_size=font_size, color="#ffffff", duration=duration)
         W, H = layer.get_size()
         cp = mv.layer.Composition(
             size=(W + margin, H), duration=duration)
@@ -58,8 +58,8 @@ def main():
             mv.layer.Rectangle(
                 (W + margin - line_width // 2, H - line_width // 2), radius=8,
                 contents=[
-                    mv.layer.FillProperty(color=bg_color),
-                    mv.layer.StrokeProperty(color=(255, 255, 255), width=line_width)],
+                    mv.layer.FillProperty(color=mv.to_rgb(bg_color)),
+                    mv.layer.StrokeProperty(color=mv.to_rgb('#ffffff'), width=line_width)],
                 duration=duration))
         cp.add_layer(layer)
         return cp
@@ -84,16 +84,17 @@ def main():
     for character in tl['character'].unique():
         character_tl = tl[tl['character'] == character]
         texts = [c.replace('\\n', '\n') for c in character_tl['text'].tolist()]
-        color_dict = {'zunda': (94, 166, 56), 'metan': (171, 74, 115)}
-        scene.add_layer(
+        color_dict = {'zunda': "#5EA638", 'metan': "#AB4A73"}
+        item = scene.add_layer(
             mv.layer.Text.from_timeline(
                 character_tl['start_time'], character_tl['end_time'], texts,
                 font_size=72, font_family=font_name, line_spacing=100, contents=[
-                    mv.layer.StrokeProperty(color=color_dict[character], width=12),
-                    mv.layer.FillProperty(color=(255, 255, 255))],
+                    mv.layer.StrokeProperty(color=mv.to_rgb(color_dict[character]), width=12),
+                    mv.layer.FillProperty(color=mv.to_rgb('#ffffff'))],
                 duration=character_tl['end_time'].max(),
                 text_alignment='center'),
-            transform=Transform(position=(960, 1040), origin_point=mv.Direction.BOTTOM_CENTER))
+            transform=Transform.from_positions(scene.size, bottom=40.0))
+        item.add_effect(mv.effect.DropShadow(offset=5.0))
 
     bgm = mv.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)
