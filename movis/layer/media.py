@@ -20,7 +20,7 @@ class Image:
     def __init__(
         self,
         img_file: Union[str, Path, PILImage.Image, np.ndarray],
-        duration: float = 1.0
+        duration: float = 1e6
     ) -> None:
         self.image: Optional[np.ndarray] = None
         self._img_file: Optional[Path] = None

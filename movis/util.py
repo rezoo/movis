@@ -1,6 +1,6 @@
-from collections.abc import Sequence as SequenceType
 import difflib
 import hashlib
+from collections.abc import Sequence as SequenceType
 from pathlib import Path
 from typing import Hashable, Sequence, Union
 

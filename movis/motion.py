@@ -5,7 +5,6 @@ import numpy as np
 
 from .enum import AttributeType, MotionType
 
-
 MOTION_TYPES_TO_FUNC = {
     MotionType.LINEAR: lambda t: t,
     MotionType.EASE_IN: lambda t: t**2,

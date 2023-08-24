@@ -37,7 +37,7 @@ class Rectangle(AttributesMixin):
         radius: float = 0.,
         color: Optional[Union[tuple[int, int, int], str]] = None,
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
-        duration: float = 1.
+        duration: float = 1e6
     ) -> None:
         if not pyside6_available:
             raise ImportError("PySide6 must be installed to use Rectangle")
@@ -96,7 +96,7 @@ class Ellipse(AttributesMixin):
         size: tuple[float, float] = (100., 100.),
         color: Optional[Union[tuple[int, int, int], str]] = None,
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
-        duration: float = 1.
+        duration: float = 1e6
     ) -> None:
         if not pyside6_available:
             raise ImportError("PySide6 must be installed to use Ellipse")
@@ -200,7 +200,7 @@ class Text(AttributesMixin):
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
         line_spacing: Optional[int] = None,
         text_alignment: Union[TextAlignment, str] = TextAlignment.CENTER,
-        duration: float = 1.
+        duration: float = 1e6
     ) -> None:
         if not pyside6_available:
             raise ImportError("PySide6 must be installed to use Text")

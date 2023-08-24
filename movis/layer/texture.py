@@ -15,7 +15,7 @@ class Gradation(AttributesMixin):
         start_color: Union[tuple[int, int, int], str] = (0, 0, 0),
         end_color: Union[tuple[int, int, int], str] = (255, 255, 255),
         gradation_type: str = 'linear',
-        duration: float = 1.0,
+        duration: float = 1e6,
     ) -> None:
         self.size = size
         self.duration = duration
@@ -61,7 +61,7 @@ class Stripe(AttributesMixin):
         total_width: float = 64.,
         phase: float = 0.,
         ratio: float = 0.5,
-        duration: float = 1.0,
+        duration: float = 1e6,
         sampling_level: int = 1,
     ) -> None:
         self.size = size
