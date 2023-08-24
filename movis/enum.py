@@ -33,13 +33,6 @@ class MotionType(Enum):
     EASE_IN = 1
     EASE_OUT = 2
     EASE_IN_OUT = 3
-    EASE_IN_MEDIUM = 4
-    EASE_OUT_MEDIUM = 5
-    EASE_IN_OUT_MEDIUM = 6
-    EASE_IN_EXPO = 7
-    EASE_OUT_EXPO = 8
-    EASE_IN_OUT_EXPO = 9
-
     EASE_IN2 = 102
     EASE_IN3 = 103
     EASE_IN5 = 105
