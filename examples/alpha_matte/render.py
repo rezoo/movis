@@ -15,7 +15,7 @@ def main():
 
     for layer_item in square.layers:
         layer_item.transform.scale.enable_motion().extend(
-            keyframes=[0, box_duration], values=[1.8, 0.4], motion_types=['ease_in_out_medium', 'linear'])
+            keyframes=[0, box_duration], values=[1.8, 0.4], motion_types=['ease_in_out3', 'linear'])
 
     text_kwargs = dict(font_family='Helvetica', font_size=60, color=(0, 0, 0), duration=duration)
     text_ypos = size[1] / 2 - 150
@@ -35,7 +35,7 @@ def main():
         layer_item.transform.position.enable_motion().extend(
             keyframes=[box_duration - 0.5, duration],
             values=[before, after],
-            motion_types=['ease_out_medium', 'linear'])
+            motion_types=['ease_out3', 'linear'])
     move_text(square['text1'])
     move_text(square['text2'])
     move_text(square['text3'])

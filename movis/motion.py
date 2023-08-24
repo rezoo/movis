@@ -1,5 +1,4 @@
 import bisect
-import math
 from typing import Any, Callable, Optional, Sequence, Union
 
 import numpy as np
@@ -7,29 +6,32 @@ import numpy as np
 from .enum import AttributeType, MotionType
 
 
-def __ease_in_out_medium(t: float):
-    alpha = 1.0135673098126083
-    beta = 0.0066928509242848554
-    return alpha * (1 / (1 + math.exp(- (t - 0.5) / 0.1)) - beta)
-
-
-def __ease_in_out_expo(t: float):
-    alpha = 1.0000908039820193
-    beta = 4.5397868702434395e-05
-    return alpha * (1 / (1 + math.exp(- (t - 0.5) / 0.05)) - beta)
-
-
 MOTION_TYPES_TO_FUNC = {
     MotionType.LINEAR: lambda t: t,
     MotionType.EASE_IN: lambda t: t**2,
     MotionType.EASE_OUT: lambda t: 1.0 - (1.0 - t) ** 2,
     MotionType.EASE_IN_OUT: lambda t: t**2 * (3.0 - 2.0 * t),
-    MotionType.EASE_IN_MEDIUM: lambda t: t**3,
-    MotionType.EASE_OUT_MEDIUM: lambda t: 1.0 - (1.0 - t) ** 3,
-    MotionType.EASE_IN_OUT_MEDIUM: __ease_in_out_medium,
-    MotionType.EASE_IN_EXPO: lambda t: math.exp(-10.0 * (1 - t)),
-    MotionType.EASE_OUT_EXPO: lambda t: 1 - math.exp(-10.0 * t),
-    MotionType.EASE_IN_OUT_EXPO: __ease_in_out_expo,
+    MotionType.EASE_IN2: lambda t: t ** 2,
+    MotionType.EASE_IN3: lambda t: t ** 3,
+    MotionType.EASE_IN5: lambda t: t ** 5,
+    MotionType.EASE_IN8: lambda t: t ** 8,
+    MotionType.EASE_IN13: lambda t: t ** 13,
+    MotionType.EASE_IN21: lambda t: t ** 21,
+    MotionType.EASE_IN34: lambda t: t ** 34,
+    MotionType.EASE_OUT2: lambda t: 1. - (1 - t) ** 2,
+    MotionType.EASE_OUT3: lambda t: 1. - (1 - t) ** 3,
+    MotionType.EASE_OUT5: lambda t: 1. - (1 - t) ** 5,
+    MotionType.EASE_OUT8: lambda t: 1. - (1 - t) ** 8,
+    MotionType.EASE_OUT13: lambda t: 1. - (1 - t) ** 13,
+    MotionType.EASE_OUT21: lambda t: 1. - (1 - t) ** 21,
+    MotionType.EASE_OUT34: lambda t: 1. - (1 - t) ** 34,
+    MotionType.EASE_IN_OUT2: lambda t: 0.5 * (2 * t) ** 2 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 2,
+    MotionType.EASE_IN_OUT3: lambda t: 0.5 * (2 * t) ** 3 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 3,
+    MotionType.EASE_IN_OUT5: lambda t: 0.5 * (2 * t) ** 5 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 5,
+    MotionType.EASE_IN_OUT8: lambda t: 0.5 * (2 * t) ** 8 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 8,
+    MotionType.EASE_IN_OUT13: lambda t: 0.5 * (2 * t) ** 13 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 13,
+    MotionType.EASE_IN_OUT21: lambda t: 0.5 * (2 * t) ** 21 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 21,
+    MotionType.EASE_IN_OUT34: lambda t: 0.5 * (2 * t) ** 34 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 34,
 }
 
 

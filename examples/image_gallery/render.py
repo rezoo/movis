@@ -20,7 +20,7 @@ def make_logo(text: str, duration: float, font_size: int, margin_x: int = 20, ma
     rect.transform.scale.enable_motion().extend(
         keyframes=[0.0, 1.0, duration - 1.0, duration],
         values=[(0.0, 1.0), (1.0, 1.0), (1.0, 1.0), (0.0, 1.0)],
-        motion_types=['ease_in_out_expo', 'linear', 'ease_in_out_expo'])
+        motion_types=['ease_in_out5', 'linear', 'ease_in_out5'])
     text_item.transform.opacity.enable_motion().extend(
         keyframes=[0.5, 0.75, duration - 0.75, duration - 0.5],
         values=[0.0, 1.0, 1.0, 0.0])

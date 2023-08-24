@@ -40,6 +40,28 @@ class MotionType(Enum):
     EASE_OUT_EXPO = 8
     EASE_IN_OUT_EXPO = 9
 
+    EASE_IN2 = 102
+    EASE_IN3 = 103
+    EASE_IN5 = 105
+    EASE_IN8 = 108
+    EASE_IN13 = 113
+    EASE_IN21 = 121
+    EASE_IN34 = 134
+    EASE_OUT2 = 202
+    EASE_OUT3 = 203
+    EASE_OUT5 = 205
+    EASE_OUT8 = 208
+    EASE_OUT13 = 213
+    EASE_OUT21 = 221
+    EASE_OUT34 = 234
+    EASE_IN_OUT2 = 302
+    EASE_IN_OUT3 = 303
+    EASE_IN_OUT5 = 305
+    EASE_IN_OUT8 = 308
+    EASE_IN_OUT13 = 313
+    EASE_IN_OUT21 = 321
+    EASE_IN_OUT34 = 334
+
     @staticmethod
     def from_string(s: str) -> "MotionType":
         if s in STRING_TO_MOTION_TYPE:
@@ -53,12 +75,27 @@ STRING_TO_MOTION_TYPE = {
     "ease_in": MotionType.EASE_IN,
     "ease_out": MotionType.EASE_OUT,
     "ease_in_out": MotionType.EASE_IN_OUT,
-    "ease_in_medium": MotionType.EASE_IN_MEDIUM,
-    "ease_out_medium": MotionType.EASE_OUT_MEDIUM,
-    "ease_in_out_medium": MotionType.EASE_IN_OUT_MEDIUM,
-    "ease_in_expo": MotionType.EASE_IN_EXPO,
-    "ease_out_expo": MotionType.EASE_OUT_EXPO,
-    "ease_in_out_expo": MotionType.EASE_IN_OUT_EXPO,
+    "ease_in2": MotionType.EASE_IN2,
+    "ease_in3": MotionType.EASE_IN3,
+    "ease_in5": MotionType.EASE_IN5,
+    "ease_in8": MotionType.EASE_IN8,
+    "ease_in13": MotionType.EASE_IN13,
+    "ease_in21": MotionType.EASE_IN21,
+    "ease_in34": MotionType.EASE_IN34,
+    "ease_out2": MotionType.EASE_OUT2,
+    "ease_out3": MotionType.EASE_OUT3,
+    "ease_out5": MotionType.EASE_OUT5,
+    "ease_out8": MotionType.EASE_OUT8,
+    "ease_out13": MotionType.EASE_OUT13,
+    "ease_out21": MotionType.EASE_OUT21,
+    "ease_out34": MotionType.EASE_OUT34,
+    "ease_in_out2": MotionType.EASE_IN_OUT2,
+    "ease_in_out3": MotionType.EASE_IN_OUT3,
+    "ease_in_out5": MotionType.EASE_IN_OUT5,
+    "ease_in_out8": MotionType.EASE_IN_OUT8,
+    "ease_in_out13": MotionType.EASE_IN_OUT13,
+    "ease_in_out21": MotionType.EASE_IN_OUT21,
+    "ease_in_out34": MotionType.EASE_IN_OUT34,
 }
 
 
