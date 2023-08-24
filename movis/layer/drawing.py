@@ -74,14 +74,15 @@ class Rectangle(AttributesMixin):
             if isinstance(c, FillProperty):
                 r, g, b = c.color
                 a = round(255 * c.opacity)
-                brush = QBrush(QColor(b, g, r, a))
-                painter.setBrush(brush)
+                painter.setBrush(QBrush(QColor(b, g, r, a)))
+                painter.setPen(QPen(QColor(b, g, r, 0)))
                 painter.drawRoundedRect(rect, radius, radius, mode=Qt.SizeMode.AbsoluteSize)
             elif isinstance(c, StrokeProperty):
                 r, g, b = c.color
                 a = round(255 * c.opacity)
                 painter_path = QPainterPath()
                 painter_path.addRoundedRect(rect, radius, radius, mode=Qt.SizeMode.AbsoluteSize)
+                painter.setBrush(QBrush(QColor(b, g, r, 0)))
                 painter.setPen(QPen(QColor(b, g, r, a), c.width))
                 painter.drawPath(painter_path)
             else:
@@ -131,8 +132,8 @@ class Ellipse(AttributesMixin):
             if isinstance(c, FillProperty):
                 r, g, b = c.color
                 a = round(255 * c.opacity)
-                brush = QBrush(QColor(b, g, r, a))
-                painter.setBrush(brush)
+                painter.setBrush(QBrush(QColor(b, g, r, a)))
+                painter.setPen(QPen(QColor(b, g, r, 0)))
                 painter.drawEllipse(rect)
             elif isinstance(c, StrokeProperty):
                 r, g, b = c.color
@@ -140,6 +141,7 @@ class Ellipse(AttributesMixin):
                 painter_path = QPainterPath()
                 painter_path.addEllipse(rect)
                 painter.setPen(QPen(QColor(b, g, r, a), c.width))
+                painter.setBrush(QBrush(QColor(b, g, r, 0)))
                 painter.drawPath(painter_path)
             else:
                 raise ValueError(f"Invalid content type: {type(c)}")
