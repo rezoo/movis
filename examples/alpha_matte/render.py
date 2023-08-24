@@ -48,7 +48,7 @@ def main():
     # Note that the image can be downloaded from: https://unsplash.com/photos/J6LMHbdW1k8
     layer_item = mv.layer.LayerItem(
         mv.layer.Image('image.jpg', duration=duration),
-        transform=mv.Transform(position=(size[0] / 2, size[1] / 2)))
+        transform=mv.Transform.from_positions(scene.size))
     scene['square'].enable_alpha_matte(layer_item)
     # Now let's make a video.
     scene.write_video('alpha_matte.mp4')
