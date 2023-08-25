@@ -58,8 +58,8 @@ def main():
             mv.layer.Rectangle(
                 (W + margin - line_width // 2, H - line_width // 2), radius=8,
                 contents=[
-                    mv.layer.FillProperty(color=mv.to_rgb(bg_color)),
-                    mv.layer.StrokeProperty(color=mv.to_rgb('#ffffff'), width=line_width)],
+                    mv.layer.FillProperty(color=bg_color),
+                    mv.layer.StrokeProperty(color='#ffffff', width=line_width)],
                 duration=duration))
         cp.add_layer(layer)
         return cp
@@ -73,13 +73,20 @@ def main():
         name='metan_logo', offset=0.5,
         transform=Transform(position=(170, 340))), np.array([-500, 0]))
 
-    slide_in_out(
-        scene.add_layer(
-            make_table_of_contents(
-                'イントロダクション', font_size=46, duration=100.0),
-            transform=Transform(position=(1920 + 10, 35), origin_point='center_right'),
-            offset=tl[tl['slide'] == 1].iloc[0]['start_time']),
-        np.array([500, 0]))
+    sections = tl[~tl['section'].isnull()]
+    section_times = np.concatenate([sections['start_time'].to_numpy(), [3600.0]])
+    for i in range(len(section_times) - 1):
+        start_time = section_times[i]
+        end_time = section_times[i + 1]
+        duration = end_time - start_time
+        section = sections['section'].iloc[i]
+        slide_in_out(
+            scene.add_layer(
+                make_table_of_contents(
+                    section, font_size=46, duration=duration),
+                transform=Transform(position=(1920 + 10, 35), origin_point='center_right'),
+                offset=start_time),
+            np.array([500, 0]))
 
     for character in tl['character'].unique():
         character_tl = tl[tl['character'] == character]

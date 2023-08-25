@@ -269,10 +269,10 @@ class Text(AttributesMixin):
         w, h = float(size[0]), float(size[1])
 
         # TODO (msaito): Fix this hack
-        margin = 1.
+        margin = 40.
         max_stroke = _get_max_stroke(self.contents)
-        W = np.floor(w + 2 * max_stroke + 2 * margin)
-        H = np.floor(h + 2 * max_stroke + 2 * margin)
+        W = np.floor(w + max_stroke + 2 * margin)
+        H = np.floor(h + max_stroke + 2 * margin)
         image = QImage(W, H, QImage.Format.Format_ARGB32)
         max_color = _get_max_color(self.contents)
         if max_color is None:
