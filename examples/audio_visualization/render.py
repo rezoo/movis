@@ -2,10 +2,11 @@ import argparse
 
 import librosa
 import numpy as np
-import movis as mv
 from PIL import Image as PILImage
 from PIL import ImageDraw as PILImageDraw
 from scipy.interpolate import RegularGridInterpolator
+
+import movis as mv
 
 
 def get_audio_image(path: str):

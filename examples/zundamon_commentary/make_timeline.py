@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
+
 from movis import make_timeline_from_voicevox, merge_timeline
 
 
