@@ -1,5 +1,5 @@
 import sys
-from typing import Callable, Hashable, NamedTuple, Optional, Sequence, Union
+from typing import Callable, Hashable, Optional, Sequence, Union
 
 import numpy as np
 
@@ -19,15 +19,19 @@ except ImportError:
     pyside6_available = False
 
 
-class FillProperty(NamedTuple):
-    color: tuple[int, int, int] = (0, 0, 0)
-    opacity: float = 1.
+class FillProperty:
+
+    def __init__(self, color: Union[tuple[int, int, int], str], opacify: float = 1.):
+        self.color: tuple[int, int, int] = to_rgb(color)
+        self.opacity: float = float(opacify)
 
 
-class StrokeProperty(NamedTuple):
-    color: tuple[int, int, int] = (255, 255, 255)
-    width: float = 1.
-    opacity: float = 1.
+class StrokeProperty:
+
+    def __init__(self, color: Union[tuple[int, int, int], str], width: float = 1., opacity: float = 1.):
+        self.color: tuple[int, int, int] = to_rgb(color)
+        self.width: float = float(width)
+        self.opacity: float = float(opacity)
 
 
 class Rectangle(AttributesMixin):
@@ -265,7 +269,7 @@ class Text(AttributesMixin):
         w, h = float(size[0]), float(size[1])
 
         # TODO (msaito): Fix this hack
-        margin = 20.
+        margin = 1.
         max_stroke = _get_max_stroke(self.contents)
         W = np.floor(w + 2 * max_stroke + 2 * margin)
         H = np.floor(h + 2 * max_stroke + 2 * margin)

@@ -89,8 +89,8 @@ def main():
             mv.layer.Text.from_timeline(
                 character_tl['start_time'], character_tl['end_time'], texts,
                 font_size=72, font_family=font_name, line_spacing=100, contents=[
-                    mv.layer.StrokeProperty(color=mv.to_rgb(color_dict[character]), width=12),
-                    mv.layer.FillProperty(color=mv.to_rgb('#ffffff'))],
+                    mv.layer.StrokeProperty(color=color_dict[character], width=12),
+                    mv.layer.FillProperty(color='#ffffff')],
                 duration=character_tl['end_time'].max(),
                 text_alignment='center'),
             transform=Transform.from_positions(scene.size, bottom=40.0))
