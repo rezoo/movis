@@ -17,7 +17,7 @@ def main():
         layer_item.transform.scale.enable_motion().extend(
             keyframes=[0, box_duration], values=[1.8, 0.4], motion_types=['ease_in_out3', 'linear'])
 
-    text_kwargs = dict(font_family='Helvetica', font_size=60, color=(0, 0, 0), duration=duration)
+    text_kwargs = dict(font_family='Helvetica', font_size=60, color="#ffffff", duration=duration)
     text_ypos = size[1] / 2 - 150
     square.add_layer(
         mv.layer.Text('Hello', **text_kwargs), transform=mv.Transform(position=(30 + 300, text_ypos)),
@@ -33,24 +33,18 @@ def main():
         after = layer_item.transform.position.init_value
         before = after + np.array([0, 100])
         layer_item.transform.position.enable_motion().extend(
-            keyframes=[box_duration - 0.5, duration],
-            values=[before, after],
+            keyframes=[box_duration - 0.5, duration], values=[before, after],
             motion_types=['ease_out3', 'linear'])
     move_text(square['text1'])
     move_text(square['text2'])
     move_text(square['text3'])
 
+    image = mv.layer.Composition(size, duration=duration)
+    image.add_layer(mv.layer.Image('image.jpg', duration=duration))
+
     scene = mv.layer.Composition(size, duration=duration)
-    scene.add_layer(mv.layer.Rectangle(size, color=(55, 55, 55), duration=duration), name='bg')
-    scene.add_layer(square, name='square')
-    # Specify image as the target of the alpha matte of square.
-    # It overwrites the color of square with image.
-    # Note that the image can be downloaded from: https://unsplash.com/photos/J6LMHbdW1k8
-    layer_item = mv.layer.LayerItem(
-        mv.layer.Image('image.jpg', duration=duration),
-        transform=mv.Transform.from_positions(scene.size))
-    scene['square'].enable_alpha_matte(layer_item)
-    # Now let's make a video.
+    scene.add_layer(mv.layer.Rectangle(size, color="#373737", duration=duration))
+    scene.add_layer(mv.layer.AlphaMatte(square, image))
     scene.write_video('alpha_matte.mp4')
 
 

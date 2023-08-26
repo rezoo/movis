@@ -10,7 +10,6 @@ from diskcache import Cache
 from tqdm import tqdm
 
 from ..enum import CacheType
-from ..imgproc import BlendingMode
 from ..transform import Transform
 from .layer import Layer
 from .layer_item import LayerItem
@@ -127,7 +126,6 @@ class Composition:
         start_time: float = 0.0,
         end_time: Optional[float] = None,
         visible: bool = True,
-        blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL,
     ) -> LayerItem:
         if name is None:
             name = f"layer_{len(self._layers)}"
@@ -144,7 +142,6 @@ class Composition:
             start_time=start_time,
             end_time=end_time,
             visible=visible,
-            blending_mode=blending_mode,
         )
         self._layers.append(layer_item)
         self._name_to_layer[name] = layer_item
@@ -156,19 +153,6 @@ class Composition:
         index = next(i for i in range(len(self._layers)) if self._layers[i].name == name)
         layer_item = self._layers.pop(index)
         return layer_item
-
-    def enable_alpha_matte(self, source_name: str, target_name: str) -> LayerItem:
-        assert source_name in self._name_to_layer and target_name in self._name_to_layer, \
-            "source and target must be in self.layers"
-        target = self.pop_layer(target_name)
-        source = self[source_name]
-        source.enable_alpha_matte(target)
-        return source
-
-    def disable_alpha_matte(self, name: str) -> Optional[LayerItem]:
-        source = self[name]
-        target = source.disable_alpha_matte()
-        return target
 
     def __call__(self, time: float) -> Optional[np.ndarray]:
         L = self._preview_level
