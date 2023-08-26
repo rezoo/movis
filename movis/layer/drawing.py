@@ -268,7 +268,9 @@ class Text(AttributesMixin):
         size = self.get_size(time)
         w, h = float(size[0]), float(size[1])
 
-        # TODO (msaito): Fix this hack
+        # XXX: The returned rectangle and the area of the text
+        # actually drawn seem to be different. We will keep
+        # more margin in the interim
         margin = 40.
         max_stroke = _get_max_stroke(self.contents)
         W = np.floor(w + max_stroke + 2 * margin)
