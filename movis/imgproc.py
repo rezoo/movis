@@ -1,9 +1,10 @@
 from typing import Union
 
+import cv2
 import numpy as np
 from PIL import Image
 
-from .enum import BlendingMode
+from .enum import BlendingMode, MatteMode
 
 
 def _blend_overlay(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
@@ -41,12 +42,22 @@ BLENDING_MODE_TO_FUNC = {
 def _overlay(
         bg: np.ndarray, fg: np.ndarray, p_bg: tuple[int, int], p_fg: tuple[int, int],
         size: tuple[int, int], opacity: float,
-        mode: BlendingMode = BlendingMode.NORMAL, alpha_matte_mode: bool = False) -> np.ndarray:
+        mode: BlendingMode = BlendingMode.NORMAL,
+        matte_mode: MatteMode = MatteMode.NONE) -> np.ndarray:
     x_bg, y_bg = p_bg
     x_fg, y_fg = p_fg
     w, h = size
     bg_subset = bg[y_bg: (y_bg + h), x_bg: (x_bg + w)].astype(np.uint32)
     fg_subset = fg[y_fg: (y_fg + h), x_fg: (x_fg + w)].astype(np.uint32)
+
+    if matte_mode == MatteMode.LUMINANCE:
+        mask = cv2.cvtColor(bg_subset, cv2.COLOR_RGB2GRAY).astype(np.uint32)
+        fg_a = (fg_subset[..., 3] * opacity).astype(np.uint32) \
+            if opacity < 1.0 else fg_subset[..., 3].astype(np.uint32)
+        bg[y_bg: (y_bg + h), x_bg: (x_bg + w), :3] = fg_subset[..., :3]
+        bg[:, :, 3] = 0
+        bg[y_bg: (y_bg + h), x_bg: (x_bg + w), 3] = (mask * fg_a) // 255
+        return bg
 
     bg_a = bg_subset[..., 3:]
     fg_a = (fg_subset[..., 3:] * opacity).astype(np.uint32) if opacity < 1.0 else fg_subset[..., 3:]
@@ -56,8 +67,10 @@ def _overlay(
     target_rgb = BLENDING_MODE_TO_FUNC[mode](bg_rgb, fg_rgb)
     out_rgb = (coeff1 * target_rgb + coeff2 * bg_rgb) // (out_a + (out_a == 0))
     bg[y_bg: (y_bg + h), x_bg: (x_bg + w), :3] = out_rgb.astype(np.uint8)
-    if not alpha_matte_mode:
+    if matte_mode == MatteMode.NONE:
         bg[y_bg: (y_bg + h), x_bg: (x_bg + w), 3:] = (out_a // 255).astype(np.uint8)
+    elif matte_mode == MatteMode.ALPHA:
+        pass  # Do nothing
     return bg
 
 
@@ -67,7 +80,7 @@ def _alpha_composite_numpy(
     position: tuple[int, int] = (0, 0),
     opacity: float = 1.0,
     blending_mode: BlendingMode = BlendingMode.NORMAL,
-    alpha_matte_mode: bool = False,
+    matte_mode: MatteMode = MatteMode.NONE,
 ) -> np.ndarray:
     h1, w1 = bg_image.shape[:2]
     h2, w2 = fg_image.shape[:2]
@@ -82,7 +95,7 @@ def _alpha_composite_numpy(
 
     return _overlay(
         bg_image, fg_image, (x1, y1), (x2, y2), (w, h), opacity,
-        blending_mode, alpha_matte_mode)
+        blending_mode, matte_mode)
 
 
 def _alpha_composite_pil(
@@ -110,7 +123,7 @@ def alpha_composite(
     position: tuple[int, int] = (0, 0),
     opacity: float = 1.0,
     blending_mode: Union[str, BlendingMode] = BlendingMode.NORMAL,
-    alpha_matte_mode: bool = False,
+    matte_mode: MatteMode = MatteMode.NONE,
 ) -> np.ndarray:
     assert bg_image.ndim == 3
     assert fg_image.ndim == 3
@@ -120,7 +133,7 @@ def alpha_composite(
     assert fg_image.dtype == np.uint8
     if not bg_image.flags.writeable:
         bg_image = bg_image.copy()
-    if blending_mode == BlendingMode.NORMAL and not alpha_matte_mode:
+    if blending_mode == BlendingMode.NORMAL and matte_mode == MatteMode.NONE:
         # Use PIL for normal blending mode
         # because it is faster than my implementation
         return _alpha_composite_pil(bg_image, fg_image, position, opacity)
@@ -128,4 +141,4 @@ def alpha_composite(
         mode = BlendingMode.from_string(blending_mode) \
             if isinstance(blending_mode, str) else blending_mode
         return _alpha_composite_numpy(
-            bg_image, fg_image, position, opacity, mode, alpha_matte_mode)
+            bg_image, fg_image, position, opacity, mode, matte_mode)

@@ -120,6 +120,26 @@ STRING_TO_BLENDING_MODE = {
 }
 
 
+class MatteMode(Enum):
+    NONE = 0
+    ALPHA = 1
+    LUMINANCE = 2
+
+    @staticmethod
+    def from_string(s: str) -> "MatteMode":
+        if s in STRING_TO_MATTE_MODE:
+            return STRING_TO_MATTE_MODE[s]
+        else:
+            raise ValueError(f"Unknown matte mode: {s}")
+
+
+STRING_TO_MATTE_MODE = {
+    "none": MatteMode.NONE,
+    "alpha": MatteMode.ALPHA,
+    "luminance": MatteMode.LUMINANCE,
+}
+
+
 class Direction(Enum):
     BOTTOM_LEFT = 1
     BOTTOM_CENTER = 2
