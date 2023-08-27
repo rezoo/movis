@@ -6,5 +6,5 @@ from .layer_item import LayerItem  # noqa
 from .layer_ops import AlphaMatte, LuminanceMatte  # noqa
 from .media import Character, Image, Slide, Video  # noqa
 from .mixin import TimelineMixin  # noqa
-from .texture import Gradation, Stripe  # noqa
+from .texture import Gradient, Stripe  # noqa
 from .time_ops import Concatenate, Repeat, TimeWarp, Trim  # noqa
