@@ -47,8 +47,8 @@ def _overlay(
     x_bg, y_bg = p_bg
     x_fg, y_fg = p_fg
     w, h = size
-    bg_subset = bg[y_bg: (y_bg + h), x_bg: (x_bg + w)].astype(np.uint32)
-    fg_subset = fg[y_fg: (y_fg + h), x_fg: (x_fg + w)].astype(np.uint32)
+    bg_subset = bg[y_bg: (y_bg + h), x_bg: (x_bg + w)]
+    fg_subset = fg[y_fg: (y_fg + h), x_fg: (x_fg + w)]
 
     if matte_mode == MatteMode.LUMINANCE:
         mask = cv2.cvtColor(bg_subset, cv2.COLOR_RGB2GRAY).astype(np.uint32)
@@ -59,6 +59,8 @@ def _overlay(
         bg[y_bg: (y_bg + h), x_bg: (x_bg + w), 3] = (mask * fg_a) // 255
         return bg
 
+    bg_subset = bg_subset.astype(np.uint32)
+    fg_subset = fg_subset.astype(np.uint32)
     bg_a = bg_subset[..., 3:]
     fg_a = (fg_subset[..., 3:] * opacity).astype(np.uint32) if opacity < 1.0 else fg_subset[..., 3:]
     coeff1, coeff2 = 255 * fg_a, bg_a * (255 - fg_a)

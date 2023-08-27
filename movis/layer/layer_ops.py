@@ -53,6 +53,10 @@ class LuminanceMatte:
         target_key = self.target.get_key(time) if hasattr(self.target, 'get_key') else time
         return (mask_key, target_key)
 
+    @property
+    def duration(self) -> float:
+        return self.mask.duration
+
     def __call__(self, time: float) -> Optional[np.ndarray]:
         mask_frame = self.mask(time)
         if mask_frame is None:
