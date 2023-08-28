@@ -2,11 +2,13 @@ import argparse
 
 import librosa
 import numpy as np
-from PIL import Image as PILImage
-from PIL import ImageDraw as PILImageDraw
 from scipy.interpolate import RegularGridInterpolator
 
 import movis as mv
+from movis.layer.drawing import _qimage_to_numpy
+
+from PySide6.QtCore import QPointF, Qt
+from PySide6.QtGui import QColor, QImage, QPainter, QPen
 
 
 def get_audio_image(path: str):
@@ -19,7 +21,7 @@ def get_audio_image(path: str):
     p = np.percentile(db_array.mean(axis=1), 5)
     db_array = db_array[db_array.mean(axis=1) > p, :]
 
-    y_linear = np.linspace(0, 1, 512)
+    y_linear = np.linspace(0, 1, 256)
     y = np.linspace(0, 1, db_array.shape[0])
     x = np.linspace(0, 1, db_array.shape[1])
     interpolator = RegularGridInterpolator((y, x), db_array)
@@ -43,31 +45,34 @@ class FrequencyLayer:
         w = self.audio_img.shape[1]
         i = int(time * w / self.duration)
         array = self.audio_img[:, i]
-        frame = PILImage.new('RGBA', (self.size[0], self.size[1]))
-        draw = PILImageDraw.Draw(frame)
+        image = QImage(self.size[0], self.size[1], QImage.Format.Format_ARGB32)
+        image.fill(QColor(0, 0, 0, 0))
+        painter = QPainter(image)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        pen = QPen(QColor(255, 255, 255, 255))
+        pen.setWidthF(5.0)
+        pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+        painter.setPen(pen)
         if self.mode == 'line':
             points = np.linspace(
-                self.margin, self.size[0] - self.margin, len(array), dtype=np.int32)
+                self.margin, self.size[0] - self.margin, len(array), dtype=np.float64)
             for px, v in zip(points, array):
                 h = v * (self.size[1] - self.margin * 2)
-                draw.line(
-                    (px, (self.size[1] - h) // 2, px, (self.size[1] + h) // 2),
-                    fill=(255, 255, 255, 255), joint='curve', width=3)
+                painter.drawLine(QPointF(px, (self.size[1] - h) / 2), QPointF(px, (self.size[1] + h) / 2))
         elif self.mode == 'circle':
             n_point = len(array)
             theta = np.linspace(0., 2 * np.pi, n_point, endpoint=False)
             center = np.array([self.size[0] / 2, self.size[1] / 2], dtype=float)
             radius = min(self.size[0], self.size[1]) / 2 - self.length / 2 - self.margin
             points = np.concatenate([np.cos(theta)[:, None], np.sin(theta)[:, None]], axis=1)
-            points_start = np.round(center + radius * points)
-            points_end = np.round(center + (radius + array[:, None] * self.length / 2) * points)
+            points_start = center + radius * points
+            points_end = center + (radius + array[:, None] * self.length / 2) * points
             for p0, p1 in zip(points_start, points_end):
-                draw.line(
-                    (p0[0], p0[1], p1[0], p1[1]),
-                    fill=(255, 255, 255, 255), joint='curve', width=3)
+                painter.drawLine(QPointF(p0[0], p0[1]), QPointF(p1[0], p1[1]))
         else:
             raise ValueError
-        return np.asarray(frame)
+        painter.end()
+        return _qimage_to_numpy(image)
 
 
 def main():
