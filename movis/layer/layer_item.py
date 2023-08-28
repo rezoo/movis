@@ -32,6 +32,10 @@ class LayerItem:
         self._effects.append(effect)
         return effect
 
+    @property
+    def effects(self) -> list[Effect]:
+        return self._effects
+
     def get_key(self, layer_time: float) -> tuple[Hashable, Hashable, Hashable]:
         if not self.visible:
             return (None, None, None)

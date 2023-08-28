@@ -4,7 +4,6 @@ from collections.abc import Sequence as SequenceType
 from pathlib import Path
 from typing import Hashable, Sequence, Union
 
-import ffmpeg
 import pandas as pd
 from pydub import AudioSegment
 
@@ -114,6 +113,7 @@ def add_materials_to_video(
     dst_file: Union[str, Path],
     subtitle_file: Union[str, Path, None] = None,
 ) -> None:
+    import ffmpeg
     kwargs = {"vf": f"ass={str(subtitle_file)}"} if subtitle_file is not None else {'vcodec': 'copy'}
     video_input = ffmpeg.input(video_file)
     audio_input = ffmpeg.input(audio_file)
