@@ -35,25 +35,55 @@ class MotionType(Enum):
     EASE_IN_OUT = 3
     EASE_IN2 = 102
     EASE_IN3 = 103
+    EASE_IN4 = 104
     EASE_IN5 = 105
+    EASE_IN6 = 106
+    EASE_IN7 = 107
     EASE_IN8 = 108
-    EASE_IN13 = 113
-    EASE_IN21 = 121
-    EASE_IN34 = 134
+    EASE_IN9 = 109
+    EASE_IN10 = 110
+    EASE_IN12 = 112
+    EASE_IN14 = 114
+    EASE_IN16 = 116
+    EASE_IN18 = 118
+    EASE_IN20 = 120
+    EASE_IN25 = 125
+    EASE_IN30 = 130
+    EASE_IN35 = 135
     EASE_OUT2 = 202
     EASE_OUT3 = 203
+    EASE_OUT4 = 204
     EASE_OUT5 = 205
+    EASE_OUT6 = 206
+    EASE_OUT7 = 207
     EASE_OUT8 = 208
-    EASE_OUT13 = 213
-    EASE_OUT21 = 221
-    EASE_OUT34 = 234
+    EASE_OUT9 = 209
+    EASE_OUT10 = 210
+    EASE_OUT12 = 212
+    EASE_OUT14 = 214
+    EASE_OUT16 = 216
+    EASE_OUT18 = 218
+    EASE_OUT20 = 220
+    EASE_OUT25 = 225
+    EASE_OUT30 = 230
+    EASE_OUT35 = 235
     EASE_IN_OUT2 = 302
     EASE_IN_OUT3 = 303
+    EASE_IN_OUT4 = 304
     EASE_IN_OUT5 = 305
+    EASE_IN_OUT6 = 306
+    EASE_IN_OUT7 = 307
     EASE_IN_OUT8 = 308
-    EASE_IN_OUT13 = 313
-    EASE_IN_OUT21 = 321
-    EASE_IN_OUT34 = 334
+    EASE_IN_OUT9 = 309
+    EASE_IN_OUT10 = 310
+    EASE_IN_OUT12 = 312
+    EASE_IN_OUT14 = 314
+    EASE_IN_OUT16 = 316
+    EASE_IN_OUT18 = 318
+    EASE_IN_OUT20 = 320
+    EASE_IN_OUT25 = 325
+    EASE_IN_OUT30 = 330
+    EASE_IN_OUT35 = 335
 
     @staticmethod
     def from_string(s: str) -> "MotionType":
@@ -70,25 +100,55 @@ STRING_TO_MOTION_TYPE = {
     "ease_in_out": MotionType.EASE_IN_OUT,
     "ease_in2": MotionType.EASE_IN2,
     "ease_in3": MotionType.EASE_IN3,
+    "ease_in4": MotionType.EASE_IN4,
     "ease_in5": MotionType.EASE_IN5,
+    "ease_in6": MotionType.EASE_IN6,
+    "ease_in7": MotionType.EASE_IN7,
     "ease_in8": MotionType.EASE_IN8,
-    "ease_in13": MotionType.EASE_IN13,
-    "ease_in21": MotionType.EASE_IN21,
-    "ease_in34": MotionType.EASE_IN34,
+    "ease_in9": MotionType.EASE_IN9,
+    "ease_in10": MotionType.EASE_IN10,
+    "ease_in12": MotionType.EASE_IN12,
+    "ease_in14": MotionType.EASE_IN14,
+    "ease_in16": MotionType.EASE_IN16,
+    "ease_in18": MotionType.EASE_IN18,
+    "ease_in20": MotionType.EASE_IN20,
+    "ease_in25": MotionType.EASE_IN25,
+    "ease_in30": MotionType.EASE_IN30,
+    "ease_in35": MotionType.EASE_IN35,
     "ease_out2": MotionType.EASE_OUT2,
     "ease_out3": MotionType.EASE_OUT3,
+    "ease_out4": MotionType.EASE_OUT4,
     "ease_out5": MotionType.EASE_OUT5,
+    "ease_out6": MotionType.EASE_OUT6,
+    "ease_out7": MotionType.EASE_OUT7,
     "ease_out8": MotionType.EASE_OUT8,
-    "ease_out13": MotionType.EASE_OUT13,
-    "ease_out21": MotionType.EASE_OUT21,
-    "ease_out34": MotionType.EASE_OUT34,
+    "ease_out9": MotionType.EASE_OUT9,
+    "ease_out10": MotionType.EASE_OUT10,
+    "ease_out12": MotionType.EASE_OUT12,
+    "ease_out14": MotionType.EASE_OUT14,
+    "ease_out16": MotionType.EASE_OUT16,
+    "ease_out18": MotionType.EASE_OUT18,
+    "ease_out20": MotionType.EASE_OUT20,
+    "ease_out25": MotionType.EASE_OUT25,
+    "ease_out30": MotionType.EASE_OUT30,
+    "ease_out35": MotionType.EASE_OUT35,
     "ease_in_out2": MotionType.EASE_IN_OUT2,
     "ease_in_out3": MotionType.EASE_IN_OUT3,
+    "ease_in_out4": MotionType.EASE_IN_OUT4,
     "ease_in_out5": MotionType.EASE_IN_OUT5,
+    "ease_in_out6": MotionType.EASE_IN_OUT6,
+    "ease_in_out7": MotionType.EASE_IN_OUT7,
     "ease_in_out8": MotionType.EASE_IN_OUT8,
-    "ease_in_out13": MotionType.EASE_IN_OUT13,
-    "ease_in_out21": MotionType.EASE_IN_OUT21,
-    "ease_in_out34": MotionType.EASE_IN_OUT34,
+    "ease_in_out9": MotionType.EASE_IN_OUT9,
+    "ease_in_out10": MotionType.EASE_IN_OUT10,
+    "ease_in_out12": MotionType.EASE_IN_OUT12,
+    "ease_in_out14": MotionType.EASE_IN_OUT14,
+    "ease_in_out16": MotionType.EASE_IN_OUT16,
+    "ease_in_out18": MotionType.EASE_IN_OUT18,
+    "ease_in_out20": MotionType.EASE_IN_OUT20,
+    "ease_in_out25": MotionType.EASE_IN_OUT25,
+    "ease_in_out30": MotionType.EASE_IN_OUT30,
+    "ease_in_out35": MotionType.EASE_IN_OUT35,
 }
 
 
