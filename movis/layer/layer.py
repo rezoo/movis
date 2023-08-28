@@ -5,13 +5,12 @@ import numpy as np
 
 class Layer(Protocol):
     def __call__(self, time: float) -> Optional[np.ndarray]:
-        """The minimum required method to implement any layers. All layers must implement this method.
+        """The minimum required method to implement a layer. All layers must implement it.
 
         Specifically, this method returns a numpy.ndarray of shape (H, W, 4) with RGBA order and dtype as
         numpy.uint8, or None, given a time.
-
         When a numpy.ndarray is returned, Movis considers this array as an image and uses it as one of the layers
-        for rendering the video. If None is returned, Movis does not render this layer.
+        for rendering the video. If None is returned, Movis does not render its layer.
 
         Args:
             time (float): A scalar variable representing time.

@@ -16,6 +16,21 @@ from .layer_item import LayerItem
 
 
 class Composition:
+    """A base layer that integrates multiple layers.
+
+    Users create a composition by specifying both time and resolution. Next, multiple layers can be added to
+    the target composition through `Composition.add_layer()`. During this process, additional information such as
+    the layer's name, start time, position, opacity, and drawing mode can be specified.
+    Finally, the composition integrates the layers in the order they were added to create a single video.
+
+    Another composition can also be added as a layer within a composition.
+    By nesting compositions in this way, more complex motions can be created.
+
+    Args:
+        size: A tuple representing the size of the composition in the form of `(width, height)`.
+        duration: The duration along the time axis for the composition.
+    """
+
     def __init__(
         self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0
     ) -> None:
@@ -34,7 +49,7 @@ class Composition:
     def size(self, size: tuple[int, int]) -> None:
         assert len(size) == 2
         assert size[0] > 0 and size[1] > 0
-        self._size = size
+        self._size = (int(size[0]), int(size[1]))
 
     @property
     def duration(self) -> float:
@@ -43,7 +58,7 @@ class Composition:
     @duration.setter
     def duration(self, duration: float) -> None:
         assert duration > 0
-        self._duration = duration
+        self._duration = float(duration)
 
     @property
     def preview_level(self) -> int:
@@ -52,7 +67,7 @@ class Composition:
     @preview_level.setter
     def preview_level(self, level: int) -> None:
         assert level > 0
-        self._preview_level = level
+        self._preview_level = int(level)
 
     @contextmanager
     def preview(self, level: int = 2) -> Iterator[None]:
@@ -78,12 +93,32 @@ class Composition:
         return self._layers
 
     def keys(self) -> list[str]:
+        """Returns a list of layer names.
+
+        Note that the keys are sorted in the order in which they will be rendered.
+
+        Returns:
+            List[str]: A list of layer names sorted in the rendering order.
+        """
         return [layer.name for layer in self._layers]
 
     def values(self) -> list[LayerItem]:
+        """Returns a list of LayerItem objects.
+
+        Note that the elements of the list are not the layers themselves,
+        but `LayerItem` containing information of the layers.
+
+        Returns:
+            List[LayerItem]: A list of `LayerItem` objects.
+        """
         return self._layers
 
     def items(self) -> list[tuple[str, LayerItem]]:
+        """Returns a list of tuples, each consisting of a layer name and its corresponding item.
+
+        Returns:
+            List[Tuple[str, LayerItem]]: A list of tuples, where each tuple contains a layer name and its layer item.
+        """
         return [(layer.name, layer) for layer in self._layers]
 
     def __len__(self) -> int:
