@@ -55,7 +55,7 @@ def main():
     scene['subtitle'].transform.position.enable_motion().extend(
         [0.0, 0.5], [(p[0], p[1] + 100), (p[0], p[1] + 80)], ['ease_out3'])
 
-    scene.write_video('logo.mp4')
+    scene.write_video('output.mp4')
 
 
 if __name__ == '__main__':

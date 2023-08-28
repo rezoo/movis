@@ -2,13 +2,12 @@ import argparse
 
 import librosa
 import numpy as np
+from PySide6.QtCore import QPointF, Qt
+from PySide6.QtGui import QColor, QImage, QPainter, QPen
 from scipy.interpolate import RegularGridInterpolator
 
 import movis as mv
 from movis.layer.drawing import _qimage_to_numpy
-
-from PySide6.QtCore import QPointF, Qt
-from PySide6.QtGui import QColor, QImage, QPainter, QPen
 
 
 def get_audio_image(path: str):

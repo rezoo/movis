@@ -1,5 +1,6 @@
-import movis as mv
 import pandas as pd
+
+import movis as mv
 
 
 def make_logo(text: str, duration: float, font_size: int, margin_x: int = 20, margin_y: int = -20):
@@ -80,7 +81,7 @@ def main():
             keyframes=[0.0, T + t_prev + t_next], values=values)
         time += (T + t_next)
 
-    scene.write_video('video.mp4')
+    scene.write_video('output.mp4')
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
 import numpy as np
+
 import movis as mv
 
 
@@ -45,7 +46,7 @@ def main():
     scene = mv.layer.Composition(size, duration=duration)
     scene.add_layer(mv.layer.Rectangle(size, color="#373737", duration=duration))
     scene.add_layer(mv.layer.AlphaMatte(square, image))
-    scene.write_video('alpha_matte.mp4')
+    scene.write_video('output.mp4')
 
 
 if __name__ == '__main__':
