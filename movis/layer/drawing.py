@@ -2,21 +2,17 @@ import sys
 from typing import Callable, Hashable, Optional, Sequence, Union
 
 import numpy as np
+from PySide6.QtCore import QCoreApplication, QPointF, QRectF, Qt
+from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase, QFontMetrics,
+                           QImage, QPainter, QPainterPath, QPen)
+from PySide6.QtWidgets import QApplication
+
+from movis.imgproc import qimage_to_numpy
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..enum import TextAlignment
 from ..util import to_rgb
 from .mixin import TimelineMixin
-
-try:
-    from PySide6.QtCore import QCoreApplication, QPointF, QRectF, Qt
-    from PySide6.QtGui import (QBrush, QColor, QFont, QFontDatabase,
-                               QFontMetrics, QImage, QPainter, QPainterPath,
-                               QPen)
-    from PySide6.QtWidgets import QApplication
-    pyside6_available = True
-except ImportError:
-    pyside6_available = False
 
 
 class FillProperty:
@@ -43,8 +39,6 @@ class Rectangle(AttributesMixin):
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
         duration: float = 1e6
     ) -> None:
-        if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Rectangle")
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D, range=(0., 1e6))
         self.radius = Attribute(radius, value_type=AttributeType.SCALAR, range=(0., 1e6,))
         if color is None:
@@ -92,7 +86,7 @@ class Rectangle(AttributesMixin):
             else:
                 raise ValueError(f"Invalid content type: {type(c)}")
         painter.end()
-        return _qimage_to_numpy(image)
+        return qimage_to_numpy(image)
 
 
 class Ellipse(AttributesMixin):
@@ -103,8 +97,6 @@ class Ellipse(AttributesMixin):
         contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
         duration: float = 1e6
     ) -> None:
-        if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Ellipse")
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D, range=(0., 1e6))
         if color is None:
             self.contents = contents
@@ -150,23 +142,19 @@ class Ellipse(AttributesMixin):
             else:
                 raise ValueError(f"Invalid content type: {type(c)}")
         painter.end()
-        return _qimage_to_numpy(image)
+        return qimage_to_numpy(image)
 
 
 class Text(AttributesMixin):
 
     @staticmethod
     def available_fonts() -> Sequence[str]:
-        if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Text")
         if QCoreApplication.instance() is None:
             QApplication(sys.argv[:1])
         return QFontDatabase.families()
 
     @staticmethod
     def available_styles(font_name: str) -> Sequence[str]:
-        if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Text")
         if QCoreApplication.instance() is None:
             QApplication(sys.argv[:1])
         return QFontDatabase.styles(font_name)
@@ -208,8 +196,6 @@ class Text(AttributesMixin):
         text_alignment: Union[TextAlignment, str] = TextAlignment.CENTER,
         duration: float = 1e6
     ) -> None:
-        if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Text")
         self.text = text
         self.font_family = font_family
         self.font_style = font_style
@@ -338,7 +324,7 @@ class Text(AttributesMixin):
                     painter_path.addText(QPointF(max_stroke + margin + cursor_x, cursor_y), qfont, line)
                 painter.drawPath(painter_path)
         painter.end()
-        array = _qimage_to_numpy(image)
+        array = qimage_to_numpy(image)
         return _clip_image(array)
 
 
@@ -369,11 +355,3 @@ def _get_max_color(
         return fills[-1] if 0 < len(fills) else None
     else:
         return max(strokes, key=lambda x: x[0])[1]
-
-
-def _qimage_to_numpy(image: QImage) -> np.ndarray:
-    assert pyside6_available, "PySide6 is not available."
-    assert image.format() == QImage.Format.Format_ARGB32
-    ptr = image.bits()
-    array_shape = (image.height(), image.width(), 4)
-    return np.array(ptr).reshape(array_shape)

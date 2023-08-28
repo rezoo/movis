@@ -1,17 +1,12 @@
 from typing import Union
 
 import numpy as np
+from PySide6.QtGui import (QColor, QImage, QLinearGradient, QPainter,
+                           QRadialGradient)
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
+from ..imgproc import qimage_to_numpy
 from ..util import to_rgb
-from .drawing import _qimage_to_numpy
-
-try:
-    from PySide6.QtGui import (QColor, QImage, QLinearGradient, QPainter,
-                               QRadialGradient)
-    pyside6_available = True
-except ImportError:
-    pyside6_available = False
 
 
 class Gradient(AttributesMixin):
@@ -25,8 +20,6 @@ class Gradient(AttributesMixin):
         gradient_type: str = 'linear',
         duration: float = 1e6,
     ) -> None:
-        if not pyside6_available:
-            raise ImportError("PySide6 must be installed to use Gradient")
         self.size = size
         self.duration = duration
         self.start_point = Attribute(start_point, AttributeType.VECTOR2D)
@@ -62,7 +55,7 @@ class Gradient(AttributesMixin):
             grad_radial.setColorAt(1, QColor(ce[2], ce[1], ce[0], 255))
             painter.fillRect(0, 0, width, height, grad_radial)
         painter.end()
-        return _qimage_to_numpy(image)
+        return qimage_to_numpy(image)
 
 
 class Stripe(AttributesMixin):

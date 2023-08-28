@@ -3,6 +3,7 @@ from typing import Union
 import cv2
 import numpy as np
 from PIL import Image
+from PySide6.QtGui import QImage
 
 from .enum import BlendingMode, MatteMode
 
@@ -144,3 +145,10 @@ def alpha_composite(
             if isinstance(blending_mode, str) else blending_mode
         return _alpha_composite_numpy(
             bg_image, fg_image, position, opacity, mode, matte_mode)
+
+
+def qimage_to_numpy(image: QImage) -> np.ndarray:
+    assert image.format() == QImage.Format.Format_ARGB32
+    ptr = image.bits()
+    array_shape = (image.height(), image.width(), 4)
+    return np.array(ptr).reshape(array_shape)
