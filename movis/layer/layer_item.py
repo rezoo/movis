@@ -20,7 +20,7 @@ class LayerItem:
         self.transform: Transform = transform if transform is not None else Transform()
         self.offset: float = offset
         self.start_time: float = start_time
-        self.end_time: float = end_time if end_time is not None else layer.duration
+        self.end_time: float = end_time if end_time is not None else getattr(layer, "duration", 1e6)
         self.visible: bool = visible
         self._effects: list[Effect] = []
 

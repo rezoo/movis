@@ -131,7 +131,7 @@ class Composition:
             name = f"layer_{len(self._layers)}"
         if name in self._name_to_layer:
             raise KeyError(f"Layer with name {name} already exists")
-        end_time = end_time if end_time is not None else layer.duration
+        end_time = end_time if end_time is not None else getattr(layer, "duration", 1e6)
         transform = transform if transform is not None \
             else Transform.from_positions(self.size)
         layer_item = LayerItem(
