@@ -1,8 +1,8 @@
+import movis as mv
 import numpy as np
 import pandas as pd
-
-import movis as mv
 from movis import Transform
+from movis.contrib.commentary import Character, Slide
 
 
 def main():
@@ -16,19 +16,19 @@ def main():
         mv.layer.Image(img_file='../../assets/bg2.png', duration=tl['end_time'].max()),
         transform=Transform(position=(960, 540)))
     scene.add_layer(
-        mv.layer.Slide(
+        Slide(
             tl['start_time'], tl['end_time'],
             slide_file='slide.pdf', slide_counter=tl['slide']),
         transform=Transform(position=(960, 421), scale=0.71))
     scene.add_layer(
-        mv.layer.Character(
+        Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='zunda', character_dir='../../assets/character/zunda'),
         name='zunda',
         transform=Transform(position=(1779, 950), scale=0.7))
     scene.add_layer(
-        mv.layer.Character(
+        Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='metan', character_dir='../../assets/character/metan'),
