@@ -3,11 +3,12 @@ import numpy as np
 import pandas as pd
 from movis import Transform
 from movis.contrib.commentary import Character, Slide
+from movis.contrib.voicevox import make_voicevox_dataframe
 
 
 def main():
     timeline = pd.read_csv('outputs/timeline.tsv', sep='\t')
-    audio_timeline = mv.make_voicevox_dataframe('audio')
+    audio_timeline = make_voicevox_dataframe('audio')
     tl = pd.merge(timeline, audio_timeline, left_index=True, right_index=True)
     font_name = 'Hiragino Maru Gothic ProN'
 
