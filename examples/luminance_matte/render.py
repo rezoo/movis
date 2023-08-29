@@ -34,17 +34,17 @@ def main():
 
     p = text['text'].transform.position.init_value
     dp = np.array([0, 180])
-    text['text'].transform.position.enable_motion().extend(
+    text['text'].position.enable_motion().extend(
         [0, 1, 2, 3, 4],
         [p - np.array([100, 0]), p - 0 * dp, p - 1 * dp, p - 2 * dp, p - 3 * dp],
         ['ease_out8'] + ['ease_in_out8'] * 4)
-    text['text'].transform.opacity.enable_motion().extend(
+    text['text'].opacity.enable_motion().extend(
         [0, 1], [0, 1], ['ease_out8'])
 
-    ps = text['suffix'].transform.position.init_value
-    text['suffix'].transform.position.enable_motion().extend(
+    ps = text['suffix'].position.init_value
+    text['suffix'].position.enable_motion().extend(
         [0, 1], [ps + np.array([100, 0]), ps], ['ease_out8'])
-    text['suffix'].transform.opacity.enable_motion().extend(
+    text['suffix'].opacity.enable_motion().extend(
         [0, 1], [0, 1], ['ease_out8'])
 
     scene_size = (1920, 1080)
@@ -63,13 +63,13 @@ def main():
             font_style='Thin', color='#ffffff', duration=duration),
         offset=5.0,
         name='title')
-    p_title = scene['title'].transform.position.init_value
-    scene['title'].transform.position.enable_motion().extend(
+    p_title = scene['title'].position.init_value
+    scene['title'].position.enable_motion().extend(
         [0, 2.0], [p_title + np.array([0, 50]), p_title], ['ease_out8'])
-    scene['title'].transform.opacity.enable_motion().extend([0, 2.0], [0, 1], ['ease_out8'])
-    scene['subtitle'].transform.position.enable_motion().extend(
+    scene['title'].opacity.enable_motion().extend([0, 2.0], [0, 1], ['ease_out8'])
+    scene['subtitle'].position.enable_motion().extend(
         [4.0, 6.0], [p_subtitle, p_subtitle + np.array([-70, 150])], ['ease_in_out8'])
-    scene['subtitle'].transform.scale.enable_motion().extend(
+    scene['subtitle'].scale.enable_motion().extend(
         [4.0, 6.0], [1.0, 0.48], ['ease_in_out8'])
 
     scene.write_video('output.mp4')

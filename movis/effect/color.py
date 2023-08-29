@@ -4,12 +4,12 @@ import cv2
 import numpy as np
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
-from ..util import hex_to_rgb
+from ..util import to_rgb
 
 
 class FillColor(AttributesMixin):
     def __init__(self, color: Union[tuple[int, int, int], str] = (255, 255, 255)):
-        c = hex_to_rgb(color) if isinstance(color, str) else color
+        c = to_rgb(color)
         self.color = Attribute(c, AttributeType.COLOR, range=(0., 255.))
 
     def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:

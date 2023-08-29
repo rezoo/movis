@@ -10,7 +10,7 @@ def circle_anim(
         duration=duration)
     item = scene.add_layer(layer, offset=offset)
     layer.size.enable_motion().extend([0, duration], [sizes[0], sizes[1]], ['ease_out5'])
-    item.transform.opacity.enable_motion().extend([0, duration], [1, 0], ['ease_out5'])
+    item.opacity.enable_motion().extend([0, duration], [1, 0], ['ease_out5'])
 
 
 def main():
@@ -42,8 +42,8 @@ def main():
             font_style='Thin', color="#ffffff"),
         transform=mv.Transform(position=(p[0], p[1] - 50)),
         offset=2.25, name='logo')
-    scene['logo'].transform.opacity.enable_motion().extend([0.0, 0.5], [0.0, 1.0])
-    scene['logo'].transform.position.enable_motion().extend(
+    scene['logo'].opacity.enable_motion().extend([0.0, 0.5], [0.0, 1.0])
+    scene['logo'].position.enable_motion().extend(
         [0.0, 0.5], [(p[0], p[1] - 30), (p[0], p[1] - 50)], ['ease_out5'])
     scene.add_layer(
         mv.layer.Text(
@@ -51,8 +51,8 @@ def main():
             font_style='Light', color="#ffffff"),
         transform=mv.Transform(position=(p[0], p[1] - 50)),
         offset=2.5, name='subtitle')
-    scene['subtitle'].transform.opacity.enable_motion().extend([0.0, 0.5], [0.0, 1.0])
-    scene['subtitle'].transform.position.enable_motion().extend(
+    scene['subtitle'].opacity.enable_motion().extend([0.0, 0.5], [0.0, 1.0])
+    scene['subtitle'].position.enable_motion().extend(
         [0.0, 0.5], [(p[0], p[1] + 100), (p[0], p[1] + 80)], ['ease_out3'])
 
     scene.write_video('output.mp4')

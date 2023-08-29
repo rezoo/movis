@@ -18,11 +18,11 @@ def make_logo(text: str, duration: float, font_size: int, margin_x: int = 20, ma
             origin_point=mv.Direction.CENTER_RIGHT))
     text_item = title.add_layer(text_layer, name='text')
 
-    rect.transform.scale.enable_motion().extend(
+    rect.scale.enable_motion().extend(
         keyframes=[0.0, 1.0, duration - 1.0, duration],
         values=[(0.0, 1.0), (1.0, 1.0), (1.0, 1.0), (0.0, 1.0)],
         motion_types=['ease_in_out5', 'linear', 'ease_in_out5'])
-    text_item.transform.opacity.enable_motion().extend(
+    text_item.opacity.enable_motion().extend(
         keyframes=[0.5, 0.75, duration - 0.75, duration - 0.5],
         values=[0.0, 1.0, 1.0, 0.0])
     return title
@@ -56,11 +56,11 @@ def main():
             mv.layer.Image(row['image'], duration=T + t_prev + t_next), offset=time - t_prev)
         if i == 0:
             # Add fadein effect
-            image.transform.opacity.enable_motion().extend(keyframes=[0.0, 1.0], values=[0.0, 1.0])
+            image.opacity.enable_motion().extend(keyframes=[0.0, 1.0], values=[0.0, 1.0])
         elif i == len(timeline) - 1:
             # Add fadeout effect
             t = image.duration
-            image.transform.opacity.enable_motion().extend(keyframes=[t - 1.0, t], values=[1.0, 0.0])
+            image.opacity.enable_motion().extend(keyframes=[t - 1.0, t], values=[1.0, 0.0])
 
         kwargs_dict = {
             'center': {'position': (size[0] / 2, size[1] / 2), 'origin_point': mv.Direction.CENTER},
@@ -73,11 +73,11 @@ def main():
 
         if 0 < i:
             # Add fade effects
-            image.transform.opacity.enable_motion().extend(keyframes=[0.0, t_prev], values=[0.0, 1.0])
+            image.opacity.enable_motion().extend(keyframes=[0.0, t_prev], values=[0.0, 1.0])
 
         # Add scale effect
         values = [1.15, 1.25] if i % 2 == 0 else [1.25, 1.15]
-        image.transform.scale.enable_motion().extend(
+        image.scale.enable_motion().extend(
             keyframes=[0.0, T + t_prev + t_next], values=values)
         time += (T + t_next)
 

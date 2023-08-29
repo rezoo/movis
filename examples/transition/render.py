@@ -58,7 +58,7 @@ def main():
     logo = mv.layer.Composition(size, duration=transition_time)
     logo.add_layer(mv.layer.Rectangle(size, color=(178, 217, 186), duration=transition_time))
     logo.add_layer(mv.layer.Image('logo.png', duration=transition_time), name='image')
-    logo['image'].transform.scale.enable_motion().extend(
+    logo['image'].scale.enable_motion().extend(
         keyframes=[0., transition_time], values=[0.9, 1.0], motion_types=['ease_out3'])
     scene.add_layer(logo, name='logo', offset=3.0 - transition_time / 2)
     scene['logo'].add_effect(TransitionEffect(duration=transition_time))

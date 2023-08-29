@@ -7,7 +7,7 @@ from PySide6.QtGui import QColor, QImage, QPainter, QPen
 from scipy.interpolate import RegularGridInterpolator
 
 import movis as mv
-from movis.layer.drawing import _qimage_to_numpy
+from movis.imgproc import qimage_to_numpy
 
 
 def get_audio_image(path: str):
@@ -71,7 +71,7 @@ class FrequencyLayer:
         else:
             raise ValueError
         painter.end()
-        return _qimage_to_numpy(image)
+        return qimage_to_numpy(image)
 
 
 def main():

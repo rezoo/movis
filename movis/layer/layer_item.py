@@ -3,6 +3,7 @@ from typing import Hashable, Optional
 import cv2
 import numpy as np
 
+from ..attribute import Attribute
 from ..effect import Effect
 from ..enum import Direction
 from ..imgproc import alpha_composite
@@ -32,9 +33,36 @@ class LayerItem:
         self._effects.append(effect)
         return effect
 
+    def remove_effect(self, effect: Effect) -> None:
+        self._effects.remove(effect)
+
     @property
     def effects(self) -> list[Effect]:
         return self._effects
+
+    @property
+    def anchor_point(self) -> Attribute:
+        return self.transform.anchor_point
+
+    @property
+    def position(self) -> Attribute:
+        return self.transform.position
+
+    @property
+    def scale(self) -> Attribute:
+        return self.transform.scale
+
+    @property
+    def rotation(self) -> Attribute:
+        return self.transform.rotation
+
+    @property
+    def opacity(self) -> Attribute:
+        return self.transform.opacity
+
+    @property
+    def origin_point(self) -> Direction:
+        return self.transform.origin_point
 
     def get_key(self, layer_time: float) -> tuple[Hashable, Hashable, Hashable]:
         if not self.visible:
