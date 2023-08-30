@@ -2,7 +2,7 @@ import numpy as np
 
 import pytest
 from movis.imgproc import alpha_composite
-from movis.enum import BlendingMode
+from movis.enum import BlendingMode, MatteMode
 
 
 alpha_composite_params = [
@@ -38,6 +38,7 @@ def test_alpha_composite(opacity, blending_mode):
     for (x, y) in [(0, 0), (-10, -20), (96, 48), (-10, 48), (96, -20)]:
         bg_dst = alpha_composite(
             bg.copy(), fg, position=(x, y),
-            opacity=opacity, blending_mode=blending_mode, alpha_matte_mode=True)
+            opacity=opacity, blending_mode=blending_mode, matte_mode=MatteMode.ALPHA)
         np.testing.assert_allclose(bg[:, :, 3], bg_dst[:, :, 3])
         assert bg_dst.dtype == np.uint8
+
