@@ -14,7 +14,7 @@ def main():
 
     scene = mv.layer.Composition(size=(1920, 1080), duration=tl['end_time'].max())
     scene.add_layer(
-        mv.layer.Image(img_file='../../assets/bg2.png', duration=tl['end_time'].max()),
+        mv.layer.Image(img_file='assets/bg2.png', duration=tl['end_time'].max()),
         transform=Transform(position=(960, 540)))
     scene.add_layer(
         Slide(
@@ -25,14 +25,14 @@ def main():
         Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
-            character_name='zunda', character_dir='../../assets/character/zunda'),
+            character_name='zunda', character_dir='assets/character/zunda'),
         name='zunda',
         transform=Transform(position=(1779, 950), scale=0.7))
     scene.add_layer(
         Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
-            character_name='metan', character_dir='../../assets/character/metan'),
+            character_name='metan', character_dir='assets/character/metan'),
         name='metan',
         transform=Transform(position=(79, 1037), scale=0.7))
 
@@ -67,11 +67,11 @@ def main():
         return cp
 
     slide_in_out(scene.add_layer(
-        mv.layer.Image(img_file='images/logo_zunda.png', duration=6.0),
+        mv.layer.Image(img_file='assets/logo_zunda.png', duration=6.0),
         name='zunda_logo', offset=0.5,
         transform=Transform(position=(1755, 340))), np.array([500, 0]))
     slide_in_out(scene.add_layer(
-        mv.layer.Image(img_file='images/logo_metan.png', duration=6.0),
+        mv.layer.Image(img_file='assets/logo_metan.png', duration=6.0),
         name='metan_logo', offset=0.5,
         transform=Transform(position=(170, 340))), np.array([-500, 0]))
 
@@ -105,7 +105,7 @@ def main():
             transform=Transform.from_positions(scene.size, bottom=40.0))
         item.add_effect(mv.effect.DropShadow(offset=5.0))
 
-    bgm = mv.make_loop_music('../../assets/bgm2.wav', tl['end_time'].max()) - 25
+    bgm = mv.make_loop_music('assets/bgm2.wav', tl['end_time'].max()) - 25
     bgm = bgm.fade_out(5 * 1000)
     voice = mv.concat_audio_files(tl['start_time'], tl['audio_file'])
     bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
