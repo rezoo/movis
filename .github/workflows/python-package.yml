@@ -24,6 +24,8 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Setup FFmpeg
+      uses: FedericoCarboni/setup-ffmpeg@v2
     - name: Install packages
       run: |
         sudo apt-get install -y libgl1-mesa-dev libglib2.0-0
