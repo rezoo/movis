@@ -1,8 +1,8 @@
 <div align="center">
-<img src="https://github.com/rezoo/movis/blob/main/images/movis_logo.jpg?raw=true" width="800" alt="logo"></img>
+<img src="https://github.com/rezoo/movis/blob/main/images/movis_logo.jpg?raw=true" width="500" alt="logo"></img>
 </div>
 
-# movis: Video Editing as a Code
+# Movis: Video Editing as a Code
 
 Movisは動画制作用のPythonエンジンである。このライブラリは以下を目的とする:
 
