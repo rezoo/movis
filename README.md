@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://raw.githubusercontent.com/rezoo/movis/main/images/movis_logo.jpg" width="800" alt="logo"></img>
+<img src="https://github.com/rezoo/movis/blob/main/images/movis_logo.jpg?raw=true" width="800" alt="logo"></img>
 </div>
 
 # movis: Video Editing as a Code
