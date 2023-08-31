@@ -5,6 +5,7 @@
 # Movis: Video Editing as a Code
 
 ![Continuous integration](https://github.com/rezoo/movis/actions/workflows/python-package.yml/badge.svg)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rezoo/movis)
 
 Movisは動画制作用のPythonエンジンである。このライブラリは以下を目的とする:
 
