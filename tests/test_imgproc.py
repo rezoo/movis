@@ -42,3 +42,11 @@ def test_alpha_composite(opacity, blending_mode):
         np.testing.assert_allclose(bg[:, :, 3], bg_dst[:, :, 3])
         assert bg_dst.dtype == np.uint8
 
+    for (x, y) in [(0, 0), (-10, -20), (96, 48), (-10, 48), (96, -20)]:
+        bg2 = bg.copy()
+        bg2[:, :, :3] = 0
+        bg_dst = alpha_composite(
+            bg2, fg, position=(x, y),
+            opacity=opacity, blending_mode=blending_mode, matte_mode=MatteMode.LUMINANCE)
+        np.testing.assert_allclose(bg_dst[:, :, 3], 0)
+        assert bg_dst.dtype == np.uint8

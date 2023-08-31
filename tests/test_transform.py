@@ -1,6 +1,7 @@
 import numpy as np
 
-from movis.transform import Transform, TransformValue
+from movis.attribute import Attribute
+from movis.transform import Transform, TransformValue, Direction
 
 
 def test_anchor_point():
@@ -63,3 +64,69 @@ def test_attributes():
 def test_get_current_value():
     transform = Transform()
     assert isinstance(transform.get_current_value(0.0), TransformValue)
+    assert isinstance(transform.get_current_value(0.5), TransformValue)
+    assert isinstance(transform.get_current_value(1.0), TransformValue)
+
+    v = transform.get_current_value(0.0)
+    assert isinstance(v.anchor_point, tuple)
+    assert isinstance(v.position, tuple)
+    assert isinstance(v.scale, tuple)
+    assert isinstance(v.rotation, float)
+    assert isinstance(v.opacity, float)
+    assert isinstance(v.origin_point, Direction)
+
+
+def test_get_attributes():
+    transform = Transform()
+    attrs = transform.attributes
+    assert isinstance(attrs, dict)
+    assert len(attrs) == 5
+
+    for attr in attrs.values():
+        assert isinstance(attr, Attribute)
+
+
+def test_from_positions():
+    transform = Transform.from_positions((100, 100))
+    assert isinstance(transform, Transform)
+    assert np.all(transform.position.init_value == np.array([50.0, 50.0]))
+
+    transform = Transform.from_positions((100, 100), top=0.0)
+    assert isinstance(transform, Transform)
+    assert np.all(transform.position.init_value == np.array([50.0, 0.0]))
+    assert transform.origin_point == Direction.TOP_CENTER
+
+    transform = Transform.from_positions((100, 100), bottom=0.0)
+    assert isinstance(transform, Transform)
+    assert np.all(transform.position.init_value == np.array([50.0, 100.0]))
+    assert transform.origin_point == Direction.BOTTOM_CENTER
+
+    transform = Transform.from_positions((100, 100), left=0.0)
+    assert isinstance(transform, Transform)
+    assert np.all(transform.position.init_value == np.array([0.0, 50.0]))
+    assert transform.origin_point == Direction.CENTER_LEFT
+
+    transform = Transform.from_positions((100, 100), right=0.0)
+    assert isinstance(transform, Transform)
+    assert np.all(transform.position.init_value == np.array([100.0, 50.0]))
+    assert transform.origin_point == Direction.CENTER_RIGHT
+
+    transform = Transform.from_positions((100, 100), top=0.0, left=0.0)
+    assert isinstance(transform, Transform)
+    assert np.all(transform.position.init_value == np.array([0.0, 0.0]))
+    assert transform.origin_point == Direction.TOP_LEFT
+
+    transform = Transform.from_positions((100, 100), top=0.0, right=0.0)
+    assert isinstance(transform, Transform)
+    assert np.all(transform.position.init_value == np.array([100.0, 0.0]))
+    assert transform.origin_point == Direction.TOP_RIGHT
+
+    transform = Transform.from_positions((100, 100), bottom=0.0, left=0.0)
+    assert isinstance(transform, Transform)
+    assert np.all(transform.position.init_value == np.array([0.0, 100.0]))
+    assert transform.origin_point == Direction.BOTTOM_LEFT
+
+    transform = Transform.from_positions((100, 100), bottom=0.0, right=0.0)
+    assert isinstance(transform, Transform)
+    assert np.all(transform.position.init_value == np.array([100.0, 100.0]))
+    assert transform.origin_point == Direction.BOTTOM_RIGHT
