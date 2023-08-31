@@ -167,7 +167,7 @@ def transform_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], va
 def transform_to_1dscalar(x: Union[float, Sequence[float], np.ndarray]) -> float:
     if isinstance(x, float):
         return x
-    elif isinstance(x, np.ndarray):
+    elif isinstance(x, np.ndarray) and x.shape == ():
         return float(x)
     else:
         return float(x[0])
