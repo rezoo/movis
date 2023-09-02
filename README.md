@@ -10,11 +10,11 @@
 
 ## What is Movis?
 
-Movis is a Python engine designed for video production. With this library, users can create a wide range of educational videos through Python, including presentation videos, explainer videos, training videos, and game commentary videos.
+Movis is a Python engine designed for video production. With this library, users can create a wide range of videos through Python, including presentation videos, explainer videos, training videos, and game commentary videos.
 
 ### No GUI, but Great for Automation
 
-Unlike many other video production software options, Movis doesn't include a GUI. While this might be a drawback for beginners, it is advantageous for automating video production tasks. Specifically, engineers can use their own AI models to automate processes such as anonymizing facial images, or generating summary videos by detecting points of change within a video. Additionally, by leveraging interactive interfaces with high programming affinity like LLM, one can also automate the video editing process.
+Unlike many other video production softwares, Movis doesn't include a GUI. While this might be a drawback for beginners, it is advantageous for automating video production tasks. Specifically, engineers can use their own AI models to automate processes such as anonymizing facial images, or generating summary videos by detecting points of change within a video. Additionally, by leveraging interactive interfaces with high programming affinity like LLM, one can also automate the video editing process.
 
 ### Working with Compositions
 
