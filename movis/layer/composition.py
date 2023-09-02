@@ -205,6 +205,10 @@ class Composition:
         for layer_item in self._layers:
             frame = layer_item._composite(
                 frame, time, preview_level=self._preview_level)
+            assert isinstance(frame, np.ndarray)
+            assert frame.ndim == 3
+            assert frame.shape[2] == 4
+            assert frame.dtype == np.uint8
         self._cache[key] = frame
         return frame
 

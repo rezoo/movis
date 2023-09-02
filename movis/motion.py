@@ -104,8 +104,10 @@ class Motion:
         motion_type: Union[str, MotionType] = MotionType.LINEAR,
     ) -> "Motion":
         i = bisect.bisect(self.keyframes, keyframe)
+        if 0 < i and self.keyframes[i - 1] == keyframe:
+            raise ValueError(f"Keyframe {keyframe} already exists")
         self.keyframes.insert(i, float(keyframe))
-        self.values.insert(i, np.array(value, dtype=np.float64))
+        self.values.insert(i, transform_to_numpy(value, self.value_type))
         motion_type = MotionType.from_string(motion_type) \
             if isinstance(motion_type, str) else motion_type
         self.motion_types.insert(i, MOTION_TYPES_TO_FUNC[motion_type])
@@ -126,6 +128,14 @@ class Motion:
             ["linear"] * len(keyframes) if motion_types is None else motion_types
         )
         converted_keyframes = [float(k) for k in keyframes]
+
+        # Check if given keyframes already exist
+        seen = set(self.keyframes)
+        for keyframe in converted_keyframes:
+            if keyframe in seen:
+                raise ValueError(f"Keyframe {keyframe} already exists")
+            seen.add(keyframe)
+
         updated_keyframes: list[float] = self.keyframes + converted_keyframes
         converted_values = [
             transform_to_numpy(v, self.value_type) for v in values]
@@ -143,6 +153,12 @@ class Motion:
         self.keyframes = list(keyframes_sorted)
         self.values = list(values_sorted)
         self.motion_types = list(motion_types_sorted)
+        return self
+
+    def clear(self) -> "Motion":
+        self.keyframes = []
+        self.values = []
+        self.motion_types = []
         return self
 
 

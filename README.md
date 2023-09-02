@@ -12,11 +12,11 @@
 
 Movis is a Python engine designed for video production. With this library, users can create a wide range of videos through Python, including presentation videos, explainer videos, training videos, and game commentary videos.
 
-### No GUI, but Great for Automation
+#### Library without GUI for automation
 
 Unlike many other video production softwares, Movis doesn't include a GUI. While this might be a drawback for beginners, it is advantageous for automating video production tasks. Specifically, engineers can use their own AI models to automate processes such as anonymizing facial images, or generating summary videos by detecting points of change within a video. Additionally, by leveraging interactive interfaces with high programming affinity like LLM, one can also automate the video editing process.
 
-### Working with Compositions
+#### Compositions
 
 Much like other video production software, Movis employs "compositions" as the basic unit for editing. One can add multiple layers to a composition and animate each layer's attributes over a timeline to create a video. Effects can also be applied to the target layers as needed.
 
@@ -42,7 +42,7 @@ The composition can also be used as a layer. By combining multiple compositions 
 
 ## Simple implementation of custom layers and effects
 
-### custom layers
+### Custom layers
 
 Movis allows you to add custom layers and effects written in Python. The requirements for implementing a layer are simple: you only need to create a function that, given a time, returns an `np.ndarray` with a shape of `(H, W, 4)` and dtype of `np.uint8` in RGBA order, or returns `None`.
 
@@ -87,7 +87,7 @@ class RadialGradientLayer:
         # ditto.
 ```
 
-### custom effects
+### Custom effects
 
 Effects for layers can also be implemented in a similar straightforward manner.
 
@@ -116,4 +116,4 @@ We have confirmed that movis works with Python versions 3.9 to 3.11.
 
 ## License
 
-MIT License (see the `LICENSE` file for details). However, please note that movis uses PySide6 for some modules, which is under the LGPL license.
+MIT License (see `LICENSE` for details). However, please note that movis uses PySide6 for some modules, which is under the LGPL.
