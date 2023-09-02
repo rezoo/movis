@@ -10,11 +10,17 @@
 
 ## What is Movis?
 
-Movisは動画制作用のPythonエンジンである。このライブラリを用いて、ユーザはプレゼン動画、解説動画、トレーニング動画、ゲーム実況を含む、多くの動画教材をPythonを通して制作できる。
+Movis is a Python engine designed for video production. With this library, users can create a wide range of educational videos through Python, including presentation videos, explainer videos, training videos, and game commentary videos.
 
-他の多くの動画制作ソフトウェアとは異なり、MovisはGUIを搭載していない。これは初学者においては不適であるが、動画制作の自動化においては都合が良い。具体的には、エンジニアが自身のAIモデルを利用して、顔画像の匿名化などの処理を自動化したい場合、あるいは、動画の変化点を検知することで要約動画を自動的に生成したい場合などに、Movisは有効である。また、LLMなどのプログラミングと親和性の高い対話型のインターフェイスを利用することで、動画編集を自動化することもできるだろう。
+### No GUI, but Great for Automation
 
-Movisは多くの動画制作用のソフトウェアと同じように、"コンポジション"を一つの編集単位とする。コンポジションに多くのレイヤを追加し、そのレイヤの各属性を時間軸にそって動かすことで動画を作成する。状況に応じて、対象のレイヤにエフェクトを適用することもできる。具体的なコードを以下に示す。
+Unlike many other video production software options, Movis doesn't include a GUI. While this might be a drawback for beginners, it is advantageous for automating video production tasks. Specifically, engineers can use their own AI models to automate processes such as anonymizing facial images, or generating summary videos by detecting points of change within a video. Additionally, by leveraging interactive interfaces with high programming affinity like LLM, one can also automate the video editing process.
+
+### Working with Compositions
+
+Much like other video production software, Movis employs "compositions" as the basic unit for editing. One can add multiple layers to a composition and animate each layer's attributes over a timeline to create a video. Effects can also be applied to the target layers as needed.
+
+Here's some example code:
 
 ```python
 import movis as mv
@@ -32,13 +38,13 @@ scene['text'].opacity.enable_motion().extend([0.0, 1.0], [0.0, 1.0])
 scene.write_video('output.mp4')
 ```
 
-コンポジションはレイヤとしても利用できる。複数のコンポジションとレイヤを組み合わせることで、複雑な動画を最終的に作成する。
+The composition can also be used as a layer. By combining multiple compositions and layers, users can create complex videos.
 
 ## Simple implementation of custom layers and effects
 
 ### custom layers
 
-MovisはPythonで書かれた独自のレイヤとエフェクトを追加できる。これらのモジュールの実装に要求される仕様は単純で、具体的には、独自のレイヤの実装には次の、時間から`(H, W, 4)`のシェイプをもつ、RGBAオーダーで`np.uint8`のdtypeをもつ`np.ndarray`もしくは`None`を返す関数を実装するだけで良い。
+Movis allows you to add custom layers and effects written in Python. The requirements for implementing a layer are simple: you only need to create a function that, given a time, returns an `np.ndarray` with a shape of `(H, W, 4)` and dtype of `np.uint8` in RGBA order, or returns `None`.
 
 ```python
 import numpy as np
@@ -64,7 +70,7 @@ scene.add_layer(get_radial_gradient_image)
 scene.write_video('output.mp4')
 ```
 
-レイヤの長さを明示したい場合には`duration`プロパティが要求される。キャッシュ機構を利用して静止画が続くレイヤのレンダリングを高速化したい場合には`get_key(time: float)`メソッドを実装する。
+If you want to specify the duration of a layer, the `duration` property is required. Movis also offers caching features to accelerate rendering. If you wish to speed up rendering for layers where the frame remains static, you can implement the `get_key(time: float)` method:
 
 ```python
 class RadialGradientLayer:
@@ -83,7 +89,7 @@ class RadialGradientLayer:
 
 ### custom effects
 
-レイヤのエフェクトも、同様の手順でシンプルに実装できる。
+Effects for layers can also be implemented in a similar straightforward manner.
 
 ```python
 def apply_gaussian_blur(prev_image: np.ndarray) -> np.ndarray:
@@ -97,19 +103,17 @@ scene.add_layer(
 scene['text'].add_effect(apply_gaussian_blur)
 ```
 
-
-
 ## Installation
 
-Movisは純粋なPythonライブラリであり、Python Package Index経由でイントールできる:
+Movis is a pure Python library and can be installed via the Python Package Index:
 
 ```bash
 # PyPI
 $ pip install movis
 ```
 
-われわれはMovisがPython 3.9から3.11まで動作することを確認している。
+We have confirmed that movis works with Python versions 3.9 to 3.11.
 
 ## License
 
-MIT License (`LICENSE` ファイルを参照)。
+MIT License (see the `LICENSE` file for details). However, please note that movis uses PySide6 for some modules, which is under the LGPL license.
