@@ -11,4 +11,4 @@ from .motion import Motion  # noqa
 from .subtitle import (ASSStyleType, rgb_to_ass_color, write_ass_file,  # noqa
                        write_srt_file)
 from .transform import Transform  # noqa
-from .util import add_materials_to_video, hex_to_rgb, to_rgb  # noqa
+from .util import add_materials_to_video, to_rgb  # noqa

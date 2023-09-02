@@ -5,7 +5,7 @@ import numpy as np
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..imgproc import alpha_composite
-from ..util import hex_to_rgb
+from ..util import to_rgb
 
 
 class DropShadow(AttributesMixin):
@@ -20,7 +20,7 @@ class DropShadow(AttributesMixin):
         self.radius = Attribute(radius, AttributeType.SCALAR, range=(0., 1e6))
         self.angle = Attribute(angle, AttributeType.SCALAR)
         self.offset = Attribute(offset, AttributeType.SCALAR)
-        c = hex_to_rgb(color) if isinstance(color, str) else color
+        c = to_rgb(color)
         self.color = Attribute(c, AttributeType.COLOR, range=(0., 255.))
         self.opacity = Attribute(opacity, AttributeType.SCALAR, range=(0., 1.))
 
