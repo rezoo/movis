@@ -21,7 +21,7 @@ setup(
     package_data={
         "movis": ["assets/*", "py.typed"],
     },
-    python_requires=">3.9.0",
+    python_requires=">=3.9.0",
     install_requires=parse_requirements(),
     classifiers=[
         "License :: OSI Approved :: MIT License",

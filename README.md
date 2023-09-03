@@ -20,12 +20,10 @@ Movis does not offer a Graphical User Interface (GUI).
 This may be perceived as a limitation for users new to video editing,
 but it serves as an advantage for automation.
 Specifically, engineers can
-*integrate their own Artificial Intelligence models*
-to execute tasks such as facial image anonymization or
-automatic summarization of videos based on detection of changes.
-Additionally, *the system is designed to work with highly
-programmable interactive interfaces like LLM* to facilitate
-automated video editing processes.
+*integrate their own ML models to execute tasks* such as
+facial image anonymization or automatic summarization of videos.
+Additionally, this library works with highly programmable interactive interfaces like LLMs
+to facilitate automated video editing processes.
 
 ### Creating Video with Compositions
 
@@ -43,9 +41,9 @@ import movis as mv
 scene = mv.layer.Composition(size=(1920, 1080), duration=5.0)
 scene.add_layer(mv.layer.Rectangle(scene.size, color='#fb4562'))
 scene.add_layer(
-    mv.text.Text('Hello World!', font_size=128, font_family='Helvetica', color='#ffffff'),
+    mv.layer.Text('Hello World!', font_size=256, font_family='Helvetica', color='#ffffff'),
     name='text')
-scene['text'].add_effect(mv.layer.DropShadow(offset=5.0))
+scene['text'].add_effect(mv.effect.DropShadow(offset=10.0))
 scene['text'].scale.enable_motion().extend(
     keyframes=[0.0, 1.0], values=[0.0, 1.0], motion_types=['ease_in_out'])
 scene['text'].opacity.enable_motion().extend([0.0, 1.0], [0.0, 1.0])
@@ -77,15 +75,15 @@ import movis as mv
 
 size = (640, 480)
 
-def get_radial_gradient_image(time: float) -> None | np.ndarray:
+def get_radial_gradient_image(time: float) -> np.ndarray:
     if time < 0.:
         return None
-    center = np.array([size[0] // 2, size[1] // 2])
+    center = np.array([size[1] // 2, size[0] // 2])
     radius = min(size)
     inds = np.mgrid[:size[1], :size[0]] - center[:, None, None]
     r = np.sqrt((inds ** 2).sum(axis=0))
-    p = (np.clip(r / radius, 0, 1) * 255).astype(np.uint8)
-    img = np.zeros(size[1], size[0], 4, dype=np.uint8)
+    p = 255 - (np.clip(r / radius, 0, 1) * 255).astype(np.uint8)
+    img = np.zeros((size[1], size[0], 4), dtype=np.uint8)
     img[:, :, :3] = p[:, :, None]
     img[:, :, 3] = 255
     return img
@@ -102,7 +100,7 @@ class RadialGradientLayer:
     def __init__(self, size: tuple[int, int], duration: float):
         self.size = size
         self.duration = duration
-        self.center = np.array([size[0] // 2, size[1] // 2])
+        self.center = np.array([size[1] // 2, size[0] // 2])
     
     def get_key(self, time: float) -> Hashable:
         # Returns 0 since the same image is always returned
@@ -117,13 +115,17 @@ class RadialGradientLayer:
 Effects for layers can also be implemented in a similar straightforward manner.
 
 ```python
+import cv2
+import movis as mv
+import numpy as np
+
 def apply_gaussian_blur(prev_image: np.ndarray) -> np.ndarray:
     return cv2.GaussianBlur(prev_image, ksize=(7, 7))
 
 scene = mv.layer.Composition(size=(1920, 1080), duration=5.0)
 scene.add_layer(mv.layer.Rectangle(scene.size, color='#fb4562'))
 scene.add_layer(
-    mv.text.Text('Hello World!', font_size=128, font_family='Helvetica', color='#ffffff'),
+    mv.layer.Text('Hello World!', font_size=256, font_family='Helvetica', color='#ffffff'),
     name='text')
 scene['text'].add_effect(apply_gaussian_blur)
 ```
