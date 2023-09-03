@@ -1,6 +1,4 @@
-<div align="center">
-<img src="https://github.com/rezoo/movis/blob/main/images/movis_logo.png?raw=true" width="800" alt="logo"></img>
-</div>
+![GitHub Logo](images/movis_logo.png)
 
 # Movis: Video Editing as a Code
 
@@ -10,15 +8,31 @@
 
 ## What is Movis?
 
-Movis is a Python engine designed for video production. With this library, users can create a wide range of videos through Python, including presentation videos, explainer videos, training videos, and game commentary videos.
+Movis is an engine written in Python, purposed for video production tasks.
+This library allows users to generate various types of videos,
+including but not limited to presentation videos, explainer videos,
+training videos, and game commentary videos, through Python programming.
 
-#### Library without GUI for automation
+### Library without GUI for automation
 
-Unlike many other video production softwares, Movis doesn't include a GUI. While this might be a drawback for beginners, it is advantageous for automating video production tasks. Specifically, engineers can use their own AI models to automate processes such as anonymizing facial images, or generating summary videos by detecting points of change within a video. Additionally, by leveraging interactive interfaces with high programming affinity like LLM, one can also automate the video editing process.
+Contrary to many existing video production software solutions,
+Movis does not offer a Graphical User Interface (GUI).
+This may be perceived as a limitation for users new to video editing,
+but it serves as an advantage for automation.
+Specifically, engineers can integrate their own Artificial Intelligence
+models to execute tasks such as facial image anonymization or
+automatic summarization of videos based on detection of changes.
+Additionally, the system is designed to work with highly
+programmable interactive interfaces like LLM to facilitate
+automated video editing processes.
 
-#### Compositions
+### Creating Video with Compositions
 
-Much like other video production software, Movis employs "compositions" as the basic unit for editing. One can add multiple layers to a composition and animate each layer's attributes over a timeline to create a video. Effects can also be applied to the target layers as needed.
+Similar to other video editing software,
+Movis employs the concept of "compositions" as the fundamental unit for video editing.
+Within a composition, users can include multiple layers and manipulate
+these layers' attributes over a time scale to produce a video.
+Effects can also be selectively applied to these layers as needed.
 
 Here's some example code:
 
@@ -40,11 +54,21 @@ scene.write_video('output.mp4')
 
 The composition can also be used as a layer. By combining multiple compositions and layers, users can create complex videos.
 
-## Simple implementation of custom layers and effects
+### Simple implementation of custom layers and effects
 
-### Custom layers
+Movis is engineered to facilitate the straightforward implementation of user-defined layers,
+thereby enabling the seamless integration of unique visual effects into video projects.
+This design obviates the necessity for users to possess
+intricate knowledge of the library or to become proficient
+in advanced programming languages exemplified by C++.
+Thus, users may focus their attention predominantly on
+their creative concepts.
+In instances where accelerated computational performance is requisite,
+one may employ separate, specialized libraries such as
+Jax or PyTorch to execute computations at an elevated speed via a GPU.
 
-Movis allows you to add custom layers and effects written in Python. The requirements for implementing a layer are simple: you only need to create a function that, given a time, returns an `np.ndarray` with a shape of `(H, W, 4)` and dtype of `np.uint8` in RGBA order, or returns `None`.
+For example, to implement a user-defined layer, you only need to create a function that, given a time,
+returns an `np.ndarray` with a shape of `(H, W, 4)` and dtype of `np.uint8` in RGBA order, or returns `None`.
 
 ```python
 import numpy as np
@@ -87,7 +111,7 @@ class RadialGradientLayer:
         # ditto.
 ```
 
-### Custom effects
+#### Custom effects
 
 Effects for layers can also be implemented in a similar straightforward manner.
 
