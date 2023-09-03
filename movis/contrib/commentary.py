@@ -1,6 +1,7 @@
+from __future__ import annotations
 import hashlib
 from pathlib import Path
-from typing import Optional, Sequence, Union
+from typing import Sequence
 
 import numpy as np
 from PIL import Image as PILImage
@@ -20,7 +21,7 @@ class Slide(TimelineMixin):
         self,
         start_times: Sequence[float],
         end_times: Sequence[float],
-        slide_file: Union[str, Path],
+        slide_file: str | Path,
         slide_counter: Sequence[int],
     ) -> None:
         if not pdf2image_available:
@@ -28,14 +29,14 @@ class Slide(TimelineMixin):
         super().__init__(start_times, end_times)
         self.slide_timeline = np.cumsum(slide_counter)
         self.slide_file = slide_file
-        self.slide_images: Optional[list[np.ndarray]] = None
+        self.slide_images: list[np.ndarray] | None = None
 
     def get_key(self, time: float) -> int:
         idx = self.get_state(time)
         key = int(self.slide_timeline[idx]) if 0 < idx else -1
         return key
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         idx = self.get_state(time)
         if idx < 0:
             return None
@@ -55,7 +56,7 @@ class Character(TimelineMixin):
         start_times: Sequence[float],
         end_times: Sequence[float],
         character_name: str,
-        character_dir: Union[str, Path],
+        character_dir: str | Path,
         characters: Sequence[str],
         character_status: Sequence[str],
         initial_status: str = "n",
@@ -65,8 +66,8 @@ class Character(TimelineMixin):
         assert len(start_times) == len(characters) == len(character_status)
         super().__init__(start_times, end_times)
         self.character_name = character_name
-        self.character_imgs: dict[str, Union[Path, np.ndarray]] = {}
-        self.eye_imgs: dict[str, list[Union[Path, np.ndarray]]] = {}
+        self.character_imgs: dict[str, Path | np.ndarray] = {}
+        self.eye_imgs: dict[str, list[Path | np.ndarray]] = {}
         character_dir = Path(character_dir)
         emotions = set()
         for character, status in zip(characters, character_status):
@@ -78,7 +79,7 @@ class Character(TimelineMixin):
             self.character_imgs[emotion] = path
             eye_path = Path(character_dir) / f"{emotion}.eye.png"
             if eye_path.exists():
-                eyes: list[Union[Path, np.ndarray]] = [eye_path]
+                eyes: list[Path | np.ndarray] = [eye_path]
                 for f in character_dir.iterdir():
                     x = f.name.split(".")
                     if f.name.startswith(f"{emotion}.eye.") and len(x) == 4:
@@ -127,7 +128,7 @@ class Character(TimelineMixin):
         eye = self.get_eye_state(time, idx)
         return (emotion, eye)
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         idx = self.get_state(time)
         if idx < 0:
             return None

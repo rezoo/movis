@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 import cv2
 import numpy as np
@@ -8,7 +8,7 @@ from ..util import to_rgb
 
 
 class FillColor(AttributesMixin):
-    def __init__(self, color: Union[tuple[int, int, int], str] = (255, 255, 255)):
+    def __init__(self, color: tuple[int, int, int] | str = (255, 255, 255)):
         c = to_rgb(color)
         self.color = Attribute(c, AttributeType.COLOR, range=(0., 255.))
 

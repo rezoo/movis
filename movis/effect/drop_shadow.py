@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 import cv2
 import numpy as np
@@ -14,7 +14,7 @@ class DropShadow(AttributesMixin):
         radius: float = 0.0,
         offset: float = 0.0,
         angle: float = 45.0,
-        color: Union[tuple[int, int, int], str] = (0, 0, 0),
+        color: tuple[int, int, int] | str = (0, 0, 0),
         opacity: float = 0.5
     ) -> None:
         self.radius = Attribute(radius, AttributeType.SCALAR, range=(0., 1e6))

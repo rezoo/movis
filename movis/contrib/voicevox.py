@@ -1,14 +1,15 @@
+from __future__ import annotations
 import difflib
 import hashlib
 from pathlib import Path
-from typing import Hashable, Union
+from typing import Hashable
 
 import pandas as pd
 from pydub import AudioSegment
 
 
-def make_voicevox_dataframe(audio_dir: Union[str, Path]) -> pd.DataFrame:
-    def get_audio_length(filename: Union[Path, str]) -> float:
+def make_voicevox_dataframe(audio_dir: str | Path) -> pd.DataFrame:
+    def get_audio_length(filename: str | Path) -> float:
         audio = AudioSegment.from_file(str(filename), format="wav")
         return audio.duration_seconds
 
@@ -30,13 +31,13 @@ def make_voicevox_dataframe(audio_dir: Union[str, Path]) -> pd.DataFrame:
 
 
 def make_timeline_from_voicevox(
-    audio_dir: Union[str, Path],
+    audio_dir: str | Path,
     max_text_length: int = 25,
     extra_columns: tuple[tuple[str, Hashable], ...] = (
         ("slide", 0), ("status", "n"), ("action", "")),
 ) -> pd.DataFrame:
 
-    def get_paths(src_dir: Union[str, Path], ext: str) -> list[Path]:
+    def get_paths(src_dir: str | Path, ext: str) -> list[Path]:
         src_dir = Path(src_dir)
         return sorted(f for f in src_dir.iterdir() if f.suffix == ext)
 
