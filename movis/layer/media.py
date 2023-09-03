@@ -9,6 +9,15 @@ from .mixin import TimelineMixin
 
 
 class Image:
+    """Still image layer to encapsulate various formats of image data and offer
+    time-based keying.
+
+    Args:
+        img_file: the source of the image data. It can be a file path (str or Path),
+            a PIL.Image object, or a numpy array.
+        duration: the duration for which the image should be displayed.
+            Default is 1e6 (long enough time).
+    """
     def __init__(
         self,
         img_file: Union[str, Path, PILImage.Image, np.ndarray],

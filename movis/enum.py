@@ -7,7 +7,6 @@ class CacheType(Enum):
 
 
 class AttributeType(Enum):
-    ANY = -1
     SCALAR = 0
     VECTOR2D = 1
     VECTOR3D = 2

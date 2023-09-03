@@ -14,12 +14,18 @@ class TransformValue(NamedTuple):
     The properties of TransformValue include the anchor point, position, scale, rotation, opacity, and origin point.
 
     Attributes:
-        anchor_point: A tuple of two floats representing the anchor point (x, y) of an object. Defaults to (0.0, 0.0).
-        position: A tuple of two floats representing the position (x, y) of an object. Defaults to (0.0, 0.0).
-        scale: A tuple of two floats representing the scale (x, y) of an object. Defaults to (1.0, 1.0).
-        rotation: A float value representing the rotation angle in degrees. Defaults to 0.0.
-        opacity: A float value representing the opacity of an object. Must be in the range [0, 1]. Defaults to 1.0.
-        origin_point: An enum value from Direction representing the origin point for transformations.
+        anchor_point:
+            A tuple of two floats representing the anchor point (x, y) of an object. Defaults to (0.0, 0.0).
+        position:
+            A tuple of two floats representing the position (x, y) of an object. Defaults to (0.0, 0.0).
+        scale:
+            A tuple of two floats representing the scale (x, y) of an object. Defaults to (1.0, 1.0).
+        rotation:
+            A float value representing the rotation angle in degrees. Defaults to 0.0.
+        opacity:
+            A float value representing the opacity of an object. Must be in the range [0, 1]. Defaults to 1.0.
+        origin_point:
+            An enum value from Direction representing the origin point for transformations.
             Defaults to Direction.CENTER.
     """
 
@@ -37,15 +43,21 @@ class Transform:
     It utilizes `Attribute` class to enforce types and optionally ranges for each attribute.
 
     Args:
-        position: A float, tuple of floats, or numpy ndarray representing the position (x, y) of an object.
+        position:
+            A float, tuple of floats, or numpy ndarray representing the position (x, y) of an object.
             Defaults to (0.0, 0.0).
-        scale: A float, tuple of floats, or numpy ndarray representing the scale (x, y) of an object.
+        scale:
+            A float, tuple of floats, or numpy ndarray representing the scale (x, y) of an object.
             Defaults to (1.0, 1.0).
-        rotation: A float value representing the rotation angle in degrees. Defaults to 0.0.
-        opacity: A float value representing the opacity of an object. Must be in the range [0, 1]. Defaults to 1.0.
-        anchor_point: A float, tuple of floats, or numpy ndarray representing the anchor point (x, y) of an object.
+        rotation:
+            A float value representing the rotation angle in degrees. Defaults to 0.0.
+        opacity:
+            A float value representing the opacity of an object. Must be in the range [0, 1]. Defaults to 1.0.
+        anchor_point:
+            A float, tuple of floats, or numpy ndarray representing the anchor point (x, y) of an object.
             Defaults to (0.0, 0.0).
-        origin_point: An enum value from Direction or a string representing the origin point for transformations.
+        origin_point:
+            An enum value from Direction or a string representing the origin point for transformations.
             Defaults to `Direction.CENTER`.
     """
 
@@ -95,12 +107,18 @@ class Transform:
         and returns a new Transform object.
 
         Args:
-            size: A tuple of two integers representing the width (W) and height (H) of the canvas or container.
-            top: Optional float, distance from the top edge of the layer. Default is None.
-            bottom: Optional float, distance from the bottom edge of the layer. Default is None.
-            left: Optional float, distance from the left edge of the layer. Default is None.
-            right: Optional float, distance from the right edge of the layer. Default is None.
-            object_fit: Optional string, specifies the scaling behavior. Accepts either 'contain' or 'cover'.
+            size:
+                A tuple of two integers representing the width (W) and height (H) of the canvas or container.
+            top:
+                Optional float, distance from the top edge of the layer. Default is None.
+            bottom:
+                Optional float, distance from the bottom edge of the layer. Default is None.
+            left:
+                Optional float, distance from the left edge of the layer. Default is None.
+            right:
+                Optional float, distance from the right edge of the layer. Default is None.
+            object_fit:
+                Optional string, specifies the scaling behavior. Accepts either 'contain' or 'cover'.
                 Default is None (do nothing).
 
         Returns:
@@ -156,11 +174,12 @@ class Transform:
         for easy use or manipulation.
 
         Args:
-            layer_time: A float representing the time for which you want to get the current value of
+            layer_time:
+                A float representing the time for which you want to get the current value of
                 all the transformation attributes.
 
         Returns:
-            A `TransformValue` that encapsulates the current transformation properties
+            `TransformValue` that encapsulates the current transformation properties
             (anchor point, position, scale, rotation, opacity, and origin point) for the given layer_time.
         """
         return TransformValue(

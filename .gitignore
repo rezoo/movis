@@ -8,6 +8,7 @@
 *.afphoto
 .DS_Store
 /proj
+/docs/source/reference/generated
 
 
 # Byte-compiled / optimized / DLL files

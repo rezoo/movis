@@ -134,20 +134,26 @@ def alpha_composite(
     If the background image is not writeable, a copy will be made.
 
     Args:
-        bg_image: The background image as a 3D numpy array of shape `(height, width, 4)`.
+        bg_image:
+            The background image as a 3D numpy array of shape `(height, width, 4)`.
             The image should have 4 channels (RGBA), with `dtype=np.uint8`.
-        fg_image: the foreground image as a 3D numpy array of shape `(height, width, 4)`.
+        fg_image:
+            the foreground image as a 3D numpy array of shape `(height, width, 4)`.
             The image should have 4 channels (RGBA), with dtype=np.uint8.
-        position: The x, y coordinates indicating where the top-left corner of the
+        position:
+            The x, y coordinates indicating where the top-left corner of the
             foreground image should be placed on the background image.
             Default is (0, 0).
-        opacity: The opacity level of the foreground image, between 0.0 and 1.0.
+        opacity:
+            The opacity level of the foreground image, between 0.0 and 1.0.
             Default is 1.0.
-        blending_mode: The blending mode used for compositing the two images.
+        blending_mode:
+            The blending mode used for compositing the two images.
             Available modes are defined in the `BlendingMode` enum.
             Default is BlendingMode.NORMAL. Note that the blending mode can also be
             specified as a string.
-        matte_mode: The mode used for handling the matte channel.
+        matte_mode:
+            The mode used for handling the matte channel.
             Available modes are defined in the `MatteMode` enum (`NONE`, `ALPHA`, and `LUMINANCE`).
             Default is `MatteMode.NONE`. Note that the matte mode can also be specified as a string.
 
