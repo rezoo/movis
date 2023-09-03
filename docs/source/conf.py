@@ -5,9 +5,6 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-import os
-import sys
-sys.path.insert(0, os.path.abspath('../../movis'))
 
 project = 'movis'
 copyright = '2023, Masaki Saito'
@@ -25,12 +22,13 @@ templates_path = ['_templates']
 exclude_patterns = []
 source_suffix = ".rst"
 master_doc = "index"
+autosummary_generate = True
 
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'press'
+html_theme = 'furo'
 html_static_path = ['_static']
 
 intersphinx_mapping = {
