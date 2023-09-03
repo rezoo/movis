@@ -9,6 +9,18 @@ def add_materials_to_video(
     dst_file: Union[str, Path],
     subtitle_file: Union[str, Path, None] = None,
 ) -> None:
+    """Merges a video file, an audio file, and optionally a subtitle file into a new video file.
+
+    It uses the ffmpeg library for media processing. The resulting video will have the audio
+    and optionally the subtitles embedded.
+
+    Args:
+        video_file: A str or Path object representing the path to the source video file.
+        audio_file: A str or Path object representing the path to the audio file to be added.
+        dst_file: A str or Path object representing the path to the destination video file.
+        subtitle_file (Optional): A str, Path, or None object representing the path to
+            the subtitle file to be added. Default is None.
+    """
     import ffmpeg
     kwargs = {"vf": f"ass={str(subtitle_file)}"} if subtitle_file is not None else {'vcodec': 'copy'}
     video_input = ffmpeg.input(video_file)
@@ -24,7 +36,7 @@ def add_materials_to_video(
     output.run(overwrite_output=True)
 
 
-def _csscolor_to_hex(css_name: str):
+def _csscolor_to_rgb(css_name: str) -> tuple[int, int, int]:
     color_dict = {
         'aliceblue': '#F0F8FF',
         'antiquewhite': '#FAEBD7',
@@ -176,7 +188,8 @@ def _csscolor_to_hex(css_name: str):
         'yellowgreen': '#9ACD32',
     }
     if css_name in color_dict:
-        return color_dict[css_name]
+        hex_str = color_dict[css_name]
+        return _hex_to_rgb(hex_str)
     else:
         raise ValueError(f'Invalid color name: {css_name}')
 
@@ -190,11 +203,24 @@ def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
 
 
 def to_rgb(color: Union[str, tuple[int, int, int], Sequence[int]]) -> tuple[int, int, int]:
+    """Converts a color input to its RGB tuple representation.
+
+    The input can be either a string representing a color name or a hex code,
+    or a sequence of integers representing the RGB values.
+
+    Args:
+        color: A union type that can be either a string or a tuple containing RGB integers or a sequence of integers.
+        If str: The string can be either a CSS color name (e.g., 'red') or a hexadecimal RGB string
+        (e.g., '#FF0000'). If tuple[int, int, int] or Sequence[int]: Represents RGB values as integers between
+        0 and 255 (e.g., (255, 0, 0)).
+
+    Returns: A tuple of three integers (R, G, B) that represent the RGB values.
+    """
     if isinstance(color, SequenceType) and all(isinstance(x, int) for x in color):
         return (int(color[0]), int(color[1]), int(color[2]))
     elif isinstance(color, str):
         if not color.startswith('#'):
-            return _hex_to_rgb(_csscolor_to_hex(color))
+            return _csscolor_to_rgb(color.lower())
         else:
             return _hex_to_rgb(color)
     else:
