@@ -30,10 +30,6 @@ class TransformValue(NamedTuple):
     opacity: float = 1.0
     origin_point: Direction = Direction.CENTER
 
-    def __post_init__(self):
-        if self.opacity < 0.0 or 1.0 < self.opacity:
-            raise ValueError("opacity must be in the range [0, 1]")
-
 
 class Transform:
     """A class responsible for encapsulating the various transformation attributes for a layer.

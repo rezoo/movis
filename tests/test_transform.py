@@ -130,3 +130,24 @@ def test_from_positions():
     assert isinstance(transform, Transform)
     assert np.all(transform.position.init_value == np.array([100.0, 100.0]))
     assert transform.origin_point == Direction.BOTTOM_RIGHT
+
+
+def test_transform_value_defaults():
+    transform = TransformValue()
+    assert transform.anchor_point == (0.0, 0.0)
+    assert transform.position == (0.0, 0.0)
+    assert transform.scale == (1.0, 1.0)
+    assert transform.rotation == 0.0
+    assert transform.opacity == 1.0
+    assert transform.origin_point == Direction.CENTER
+
+
+def test_transform_value_custom_values():
+    transform = TransformValue(anchor_point=(1.0, 2.0), position=(3.0, 4.0), scale=(2.0, 2.0),
+                               rotation=45.0, opacity=0.5, origin_point=Direction.TOP_LEFT)
+    assert transform.anchor_point == (1.0, 2.0)
+    assert transform.position == (3.0, 4.0)
+    assert transform.scale == (2.0, 2.0)
+    assert transform.rotation == 45.0
+    assert transform.opacity == 0.5
+    assert transform.origin_point == Direction.TOP_LEFT
