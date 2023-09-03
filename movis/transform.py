@@ -9,6 +9,20 @@ from .motion import transform_to_1dscalar, transform_to_2dvector
 
 
 class TransformValue(NamedTuple):
+    """A named tuple that encapsulates various transformation properties that can be applied to a layer.
+
+    The properties of TransformValue include the anchor point, position, scale, rotation, opacity, and origin point.
+
+    Attributes:
+        anchor_point: A tuple of two floats representing the anchor point (x, y) of an object. Defaults to (0.0, 0.0).
+        position: A tuple of two floats representing the position (x, y) of an object. Defaults to (0.0, 0.0).
+        scale: A tuple of two floats representing the scale (x, y) of an object. Defaults to (1.0, 1.0).
+        rotation: A float value representing the rotation angle in degrees. Defaults to 0.0.
+        opacity: A float value representing the opacity of an object. Must be in the range [0, 1]. Defaults to 1.0.
+        origin_point: An enum value from Direction representing the origin point for transformations.
+            Defaults to Direction.CENTER.
+    """
+
     anchor_point: tuple[float, float] = (0.0, 0.0)
     position: tuple[float, float] = (0.0, 0.0)
     scale: tuple[float, float] = (1.0, 1.0)
@@ -22,6 +36,23 @@ class TransformValue(NamedTuple):
 
 
 class Transform:
+    """A class responsible for encapsulating the various transformation attributes for a layer.
+
+    It utilizes `Attribute` class to enforce types and optionally ranges for each attribute.
+
+    Args:
+        position: A float, tuple of floats, or numpy ndarray representing the position (x, y) of an object.
+            Defaults to (0.0, 0.0).
+        scale: A float, tuple of floats, or numpy ndarray representing the scale (x, y) of an object.
+            Defaults to (1.0, 1.0).
+        rotation: A float value representing the rotation angle in degrees. Defaults to 0.0.
+        opacity: A float value representing the opacity of an object. Must be in the range [0, 1]. Defaults to 1.0.
+        anchor_point: A float, tuple of floats, or numpy ndarray representing the anchor point (x, y) of an object.
+            Defaults to (0.0, 0.0).
+        origin_point: An enum value from Direction or a string representing the origin point for transformations.
+            Defaults to `Direction.CENTER`.
+    """
+
     def __init__(
         self,
         position: Union[float, tuple[float, float], np.ndarray] = (0.0, 0.0),
@@ -58,6 +89,27 @@ class Transform:
         right: Optional[float] = None,
         object_fit: Optional[str] = None
     ) -> "Transform":
+        """Allows to create `Transform` by specifying the position based on the edges (top, bottom, left, right).
+
+        The `object_fit` parameter specifies how the object should scale to fit the canvas or container.
+        If `object_fit` is 'contain', the object will scale to fit within the canvas while preserving its aspect ratio.
+        If 'cover', the object will scale to completely cover the canvas, also preserving its aspect ratio.
+
+        The method calculates the position and origin point of the object based on the supplied arguments
+        and returns a new Transform object.
+
+        Args:
+            size: A tuple of two integers representing the width (W) and height (H) of the canvas or container.
+            top: Optional float, distance from the top edge of the layer. Default is None.
+            bottom: Optional float, distance from the bottom edge of the layer. Default is None.
+            left: Optional float, distance from the left edge of the layer. Default is None.
+            right: Optional float, distance from the right edge of the layer. Default is None.
+            object_fit: Optional string, specifies the scaling behavior. Accepts either 'contain' or 'cover'.
+                Default is None (do nothing).
+
+        Returns:
+            A new `Transform` object with the specified position, scale, and origin point.
+        """
         W, H = size[0], size[1]
         if top is None and bottom is None and left is None and right is None:
             x, y = W / 2, H / 2
@@ -101,6 +153,20 @@ class Transform:
         return cls(position=(x, y), origin_point=origin_point, scale=scale)
 
     def get_current_value(self, layer_time: float) -> TransformValue:
+        """Retrieves the current transformation attributes for a given time, encapsulated within a `TransformValue`.
+
+        This includes the anchor point, position, scale, rotation, and opacity, all evaluated at layer_time.
+        The transformation attributes are converted to their corresponding 2D vectors or scalar values as appropriate,
+        for easy use or manipulation.
+
+        Args:
+            layer_time: A float representing the time for which you want to get the current value of
+                all the transformation attributes.
+
+        Returns:
+            A `TransformValue` that encapsulates the current transformation properties
+            (anchor point, position, scale, rotation, opacity, and origin point) for the given layer_time.
+        """
         return TransformValue(
             anchor_point=transform_to_2dvector(self.anchor_point(layer_time)),
             position=transform_to_2dvector(self.position(layer_time)),
