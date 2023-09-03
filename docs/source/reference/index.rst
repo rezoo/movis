@@ -6,3 +6,4 @@ API Reference
 
     imgproc
     transform
+    util

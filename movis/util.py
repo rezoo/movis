@@ -15,10 +15,14 @@ def add_materials_to_video(
     and optionally the subtitles embedded.
 
     Args:
-        video_file: A str or Path object representing the path to the source video file.
-        audio_file: A str or Path object representing the path to the audio file to be added.
-        dst_file: A str or Path object representing the path to the destination video file.
-        subtitle_file (Optional): A str, Path, or None object representing the path to
+        video_file:
+            A str or Path object representing the path to the source video file.
+        audio_file:
+            A str or Path object representing the path to the audio file to be added.
+        dst_file:
+            A str or Path object representing the path to the destination video file.
+        subtitle_file (Optional):
+            A str, Path, or None object representing the path to
             the subtitle file to be added. Default is None.
     """
     import ffmpeg
@@ -209,12 +213,14 @@ def to_rgb(color: Union[str, tuple[int, int, int], Sequence[int]]) -> tuple[int,
     or a sequence of integers representing the RGB values.
 
     Args:
-        color: A union type that can be either a string or a tuple containing RGB integers or a sequence of integers.
-        If str: The string can be either a CSS color name (e.g., 'red') or a hexadecimal RGB string
-        (e.g., '#FF0000'). If tuple[int, int, int] or Sequence[int]: Represents RGB values as integers between
-        0 and 255 (e.g., (255, 0, 0)).
+        color:
+            A union type that can be either a string or a tuple containing RGB integers or a sequence of integers.
+            If str: The string can be either a CSS color name (e.g., 'red') or a hexadecimal RGB string
+            (e.g., '#FF0000'). If tuple[int, int, int] or Sequence[int]: Represents RGB values as integers between
+            0 and 255 (e.g., (255, 0, 0)).
 
-    Returns: A tuple of three integers (R, G, B) that represent the RGB values.
+    Returns:
+        A tuple of three integers (R, G, B) that represent the RGB values.
     """
     if isinstance(color, SequenceType) and all(isinstance(x, int) for x in color):
         return (int(color[0]), int(color[1]), int(color[2]))

@@ -12,6 +12,24 @@ Unlike many other video production softwares, Movis doesn't include a GUI. While
 
 Much like other video production software, Movis employs "compositions" as the basic unit for editing. One can add multiple layers to a composition and animate each layer's attributes over a timeline to create a video. Effects can also be applied to the target layers as needed.
 
+Here's some example code:
+
+.. code-block:: python
+
+    import movis as mv
+
+    scene = mv.layer.Composition(size=(1920, 1080), duration=5.0)
+    scene.add_layer(mv.layer.Rectangle(scene.size, color='#fb4562'))
+    scene.add_layer(
+        mv.text.Text('Hello World!', font_size=128, font_family='Helvetica', color='#ffffff'),
+        name='text')
+    scene['text'].add_effect(mv.layer.DropShadow(offset=5.0))
+    scene['text'].scale.enable_motion().extend(
+        keyframes=[0.0, 1.0], values=[0.0, 1.0], motion_types=['ease_in_out'])
+    scene['text'].opacity.enable_motion().extend([0.0, 1.0], [0.0, 1.0])
+
+    scene.write_video('output.mp4')
+
 
 Reference
 ===========
