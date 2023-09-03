@@ -1,4 +1,5 @@
-from typing import Hashable, Optional
+from __future__ import annotations
+from typing import Hashable
 
 import cv2
 import numpy as np
@@ -13,8 +14,8 @@ from .layer import Layer
 
 class LayerItem:
     def __init__(
-            self, layer: Layer, name: str = 'layer', transform: Optional[Transform] = None,
-            offset: float = 0.0, start_time: float = 0.0, end_time: Optional[float] = None,
+            self, layer: Layer, name: str = 'layer', transform: Transform | None = None,
+            offset: float = 0.0, start_time: float = 0.0, end_time: float | None = None,
             visible: bool = True):
         self.layer: Layer = layer
         self.name: str = name
@@ -70,7 +71,7 @@ class LayerItem:
         transform_key = self.transform.get_current_value(layer_time)
         layer_key = self.layer.get_key(layer_time) if hasattr(self.layer, 'get_key') else layer_time
 
-        def get_effect_key(e: Effect) -> Optional[Hashable]:
+        def get_effect_key(e: Effect) -> Hashable | None:
             return e.get_key(layer_time) if hasattr(e, 'get_key') else layer_time
 
         effects_key = None if len(self._effects) == 0 else tuple([get_effect_key(e) for e in self._effects])
@@ -106,7 +107,7 @@ class LayerItem:
             opacity=p.opacity)
         return bg_image
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         layer_time = time - self.offset
         if not self.visible:
             return None
@@ -125,7 +126,7 @@ class LayerItem:
 def _get_fixed_affine_matrix(
     fg_image: np.ndarray, p: TransformValue,
     preview_level: int = 1
-) -> Optional[tuple[np.ndarray, tuple[int, int], tuple[int, int]]]:
+) -> tuple[np.ndarray, tuple[int, int], tuple[int, int]] | None:
     h, w = fg_image.shape[:2]
 
     T1, SR = _get_T1(p), _get_SR(p)

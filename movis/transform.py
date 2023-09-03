@@ -1,4 +1,5 @@
-from typing import NamedTuple, Optional, Union
+from __future__ import annotations
+from typing import NamedTuple
 
 import numpy as np
 
@@ -63,12 +64,12 @@ class Transform:
 
     def __init__(
         self,
-        position: Union[float, tuple[float, float], np.ndarray] = (0.0, 0.0),
-        scale: Union[float, tuple[float, float], np.ndarray] = (1.0, 1.0),
+        position: float | tuple[float, float] | np.ndarray = (0.0, 0.0),
+        scale: float | tuple[float, float] | np.ndarray = (1.0, 1.0),
         rotation: float = 0.0,
         opacity: float = 1.0,
-        anchor_point: Union[float, tuple[float, float], np.ndarray] = (0.0, 0.0),
-        origin_point: Union[Direction, str] = Direction.CENTER,
+        anchor_point: float | tuple[float, float] | np.ndarray = (0.0, 0.0),
+        origin_point: Direction | str = Direction.CENTER,
     ):
         self.position = Attribute(position, AttributeType.VECTOR2D)
         self.scale = Attribute(scale, AttributeType.VECTOR2D)
@@ -91,11 +92,11 @@ class Transform:
     def from_positions(
         cls,
         size: tuple[int, int],
-        top: Optional[float] = None,
-        bottom: Optional[float] = None,
-        left: Optional[float] = None,
-        right: Optional[float] = None,
-        object_fit: Optional[str] = None
+        top: float | None = None,
+        bottom: float | None = None,
+        left: float | None = None,
+        right: float | None = None,
+        object_fit: str | None = None
     ) -> "Transform":
         """Allows to create `Transform` by specifying the position based on the edges (top, bottom, left, right).
 

@@ -11,7 +11,7 @@
 Movis is an engine written in Python, purposed for video production tasks.
 This library allows users to generate various types of videos,
 including but not limited to presentation videos, explainer videos,
-training videos, and game commentary videos, through Python programming.
+training videos, and game commentary videos, through Python.
 
 ### Library without GUI for automation
 

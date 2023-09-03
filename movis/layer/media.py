@@ -1,5 +1,6 @@
+from __future__ import annotations
 from pathlib import Path
-from typing import Optional, Sequence, Union
+from typing import Sequence, Union
 
 import imageio
 import numpy as np
@@ -23,8 +24,8 @@ class Image:
         img_file: Union[str, Path, PILImage.Image, np.ndarray],
         duration: float = 1e6
     ) -> None:
-        self.image: Optional[np.ndarray] = None
-        self._img_file: Optional[Path] = None
+        self.image: np.ndarray | None = None
+        self._img_file: Path | None = None
         if isinstance(img_file, (str, Path)):
             self._img_file = Path(img_file)
             assert self._img_file.exists(), f"{self._img_file} does not exist"
@@ -57,7 +58,7 @@ class Image:
             self.image = image
         return self.image
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         return self._read_image()
 
 
@@ -92,7 +93,7 @@ class ImageSequence(TimelineMixin):
     ) -> None:
         super().__init__(start_times, end_times)
         self.img_files = img_files
-        self.images: list[Optional[np.ndarray]] = [None] * len(img_files)
+        self.images: list[np.ndarray | None] = [None] * len(img_files)
         for i, img_file in enumerate(img_files):
             if isinstance(img_file, (str, Path)):
                 img_file = Path(img_file)
@@ -110,7 +111,7 @@ class ImageSequence(TimelineMixin):
             return -1
         return idx
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         idx = self.get_state(time)
         if idx < 0:
             return None
@@ -142,7 +143,7 @@ class Video:
         frame_index = int(time * self.fps)
         return frame_index
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         frame_index = int(time * self.fps)
         frame = self.reader.get_data(frame_index)
         pil_frame = PILImage.fromarray(frame).convert("RGBA")

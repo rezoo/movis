@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, Hashable, Optional, Union
+from typing import Callable, Hashable
 
 import numpy as np
 
@@ -11,11 +11,11 @@ from movis.motion import Motion, transform_to_hashable, transform_to_numpy
 class Attribute:
     def __init__(
         self,
-        init_value: Union[float, tuple[float, ...], np.ndarray],
+        init_value: float | tuple[float, ...] | np.ndarray,
         value_type: AttributeType,
-        range: Optional[tuple[float, float]] = None,
-        motion: Optional[Motion] = None,
-        function: Optional[Callable[[np.ndarray, float], np.ndarray]] = None,
+        range: tuple[float, float] | None = None,
+        motion: Motion | None = None,
+        function: Callable[[np.ndarray, float], np.ndarray] | None = None,
     ) -> None:
         np_value = transform_to_numpy(init_value, value_type)
         clipped_value = np.clip(np_value, range[0], range[1]) if range is not None else np_value
@@ -50,7 +50,7 @@ class Attribute:
         self._motion = None
 
     @property
-    def motion(self) -> Optional[Motion]:
+    def motion(self) -> Motion | None:
         return self._motion
 
     def enable_function(
@@ -65,7 +65,7 @@ class Attribute:
         self._function = None
 
     @property
-    def function(self) -> Optional[Callable[[np.ndarray, float], np.ndarray]]:
+    def function(self) -> Callable[[np.ndarray, float], np.ndarray] | None:
         return self._function
 
     def __repr__(self) -> str:

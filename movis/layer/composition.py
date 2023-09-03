@@ -1,7 +1,8 @@
+from __future__ import annotations
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Hashable, Iterator, Optional, Sequence, Union
+from typing import Hashable, Iterator, Sequence
 from weakref import WeakValueDictionary
 
 import imageio
@@ -127,7 +128,7 @@ class Composition:
     def __getitem__(self, key: str) -> LayerItem:
         return self._name_to_layer[key]
 
-    def __setitem__(self, key: str, value: Union[LayerItem, Layer]) -> None:
+    def __setitem__(self, key: str, value: LayerItem | Layer) -> None:
         if isinstance(value, LayerItem):
             self._layers.append(value)
             self._name_to_layer[key] = value
@@ -155,11 +156,11 @@ class Composition:
     def add_layer(
         self,
         layer: Layer,
-        name: Optional[str] = None,
-        transform: Optional[Transform] = None,
+        name: str | None = None,
+        transform: Transform | None = None,
         offset: float = 0.0,
         start_time: float = 0.0,
-        end_time: Optional[float] = None,
+        end_time: float | None = None,
         visible: bool = True,
     ) -> LayerItem:
         if name is None:
@@ -189,7 +190,7 @@ class Composition:
         layer_item = self._layers.pop(index)
         return layer_item
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         L = self._preview_level
         current_shape = self.size[1] // L, self.size[0] // L
 
@@ -214,13 +215,13 @@ class Composition:
 
     def write_video(
         self,
-        dst_file: Union[str, Path],
+        dst_file: str | Path,
         start_time: float = 0.0,
-        end_time: Optional[float] = None,
+        end_time: float | None = None,
         codec: str = "libx264",
         pixelformat: str = "yuv420p",
         fps: float = 30.0,
-        audio_path: Optional[Union[str, Path]] = None,
+        audio_path: str | Path | None = None,
     ) -> None:
         if end_time is None:
             end_time = self.duration
@@ -241,7 +242,7 @@ class Composition:
     def render_and_play(
         self,
         start_time: float = 0.0,
-        end_time: Optional[float] = None,
+        end_time: float | None = None,
         fps: float = 30.0,
         preview_level: int = 2
     ) -> None:

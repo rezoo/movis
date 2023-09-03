@@ -1,11 +1,11 @@
+from __future__ import annotations
 import math
 from pathlib import Path
-from typing import Union
 
 from pydub import AudioSegment
 
 
-def concat_audio_files(start_times: list[float], audio_files: list[Union[str, Path]]) -> AudioSegment:
+def concat_audio_files(start_times: list[float], audio_files: list[str | Path]) -> AudioSegment:
     assert len(audio_files) == len(start_times)
     audio = AudioSegment.empty()
     silence = AudioSegment.silent(duration=1000)
@@ -19,7 +19,7 @@ def concat_audio_files(start_times: list[float], audio_files: list[Union[str, Pa
     return audio
 
 
-def make_loop_music(audio_file: Union[str, Path], duration: float) -> AudioSegment:
+def make_loop_music(audio_file: str | Path, duration: float) -> AudioSegment:
     path = Path(audio_file)
     bgm: AudioSegment = AudioSegment.from_file(str(path), format=path.suffix[1:])
     bgm_repeat_times = int(math.ceil(duration / bgm.duration_seconds))

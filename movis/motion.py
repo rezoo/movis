@@ -1,5 +1,6 @@
+from __future__ import annotations
 import bisect
-from typing import Any, Callable, Optional, Sequence, Union
+from typing import Any, Callable, Sequence
 
 import numpy as np
 
@@ -67,13 +68,13 @@ MOTION_TYPES_TO_FUNC = {
 class Motion:
     def __init__(
         self,
-        init_value: Optional[Union[float, Sequence[float], np.ndarray]] = None,
+        init_value: float | Sequence[float] | np.ndarray | None = None,
         value_type: AttributeType = AttributeType.SCALAR,
     ):
         self.keyframes: list[float] = []
         self.values: list[np.ndarray] = []
         self.motion_types: list[Callable[[float], float]] = []
-        self.init_value: Optional[np.ndarray] = transform_to_numpy(init_value, value_type) \
+        self.init_value: np.ndarray | None = transform_to_numpy(init_value, value_type) \
             if init_value is not None else None
         self.value_type = value_type
 
@@ -100,8 +101,8 @@ class Motion:
     def append(
         self,
         keyframe: float,
-        value: Union[float, Sequence[float], np.ndarray],
-        motion_type: Union[str, MotionType] = MotionType.LINEAR,
+        value: float | Sequence[float] | np.ndarray,
+        motion_type: str | MotionType = MotionType.LINEAR,
     ) -> "Motion":
         i = bisect.bisect(self.keyframes, keyframe)
         if 0 < i and self.keyframes[i - 1] == keyframe:
@@ -116,8 +117,8 @@ class Motion:
     def extend(
         self,
         keyframes: Sequence[float],
-        values: Sequence[Union[float, Sequence[float], np.ndarray]],
-        motion_types: Optional[Sequence[Union[str, MotionType]]] = None,
+        values: Sequence[float | Sequence[float] | np.ndarray],
+        motion_types: Sequence[str | MotionType] | None = None,
     ) -> "Motion":
         assert len(keyframes) == len(values)
         if motion_types is not None:
@@ -141,7 +142,7 @@ class Motion:
             transform_to_numpy(v, self.value_type) for v in values]
         updated_values: list[np.ndarray[Any, np.dtype[np.float64]]] = self.values + converted_values
 
-        def convert(t: Union[str, MotionType]) -> Callable[[float], float]:
+        def convert(t: str | MotionType) -> Callable[[float], float]:
             return MOTION_TYPES_TO_FUNC[MotionType.from_string(t)] \
                 if isinstance(t, str) else MOTION_TYPES_TO_FUNC[t]
 
@@ -162,7 +163,7 @@ class Motion:
         return self
 
 
-def transform_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], value_type: AttributeType) -> np.ndarray:
+def transform_to_numpy(value: int | float | Sequence[float] | np.ndarray, value_type: AttributeType) -> np.ndarray:
     if isinstance(value, (int, float)):
         if value_type in (AttributeType.SCALAR, AttributeType.ANGLE):
             return np.array([value], dtype=np.float64)
@@ -180,7 +181,7 @@ def transform_to_numpy(value: Union[int, float, Sequence[float], np.ndarray], va
     raise ValueError(f"Invalid value type: {value_type}")
 
 
-def transform_to_1dscalar(x: Union[float, Sequence[float], np.ndarray]) -> float:
+def transform_to_1dscalar(x: float | Sequence[float] | np.ndarray) -> float:
     if isinstance(x, float):
         return x
     elif isinstance(x, np.ndarray) and x.shape == ():
@@ -190,7 +191,7 @@ def transform_to_1dscalar(x: Union[float, Sequence[float], np.ndarray]) -> float
 
 
 def transform_to_2dvector(
-    x: Union[float, Sequence[float], np.ndarray]
+    x: float | Sequence[float] | np.ndarray
 ) -> tuple[float, float]:
     if isinstance(x, float):
         return (x, x)
@@ -205,7 +206,7 @@ def transform_to_2dvector(
 
 
 def transform_to_3dvector(
-    x: Union[float, Sequence[float], np.ndarray]
+    x: float | Sequence[float] | np.ndarray
 ) -> tuple[float, float, float]:
     if isinstance(x, float):
         return (x, x, x)
@@ -221,8 +222,8 @@ def transform_to_3dvector(
 
 
 def transform_to_hashable(
-    x: Union[float, Sequence[float], np.ndarray]
-) -> Union[float, tuple[float, ...]]:
+    x: float | Sequence[float] | np.ndarray
+) -> float | tuple[float, ...]:
     if isinstance(x, (int, float)):
         return float(x)
     elif len(x) == 1:

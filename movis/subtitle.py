@@ -1,5 +1,6 @@
+from __future__ import annotations
 from pathlib import Path
-from typing import NamedTuple, Optional, Sequence, Union
+from typing import NamedTuple, Sequence
 
 from .enum import Direction
 
@@ -59,10 +60,10 @@ def write_ass_file(
     start_times: Sequence[float],
     end_times: Sequence[float],
     texts: Sequence[str],
-    dst_ass_file: Union[Path, str],
+    dst_ass_file: str | Path,
     size: tuple[int, int] = (1920, 1080),
-    characters: Optional[Sequence[str]] = None,
-    styles: Optional[Sequence[ASSStyleType]] = None,
+    characters: Sequence[str] | None = None,
+    styles: Sequence[ASSStyleType] | None = None,
 ) -> None:
     assert len(start_times) == len(end_times) == len(texts)
 
@@ -109,7 +110,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 def write_srt_file(
         start_times: Sequence[float], end_times: Sequence[float], texts: Sequence[str],
-        dst_srt_file: Union[Path, str]) -> None:
+        dst_srt_file: str | Path) -> None:
     assert len(start_times) == len(end_times) == len(texts)
     with open(dst_srt_file, 'w') as srt:
         for i, (start_time, end_time, text) in enumerate(zip(start_times, end_times, texts)):

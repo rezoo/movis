@@ -1,13 +1,14 @@
+from __future__ import annotations
 from collections.abc import Sequence as SequenceType
 from pathlib import Path
-from typing import Sequence, Union
+from typing import Sequence
 
 
 def add_materials_to_video(
-    video_file: Union[str, Path],
-    audio_file: Union[str, Path],
-    dst_file: Union[str, Path],
-    subtitle_file: Union[str, Path, None] = None,
+    video_file: str | Path,
+    audio_file: str | Path,
+    dst_file: str | Path,
+    subtitle_file: str | Path | None = None,
 ) -> None:
     """Merges a video file, an audio file, and optionally a subtitle file into a new video file.
 
@@ -206,7 +207,7 @@ def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
     return (r, g, b)
 
 
-def to_rgb(color: Union[str, tuple[int, int, int], Sequence[int]]) -> tuple[int, int, int]:
+def to_rgb(color: str | tuple[int, int, int] | Sequence[int]) -> tuple[int, int, int]:
     """Converts a color input to its RGB tuple representation.
 
     The input can be either a string representing a color name or a hex code,

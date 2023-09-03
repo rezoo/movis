@@ -1,5 +1,6 @@
+from __future__ import annotations
 import sys
-from typing import Callable, Hashable, Optional, Sequence, Union
+from typing import Callable, Hashable, Sequence
 
 import numpy as np
 from PySide6.QtCore import QCoreApplication, QPointF, QRectF, Qt
@@ -17,14 +18,14 @@ from .mixin import TimelineMixin
 
 class FillProperty:
 
-    def __init__(self, color: Union[tuple[int, int, int], str], opacify: float = 1.):
+    def __init__(self, color: tuple[int, int, int] | str, opacify: float = 1.):
         self.color: tuple[int, int, int] = to_rgb(color)
         self.opacity: float = float(opacify)
 
 
 class StrokeProperty:
 
-    def __init__(self, color: Union[tuple[int, int, int], str], width: float = 1., opacity: float = 1.):
+    def __init__(self, color: tuple[int, int, int] | str, width: float = 1., opacity: float = 1.):
         self.color: tuple[int, int, int] = to_rgb(color)
         self.width: float = float(width)
         self.opacity: float = float(opacity)
@@ -35,8 +36,8 @@ class Rectangle(AttributesMixin):
         self,
         size: tuple[float, float] = (100., 100.),
         radius: float = 0.,
-        color: Optional[Union[tuple[int, int, int], str]] = None,
-        contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
+        color: tuple[int, int, int] | str | None = None,
+        contents: Sequence[FillProperty | StrokeProperty] = (),
         duration: float = 1e6
     ) -> None:
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D, range=(0., 1e6))
@@ -47,7 +48,7 @@ class Rectangle(AttributesMixin):
             self.contents = (FillProperty(color=to_rgb(color)),)
         self.duration = duration
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         if len(self.contents) == 0:
             return None
         size = [float(x) for x in self.size(time)]
@@ -93,8 +94,8 @@ class Ellipse(AttributesMixin):
     def __init__(
         self,
         size: tuple[float, float] = (100., 100.),
-        color: Optional[Union[tuple[int, int, int], str]] = None,
-        contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
+        color: tuple[int, int, int] | str | None = None,
+        contents: Sequence[FillProperty | StrokeProperty] = (),
         duration: float = 1e6
     ) -> None:
         self.size = Attribute(size, value_type=AttributeType.VECTOR2D, range=(0., 1e6))
@@ -104,7 +105,7 @@ class Ellipse(AttributesMixin):
             self.contents = (FillProperty(color=to_rgb(color)),)
         self.duration = duration
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         if len(self.contents) == 0:
             return None
         size = [float(x) for x in self.size(time)]
@@ -186,14 +187,14 @@ class Text(AttributesMixin):
 
     def __init__(
         self,
-        text: Union[str, Callable[[float], str]],
+        text: str | Callable[[float], str],
         font_size: float,
         font_family: str = 'Sans Serif',
-        font_style: Optional[str] = None,
-        color: Optional[Union[tuple[int, int, int], str]] = None,
-        contents: Sequence[Union[FillProperty, StrokeProperty]] = (),
-        line_spacing: Optional[int] = None,
-        text_alignment: Union[TextAlignment, str] = TextAlignment.CENTER,
+        font_style: str | None = None,
+        color: tuple[int, int, int] | str | None = None,
+        contents: Sequence[FillProperty | StrokeProperty] = (),
+        line_spacing: int | None = None,
+        text_alignment: TextAlignment | str = TextAlignment.CENTER,
         duration: float = 1e6
     ) -> None:
         self.text = text
@@ -245,7 +246,7 @@ class Text(AttributesMixin):
         key = super().get_key(time)
         return (self.get_text(time), key)
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         if len(self.contents) == 0:
             return None
         text = self.get_text(time)
@@ -341,14 +342,14 @@ def _clip_image(image: np.ndarray) -> np.ndarray:
     return clipped_image
 
 
-def _get_max_stroke(contents: Sequence[Union[FillProperty, StrokeProperty]]) -> float:
+def _get_max_stroke(contents: Sequence[FillProperty | StrokeProperty]) -> float:
     strokes = [c.width for c in contents if isinstance(c, StrokeProperty)]
     return float(max(strokes)) if 0 < len(strokes) else 0.
 
 
 def _get_max_color(
-    contents: Sequence[Union[FillProperty, StrokeProperty]]
-) -> Optional[tuple[int, int, int]]:
+    contents: Sequence[FillProperty | StrokeProperty]
+) -> tuple[int, int, int] | None:
     strokes = [(c.width, c.color) for c in contents if isinstance(c, StrokeProperty)]
     if len(strokes) == 0:
         fills = [c.color for c in contents if isinstance(c, FillProperty)]

@@ -1,4 +1,5 @@
-from typing import Callable, Hashable, Optional, Sequence
+from __future__ import annotations
+from typing import Callable, Hashable, Sequence
 
 import numpy as np
 
@@ -20,12 +21,12 @@ class Repeat:
             return self.layer.get_key(time % self.layer.duration)
         return time % self.layer.duration
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         return self.layer(time % self.layer.duration)
 
 
 class TimeWarp:
-    def __init__(self, layer: Layer, warp_func: Callable[[float], float], duration: Optional[float] = None):
+    def __init__(self, layer: Layer, warp_func: Callable[[float], float], duration: float | None = None):
         self.layer = layer
         self.warp_func = warp_func
         self.duration = self.layer.duration if duration is None else duration
@@ -33,7 +34,7 @@ class TimeWarp:
     def get_key(self, time: float) -> Hashable:
         return self.layer.get_key(self.warp_func(time))
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         return self.layer(self.warp_func(time))
 
 
@@ -58,7 +59,7 @@ class Concatenate:
         layer = self.layers[idx]
         return layer.get_key(time - self._timeline[idx])
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         if time < 0. or self.duration <= time:
             return None
         idx = np.searchsorted(self._timeline, time, side='right') - 1
@@ -92,7 +93,7 @@ class Trim:
             return None
         return self.layer.get_key(time - self._timeline[idx])
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         if time < 0. or self.duration <= time:
             return None
         idx = self.get_state(time)

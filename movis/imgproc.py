@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 import cv2
 import numpy as np
@@ -125,7 +125,7 @@ def alpha_composite(
     fg_image: np.ndarray,
     position: tuple[int, int] = (0, 0),
     opacity: float = 1.0,
-    blending_mode: Union[str, BlendingMode] = BlendingMode.NORMAL,
+    blending_mode: str | BlendingMode = BlendingMode.NORMAL,
     matte_mode: MatteMode = MatteMode.NONE,
 ) -> np.ndarray:
     """Perform alpha compositing of two images (with alpha channels).

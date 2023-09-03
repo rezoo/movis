@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 import numpy as np
 from PySide6.QtGui import (QColor, QImage, QLinearGradient, QPainter,
@@ -15,8 +15,8 @@ class Gradient(AttributesMixin):
         size: tuple[int, int] = (100, 100),
         start_point: tuple[float, float] = (0., 0.),
         end_point: tuple[float, float] = (100., 100.,),
-        start_color: Union[tuple[int, int, int], str] = (0, 0, 0),
-        end_color: Union[tuple[int, int, int], str] = (255, 255, 255),
+        start_color: tuple[int, int, int] | str = (0, 0, 0),
+        end_color: tuple[int, int, int] | str = (255, 255, 255),
         gradient_type: str = 'linear',
         duration: float = 1e6,
     ) -> None:
@@ -63,8 +63,8 @@ class Stripe(AttributesMixin):
         self,
         size: tuple[int, int] = (100, 100),
         angle: float = 45.,
-        color1: Union[tuple[int, int, int], str] = (0, 0, 0),
-        color2: Union[tuple[int, int, int], str] = (255, 255, 255),
+        color1: tuple[int, int, int] | str = (0, 0, 0),
+        color2: tuple[int, int, int] | str = (255, 255, 255),
         opacity1: float = 1.0,
         opacity2: float = 1.0,
         total_width: float = 64.,

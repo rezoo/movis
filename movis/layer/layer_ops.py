@@ -1,4 +1,5 @@
-from typing import Hashable, Optional, Union
+from __future__ import annotations
+from typing import Hashable
 
 import numpy as np
 
@@ -12,7 +13,7 @@ class AlphaMatte(AttributesMixin):
 
     def __init__(
             self, mask: Layer, target: Layer,
-            opacity: float = 1.0, blending_mode: Union[BlendingMode, str] = BlendingMode.NORMAL):
+            opacity: float = 1.0, blending_mode: BlendingMode | str = BlendingMode.NORMAL):
         self.mask = mask
         self.target = target
         self.opacity = Attribute(opacity, value_type=AttributeType.SCALAR, range=(0., 1.))
@@ -29,7 +30,7 @@ class AlphaMatte(AttributesMixin):
     def duration(self) -> float:
         return self.mask.duration
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         mask_frame = self.mask(time)
         if mask_frame is None:
             return None
@@ -57,7 +58,7 @@ class LuminanceMatte:
     def duration(self) -> float:
         return self.mask.duration
 
-    def __call__(self, time: float) -> Optional[np.ndarray]:
+    def __call__(self, time: float) -> np.ndarray | None:
         mask_frame = self.mask(time)
         if mask_frame is None:
             return None
