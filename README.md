@@ -19,11 +19,12 @@ Contrary to many existing video production software solutions,
 Movis does not offer a Graphical User Interface (GUI).
 This may be perceived as a limitation for users new to video editing,
 but it serves as an advantage for automation.
-Specifically, engineers can integrate their own Artificial Intelligence
-models to execute tasks such as facial image anonymization or
+Specifically, engineers can
+*integrate their own Artificial Intelligence models*
+to execute tasks such as facial image anonymization or
 automatic summarization of videos based on detection of changes.
-Additionally, the system is designed to work with highly
-programmable interactive interfaces like LLM to facilitate
+Additionally, *the system is designed to work with highly
+programmable interactive interfaces like LLM* to facilitate
 automated video editing processes.
 
 ### Creating Video with Compositions
@@ -140,4 +141,4 @@ We have confirmed that movis works with Python versions 3.9 to 3.11.
 
 ## License
 
-MIT License (see `LICENSE` for details). However, please note that movis uses PySide6 for some modules, which is under the LGPL.
+MIT License (see `LICENSE` for details).
