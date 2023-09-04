@@ -4,7 +4,7 @@ import movis as mv
 import numpy as np
 
 
-def palette(t: np.ndarray):
+def palette(t: np.ndarray) -> np.ndarray:
     a = np.array([0.5, 0.5, 0.5])[:, None, None]
     b = np.array([0.5, 0.5, 0.5])[:, None, None]
     c = np.array([1.0, 1.0, 1.0])[:, None, None]
@@ -12,15 +12,15 @@ def palette(t: np.ndarray):
     return a + b * np.cos(6.28318 * (c * t + d))
 
 
-def length(x: np.ndarray):
+def length(x: np.ndarray) -> np.ndarray:
     return np.sqrt(np.sum(x * x, axis=0))
 
 
-def fract(x: np.ndarray):
+def fract(x: np.ndarray) -> np.ndarray:
     return x - np.floor(x)
 
 
-def render(time: float, size: tuple[int, int], eps=1e-8) -> np.ndarray:
+def render(time: float, size: tuple[int, int], eps: float = 1e-8) -> np.ndarray:
     eps = 1e-8
     fragCoord = np.mgrid[:size[1], :size[0]]
     iResolution_xy = (np.array([size[1], size[0]]) - 1).reshape(2, 1, 1)
