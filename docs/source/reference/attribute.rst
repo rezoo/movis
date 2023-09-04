@@ -10,4 +10,4 @@ The :mod:`~movis.attribute` module provides `Attribute` class that defines the a
    :nosignatures:
 
    movis.attribute.Attribute
-   movis.attribute.AttributeMixin
+   movis.attribute.AttributesMixin
