@@ -6,6 +6,7 @@
 *.ass
 *.psd
 *.afphoto
+/.vscode
 .DS_Store
 /proj
 /docs/source/reference/generated
