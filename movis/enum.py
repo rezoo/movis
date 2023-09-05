@@ -156,14 +156,20 @@ class BlendingMode(Enum):
     MULTIPLY = 1
     SCREEN = 2
     OVERLAY = 3
-    DARKEN = 7
-    LIGHTEN = 8
-    COLOR_DODGE = 10
-    COLOR_BURN = 11
-    LINEAR_DODGE = 6
+    DARKEN = 4
+    LIGHTEN = 5
+    COLOR_DODGE = 6
+    COLOR_BURN = 7
+    LINEAR_DODGE = 8
     LINEAR_BURN = 9
-    HARD_LIGHT = 4
-    SOFT_LIGHT = 5
+    HARD_LIGHT = 10
+    SOFT_LIGHT = 11
+    VIVID_LIGHT = 12
+    LINEAR_LIGHT = 13
+    PIN_LIGHT = 14
+    DIFFERENCE = 15
+    EXCLUSION = 16
+    SUBTRACT = 17
 
     @staticmethod
     def from_string(s: str) -> "BlendingMode":
@@ -180,9 +186,18 @@ STRING_TO_BLENDING_MODE = {
     "overlay": BlendingMode.OVERLAY,
     "darken": BlendingMode.DARKEN,
     "lighten": BlendingMode.LIGHTEN,
+    "color_dodge": BlendingMode.COLOR_DODGE,
+    "color_burn": BlendingMode.COLOR_BURN,
+    "linear_dodge": BlendingMode.LINEAR_DODGE,
+    "linear_burn": BlendingMode.LINEAR_BURN,
     "hard_light": BlendingMode.HARD_LIGHT,
     "soft_light": BlendingMode.SOFT_LIGHT,
-    "linear_dodge": BlendingMode.LINEAR_DODGE,
+    "vivid_light": BlendingMode.VIVID_LIGHT,
+    "linear_light": BlendingMode.LINEAR_LIGHT,
+    "pin_light": BlendingMode.PIN_LIGHT,
+    "difference": BlendingMode.DIFFERENCE,
+    "exclusion": BlendingMode.EXCLUSION,
+    "subtract": BlendingMode.SUBTRACT,
 }
 
 

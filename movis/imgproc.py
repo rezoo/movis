@@ -9,7 +9,7 @@ from .enum import BlendingMode, MatteMode
 
 
 def _blend_multiply(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
-    return (bg.astype(np.uint16) * fg.astype(np.uint16) // 255).astype(np.uint8)
+    return (bg.astype(np.int32) * fg.astype(np.int32) // 255).astype(np.uint8)
 
 
 def _blend_overlay(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
@@ -17,8 +17,26 @@ def _blend_overlay(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
 
 
 def _blend_screen(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
-    x = 255 - (255 - bg).astype(np.uint16) * (255 - fg).astype(np.uint16) // 255
+    x = 255 - (255 - bg).astype(np.int32) * (255 - fg).astype(np.int32) // 255
     return x.astype(np.uint8)
+
+
+def _color_dodge(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    x = 255 * bg.astype(np.int32) / (255 - fg.astype(np.int32) + 1)
+    return np.clip(x, 0, 255).astype(np.uint8)
+
+
+def _color_burn(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    x = 255 * (255 - bg.astype(np.int32)) / (fg.astype(np.int32) + 1)
+    return 255 - np.clip(x, 0, 255).astype(np.uint8)
+
+
+def _linear_dodge(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return np.minimum(255, bg.astype(np.int32) + fg.astype(np.int32)).astype(np.uint8)
+
+
+def _linear_burn(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return np.maximum(0, bg.astype(np.int32) + fg.astype(np.int32)).astype(np.uint8)
 
 
 def _blend_soft_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
@@ -31,29 +49,50 @@ def _blend_soft_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
             return np.where(
                 x < 64,
                 ((16 * x - (12 * 255 ** 2) * x + 4 * (255 ** 2)) * x) // (255 ** 2),
-                np.sqrt(255 * x).astype(np.uint32))
+                np.sqrt(255 * x).astype(np.int32))
 
         return bg + (2 * fg - 255) * (g_w3c(bg) - bg) // 255
 
-    return np.where(fg < 128, soft_light_dark(bg, fg), soft_light_light(bg, fg))
+    return np.where(fg < 128, soft_light_dark(bg, fg), soft_light_light(bg, fg)).astype(np.uint8)
 
 
-def _color_dodge(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
-    x = 255 * bg.astype(np.uint32) / (255 - fg.astype(np.uint32) + 1)
-    return np.clip(x, 0, 255).astype(np.uint8)
+def _vivid_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    fg2 = 2 * fg.astype(np.int32)
+    return np.where(
+        fg > 127,
+        _color_dodge(bg, 2 * (fg2 - 127)),
+        _color_burn(bg, fg2))
 
 
-def _color_burn(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
-    x = 255 * (255 - bg.astype(np.uint32)) / (fg.astype(np.uint32) + 1)
-    return 255 - np.clip(x, 0, 255).astype(np.uint8)
+def _linear_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    fg2 = 2 * fg.astype(np.int32)
+    return np.where(
+        fg > 127,
+        _linear_dodge(bg, fg2 - 255),
+        _linear_burn(bg, fg2)
+    )
 
 
-def _linear_dodge(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
-    return np.minimum(255, bg.astype(np.uint16) + fg.astype(np.uint16)).astype(np.uint8)
+def _pin_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    fg2 = 2 * fg.astype(np.int32)
+    return np.where(
+        fg > 127,
+        np.maximum(bg, fg2 - 255),
+        np.minimum(bg, fg2)).astype(np.uint8)
 
 
-def _linear_burn(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
-    return np.maximum(0, bg.astype(np.uint16) + fg.astype(np.uint16)).astype(np.uint8)
+def _difference(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return np.abs(bg.astype(np.int32) - fg.astype(np.int32)).astype(np.uint8)
+
+
+def _exclusion(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    bg = bg.astype(np.int32)
+    fg = fg.astype(np.int32)
+    return np.clip(bg + fg - 2 * bg * fg // 255, 0, 255).astype(np.uint8)
+
+
+def _subtract(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return np.clip(bg.astype(np.int32) - fg.astype(np.int32), 0, 255).astype(np.uint8)
 
 
 BLENDING_MODE_TO_FUNC = {
@@ -69,6 +108,12 @@ BLENDING_MODE_TO_FUNC = {
     BlendingMode.LINEAR_BURN: _linear_burn,
     BlendingMode.HARD_LIGHT: lambda bg, fg: _blend_overlay(fg, bg),
     BlendingMode.SOFT_LIGHT: _blend_soft_light,
+    BlendingMode.VIVID_LIGHT: _vivid_light,
+    BlendingMode.LINEAR_LIGHT: _linear_light,
+    BlendingMode.PIN_LIGHT: _pin_light,
+    BlendingMode.DIFFERENCE: _difference,
+    BlendingMode.EXCLUSION: _exclusion,
+    BlendingMode.SUBTRACT: _subtract,
 }
 
 
