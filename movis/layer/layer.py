@@ -21,6 +21,8 @@ class Layer(Protocol):
         """
         raise NotImplementedError
 
+
+class BasicLayer(Layer):
     @property
     def duration(self) -> float:
         """An optional but desirable property for any layer implementation.
