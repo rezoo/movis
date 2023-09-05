@@ -7,11 +7,15 @@ from movis.enum import BlendingMode, MatteMode
 
 alpha_composite_params = [
     (0.5, BlendingMode.NORMAL),
-    (1.0, BlendingMode.ADD),
-    (0.3, BlendingMode.HARD_LIGHT),
     (0.2, BlendingMode.MULTIPLY),
-    (0.9, BlendingMode.OVERLAY),
     (1.0, BlendingMode.SCREEN),
+    (0.9, BlendingMode.OVERLAY),
+    (0.8, BlendingMode.DARKEN),
+    (0.7, BlendingMode.LIGHTEN),
+    (0.6, BlendingMode.COLOR_DODGE),
+    (0.5, BlendingMode.LINEAR_DODGE),
+    (0.4, BlendingMode.LINEAR_BURN),
+    (0.3, BlendingMode.HARD_LIGHT),
     (0.1, BlendingMode.SOFT_LIGHT),
 ]
 

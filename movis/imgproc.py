@@ -8,8 +8,17 @@ from PySide6.QtGui import QImage
 from .enum import BlendingMode, MatteMode
 
 
+def _blend_multiply(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return (bg.astype(np.uint16) * fg.astype(np.uint16) // 255).astype(np.uint8)
+
+
 def _blend_overlay(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
     return np.where(bg < 128, 2 * bg * fg // 255, 255 - 2 * (255 - bg) * (255 - fg) // 255)
+
+
+def _blend_screen(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    x = 255 - (255 - bg).astype(np.uint16) * (255 - fg).astype(np.uint16) // 255
+    return x.astype(np.uint8)
 
 
 def _blend_soft_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
@@ -29,14 +38,37 @@ def _blend_soft_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
     return np.where(fg < 128, soft_light_dark(bg, fg), soft_light_light(bg, fg))
 
 
+def _color_dodge(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    x = 255 * bg.astype(np.uint32) / (255 - fg.astype(np.uint32) + 1)
+    return np.clip(x, 0, 255).astype(np.uint8)
+
+
+def _color_burn(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    x = 255 * (255 - bg.astype(np.uint32)) / (fg.astype(np.uint32) + 1)
+    return 255 - np.clip(x, 0, 255).astype(np.uint8)
+
+
+def _linear_dodge(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return np.minimum(255, bg.astype(np.uint16) + fg.astype(np.uint16)).astype(np.uint8)
+
+
+def _linear_burn(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return np.maximum(0, bg.astype(np.uint16) + fg.astype(np.uint16)).astype(np.uint8)
+
+
 BLENDING_MODE_TO_FUNC = {
     BlendingMode.NORMAL: lambda bg, fg: fg,
-    BlendingMode.MULTIPLY: lambda bg, fg: bg * fg // 255,
-    BlendingMode.SCREEN: lambda bg, fg: 255 - (255 - bg) * (255 - fg) // 255,
-    BlendingMode.OVERLAY: lambda bg, fg: _blend_overlay(bg, fg),
+    BlendingMode.MULTIPLY: _blend_multiply,
+    BlendingMode.SCREEN: _blend_screen,
+    BlendingMode.OVERLAY: _blend_overlay,
+    BlendingMode.DARKEN: lambda bg, fg: np.minimum(bg, fg),
+    BlendingMode.LIGHTEN: lambda bg, fg: np.maximum(bg, fg),
+    BlendingMode.COLOR_DODGE: _color_dodge,
+    BlendingMode.COLOR_BURN: _color_burn,
+    BlendingMode.LINEAR_DODGE: _linear_dodge,
+    BlendingMode.LINEAR_BURN: _linear_burn,
     BlendingMode.HARD_LIGHT: lambda bg, fg: _blend_overlay(fg, bg),
-    BlendingMode.SOFT_LIGHT: lambda bg, fg: _blend_soft_light(bg, fg),
-    BlendingMode.ADD: lambda bg, fg: np.clip(bg.astype(np.uint16) + fg.astype(np.uint16), 0, 255).astype(np.uint8)
+    BlendingMode.SOFT_LIGHT: _blend_soft_light,
 }
 
 

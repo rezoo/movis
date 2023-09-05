@@ -156,9 +156,14 @@ class BlendingMode(Enum):
     MULTIPLY = 1
     SCREEN = 2
     OVERLAY = 3
+    DARKEN = 7
+    LIGHTEN = 8
+    COLOR_DODGE = 10
+    COLOR_BURN = 11
+    LINEAR_DODGE = 6
+    LINEAR_BURN = 9
     HARD_LIGHT = 4
     SOFT_LIGHT = 5
-    ADD = 6
 
     @staticmethod
     def from_string(s: str) -> "BlendingMode":
@@ -173,9 +178,11 @@ STRING_TO_BLENDING_MODE = {
     "multiply": BlendingMode.MULTIPLY,
     "screen": BlendingMode.SCREEN,
     "overlay": BlendingMode.OVERLAY,
+    "darken": BlendingMode.DARKEN,
+    "lighten": BlendingMode.LIGHTEN,
     "hard_light": BlendingMode.HARD_LIGHT,
     "soft_light": BlendingMode.SOFT_LIGHT,
-    "add": BlendingMode.ADD,
+    "linear_dodge": BlendingMode.LINEAR_DODGE,
 }
 
 
