@@ -8,11 +8,12 @@ from movis.motion import Motion, transform_to_hashable, transform_to_numpy
 
 
 class Attribute:
-    """Attribute Class for Animating Properties
+    """Attribute class for animating the specified property.
 
     This class is used for animating layer properties.
     The dimensionality of the values that each Attribute can handle varies
     depending on the type of property.
+
     This is specified by setting an appropriate value for `value_type` using `AttributeType` Enum.
     For example, the values will be one-dimensional if `value_type` is set to `AttributeType.SCALAR`.
     If set to `AttributeType.COLOR`, the values will be three-dimensional.
@@ -33,8 +34,8 @@ class Attribute:
         motion:
             The instance of the motion to use when adding keyframe animations.
             It can be specified in the constructor or activated later using `enable_motion()`.
-        function:
-            A user-defined function for adding animations, separate from keyframe animations.
+        functions:
+            User-defined functions for adding animations, separate from keyframe animations.
             It can be specified in the constructor or added later using `add_function()`.
     """
     def __init__(
@@ -47,58 +48,95 @@ class Attribute:
     ) -> None:
         np_value = transform_to_numpy(init_value, value_type)
         clipped_value = np.clip(np_value, range[0], range[1]) if range is not None else np_value
-        self.init_value: np.ndarray = clipped_value
-        self.value_type = value_type
-        self.range = range
+        self._init_value: np.ndarray = clipped_value
+        self._value_type = value_type
+        self._range = range
         self._motion = motion
         self._functions = [] if functions is None else list(functions)
 
     def __call__(self, layer_time: float) -> np.ndarray:
         if self._motion is None:
-            return transform_to_numpy(self.init_value, self.value_type)
+            return transform_to_numpy(self._init_value, self._value_type)
         else:
-            value = self.init_value
+            value = self._init_value
             if self._motion is not None:
                 value = transform_to_numpy(
-                    self._motion(value, layer_time), self.value_type)
+                    self._motion(value, layer_time), self._value_type)
             if 0 < len(self._functions):
                 for func in self._functions:
                     value = transform_to_numpy(
-                        func(value, layer_time), self.value_type)
-            if self.range is not None:
-                return np.clip(value, self.range[0], self.range[1])
+                        func(value, layer_time), self._value_type)
+            if self._range is not None:
+                return np.clip(value, self._range[0], self._range[1])
             else:
                 return value
 
     def enable_motion(self) -> Motion:
+        """Enable `Motion` object to animate the attribute."""
         if self._motion is None:
-            motion = Motion(init_value=self.init_value, value_type=self.value_type)
+            motion = Motion(init_value=self._init_value, value_type=self._value_type)
             self._motion = motion
         return self._motion
 
     def disable_motion(self) -> None:
+        """Remove `Motion` object."""
         self._motion = None
 
     @property
+    def init_value(self) -> np.ndarray:
+        """The initial value of the attribute."""
+        return self._init_value
+
+    @init_value.setter
+    def init_value(self, value: float | tuple[float, ...] | np.ndarray) -> None:
+        self._init_value = transform_to_numpy(value, self._value_type)
+
+    @property
+    def value_type(self) -> AttributeType:
+        """The type of value that the attribute handles."""
+        return self._value_type
+
+    @property
+    def range(self) -> tuple[float, float] | None:
+        """The upper and lower limits of the possible values."""
+        return self._range
+
+    @range.setter
+    def range(self, range: tuple[float, float] | None) -> None:
+        self._range = range
+
+    @property
     def motion(self) -> Motion | None:
+        """The instance of the motion to use when adding keyframe animations."""
         return self._motion
 
     @property
     def functions(self) -> list[Callable[[np.ndarray, float], np.ndarray]]:
+        """User-defined functions for adding animations, separate from keyframe animations."""
         return self._functions
 
     def add_function(
         self, function: Callable[[np.ndarray, float], np.ndarray]
     ) -> Callable[[np.ndarray, float], np.ndarray]:
+        """Add a user-defined function for adding animations, separate from keyframe animations.
+
+        Args:
+            function: A function that takes two arguments, `value` and `time` and returns an array.
+
+        Returns:
+            The function that was added.
+        """
         if not callable(function):
             raise ValueError(f"Invalid function: {function}")
         self._functions.append(function)
         return function
 
     def pop_function(self, index: int) -> Callable[[np.ndarray, float], np.ndarray]:
+        """Remove a user-defined function of the specified index."""
         return self._functions.pop(index)
 
     def clear_functions(self) -> None:
+        """Remove all user-defined functions."""
         self._functions.clear()
 
     def __getitem__(self, index: int) -> Callable[[np.ndarray, float], np.ndarray]:
@@ -106,15 +144,26 @@ class Attribute:
 
     def __repr__(self) -> str:
         if self._motion is None:
-            return f"{self.init_value}"
+            return f"{self._init_value}"
         else:
-            return f"Attribute(value_type={self.value_type})"
+            return f"Attribute(value_type={self._value_type})"
 
 
 class AttributesMixin:
+    """A mix-in class with a collection of methods for implementing layers or effects using attributes.
+
+    When using attributes, the content of layers or effects changes based on those attributes.
+    Specifically, these attributes influence the generation of cache keys for the composition.
+
+    This mixin class adds a feature that, when the `get_key()` method is called,
+    extracts all attributes from the instance and converts them into a format that can be used for the cache key.
+    """
+
     @property
     def attributes(self) -> dict[str, Attribute]:
+        """A dictionary of attributes that are used to generate cache keys."""
         return {key: attr for key, attr in vars(self).items() if isinstance(attr, Attribute)}
 
     def get_key(self, time: float) -> tuple[Hashable, ...]:
+        """Returns a tuple of hashable values that represent the state of the instance at a given time."""
         return tuple([transform_to_hashable(attr(time)) for attr in self.attributes.values()])
