@@ -33,7 +33,7 @@ class BasicLayer(Layer):
         Returns:
             float: The duration for which the layer will persist.
         """
-        raise NotImplementedError
+        return 1e6
 
     def get_key(self, time: float) -> Hashable:
         """An optional but desirable method for any layer implementation.

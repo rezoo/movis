@@ -6,13 +6,13 @@ import numpy as np
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..enum import BlendingMode, MatteMode
 from ..imgproc import alpha_composite
-from .layer import Layer
+from .layer import BasicLayer
 
 
 class AlphaMatte(AttributesMixin):
 
     def __init__(
-            self, mask: Layer, target: Layer,
+            self, mask: BasicLayer, target: BasicLayer,
             opacity: float = 1.0, blending_mode: BlendingMode | str = BlendingMode.NORMAL):
         self.mask = mask
         self.target = target
@@ -45,7 +45,7 @@ class AlphaMatte(AttributesMixin):
 
 class LuminanceMatte:
 
-    def __init__(self, mask: Layer, target: Layer):
+    def __init__(self, mask: BasicLayer, target: BasicLayer):
         self.mask = mask
         self.target = target
 

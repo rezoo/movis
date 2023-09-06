@@ -190,6 +190,9 @@ class Composition:
         layer_item = self._layers.pop(index)
         return layer_item
 
+    def clear(self) -> None:
+        self._layers.clear()
+
     def __call__(self, time: float) -> np.ndarray | None:
         L = self._preview_level
         current_shape = self.size[1] // L, self.size[0] // L
