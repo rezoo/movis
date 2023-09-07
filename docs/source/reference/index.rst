@@ -6,5 +6,6 @@ API Reference
 
     attribute
     imgproc
+    layers/index
     transform
     util
