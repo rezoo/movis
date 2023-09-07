@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from collections.abc import Sequence as SequenceType
 from pathlib import Path
 from typing import Sequence

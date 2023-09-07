@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import bisect
 from typing import Any, Callable, Sequence
 
