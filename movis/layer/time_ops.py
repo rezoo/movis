@@ -4,7 +4,7 @@ from typing import Callable, Hashable, Sequence
 
 import numpy as np
 
-from .layer import BasicLayer
+from .protocol import BasicLayer
 
 
 class Repeat:

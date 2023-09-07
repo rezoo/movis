@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 from ..enum import CacheType, Direction
 from ..transform import Transform
-from .layer import Layer
+from .protocol import Layer
 from .layer_item import LayerItem
 
 

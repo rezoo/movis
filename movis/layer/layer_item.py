@@ -10,7 +10,7 @@ from ..effect import Effect
 from ..enum import Direction
 from ..imgproc import alpha_composite
 from ..transform import Transform, TransformValue
-from .layer import Layer
+from .protocol import Layer
 
 
 class LayerItem:

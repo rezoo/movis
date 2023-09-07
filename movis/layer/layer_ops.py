@@ -7,7 +7,7 @@ import numpy as np
 from ..attribute import Attribute, AttributesMixin, AttributeType
 from ..enum import BlendingMode, MatteMode
 from ..imgproc import alpha_composite
-from .layer import BasicLayer
+from .protocol import BasicLayer
 
 
 class AlphaMatte(AttributesMixin):
