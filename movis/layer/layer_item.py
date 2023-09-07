@@ -88,12 +88,12 @@ class LayerItem:
         if layer_time < self.start_time or self.end_time <= layer_time:
             return bg_image
         fg_image = self(time)
+        if fg_image is None:
+            return bg_image
         assert isinstance(fg_image, np.ndarray), "Rendered layer image must be a numpy array"
         assert fg_image.dtype == np.uint8, "Rendered layer image must have dtype=np.uint8"
         assert fg_image.ndim == 3, "Rendered layer image must have 3 dimensions (H, W, C)"
         assert fg_image.shape[2] == 4, "Rendered layer image must have 4 channels (RGBA)"
-        if fg_image is None:
-            return bg_image
 
         # Get affine matrix and transform layer image
         p = self.transform.get_current_value(layer_time)
