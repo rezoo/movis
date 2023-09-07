@@ -15,10 +15,10 @@ class Image:
     time-based keying.
 
     Args:
-        img_file: the source of the image data. It can be a file path (`str` or `Path`),
-            a `PIL.Image` object, or a two or three-dimensional `np.ndarray` with a shape of (H, W, C).
+        img_file: the source of the image data. It can be a file path (``str`` or ``Path``),
+            a `PIL.Image` object, or a two or three-dimensional ``numpy.ndarray`` with a shape of ``(H, W, C)``.
         duration: the duration for which the image should be displayed.
-            Default is `1000000.0` (long enough time).
+            Default is ``1000000.0`` (long enough time).
     """
     def __init__(
         self,

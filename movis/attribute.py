@@ -15,11 +15,11 @@ class Attribute:
     The dimensionality of the values that each Attribute can handle varies
     depending on the type of property.
 
-    This is specified by setting an appropriate value for `value_type` using `AttributeType` Enum.
-    For example, the values will be one-dimensional if `value_type` is set to `AttributeType.SCALAR`.
-    If set to `AttributeType.COLOR`, the values will be three-dimensional.
-    Regardless of `value_type`, the returned type will always be `np.ndarray`.
-    Note that even if it's scalar, the returned value will be an array like `np.array([value])`.
+    This is specified by setting an appropriate value for ``value_type`` using ``AttributeType`` Enum.
+    For example, the values will be one-dimensional if ``value_type`` is set to ``AttributeType.SCALAR``.
+    If set to ``AttributeType.COLOR``, the values will be three-dimensional.
+    Regardless of ``value_type``, the returned type will always be ``numpy.ndarray``.
+    Note that even if it's scalar, the returned value will be an array like ``np.array([value])``.
 
     Args:
         init_value:
@@ -27,17 +27,17 @@ class Attribute:
             or when an animation with zero keyframes is set.
         value_type:
             Specifies the type of value that the Attribute will handle.
-            For more details, see the docs of `AttributeType`.
+            For more details, see the docs of ``AttributeType``.
         range:
             Defines the upper and lower limits of the possible values.
             If set, the returned array's values are guaranteed to be within this range;
             values that exceed this range are simply clipped.
         motion:
             The instance of the motion to use when adding keyframe animations.
-            It can be specified in the constructor or activated later using `enable_motion()`.
+            It can be specified in the constructor or activated later using ``enable_motion()``.
         functions:
             User-defined functions for adding animations, separate from keyframe animations.
-            It can be specified in the constructor or added later using `add_function()`.
+            It can be specified in the constructor or added later using ``add_function()``.
     """
     def __init__(
         self,
@@ -156,7 +156,7 @@ class AttributesMixin:
     When using attributes, the content of layers or effects changes based on those attributes.
     Specifically, these attributes influence the generation of cache keys for the composition.
 
-    This mixin class adds a feature that, when the `get_key()` method is called,
+    This mixin class adds a feature that, when the ``get_key()`` method is called,
     extracts all attributes from the instance and converts them into a format that can be used for the cache key.
     """
 

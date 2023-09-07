@@ -11,16 +11,16 @@ class Layer(Protocol):
     def __call__(self, time: float) -> np.ndarray | None:
         """The minimum required method to implement a layer. All layers must implement it.
 
-        Specifically, this method returns a `numpy.ndarray` of shape `(H, W, 4)` with RGBA order and dtype as
-        `numpy.uint8`, or `None`, given a time.
-        When a `numpy.ndarray` is returned, Movis considers this array as an image and uses it as one of the layers
-        for rendering the video. If `None` is returned, Movis does not render its layer.
+        Specifically, this method returns a ``numpy.ndarray`` of shape ``(H, W, 4)`` with RGBA order and dtype as
+        ``numpy.uint8``, or ``None``, given a time.
+        When a ``numpy.ndarray`` is returned, Movis considers this array as an image and uses it as one of the layers
+        for rendering the video. If ``None`` is returned, Movis does not render its layer.
 
         Args:
-            time (float): A scalar variable representing time.
+            time: A scalar variable representing time.
 
         Returns:
-            Optional[numpy.ndarray]: Returns None if nothing is to be rendered, otherwise numpy.ndarray.
+            ``None`` if nothing is to be rendered, otherwise ``numpy.ndarray``.
         """
         raise NotImplementedError
 
@@ -36,7 +36,7 @@ class BasicLayer(Layer):
         If not implemented, it is assumed that the layer has an indefinitely large duration.
 
         Returns:
-            float: The duration for which the layer will persist.
+            The duration for which the layer will persist.
         """
         return 1e6
 
@@ -49,9 +49,9 @@ class BasicLayer(Layer):
         Movis will use the cache to accelerate video rendering.
 
         If not implemented, Movis assumes that the layer is independent at each time frame,
-        i.e., it will not use cache-based rendering.
+        `i.e.`, it will not use cache-based rendering.
 
         Returns:
-            Hashable: A hashable key that represents the state of the layer at the given time.
+            A hashable key that represents the state of the layer at the given time.
         """
         return time

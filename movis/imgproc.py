@@ -207,36 +207,36 @@ def alpha_composite(
 ) -> np.ndarray:
     """Perform alpha compositing of two images (with alpha channels).
 
-    This function asserts that both the background and foreground images have 4 channels (RGBA) and dtype=np.uint8.
-    If the background image is not writeable, a copy will be made.
+    This function asserts that both the background and foreground images have 4 channels (RGBA) and
+    ``dtype=numpy.uint8``. If the background image is not writeable, a copy will be made.
 
     Args:
         bg_image:
-            The background image as a 3D numpy array of shape `(height, width, 4)`.
-            The image should have 4 channels (RGBA), with `dtype=np.uint8`.
+            The background image as a 3D numpy array of shape ``(height, width, 4)``.
+            The image should have 4 channels (RGBA), with ``dtype=numpy.uint8``.
         fg_image:
-            the foreground image as a 3D numpy array of shape `(height, width, 4)`.
-            The image should have 4 channels (RGBA), with dtype=np.uint8.
+            the foreground image as a 3D numpy array of shape ``(height, width, 4)``.
+            The image should have 4 channels (RGBA), with ``dtype=numpy.uint8``.
         position:
             The x, y coordinates indicating where the top-left corner of the
             foreground image should be placed on the background image.
-            Default is (0, 0).
+            Default is ``(0, 0)``.
         opacity:
             The opacity level of the foreground image, between 0.0 and 1.0.
             Default is 1.0.
         blending_mode:
             The blending mode used for compositing the two images.
-            Available modes are defined in the `BlendingMode` enum.
-            Default is BlendingMode.NORMAL. Note that the blending mode can also be
+            Available modes are defined in the ``BlendingMode`` enum.
+            Default is ``BlendingMode.NORMAL``. Note that the blending mode can also be
             specified as a string.
         matte_mode:
             The mode used for handling the matte channel.
-            Available modes are defined in the `MatteMode` enum (`NONE`, `ALPHA`, and `LUMINANCE`).
-            Default is `MatteMode.NONE`. Note that the matte mode can also be specified as a string.
+            Available modes are defined in the ``MatteMode`` enum (``NONE``, ``ALPHA``, and ``LUMINANCE``).
+            Default is ``MatteMode.NONE``. Note that the matte mode can also be specified as a string.
 
     Returns:
-        np.ndarray: The composited image as a 3D numpy array of shape `(height, width, 4)`
-            with dtype=np.uint8.
+        The composited image as a 3D numpy array of shape ``(height, width, 4)``
+        with ``dtype=numpy.uint8``.
     """
     assert bg_image.ndim == 3
     assert fg_image.ndim == 3
@@ -260,16 +260,16 @@ def alpha_composite(
 def qimage_to_numpy(image: QImage) -> np.ndarray:
     """Convert a QImage to a numpy ndarray.
 
-    Note that it asserts that the input QImage format is QImage.Format.Format_ARGB32.
+    Note that it asserts that the input QImage format is ``QImage.Format.Format_ARGB32``.
     The memory layout of the returned numpy array corresponds to the QImage layout.
 
     Args:
         image: The input QImage object. The function assumes that the image format
-            is `QImage.Format.Format_ARGB32`.
+            is ``QImage.Format.Format_ARGB32``.
 
     Returns:
-        np.ndarray: A 3D numpy array of shape `(height, width, 4)` representing
-            `QImage`. The returned array will have 4 channels (RGBA) and dtype will be uint8.
+        A 3D numpy array of shape ``(height, width, 4)`` representing
+        ``QImage``. The returned array will have 4 channels (RGBA) and dtype will be uint8.
     """
     assert image.format() == QImage.Format.Format_ARGB32
     ptr = image.bits()

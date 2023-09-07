@@ -24,7 +24,7 @@ class Composition:
     """A base layer that integrates multiple layers into one video.
 
     Users create a composition by specifying both time and resolution. Next, multiple layers can be added to
-    the target composition through `Composition.add_layer()`. During this process, additional information such as
+    the target composition through ``Composition.add_layer()``. During this process, additional information such as
     the layer's name, start time, position, opacity, and drawing mode can be specified.
     Finally, the composition integrates the layers in the order they were added to create a single video.
 
@@ -32,8 +32,10 @@ class Composition:
     By nesting compositions in this way, more complex motions can be created.
 
     Args:
-        size: A tuple representing the size of the composition in the form of `(width, height)`.
-        duration: The duration along the time axis for the composition.
+        size:
+            A tuple representing the size of the composition in the form of ``(width, height)``.
+        duration:
+            The duration along the time axis for the composition.
     """
 
     def __init__(
@@ -102,7 +104,7 @@ class Composition:
         Note that the keys are sorted in the order in which they will be rendered.
 
         Returns:
-            List[str]: A list of layer names sorted in the rendering order.
+            A list of layer names sorted in the rendering order.
         """
         return [layer.name for layer in self._layers]
 
@@ -113,7 +115,7 @@ class Composition:
         but `LayerItem` containing information of the layers.
 
         Returns:
-            List[LayerItem]: A list of `LayerItem` objects.
+            A list of ``LayerItem`` objects.
         """
         return self._layers
 
@@ -121,7 +123,7 @@ class Composition:
         """Returns a list of tuples, each consisting of a layer name and its corresponding item.
 
         Returns:
-            List[Tuple[str, LayerItem]]: A list of tuples, where each tuple contains a layer name and its layer item.
+            A list of tuples, where each tuple contains a layer name and its layer item.
         """
         return [(layer.name, layer) for layer in self._layers]
 
@@ -295,9 +297,9 @@ class LayerItem:
     However, editing additional information like the layer's position or opacity,
     or when adding animations or effects, requires editing this layer.
 
-    `LayerItem` can be accessed as the return value of `composition.add_layer()`
-    or by specifying it like `composition['layer_name']`.
-    If you want to directly access the layer, refer to the `layer_item.layer` property.
+    ``LayerItem`` can be accessed as the return value of ``composition.add_layer()``
+    or by specifying it like ``composition['layer_name']``.
+    If you want to directly access the layer, refer to the ``layer_item.layer`` property.
 
     Args:
         layer:
@@ -305,22 +307,22 @@ class LayerItem:
         name:
             The name of the layer. The layer name must be unique within the composition.
         transform:
-            An instance of `Transform` that includes multiple properties
+            An instance of ``Transform`` that includes multiple properties
             used to transform the layer within the composition.
         offset:
-            The starting time of the layer. For example, if `start_time=0.0` and `offset=1.0`,
+            The starting time of the layer. For example, if ``start_time=0.0`` and ``offset=1.0``,
             the layer will appear after 1 second in the composition.
         start_time:
             The start time of the layer. This variable is used to clip the layer in the time axis direction.
-            For example, if `start_time=1.0` and `offset=0.0`, this layer will appear immediately
+            For example, if ``start_time=1.0`` and ``offset=0.0``, this layer will appear immediately
             with one second skipped.
         end_time:
             The end time of the layer. This variable is used to clip the layer in the time axis direction.
-            For example, if `start_time=0.0`, `end_time=1.0`, and `offset=0.0`,
-            this layer will disappear after one second. If not specified, the layer's duration is used for `end_time`.
+            For example, if ``start_time=0.0``, ``end_time=1.0``, and ``offset=0.0``,
+            this layer will disappear after one second. If not specified, the layer's duration is used for ``end_time``.
         visible:
             A flag specifying whether the layer is visible or not;
-            if `visible=False`, the layer in the composition is not rendered.
+            if ``visible=False``, the layer in the composition is not rendered.
     """
     def __init__(
             self, layer: Layer, name: str = 'layer', transform: Transform | None = None,
