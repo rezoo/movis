@@ -6,19 +6,22 @@ from pathlib import Path
 from typing import Hashable, Iterator, Sequence
 from weakref import WeakValueDictionary
 
+import cv2
 import imageio
 import numpy as np
 from diskcache import Cache
 from tqdm import tqdm
 
+from ..attribute import Attribute
+from ..effect import Effect
 from ..enum import CacheType, Direction
-from ..transform import Transform
+from ..imgproc import alpha_composite
+from ..transform import Transform, TransformValue
 from .protocol import Layer
-from .layer_item import LayerItem
 
 
 class Composition:
-    """A base layer that integrates multiple layers.
+    """A base layer that integrates multiple layers into one video.
 
     Users create a composition by specifying both time and resolution. Next, multiple layers can be added to
     the target composition through `Composition.add_layer()`. During this process, additional information such as
@@ -59,11 +62,15 @@ class Composition:
 
     @duration.setter
     def duration(self, duration: float) -> None:
+        """The duration along the time axis for the composition."""
         assert duration > 0
         self._duration = float(duration)
 
     @property
     def preview_level(self) -> int:
+        """The resolution of the rendering of the composition.
+        For example, if `preview_level=2` is set,
+        the composition's resolution is `(W / 2, H / 2)`."""
         return self._preview_level
 
     @preview_level.setter
@@ -73,18 +80,13 @@ class Composition:
 
     @contextmanager
     def preview(self, level: int = 2) -> Iterator[None]:
+        """Context manager method to temporarily change the `preview_level` using the `with` syntax.
+
+        For example, `with self.preview(level=2):` would change the `preview_level` to 2 in that scope.
+        """
         assert level > 0
         original_level = self._preview_level
         self._preview_level = level
-        try:
-            yield
-        finally:
-            self._preview_level = original_level
-
-    @contextmanager
-    def final(self) -> Iterator[None]:
-        original_level = self._preview_level
-        self._preview_level = 1
         try:
             yield
         finally:
@@ -284,3 +286,220 @@ class Composition:
                 self._cache.clear()
 
                 display(Video.from_file(filename, autoplay=True, loop=True))
+
+
+class LayerItem:
+    """A wrapper layer for managing additional info. (e.g., the name and position) of each layer in a composition.
+
+    Usually, there is no need for the user to create this layer directly.
+    However, editing additional information like the layer's position or opacity,
+    or when adding animations or effects, requires editing this layer.
+
+    `LayerItem` can be accessed as the return value of `composition.add_layer()`
+    or by specifying it like `composition['layer_name']`.
+    If you want to directly access the layer, refer to the `layer_item.layer` property.
+
+    Args:
+        layer:
+            The layer to be wrapped.
+        name:
+            The name of the layer. The layer name must be unique within the composition.
+        transform:
+            An instance of `Transform` that includes multiple properties
+            used to transform the layer within the composition.
+        offset:
+            The starting time of the layer. For example, if `start_time=0.0` and `offset=1.0`,
+            the layer will appear after 1 second in the composition.
+        start_time:
+            The start time of the layer. This variable is used to clip the layer in the time axis direction.
+            For example, if `start_time=1.0` and `offset=0.0`, this layer will appear immediately
+            with one second skipped.
+        end_time:
+            The end time of the layer. This variable is used to clip the layer in the time axis direction.
+            For example, if `start_time=0.0`, `end_time=1.0`, and `offset=0.0`,
+            this layer will disappear after one second. If not specified, the layer's duration is used for `end_time`.
+        visible:
+            A flag specifying whether the layer is visible or not;
+            if `visible=False`, the layer in the composition is not rendered.
+    """
+    def __init__(
+            self, layer: Layer, name: str = 'layer', transform: Transform | None = None,
+            offset: float = 0.0, start_time: float = 0.0, end_time: float | None = None,
+            visible: bool = True):
+        self.layer: Layer = layer
+        self.name: str = name
+        self.transform: Transform = transform if transform is not None else Transform()
+        self.offset: float = offset
+        self.start_time: float = start_time
+        self.end_time: float = end_time if end_time is not None else getattr(layer, "duration", 1e6)
+        self.visible: bool = visible
+        self._effects: list[Effect] = []
+
+    @property
+    def duration(self) -> float:
+        """The duration of the layer item.
+
+        Note that this value is determined by the difference between `end_time` and `start_time`,
+        not by the duration of the layer.
+        """
+        return self.end_time - self.start_time
+
+    def add_effect(self, effect: Effect) -> Effect:
+        self._effects.append(effect)
+        return effect
+
+    def remove_effect(self, effect: Effect) -> None:
+        self._effects.remove(effect)
+
+    @property
+    def effects(self) -> list[Effect]:
+        return self._effects
+
+    @property
+    def anchor_point(self) -> Attribute:
+        return self.transform.anchor_point
+
+    @property
+    def position(self) -> Attribute:
+        return self.transform.position
+
+    @property
+    def scale(self) -> Attribute:
+        return self.transform.scale
+
+    @property
+    def rotation(self) -> Attribute:
+        return self.transform.rotation
+
+    @property
+    def opacity(self) -> Attribute:
+        return self.transform.opacity
+
+    @property
+    def origin_point(self) -> Direction:
+        return self.transform.origin_point
+
+    def get_key(self, layer_time: float) -> tuple[Hashable, Hashable, Hashable]:
+        if not self.visible:
+            return (None, None, None)
+        transform_key = self.transform.get_current_value(layer_time)
+        layer_key = self.layer.get_key(layer_time) if hasattr(self.layer, 'get_key') else layer_time
+
+        def get_effect_key(e: Effect) -> Hashable | None:
+            return e.get_key(layer_time) if hasattr(e, 'get_key') else layer_time
+
+        effects_key = None if len(self._effects) == 0 else tuple([get_effect_key(e) for e in self._effects])
+        return (transform_key, layer_key, effects_key)
+
+    def _composite(
+        self, bg_image: np.ndarray, time: float,
+        parent: tuple[int, int] = (0, 0),
+        preview_level: int = 1,
+    ) -> np.ndarray:
+        # Retrieve layer image
+        layer_time = time - self.offset
+        if layer_time < self.start_time or self.end_time <= layer_time:
+            return bg_image
+        fg_image = self(time)
+        if fg_image is None:
+            return bg_image
+        assert isinstance(fg_image, np.ndarray), "Rendered layer image must be a numpy array"
+        assert fg_image.dtype == np.uint8, "Rendered layer image must have dtype=np.uint8"
+        assert fg_image.ndim == 3, "Rendered layer image must have 3 dimensions (H, W, C)"
+        assert fg_image.shape[2] == 4, "Rendered layer image must have 4 channels (RGBA)"
+
+        # Get affine matrix and transform layer image
+        p = self.transform.get_current_value(layer_time)
+        result = _get_fixed_affine_matrix(fg_image, p, preview_level=preview_level)
+        if result is None:
+            return bg_image
+        affine_matrix_fixed, (W, H), (offset_x, offset_y) = result
+        fg_image_transformed = cv2.warpAffine(
+            fg_image, affine_matrix_fixed, dsize=(W, H),
+            flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+
+        # Composite bg_image and fg_image
+        bg_image = alpha_composite(
+            bg_image, fg_image_transformed,
+            position=(offset_x - parent[0], offset_y - parent[1]),
+            opacity=p.opacity)
+        return bg_image
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        layer_time = time - self.offset
+        if not self.visible:
+            return None
+        frame = self.layer(layer_time)
+        if frame is None:
+            return None
+        for effect in self._effects:
+            frame = effect(frame, layer_time)
+        return frame
+
+    def __repr__(self) -> str:
+        return f"LayerItem(name={self.name!r}, layer={self.layer!r}, transform={self.transform!r}, " \
+            f"offset={self.offset}, visible={self.visible})"
+
+
+def _get_fixed_affine_matrix(
+    fg_image: np.ndarray, p: TransformValue,
+    preview_level: int = 1
+) -> tuple[np.ndarray, tuple[int, int], tuple[int, int]] | None:
+    h, w = fg_image.shape[:2]
+
+    T1, SR = _get_T1(p), _get_SR(p)
+    T2 = _get_T2(p, (w, h), p.origin_point)
+    M = T1 @ SR @ T2
+    P = np.array([
+        [1 / preview_level, 0, 0],
+        [0, 1 / preview_level, 0],
+        [0, 0, 1]], dtype=np.float64)
+    affine_matrix = (P @ M)[:2]
+
+    corners_layer = np.array([
+        [0, 0, 1],
+        [0, h, 1],
+        [w, 0, 1],
+        [w, h, 1]], dtype=np.float64)
+    corners_global = corners_layer @ affine_matrix.transpose()
+    min_coords = np.ceil(corners_global.min(axis=0))
+    max_coords = np.floor(corners_global.max(axis=0))
+    WH = (max_coords - min_coords).astype(np.int32)
+    W, H = WH[0], WH[1]
+    if W == 0 or H == 0:
+        return None
+    offset_x, offset_y = int(min_coords[0]), int(min_coords[1])
+
+    Pf = np.array([
+        [1 / preview_level, 0, - offset_x],
+        [0, 1 / preview_level, - offset_y],
+        [0, 0, 1]], dtype=np.float64)
+    affine_matrix_fixed = (Pf @ M)[:2]
+    return affine_matrix_fixed, (W, H), (offset_x, offset_y)
+
+
+def _get_T1(p: TransformValue) -> np.ndarray:
+    return np.array([
+        [1, 0, p.position[0] + p.anchor_point[0]],
+        [0, 1, p.position[1] + p.anchor_point[1]],
+        [0, 0, 1]], dtype=np.float64)
+
+
+def _get_SR(p: TransformValue) -> np.ndarray:
+    cos_t = np.cos((2 * np.pi * p.rotation) / 360)
+    sin_t = np.sin((2 * np.pi * p.rotation) / 360)
+    SR = np.array([
+        [p.scale[0] * cos_t, - p.scale[0] * sin_t, 0],
+        [p.scale[1] * sin_t, p.scale[1] * cos_t, 0],
+        [0, 0, 1]], dtype=np.float64)
+    return SR
+
+
+def _get_T2(p: TransformValue, size: tuple[int, int], origin_point: Direction) -> np.ndarray:
+    center_point = Direction.to_vector(
+        origin_point, (float(size[0]), float(size[1])))
+    T2 = np.array([
+        [1, 0, - p.anchor_point[0] - center_point[0]],
+        [0, 1, - p.anchor_point[1] - center_point[1]],
+        [0, 0, 1]], dtype=np.float64)
+    return T2

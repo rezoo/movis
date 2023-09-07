@@ -15,10 +15,10 @@ class Image:
     time-based keying.
 
     Args:
-        img_file: the source of the image data. It can be a file path (str or Path),
-            a PIL.Image object, or a numpy array.
+        img_file: the source of the image data. It can be a file path (`str` or `Path`),
+            a `PIL.Image` object, or a two or three-dimensional `np.ndarray` with a shape of (H, W, C).
         duration: the duration for which the image should be displayed.
-            Default is 1e6 (long enough time).
+            Default is `1000000.0` (long enough time).
     """
     def __init__(
         self,
@@ -34,7 +34,19 @@ class Image:
             image = np.asarray(img_file.convert("RGBA"))
             self.image = image
         elif isinstance(img_file, np.ndarray):
-            self.image = img_file
+            if img_file.ndim == 2:
+                assert img_file.dtype == np.uint8
+                img = np.expand_dims(img_file, axis=-1)
+                img = np.concatenate([
+                    np.repeat(img, 3, axis=-1),
+                    np.full_like(img, 255, dtype=np.uint8)],
+                    axis=-1)
+                self.image = img
+            elif img_file.ndim == 3:
+                assert img_file.shape[2] == 4, "Image must have 4 channels (RGBA)"
+                self.image = img_file
+            else:
+                raise ValueError(f"Invalid img_file shape: {img_file.shape}")
         else:
             raise ValueError(f"Invalid img_file type: {type(img_file)}")
 
@@ -42,10 +54,12 @@ class Image:
 
     @property
     def duration(self):
+        """The duration for which the image should be displayed."""
         return self._duration
 
     @property
     def size(self):
+        """The size of the image with a tuple of `(width, height)`."""
         shape = self._read_image().shape[:2]
         return shape[1], shape[0]
 
