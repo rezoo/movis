@@ -10,9 +10,9 @@ def main():
 
     square = mv.layer.Composition(size, duration=duration)
     rect = mv.layer.Rectangle((600, 600), radius=10.0, color=(255, 255, 255), duration=duration)
-    square.add_layer(rect, transform=mv.Transform(position=(30 + 300, size[1] / 2)))
-    square.add_layer(rect)  # If transform is not specified, the layer is centered by default
-    square.add_layer(rect, transform=mv.Transform(position=(size[0] - 30 - 300, size[1] / 2)))
+    square.add_layer(rect, position=(30 + 300, size[1] / 2))
+    square.add_layer(rect)  # If position is not specified, the layer is centered by default
+    square.add_layer(rect, position=(size[0] - 30 - 300, size[1] / 2))
 
     for layer_item in square.layers:
         layer_item.scale.enable_motion().extend(
@@ -21,14 +21,11 @@ def main():
     text_kwargs = dict(font_family='Helvetica', font_size=60, color="#ffffff", duration=duration)
     text_ypos = size[1] / 2 - 150
     square.add_layer(
-        mv.layer.Text('Hello', **text_kwargs), transform=mv.Transform(position=(30 + 300, text_ypos)),
-        name='text1')
+        mv.layer.Text('Hello', **text_kwargs), position=(30 + 300, text_ypos), name='text1')
     square.add_layer(
-        mv.layer.Text('Alpha', **text_kwargs), transform=mv.Transform(position=(size[0] / 2, text_ypos)),
-        name='text2')
+        mv.layer.Text('Alpha', **text_kwargs), position=(size[0] / 2, text_ypos), name='text2')
     square.add_layer(
-        mv.layer.Text('Matte!', **text_kwargs), transform=mv.Transform(position=(size[0] - 30 - 300, text_ypos)),
-        name='text3')
+        mv.layer.Text('Matte!', **text_kwargs), position=(size[0] - 30 - 300, text_ypos), name='text3')
 
     def move_text(layer_item: mv.layer.LayerItem):
         after = layer_item.position.init_value

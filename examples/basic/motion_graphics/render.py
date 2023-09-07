@@ -40,8 +40,7 @@ def main():
         mv.layer.Text(
             'Movis', font_size=200, font_family='Helvetica Neue',
             font_style='Thin', color="#ffffff"),
-        transform=mv.Transform(position=(p[0], p[1] - 50)),
-        offset=2.25, name='logo')
+        position=(p[0], p[1] - 50), offset=2.25, name='logo')
     scene['logo'].opacity.enable_motion().extend([0.0, 0.5], [0.0, 1.0])
     scene['logo'].position.enable_motion().extend(
         [0.0, 0.5], [(p[0], p[1] - 30), (p[0], p[1] - 50)], ['ease_out5'])
@@ -49,8 +48,7 @@ def main():
         mv.layer.Text(
             'Video Editing as a Code', font_size=48, font_family='Helvetica Neue',
             font_style='Light', color="#ffffff"),
-        transform=mv.Transform(position=(p[0], p[1] - 50)),
-        offset=2.5, name='subtitle')
+        position=(p[0], p[1] - 50), offset=2.5, name='subtitle')
     scene['subtitle'].opacity.enable_motion().extend([0.0, 0.5], [0.0, 1.0])
     scene['subtitle'].position.enable_motion().extend(
         [0.0, 0.5], [(p[0], p[1] + 100), (p[0], p[1] + 80)], ['ease_out3'])

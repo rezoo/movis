@@ -12,10 +12,7 @@ def make_logo(text: str, duration: float, font_size: int, margin_x: int = 20, ma
     title = mv.layer.Composition(size=(W, H), duration=duration)
     rect = title.add_layer(
         mv.layer.Rectangle(size=(W, H), color='#202020', duration=duration),
-        transform=mv.Transform(
-            position=(W, H / 2),
-            opacity=0.75,
-            origin_point=mv.Direction.CENTER_RIGHT))
+        position=(W, H / 2), opacity=0.75, origin_point=mv.Direction.CENTER_RIGHT)
     text_item = title.add_layer(text_layer, name='text')
 
     rect.scale.enable_motion().extend(
@@ -69,7 +66,7 @@ def main():
         origin_point = kwargs_dict[row['title_position']]['origin_point']
         scene.add_layer(
             make_logo(row['title'], duration=T, font_size=64),
-            offset=time, transform=mv.Transform(position=position, origin_point=origin_point))
+            offset=time, position=position, origin_point=origin_point)
 
         if 0 < i:
             # Add fade effects

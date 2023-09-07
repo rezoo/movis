@@ -15,26 +15,26 @@ def main():
     scene = mv.layer.Composition(size=(1920, 1080), duration=tl['end_time'].max())
     scene.add_layer(
         mv.layer.Image(img_file='assets/bg2.png', duration=tl['end_time'].max()),
-        transform=Transform(position=(960, 540)))
+        position=(960, 540))
     scene.add_layer(
         Slide(
             tl['start_time'], tl['end_time'],
             slide_file='slide.pdf', slide_counter=tl['slide']),
-        transform=Transform(position=(960, 421), scale=0.71))
+        position=(960, 421), scale=0.71)
     scene.add_layer(
         Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='zunda', character_dir='assets/character/zunda'),
         name='zunda',
-        transform=Transform(position=(1779, 950), scale=0.7))
+        position=(1779, 950), scale=0.7)
     scene.add_layer(
         Character(
             tl['start_time'], tl['end_time'],
             characters=tl['character'], character_status=tl['status'],
             character_name='metan', character_dir='assets/character/metan'),
         name='metan',
-        transform=Transform(position=(79, 1037), scale=0.7))
+        position=(79, 1037), scale=0.7)
 
     def slide_in_out(item: mv.layer.LayerItem, offset: np.ndarray):
         p = item.transform.position.init_value
@@ -66,14 +66,16 @@ def main():
         cp.add_layer(layer)
         return cp
 
-    slide_in_out(scene.add_layer(
-        mv.layer.Image(img_file='assets/logo_zunda.png', duration=6.0),
-        name='zunda_logo', offset=0.5,
-        transform=Transform(position=(1755, 340))), np.array([500, 0]))
-    slide_in_out(scene.add_layer(
-        mv.layer.Image(img_file='assets/logo_metan.png', duration=6.0),
-        name='metan_logo', offset=0.5,
-        transform=Transform(position=(170, 340))), np.array([-500, 0]))
+    slide_in_out(
+        scene.add_layer(
+            mv.layer.Image(img_file='assets/logo_zunda.png', duration=6.0),
+            name='zunda_logo', offset=0.5, position=(1755, 340)),
+        np.array([500, 0]))
+    slide_in_out(
+        scene.add_layer(
+            mv.layer.Image(img_file='assets/logo_metan.png', duration=6.0),
+            name='metan_logo', offset=0.5, position=(170, 340)),
+        np.array([-500, 0]))
 
     sections = tl[~tl['section'].isnull()]
     section_times = np.concatenate([sections['start_time'].to_numpy(), [3600.0]])
@@ -86,7 +88,7 @@ def main():
             scene.add_layer(
                 make_table_of_contents(
                     section, font_size=46, duration=duration),
-                transform=Transform(position=(1920 + 10, 35), origin_point='center_right'),
+                position=(1920 + 10, 35), origin_point='center_right',
                 offset=start_time),
             np.array([500, 0]))
 

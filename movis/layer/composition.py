@@ -11,7 +11,7 @@ import numpy as np
 from diskcache import Cache
 from tqdm import tqdm
 
-from ..enum import CacheType
+from ..enum import CacheType, Direction
 from ..transform import Transform
 from .layer import Layer
 from .layer_item import LayerItem
@@ -158,6 +158,12 @@ class Composition:
         self,
         layer: Layer,
         name: str | None = None,
+        position: tuple[float, float] | None = None,
+        scale: float | tuple[float, float] | np.ndarray = (1.0, 1.0),
+        rotation: float = 0.0,
+        opacity: float = 1.0,
+        anchor_point: float | tuple[float, float] | np.ndarray = (0.0, 0.0),
+        origin_point: Direction | str = Direction.CENTER,
         transform: Transform | None = None,
         offset: float = 0.0,
         start_time: float = 0.0,
@@ -169,12 +175,22 @@ class Composition:
         if name in self._name_to_layer:
             raise KeyError(f"Layer with name {name} already exists")
         end_time = end_time if end_time is not None else getattr(layer, "duration", 1e6)
-        transform = transform if transform is not None \
-            else Transform.from_positions(self.size)
+
+        if position is None:
+            position = self.size[0] / 2, self.size[1] / 2
+        if transform is None:
+            transform = Transform(
+                position=position,
+                scale=scale,
+                rotation=rotation,
+                opacity=opacity,
+                anchor_point=anchor_point,
+                origin_point=origin_point,
+            )
         layer_item = LayerItem(
             layer,
-            name,
-            transform,
+            name=name,
+            transform=transform,
             offset=offset,
             start_time=start_time,
             end_time=end_time,

@@ -94,14 +94,14 @@ def main():
             else (size[0] // 2, size[1] // 2)
         scene.add_layer(
             mv.layer.Image('logo.png', duration=duration + eps),
-            transform=mv.Transform(position=logo_position))
+            position=logo_position)
 
     freq_size = (1920, 256) if args.type == 'line' else (1080, 1080)
     freq_position = (size[0] // 2, size[1] // 2 + 200) if args.type == 'line' \
         else (size[0] // 2, size[1] // 2)
     scene.add_layer(
         FrequencyLayer(audio_img, duration, freq_size, mode=args.type),
-        transform=mv.Transform(position=freq_position, opacity=0.9))
+        position=freq_position, opacity=0.9)
     scene.write_video(args.output, audio_path=args.input)
 
 

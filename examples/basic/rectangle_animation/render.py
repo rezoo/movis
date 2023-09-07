@@ -7,8 +7,7 @@ def main():
 
     scene = mv.layer.Composition(size, duration=duration)
     scene.add_layer(
-        mv.layer.Rectangle(
-            size, color=(127, 127, 127), duration=duration),
+        mv.layer.Rectangle(size, color=(127, 127, 127), duration=duration),
         name='bg')
     rectangle = mv.layer.Rectangle(
         size=(10, 10),

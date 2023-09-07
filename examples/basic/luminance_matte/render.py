@@ -10,14 +10,16 @@ def main():
 
     matte = mv.layer.Composition(size=size, duration=duration)
     matte.add_layer(mv.layer.Rectangle(size, color='#ffffff', duration=duration))
-    matte.add_layer(mv.layer.Gradient(
-        (size[0], height), start_point=(0, 0), end_point=(0, height),
-        start_color='#000000', end_color='#ffffff', duration=duration),
-        transform=mv.Transform(position=(size[0] // 2, height), origin_point='bottom_center'))
-    matte.add_layer(mv.layer.Gradient(
-        (size[0], height), start_point=(0, 0), end_point=(0, height),
-        start_color='#000000', end_color='#ffffff', duration=duration),
-        transform=mv.Transform(position=(size[0] // 2, size[1] - height), origin_point='bottom_center', rotation=180))
+    matte.add_layer(
+        mv.layer.Gradient(
+            (size[0], height), start_point=(0, 0), end_point=(0, height),
+            start_color='#000000', end_color='#ffffff', duration=duration),
+        position=(size[0] // 2, height), origin_point='bottom_center')
+    matte.add_layer(
+        mv.layer.Gradient(
+            (size[0], height), start_point=(0, 0), end_point=(0, height),
+            start_color='#000000', end_color='#ffffff', duration=duration),
+        position=(size[0] // 2, size[1] - height), origin_point='bottom_center', rotation=180)
 
     text = mv.layer.Composition(size=size, duration=duration)
     text.add_layer(
@@ -25,12 +27,12 @@ def main():
             'Infrastructure\nPlatform\nSoftware\nVideo Editing', font_size=128, font_family='Helvetica Neue',
             font_style='Thin', color='#ffffff', line_spacing=180,
             text_alignment=mv.TextAlignment.RIGHT, duration=duration),
-        transform=mv.Transform(position=(size[0] // 2 - 500, size[1] // 2 + 280)), name='text')
+        position=(size[0] // 2 - 500, size[1] // 2 + 280), name='text')
     text.add_layer(
         mv.layer.Text(
             'as a Code', font_size=128, font_family='Helvetica Neue',
             font_style='Thin', color='#ffffff', duration=duration),
-        transform=mv.Transform(position=(size[0] // 2 + 160, size[1] // 2)), name='suffix')
+        position=(size[0] // 2 + 160, size[1] // 2), name='suffix')
 
     p = text['text'].transform.position.init_value
     dp = np.array([0, 180])
@@ -52,7 +54,7 @@ def main():
     scene.add_layer(mv.layer.Rectangle(scene_size, color='#373737', duration=duration))
     scene.add_layer(
         mv.layer.LuminanceMatte(matte, text),
-        transform=mv.Transform(position=(scene_size[0] // 2 + 170, scene_size[1] // 2)),
+        position=(scene_size[0] // 2 + 170, scene_size[1] // 2),
         name='subtitle'
     )
 
