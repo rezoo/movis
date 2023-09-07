@@ -31,6 +31,48 @@ class StrokeProperty:
         self.opacity: float = float(opacity)
 
 
+class Line(AttributesMixin):
+    def __init__(
+        self,
+        size: tuple[int, int] = (100, 100),
+        start: tuple[float, float] | np.ndarray = (0., 0.),
+        end: tuple[float, float] | np.ndarray = (100., 100.),
+        color: tuple[int, int, int] | str = (255, 255, 255),
+        width: float = 1.,
+        duration: float = 1e6,
+    ) -> None:
+        self.size = size
+        self.start = Attribute(start, value_type=AttributeType.VECTOR2D)
+        self.end = Attribute(end, value_type=AttributeType.VECTOR2D)
+        self.color = Attribute(to_rgb(color), value_type=AttributeType.COLOR, range=(0., 255.))
+        self.width = Attribute(width, value_type=AttributeType.SCALAR, range=(0., 1e6))
+        self.trim_start = Attribute(0., value_type=AttributeType.SCALAR, range=(0., 1.))
+        self.trim_end = Attribute(1., value_type=AttributeType.SCALAR, range=(0., 1.))
+        self.duration = duration
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        p0 = self.start(time)
+        p1 = self.end(time)
+        trim_start = self.trim_start(time)[0]
+        trim_end = self.trim_end(time)[0]
+        assert 0. <= trim_start <= trim_end <= 1.
+        p_start = p0 + trim_start * (p1 - p0)
+        p_end = p0 + trim_end * (p1 - p0)
+        r, g, b = tuple(np.round(self.color(time)).astype(int))
+
+        W, H = self.size
+        image = QImage(W, H, QImage.Format.Format_ARGB32)
+        image.fill(QColor(0, 0, 0, 0))
+
+        painter = QPainter(image)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        painter.setPen(QPen(QColor(b, g, r, 255), self.width(time)[0]))
+        painter.drawLine(QPointF(*p_start), QPointF(*p_end))
+
+        painter.end()
+        return qimage_to_numpy(image)
+
+
 class Rectangle(AttributesMixin):
     def __init__(
         self,

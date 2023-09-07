@@ -1,6 +1,6 @@
 from .composition import Composition, LayerItem  # noqa
 from .drawing import (Ellipse, FillProperty, Rectangle, StrokeProperty,  # noqa
-                      Text)
+                      Text, Line)
 from .layer import Layer, BasicLayer  # noqa
 from .layer_item import LayerItem  # noqa
 from .layer_ops import AlphaMatte, LuminanceMatte  # noqa
