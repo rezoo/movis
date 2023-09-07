@@ -19,7 +19,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        "movis": ["assets/*", "py.typed"],
+        "movis": ["py.typed"],
     },
     python_requires=">=3.9.0",
     install_requires=parse_requirements(),
