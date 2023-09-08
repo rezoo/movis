@@ -72,20 +72,20 @@ class Composition:
     @property
     def preview_level(self) -> int:
         """The resolution of the rendering of the composition.
-        For example, if `preview_level=2` is set,
-        the composition's resolution is `(W / 2, H / 2)`."""
+        For example, if ``preview_level=2`` is set,
+        the composition's resolution is ``(W / 2, H / 2)``."""
         return self._preview_level
 
     @preview_level.setter
     def preview_level(self, level: int) -> None:
-        assert level > 0
+        assert level > 0, "preview_level must be greater than 0"
         self._preview_level = int(level)
 
     @contextmanager
     def preview(self, level: int = 2) -> Iterator[None]:
-        """Context manager method to temporarily change the `preview_level` using the `with` syntax.
+        """Context manager method to temporarily change the ``preview_level`` using the `with` syntax.
 
-        For example, `with self.preview(level=2):` would change the `preview_level` to 2 in that scope.
+        For example, ``with self.preview(level=2):`` would change the ``preview_level`` to 2 in that scope.
         """
         assert level > 0
         original_level = self._preview_level
@@ -178,6 +178,71 @@ class Composition:
         end_time: float | None = None,
         visible: bool = True,
     ) -> LayerItem:
+        """Add a layer to the composition.
+
+        This method appends the target layer to the composition, along with details about the layer such as
+        position, scale, opacity, and rendering mode. The composition registers layers wrapped within
+        a ``LayerItem`` object, which consolidates these related details.
+        Users can also add the layer with a unique name to the composition.
+        In this case, the LayerItem can be accessed using ``composition['layer_name']``.
+        To access the layer directly, users can reference it as ``composition['layer_name'].layer``,
+        or ideally, retain it in a separate variable before registering with ``add_layer()``.
+
+        A composition can also be treated as a layer.
+        This means that users can embed one composition within another using the ``add_layer()`` method.
+        This allows for more intricate image compositions and animations.
+
+        Args:
+            layer:
+                An instance or function of the layer to be added to the composition,
+                conforming to the ``Layer`` protocol.
+            name:
+                The unique name for the layer within the composition.
+            position:
+                The position of the layer. If unspecified,
+                the layer is placed at the center of the composition by default.
+            scale:
+                Scale ``(sx, sy)`` of the layer. Defaults to ``(1.0, 1.0)``.
+            rotation:
+                Clockwise rotation angle (in degrees) of the layer. Default is ``0.0``.
+            opacity:
+                Opacity of the layer. Default is ``1.0``.
+            blending_mode:
+                Rendering mode of the layer. Can be specified as an Enum from ``BlendingMode``
+                or as a string. Defaults to ``BlendingMode.NORMAL``.
+            anchor_point:
+                Defines the origin of the layer's coordinate system.
+                The origin is determined by the sum of ``origin_point`` and ``anchor_point``.
+                If ``origin_point`` is ``Direction.CENTER`` and ``anchor_point`` is ``(0, 0)``,
+                the origin is the center of the layer. Default is ``(0, 0)``.
+            origin_point:
+                Initial reference point for the layer's coordinate system.
+                The final origin is determined by the sum of ``origin_point`` and ``anchor_point``.
+                Defaults to ``Direction.CENTER`` (center of the layer).
+            transform:
+                A Transform object managing the geometric properties and rendering mode of the layer.
+                If specified, the arguments for ``position``, ``scale``, ``rotation``, ``anchor_point``,
+                ``origin_point``, and ``blending_mode`` in ``add_layer()`` are ignored
+                in favor of the values in ``transform``.
+            offset:
+                The starting time of the layer. For example, if ``start_time=0.0`` and ``offset=1.0``,
+                the layer will appear after 1 second in the composition.
+            start_time:
+                The start time of the layer. This variable is used to clip the layer in the time axis direction.
+                For example, if ``start_time=1.0`` and ``offset=0.0``, this layer will appear immediately
+                with one second skipped.
+            end_time:
+                The end time of the layer. This variable is used to clip the layer in the time axis direction.
+                For example, if ``start_time=0.0``, ``end_time=1.0``, and ``offset=0.0``,
+                this layer will disappear after one second. If not specified,
+                the layer's duration is used for ``end_time``.
+            visible:
+                A flag specifying whether the layer is visible or not;
+                if ``visible=False``, the layer in the composition is not rendered.
+
+        Returns:
+            A ``LayerItem`` object that wraps the layer and its corresponding information.
+        """
         if name is None:
             name = f"layer_{len(self._layers)}"
         if name in self._name_to_layer:
@@ -210,7 +275,14 @@ class Composition:
         return layer_item
 
     def pop_layer(self, name: str) -> LayerItem:
-        """Removes a layer item from the composition and returns it."""
+        """Removes a layer item from the composition and returns it.
+
+        Args:
+            name: The name of the layer to be removed.
+
+        Returns:
+            The layer item that was removed.
+        """
         if name not in self._name_to_layer:
             raise KeyError(f"Layer with name {name} does not exist")
         index = next(i for i in range(len(self._layers)) if self._layers[i].name == name)
@@ -250,6 +322,25 @@ class Composition:
         fps: float = 30.0,
         audio_path: str | Path | None = None,
     ) -> None:
+        """Writes the composition's contents to a video file.
+
+        Args:
+            dst_file:
+                The path to the destination video file.
+            start_time:
+                The start time of the video. This variable is used to clip the video in the time axis direction.
+            end_time:
+                The end time of the video. This variable is used to clip the video in the time axis direction.
+                If not specified, the composition's duration is used for ``end_time``.
+            codec:
+                The codec used to encode the video. Default is ``libx264``.
+            pixelformat:
+                The pixel format of the video. Default is ``yuv420p``.
+            fps:
+                The frame rate of the video. Default is ``30.0``.
+            audio_path:
+                The path to the audio file to be added to the video. Default is ``None``.
+        """
         if end_time is None:
             end_time = self.duration
         times = np.arange(start_time, end_time, 1.0 / fps)
@@ -273,6 +364,20 @@ class Composition:
         fps: float = 30.0,
         preview_level: int = 2
     ) -> None:
+        """Renders the composition and plays it in a Jupyter notebook.
+
+        Args:
+            start_time:
+                The start time of the video. This variable is used to clip the video in the time axis direction.
+            end_time:
+                The end time of the video. This variable is used to clip the video in the time axis direction.
+            fps:
+                The frame rate of the video. Default is ``30.0``.
+            preview_level:
+                The resolution of the rendering of the composition.
+                For example, if ``preview_level=2`` is set, the resolution of the output is ``(W / 2, H / 2)``.
+                Default is ``2``.
+        """
         from IPython.display import display
         from ipywidgets import Video
 
@@ -326,7 +431,8 @@ class LayerItem:
         end_time:
             The end time of the layer. This variable is used to clip the layer in the time axis direction.
             For example, if ``start_time=0.0``, ``end_time=1.0``, and ``offset=0.0``,
-            this layer will disappear after one second. If not specified, the layer's duration is used for ``end_time``.
+            this layer will disappear after one second.
+            If not specified, the layer's duration is used for ``end_time``.
         visible:
             A flag specifying whether the layer is visible or not;
             if ``visible=False``, the layer in the composition is not rendered.
@@ -354,45 +460,76 @@ class LayerItem:
         return self.end_time - self.start_time
 
     def add_effect(self, effect: Effect) -> Effect:
+        """Adds an effect to the layer.
+
+        Args:
+            effect:
+                The effect to be added to the layer.
+
+        Returns:
+            The effect that was added.
+        """
         self._effects.append(effect)
         return effect
 
     def remove_effect(self, effect: Effect) -> None:
+        """Removes an effect from the layer.
+
+        Args:
+            effect:
+                The effect to be removed from the layer.
+        """
         self._effects.remove(effect)
 
     @property
     def effects(self) -> list[Effect]:
+        """A list of effects applied to the layer."""
         return self._effects
 
     @property
     def anchor_point(self) -> Attribute:
+        """The anchor point of the layer."""
         return self.transform.anchor_point
 
     @property
     def position(self) -> Attribute:
+        """The position of the layer."""
         return self.transform.position
 
     @property
     def scale(self) -> Attribute:
+        """The scale of the layer."""
         return self.transform.scale
 
     @property
     def rotation(self) -> Attribute:
+        """The rotation of the layer."""
         return self.transform.rotation
 
     @property
     def opacity(self) -> Attribute:
+        """The opacity of the layer."""
         return self.transform.opacity
 
     @property
     def origin_point(self) -> Direction:
+        """The origin point of the layer."""
         return self.transform.origin_point
 
     @property
     def blending_mode(self) -> BlendingMode:
+        """The blending mode of the layer."""
         return self.transform.blending_mode
 
     def get_key(self, layer_time: float) -> tuple[Hashable, Hashable, Hashable]:
+        """Returns the state of the layer item at the given time.
+
+        Args:
+            layer_time:
+                The time at which the layer is rendered.
+
+        Returns:
+            A tuple of hashable keys representing the state of the layer at the given time."""
         if not self.visible:
             return (None, None, None)
         transform_key = self.transform.get_current_value(layer_time)
