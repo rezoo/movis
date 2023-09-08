@@ -10,6 +10,37 @@ from ..util import to_rgb
 
 
 class Gradient(AttributesMixin):
+    """A layer that generates a gradient image.
+
+    Args:
+        size:
+            the size of the generated image. Defaults to ``(100, 100)``.
+        start_point:
+            the start point of the gradient. Defaults to ``(0., 0.)``.
+        end_point:
+            the end point of the gradient. Defaults to ``(100., 100.)``.
+        start_color:
+            the start color of the gradient. Defaults to ``(0, 0, 0)``.
+            the color can be specified as a tuple of ``(R, G, B)``
+            or a string (`e.g.,` ``"#ff0000"``, or ``"red"``).
+        end_color:
+            the end color of the gradient. Defaults to ``(255, 255, 255)``.
+        gradient_type:
+            the type of the gradient. "linear" or "radial" is expected. Defaults to ``"linear"``.
+        duration:
+            the duration of the layer. Defaults to ``1e6``.
+
+    Animatable Attributes:
+        start_point:
+            the start point of the gradient.
+        end_point:
+            the end point of the gradient.
+        start_color:
+            the start color of the gradient.
+        end_color:
+            the end color of the gradient.
+    """
+
     def __init__(
         self,
         size: tuple[int, int] = (100, 100),
@@ -71,7 +102,6 @@ class Stripe(AttributesMixin):
         phase: float = 0.,
         ratio: float = 0.5,
         duration: float = 1e6,
-        sampling_level: int = 1,
     ) -> None:
         self.size = size
         self.duration = duration
@@ -85,11 +115,9 @@ class Stripe(AttributesMixin):
         self.total_width = Attribute(total_width, AttributeType.SCALAR, range=(0., 1e6))
         self.phase = Attribute(phase, AttributeType.SCALAR)
         self.ratio = Attribute(ratio, AttributeType.SCALAR, range=(0., 1.0))
-        self.sampling_level = sampling_level
 
     def __call__(self, time: float) -> np.ndarray:
         width, height = self.size
-        L = self.sampling_level
         ratio = float(self.ratio(time))
         c1 = np.concatenate([
             np.round(self.color1(time)).reshape(3, 1, 1),
@@ -104,17 +132,25 @@ class Stripe(AttributesMixin):
             c2_img = np.broadcast_to(c2, (4, height, width)).transpose(1, 2, 0)
             return c2_img.astype(np.uint8)
         center = np.array([height / 2, width / 2])[:, None, None]
-        L = self.sampling_level
-        inds = np.mgrid[:L * height, :L * width] / L - center
+        inds = np.mgrid[:height, :width] - center
         theta = float(self.angle(time)) / 180.0 * np.pi
         phase = float(self.phase(time))
         stripe_width = float(self.total_width(time))
 
+        eps = 1e-2
         v = np.array([np.sin(theta), np.cos(theta)], dtype=np.float64)
         p = (v.reshape(2, 1, 1) * inds).sum(axis=0, keepdims=True) / stripe_width + phase
-        p = p - np.floor(p)
-        color: np.ndarray = np.where(p > ratio, c1, c2)
-        color = color.reshape(4, height, L, width, L)
-        color = color.transpose(1, 3, 2, 4, 0).mean(axis=(2, 3))
-        color = color.astype(np.uint8)
+        p = _fract(p)
+        p = _smoothstep(max(ratio - eps, 0.0), min(ratio + eps, 1.0), p)
+        color = p * np.broadcast_to(c1, (4, height, width)) + (1 - p) * np.broadcast_to(c2, (4, height, width))
+        color = color.transpose(1, 2, 0).astype(np.uint8)
         return color
+
+
+def _smoothstep(edge0: float, edge1: float, x: np.ndarray) -> np.ndarray:
+    t = np.clip((x - edge0) / (edge1 - edge0), 0.0, 1.0)
+    return t * t * (3.0 - 2.0 * t)
+
+
+def _fract(x: np.ndarray) -> np.ndarray:
+    return x - np.floor(x)
