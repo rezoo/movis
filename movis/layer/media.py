@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Sequence, Union
+from typing import Sequence
 
 import imageio
 import numpy as np
@@ -22,7 +22,7 @@ class Image:
     """
     def __init__(
         self,
-        img_file: Union[str, Path, PILImage.Image, np.ndarray],
+        img_file: str | Path | PILImage.Image | np.ndarray,
         duration: float = 1e6
     ) -> None:
         self.image: np.ndarray | None = None
@@ -53,17 +53,18 @@ class Image:
         self._duration = duration
 
     @property
-    def duration(self):
+    def duration(self) -> float:
         """The duration for which the image should be displayed."""
         return self._duration
 
     @property
-    def size(self):
+    def size(self) -> tuple[int, int]:
         """The size of the image with a tuple of `(width, height)`."""
         shape = self._read_image().shape[:2]
         return shape[1], shape[0]
 
     def get_key(self, time: float) -> bool:
+        """Get the state index for the given time."""
         return 0 <= time < self.duration
 
     def _read_image(self) -> np.ndarray:
@@ -78,12 +79,39 @@ class Image:
 
 
 class ImageSequence(TimelineMixin):
+    """Image sequence layer to encapsulate various formats of images.
+
+    Args:
+        start_times:
+            a sequence of start times for each image.
+        end_times:
+            a sequence of end times for each image.
+        img_files:
+            a sequence of image data. Each element can be a file path (``str`` or ``Path``),
+            a `PIL.Image` object, or a two or four-dimensional ``numpy.ndarray`` with a shape of ``(H, W, C)``.
+    """
+
     @classmethod
     def from_files(
         cls,
-        img_files: Sequence[Union[str, Path]],
+        img_files: Sequence[str | Path | PILImage.Image | np.ndarray],
         each_duration: float = 1.0
     ) -> "ImageSequence":
+        """Create an ``ImageSequence`` object from a sequence of image files.
+
+        Different from ``ImageSequence.__init__``, this method does not require the start and end times,
+        and the duration for each image is set to ``each_duration``.
+
+        Args:
+            img_files:
+                a sequence of image data. Each element can be a file path (``str`` or ``Path``),
+                a `PIL.Image` object, or a two or four-dimensional ``numpy.ndarray`` with a shape of ``(H, W, C)``.
+            each_duration:
+                the duration for which each image should be displayed. Default is ``1.0``.
+
+        Returns:
+            An ``ImageSequence`` object.
+        """
         start_times = np.arange(len(img_files)) * each_duration
         end_times = start_times + each_duration
         return cls(start_times.tolist(), end_times.tolist(), img_files)
@@ -91,9 +119,20 @@ class ImageSequence(TimelineMixin):
     @classmethod
     def from_dir(
         cls,
-        img_dir: Union[str, Path],
+        img_dir: str | Path,
         each_duration: float = 1.0
     ) -> "ImageSequence":
+        """Create an ``ImageSequence`` object from a directory of image files.
+
+        Args:
+            img_dir:
+                a directory containing image files.
+            each_duration:
+                the duration for which each image should be displayed. Default is ``1.0``.
+
+        Returns:
+            An ``ImageSequence`` object.
+        """
         img_dir = Path(img_dir)
         exts = set([".png", ".jpg", ".jpeg", ".bmp", ".tiff"])
         img_files = [
@@ -104,7 +143,7 @@ class ImageSequence(TimelineMixin):
         self,
         start_times: Sequence[float],
         end_times: Sequence[float],
-        img_files: Sequence[Union[str, Path, PILImage.Image, np.ndarray]]
+        img_files: Sequence[str | Path | PILImage.Image | np.ndarray]
     ) -> None:
         super().__init__(start_times, end_times)
         self.img_files = img_files
@@ -121,6 +160,7 @@ class ImageSequence(TimelineMixin):
                 raise ValueError(f"Invalid img_file type: {type(img_file)}")
 
     def get_key(self, time: float) -> int:
+        """Get the state index for the given time."""
         idx = self.get_state(time)
         if idx < 0:
             return -1
@@ -139,27 +179,50 @@ class ImageSequence(TimelineMixin):
 
 
 class Video:
-    def __init__(self, video_file: Union[str, Path]) -> None:
+    """Video layer to encapsulate various formats of video data.
+
+    Args:
+        video_file: the source of the video data. It can be a file path (``str`` or ``Path``).
+    """
+
+    def __init__(self, video_file: str | Path) -> None:
         self.video_file = Path(video_file)
-        self.reader = imageio.get_reader(video_file)
-        meta_data = self.reader.get_meta_data()
-        self.fps = meta_data["fps"]
-        self.size = meta_data["size"]
-        self.n_frames = meta_data["nframes"]
+        self._reader = imageio.get_reader(video_file)
+        meta_data = self._reader.get_meta_data()
+        self._fps = meta_data["fps"]
+        self._size = meta_data["size"]
+        self._n_frame = meta_data["nframes"]
         self._duration = meta_data["duration"]
 
     @property
-    def duration(self):
+    def fps(self) -> float:
+        """The frame rate of the video."""
+        return self._fps
+
+    @property
+    def size(self) -> tuple[int, int]:
+        """The size of the video with a tuple of ``(width, height)``."""
+        return self._size
+
+    @property
+    def n_frame(self) -> int:
+        """The number of frames in the video."""
+        return self._n_frame
+
+    @property
+    def duration(self) -> float:
+        """The duration of the video."""
         return self._duration
 
     def get_key(self, time: float) -> int:
+        """Get the state index for the given time."""
         if time < 0 or self.duration < time:
             return -1
-        frame_index = int(time * self.fps)
+        frame_index = int(time * self._fps)
         return frame_index
 
     def __call__(self, time: float) -> np.ndarray | None:
-        frame_index = int(time * self.fps)
-        frame = self.reader.get_data(frame_index)
+        frame_index = int(time * self._fps)
+        frame = self._reader.get_data(frame_index)
         pil_frame = PILImage.fromarray(frame).convert("RGBA")
         return np.asarray(pil_frame)

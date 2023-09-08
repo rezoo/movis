@@ -20,19 +20,72 @@ from .mixin import TimelineMixin
 class FillProperty:
 
     def __init__(self, color: tuple[int, int, int] | str, opacify: float = 1.):
-        self.color: tuple[int, int, int] = to_rgb(color)
-        self.opacity: float = float(opacify)
+        self._color: tuple[int, int, int] = to_rgb(color)
+        self._opacity: float = float(opacify)
+
+    @property
+    def color(self) -> tuple[int, int, int]:
+        return self._color
+
+    @property
+    def opacity(self) -> float:
+        return self._opacity
 
 
 class StrokeProperty:
 
     def __init__(self, color: tuple[int, int, int] | str, width: float = 1., opacity: float = 1.):
-        self.color: tuple[int, int, int] = to_rgb(color)
-        self.width: float = float(width)
-        self.opacity: float = float(opacity)
+        self._color: tuple[int, int, int] = to_rgb(color)
+        self._width: float = float(width)
+        self._opacity: float = float(opacity)
+
+    @property
+    def color(self) -> tuple[int, int, int]:
+        return self._color
+
+    @property
+    def width(self) -> float:
+        return self._width
+
+    @property
+    def opacity(self) -> float:
+        return self._opacity
 
 
 class Line(AttributesMixin):
+    """Draw a line from ``start`` to ``end``.
+
+    Args:
+        size:
+            The size of the canvas with a tuple of ``(width, height)``.
+        start:
+            The start point of the line with a tuple of ``(x, y)``.
+        end:
+            The end point of the line with a tuple of ``(x, y)``.
+        color:
+            The color of the line with a tuple of ``(r, g, b)``
+            or a string representing a color name (`e.g.,` ``"#ff0000" or "red"``).
+        width:
+            The width of the line.
+        duration:
+            The duration for which the line should be displayed.
+
+    Animateable Attributes:
+        start:
+            The start point of the line.
+        end:
+            The end point of the line.
+        color:
+            The color of the line.
+        width:
+            The width of the line.
+        trim_start:
+            The start point of the line to be drawn in the range of ``[0, 1]``.
+            The default value is ``0``.
+        trim_end:
+            The end point of the line to be drawn in the range of ``[0, 1]``.
+            The default value is ``1``.
+    """
     def __init__(
         self,
         size: tuple[int, int] = (100, 100),
@@ -75,6 +128,29 @@ class Line(AttributesMixin):
 
 
 class Rectangle(AttributesMixin):
+    """Draw a rectangle with rounded corners.
+
+    Args:
+        size:
+            The size of the rectangle with a tuple of ``(width, height)``.
+        radius:
+            The radius of the rounded corners. The default value is ``0``.
+        color:
+            The color of the rectangle with a tuple of ``(r, g, b)``.
+            If ``None``, this layer uses the ``contents`` argument to draw the rectangle.
+        contents:
+            A sequence of ``FillProperty`` or ``StrokeProperty`` objects,
+            which will be drawn on top of the rectangle.
+            If an empty sequence is given, the rectangle will be filled with the ``color`` argument.
+        duration:
+            The duration for which the rectangle should be displayed.
+
+    Animateable Attributes:
+        size:
+            The size of the rectangle.
+        radius:
+            The radius of the rounded corners.
+    """
     def __init__(
         self,
         size: tuple[float, float] = (100., 100.),
@@ -134,6 +210,26 @@ class Rectangle(AttributesMixin):
 
 
 class Ellipse(AttributesMixin):
+    """Draw an ellipse.
+
+    Args:
+        size:
+            The size of the ellipse with a tuple of ``(width, height)``.
+        color:
+            The color of the ellipse with a tuple of ``(r, g, b)``,
+            or a string representing a color name (`e.g.,` ``"#ff0000" or "red"``).
+            If ``None``, this layer uses the ``contents`` argument to draw the ellipse.
+        contents:
+            A sequence of ``FillProperty`` or ``StrokeProperty`` objects,
+            which will be drawn on top of the ellipse.
+            If an empty sequence is given, the ellipse will be filled with the ``color`` argument.
+        duration:
+            The duration for which the ellipse should be displayed.
+
+    Animateable Attributes:
+        size:
+            The size of the ellipse.
+    """
     def __init__(
         self,
         size: tuple[float, float] = (100., 100.),
@@ -190,15 +286,53 @@ class Ellipse(AttributesMixin):
 
 
 class Text(AttributesMixin):
+    """Draw a text.
+
+    Args:
+        text:
+            the text to be drawn. It can be a string or a callable object.
+            If it is a callable object, it must accept a float value representing the time,
+            and return a string.
+        font_size:
+            the font size of the text.
+        font_family:
+            the font family of the text. It must be one of the available fonts (`e.g.,` ``"Helvetica"``).
+            To see the list of available fonts, run ``movis.layer.Text.available_fonts()``.
+        font_style:
+            the font style of the text. It must be one of the available styles of the given font family
+            (`e.g.,` ``"Bold"``). To see the list of available styles,
+            un ``movis.layer.Text.available_styles(font_name)``.
+        color:
+            the color of the text with a tuple of ``(r, g, b)``,
+            or a string representing a color name (`e.g.,` ``"#ff0000" or "red"``).
+            If ``None``, this layer uses the ``contents`` argument to draw the text.
+        contents:
+            A sequence of ``FillProperty`` or ``StrokeProperty`` objects,
+            which will be drawn on top of the text.
+            If an empty sequence is given, the text will be filled with the ``color`` argument.
+        line_spacing:
+            the line spacing of the text. If ``None``, the line spacing is automatically determined.
+        text_alignment:
+            the text alignment. If string is given, it must be one of ``"left"``, ``"center"``, or ``"right"``.
+            It also accepts a ``TextAlignment`` enum.
+        duration:
+            the duration for which the text should be displayed.
+
+        Animateable Attributes:
+            font_size:
+                the font size of the text.
+    """
 
     @staticmethod
     def available_fonts() -> Sequence[str]:
+        """Returns the list of available fonts."""
         if QCoreApplication.instance() is None:
             QApplication(sys.argv[:1])
         return QFontDatabase.families()
 
     @staticmethod
     def available_styles(font_name: str) -> Sequence[str]:
+        """Returns the list of available styles of the given font family."""
         if QCoreApplication.instance() is None:
             QApplication(sys.argv[:1])
         return QFontDatabase.styles(font_name)
@@ -211,6 +345,22 @@ class Text(AttributesMixin):
         texts: Sequence[str],
         **kwargs
     ) -> 'Text':
+        """Create a text layer from a timeline.
+
+        This method is useful when you want to display different texts at different times
+        (e.g., displaying a subtitle). Note that other arguments are the same as the constructor.
+
+        Args:
+            start_times:
+                A sequence of start times of the texts.
+            end_times:
+                A sequence of end times of the texts.
+            texts:
+                A sequence of texts to be displayed.
+
+        Returns:
+            A new `Text` object.
+        """
         assert len(start_times) == len(texts)
 
         class TextWithTime(TimelineMixin):
@@ -256,6 +406,7 @@ class Text(AttributesMixin):
             QApplication(sys.argv[:1])
 
     def get_text(self, time: float = 0.) -> str:
+        """Returns the text to be drawn at the given time."""
         if isinstance(self.text, str):
             return self.text
         elif callable(self.text):
@@ -271,6 +422,15 @@ class Text(AttributesMixin):
                 self.font_family, self.font_style, round(float(self.font_size(time))))
 
     def get_size(self, time: float = 0.) -> tuple[int, int]:
+        """Returns the size of the text at the given time.
+
+        Note that the returned size is the size of the text drawn on the canvas,
+        and it may be different from the size of the text itself.
+
+        Args:
+            time:
+                The time at which the size of the text is measured.
+        """
         qfont = self._get_qfont(time)
         metrics = QFontMetrics(qfont)
         text = self.get_text(time)
@@ -286,6 +446,7 @@ class Text(AttributesMixin):
         return (W, H)
 
     def get_key(self, time: float) -> tuple[str, Hashable]:
+        """Returns the state of the layer at the given time."""
         key = super().get_key(time)
         return (self.get_text(time), key)
 
