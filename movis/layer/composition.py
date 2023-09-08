@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 from ..attribute import Attribute
 from ..effect import Effect
-from ..enum import CacheType, Direction
+from ..enum import BlendingMode, CacheType, Direction
 from ..imgproc import alpha_composite
 from ..transform import Transform, TransformValue
 from .protocol import Layer
@@ -50,6 +50,7 @@ class Composition:
 
     @property
     def size(self) -> tuple[int, int]:
+        """The size of the composition in the form of ``(width, height)``."""
         return self._size
 
     @size.setter
@@ -60,11 +61,11 @@ class Composition:
 
     @property
     def duration(self) -> float:
+        """The duration of the composition."""
         return self._duration
 
     @duration.setter
     def duration(self, duration: float) -> None:
-        """The duration along the time axis for the composition."""
         assert duration > 0
         self._duration = float(duration)
 
@@ -96,6 +97,7 @@ class Composition:
 
     @property
     def layers(self) -> Sequence[LayerItem]:
+        """Returns a list of ``LayerItem`` objects."""
         return self._layers
 
     def keys(self) -> list[str]:
@@ -146,6 +148,7 @@ class Composition:
         self.pop_layer(key)
 
     def get_key(self, time: float) -> tuple[Hashable, ...]:
+        """Returns a tuple of hashable keys representing the state for each layer at the given time."""
         layer_keys: list[Hashable] = [CacheType.COMPOSITION]
         for layer_item in self._layers:
             layer_time = time - layer_item.offset
@@ -166,6 +169,7 @@ class Composition:
         scale: float | tuple[float, float] | np.ndarray = (1.0, 1.0),
         rotation: float = 0.0,
         opacity: float = 1.0,
+        blending_mode: BlendingMode | str = BlendingMode.NORMAL,
         anchor_point: float | tuple[float, float] | np.ndarray = (0.0, 0.0),
         origin_point: Direction | str = Direction.CENTER,
         transform: Transform | None = None,
@@ -190,6 +194,7 @@ class Composition:
                 opacity=opacity,
                 anchor_point=anchor_point,
                 origin_point=origin_point,
+                blending_mode=blending_mode,
             )
         layer_item = LayerItem(
             layer,
@@ -205,6 +210,7 @@ class Composition:
         return layer_item
 
     def pop_layer(self, name: str) -> LayerItem:
+        """Removes a layer item from the composition and returns it."""
         if name not in self._name_to_layer:
             raise KeyError(f"Layer with name {name} does not exist")
         index = next(i for i in range(len(self._layers)) if self._layers[i].name == name)
@@ -212,6 +218,7 @@ class Composition:
         return layer_item
 
     def clear(self) -> None:
+        """Removes all layers from the composition."""
         self._layers.clear()
 
     def __call__(self, time: float) -> np.ndarray | None:
@@ -381,6 +388,10 @@ class LayerItem:
     def origin_point(self) -> Direction:
         return self.transform.origin_point
 
+    @property
+    def blending_mode(self) -> BlendingMode:
+        return self.transform.blending_mode
+
     def get_key(self, layer_time: float) -> tuple[Hashable, Hashable, Hashable]:
         if not self.visible:
             return (None, None, None)
@@ -424,7 +435,7 @@ class LayerItem:
         bg_image = alpha_composite(
             bg_image, fg_image_transformed,
             position=(offset_x - parent[0], offset_y - parent[1]),
-            opacity=p.opacity)
+            opacity=p.opacity, blending_mode=p.blending_mode)
         return bg_image
 
     def __call__(self, time: float) -> np.ndarray | None:

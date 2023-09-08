@@ -4,7 +4,7 @@ from typing import NamedTuple
 
 import numpy as np
 
-from movis.enum import Direction
+from movis.enum import BlendingMode, Direction
 
 from .attribute import Attribute, AttributeType
 from .motion import transform_to_1dscalar, transform_to_2dvector
@@ -29,6 +29,9 @@ class TransformValue(NamedTuple):
         origin_point:
             An enum value from Direction representing the origin point for transformations.
             Defaults to ``Direction.CENTER``.
+        origin_point:
+            An enum value from Direction representing the blending mode of the layer.
+            Defaults to ``BlendingMode.NORMAL``.
     """
 
     anchor_point: tuple[float, float] = (0.0, 0.0)
@@ -37,6 +40,7 @@ class TransformValue(NamedTuple):
     rotation: float = 0.0
     opacity: float = 1.0
     origin_point: Direction = Direction.CENTER
+    blending_mode: BlendingMode = BlendingMode.NORMAL
 
 
 class Transform:
@@ -71,6 +75,7 @@ class Transform:
         opacity: float = 1.0,
         anchor_point: float | tuple[float, float] | np.ndarray = (0.0, 0.0),
         origin_point: Direction | str = Direction.CENTER,
+        blending_mode: BlendingMode | str = BlendingMode.NORMAL,
     ):
         self.position = Attribute(position, AttributeType.VECTOR2D)
         self.scale = Attribute(scale, AttributeType.VECTOR2D)
@@ -78,6 +83,8 @@ class Transform:
         self.opacity = Attribute(opacity, AttributeType.SCALAR, range=(0., 1.))
         self.anchor_point = Attribute(anchor_point, AttributeType.VECTOR2D)
         self.origin_point = Direction.from_string(origin_point) if isinstance(origin_point, str) else origin_point
+        self.blending_mode = BlendingMode.from_string(blending_mode) \
+            if isinstance(blending_mode, str) else blending_mode
 
     @property
     def attributes(self) -> dict[str, Attribute]:
@@ -191,8 +198,9 @@ class Transform:
             rotation=transform_to_1dscalar(self.rotation(layer_time)),
             opacity=transform_to_1dscalar(self.opacity(layer_time)),
             origin_point=self.origin_point,
+            blending_mode=self.blending_mode,
         )
 
     def __repr__(self) -> str:
         return f"Transform(ap={self.anchor_point}, pos={self.position}, " \
-            f"s={self.scale}, rot={self.rotation}, op={self.opacity})"
+            f"s={self.scale}, rot={self.rotation}, op={self.opacity}, blend={self.blending_mode})"
