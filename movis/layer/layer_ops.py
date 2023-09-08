@@ -11,6 +11,26 @@ from .protocol import BasicLayer
 
 
 class AlphaMatte(AttributesMixin):
+    """A layer that applies alpha matte to the target layer using the mask layer.
+
+    Alpha Matte is a algorihtm that overlays the target layer on the mask layer without changing the alpha channel.
+    The mask layer and the target layer should have the same size and the same duration.
+    Using the `Composition` layer is preferred if users want to align them.
+
+    Args:
+        mask:
+            the base mask layer used for alpha matte. ``mask`` must comply with the ``BasicLayer`` protocol.
+        target:
+            the target layer to which alpha matte is applied. ``target`` must comply with the ``BasicLayer`` protocol.
+        opacity:
+            the opacity of the target layer. Defaults to ``1.0``.
+        blending_mode:
+            the blending mode of the target layer. Defaults to ``BlendingMode.NORMAL``.
+
+    Animatable Attributes:
+        opacity:
+            the opacity of the target layer.
+    """
 
     def __init__(
             self, mask: BasicLayer, target: BasicLayer,
@@ -22,6 +42,7 @@ class AlphaMatte(AttributesMixin):
             if isinstance(blending_mode, str) else blending_mode
 
     def get_key(self, time: float) -> tuple[Hashable, Hashable, Hashable]:
+        """Get the state for the given time."""
         attr_key = super().get_key(time)
         mask_key = self.mask.get_key(time) if hasattr(self.mask, 'get_key') else time
         target_key = self.target.get_key(time) if hasattr(self.target, 'get_key') else time
@@ -29,6 +50,7 @@ class AlphaMatte(AttributesMixin):
 
     @property
     def duration(self) -> float:
+        """The duration of the layer."""
         return self.mask.duration
 
     def __call__(self, time: float) -> np.ndarray | None:
@@ -45,18 +67,32 @@ class AlphaMatte(AttributesMixin):
 
 
 class LuminanceMatte:
+    """A layer that replaces the alpha channel of the target layer with the luminance of the mask layer.
+
+    Note that the mask layer and the target layer should have the same size and the same duration.
+    Using the `Composition` layer is preferred if users want to align them.
+
+    Args:
+        mask:
+            the base mask layer used for luminance matte. ``mask`` must comply with the ``BasicLayer`` protocol.
+        target:
+            the target layer to which luminance matte is applied.
+            ``target`` must comply with the ``BasicLayer`` protocol.
+    """
 
     def __init__(self, mask: BasicLayer, target: BasicLayer):
         self.mask = mask
         self.target = target
 
     def get_key(self, time: float) -> tuple[Hashable, Hashable]:
+        """Get the state for the given time."""
         mask_key = self.mask.get_key(time) if hasattr(self.mask, 'get_key') else time
         target_key = self.target.get_key(time) if hasattr(self.target, 'get_key') else time
         return (mask_key, target_key)
 
     @property
     def duration(self) -> float:
+        """The duration of the layer."""
         return self.mask.duration
 
     def __call__(self, time: float) -> np.ndarray | None:

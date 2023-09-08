@@ -44,6 +44,25 @@ Drawing layers
    movis.layer.drawing.Ellipse
    movis.layer.drawing.Text
 
+Texture layers
+^^^^^^^^^^^^^^^
+
+.. autosummary::
+   :toctree: generated/
+   :nosignatures:
+
+   movis.layer.texture.Gradient
+   movis.layer.texture.Stripe
+
+Layer-to-Layer Composition
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autosummary::
+   :toctree: generated/
+   :nosignatures:
+
+   movis.layer.layer_ops.AlphaMatte
+   movis.layer.layer_ops.LuminanceMatte
 
 Layer protocol
 ---------------
