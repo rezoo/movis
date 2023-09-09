@@ -1,4 +1,4 @@
 from .blur import GaussianBlur, Glow  # noqa
 from .color import FillColor, HSLShift  # noqa
-from .drop_shadow import DropShadow  # noqa
-from .effect import Effect  # noqa
+from .protocol import Effect  # noqa
+from .style import DropShadow  # noqa
