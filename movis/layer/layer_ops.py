@@ -28,8 +28,7 @@ class AlphaMatte(AttributesMixin):
             the blending mode of the target layer. Defaults to ``BlendingMode.NORMAL``.
 
     Animatable Attributes:
-        opacity:
-            the opacity of the target layer.
+        ``opacity``
     """
 
     def __init__(

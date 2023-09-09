@@ -6,6 +6,19 @@ from ..imgproc import alpha_composite
 
 
 class GaussianBlur(AttributesMixin):
+    """Gaussian blur effect.
+
+    It applies Gaussian blur to the input image.
+    Note that the resolution of the output image is greater than
+    that of the input image ot preserve the blurring of the edges. 
+
+    Args:
+        radius:
+            Radius of Gaussian kernel.
+
+    Animatable Attributes:
+        ``radius``
+    """
 
     def __init__(self, radius: float):
         self.radius = Attribute(radius, AttributeType.SCALAR, range=(0., 1e6))
@@ -28,10 +41,24 @@ class GaussianBlur(AttributesMixin):
 
 
 class Glow(AttributesMixin):
+    """Glow effect.
+
+    It applies Gaussian blur to the input image and adds it to the original with the specified strength.
+
+    Args:
+        radius:
+            Radius of Gaussian kernel.
+        strength:
+            Strength of the glow effect.
+
+    Animatable Attributes:
+        ``radius``
+        ``strength``
+    """
 
     def __init__(self, radius: float, strength: float = 1.0):
         self.radius = Attribute(radius, AttributeType.SCALAR, range=(0., 1e6))
-        self.strength = Attribute(strength, AttributeType.SCALAR, range=(0., 1.))
+        self.strength = Attribute(strength, AttributeType.SCALAR, range=(0., 100.))
 
     def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:
         radius = float(self.radius(time))
@@ -47,6 +74,9 @@ class Glow(AttributesMixin):
         blurred_image = cv2.GaussianBlur(
             src=pad_image,
             ksize=ksize, sigmaX=radius, sigmaY=radius)
-        opacity = float(self.strength(time))
+        strength = float(self.strength(time))
+        bimg_rgb = blurred_image[:, :, :3].astype(np.float32)
+        bimg_rgb = np.clip(strength * blurred_image[:, :, :3].astype(np.float32), 0, 255).astype(np.uint8)
+        blurred_image = np.concatenate([bimg_rgb, blurred_image[:, :, 3:]], axis=2)
         return alpha_composite(
-            pad_image, blurred_image, opacity=opacity, blending_mode='add')
+            pad_image, blurred_image, blending_mode='add')

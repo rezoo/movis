@@ -8,6 +8,16 @@ from ..util import to_rgb
 
 
 class FillColor(AttributesMixin):
+    """Fill the image with the specified color while preserving the alpha channel.
+
+    Args:
+        color:
+            Color to fill. It can be specified as a tuple of RGB values or a string of color name.
+
+    Animatable Attributes:
+        ``color``
+    """
+
     def __init__(self, color: tuple[int, int, int] | str = (255, 255, 255)):
         c = to_rgb(color)
         self.color = Attribute(c, AttributeType.COLOR, range=(0., 255.))
@@ -22,6 +32,22 @@ class FillColor(AttributesMixin):
 
 
 class HSLShift(AttributesMixin):
+    """Shift hue, saturation, and luminance of the image.
+
+    Args:
+        hue:
+            Hue shift in degrees.
+        saturation:
+            Saturation shift in the range ``[-1, 1]``.
+        luminance:
+            Luminance shift in the range ``[-1, 1]``.
+
+    Animatable Attributes:
+        ``hue``
+        ``saturation``
+        ``luminance``
+    """
+
     def __init__(self, hue: float = 0.0, saturation: float = 0.0, luminance: float = 0.0):
         self.hue = Attribute(hue, AttributeType.SCALAR, range=(-180., 180.))
         self.saturation = Attribute(saturation, AttributeType.SCALAR, range=(-1., 1.))

@@ -31,14 +31,10 @@ class Gradient(AttributesMixin):
             the duration of the layer. Defaults to ``1e6``.
 
     Animatable Attributes:
-        start_point:
-            the start point of the gradient.
-        end_point:
-            the end point of the gradient.
-        start_color:
-            the start color of the gradient.
-        end_color:
-            the end color of the gradient.
+        ``start_point``
+        ``end_point``
+        ``start_color``
+        ``end_color``
     """
 
     def __init__(
@@ -118,22 +114,14 @@ class Stripe(AttributesMixin):
             the duration of the layer. Defaults to ``1e6``.
 
     Animatable Attributes:
-        angle:
-            the angle of the stripe pattern in degrees.
-        color1:
-            the first color of the stripe pattern.
-        color2:
-            the second color of the stripe pattern.
-        opacity1:
-            the opacity of the first color.
-        opacity2:
-            the opacity of the second color.
-        total_width:
-            the total width of the stripe pattern.
-        phase:
-            the phase of the stripe pattern in degrees.
-        ratio:
-            the ratio of the first color.
+        ``angle``
+        ``color1``
+        ``color2``
+        ``opacity1``
+        ``opacity2``
+        ``total_width``
+        ``phase``
+        ``ratio``
     """
     def __init__(
         self,

@@ -9,6 +9,28 @@ from ..util import to_rgb
 
 
 class DropShadow(AttributesMixin):
+    """Applies drop shadow to the input image.
+
+    Args:
+        radius:
+            Radius of Gaussian kernel.
+        offset:
+            Offset of the shadow in pixels.
+        angle:
+            Angle of the shadow in degrees.
+        color:
+            Color of the shadow. It can be specified as a tuple of RGB values or a string of color name.
+        opacity:
+            Opacity of the shadow in the range ``[0, 1]``.
+
+    Animatable Attributes:
+        ``radius``
+        ``offset``
+        ``angle``
+        ``color``
+        ``opacity``
+"""
+
     def __init__(
         self,
         radius: float = 0.0,

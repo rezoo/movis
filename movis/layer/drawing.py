@@ -71,20 +71,14 @@ class Line(AttributesMixin):
             The duration for which the line should be displayed.
 
     Animateable Attributes:
-        start:
-            The start point of the line.
-        end:
-            The end point of the line.
-        color:
-            The color of the line.
-        width:
-            The width of the line.
-        trim_start:
+        ``trim_start``
             The start point of the line to be drawn in the range of ``[0, 1]``.
             The default value is ``0``.
-        trim_end:
+        ``trim_end``
             The end point of the line to be drawn in the range of ``[0, 1]``.
             The default value is ``1``.
+        ``start`` ``end`` ``color`` ``width``
+            These attributes can be animated as well.
     """
     def __init__(
         self,
@@ -146,10 +140,8 @@ class Rectangle(AttributesMixin):
             The duration for which the rectangle should be displayed.
 
     Animateable Attributes:
-        size:
-            The size of the rectangle.
-        radius:
-            The radius of the rounded corners.
+        ``size``
+        ``radius``
     """
     def __init__(
         self,
@@ -227,8 +219,7 @@ class Ellipse(AttributesMixin):
             The duration for which the ellipse should be displayed.
 
     Animateable Attributes:
-        size:
-            The size of the ellipse.
+        ``size``
     """
     def __init__(
         self,
@@ -319,8 +310,7 @@ class Text(AttributesMixin):
             the duration for which the text should be displayed.
 
         Animateable Attributes:
-            font_size:
-                the font size of the text.
+            ``font_size``
     """
 
     @staticmethod
