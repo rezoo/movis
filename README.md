@@ -93,7 +93,10 @@ scene.add_layer(get_radial_gradient_image)
 scene.write_video('output.mp4')
 ```
 
-If you want to specify the duration of a layer, the `duration` property is required. Movis also offers caching features to accelerate rendering. If you wish to speed up rendering for layers where the frame remains static, you can implement the `get_key(time: float)` method:
+If you want to specify the duration of a layer,
+the `duration` property is required. Movis also offers caching features
+to accelerate rendering. If you wish to speed up rendering for layers
+where the frame remains static, you can implement the `get_key(time: float)` method:
 
 ```python
 class RadialGradientLayer:
