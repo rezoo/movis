@@ -72,6 +72,23 @@ class Attribute:
             else:
                 return value
 
+    def get_values(self, layer_times: np.ndarray) -> np.ndarray:
+        """Returns an array of values for the specified layer times.
+
+        Args:
+            layer_times: An array of times for which to get the values.
+
+        Returns:
+            An array of values for the specified layer times.
+        """
+        assert layer_times.ndim == 1
+        N, C = len(layer_times), len(self._init_value)
+        if self._motion is None and len(self._functions) == 0:
+            return np.broadcast_to(self._init_value.reshape(1, C), (N, C))
+        else:
+            values = [self(t) for t in layer_times]
+            return np.concatenate(values).reshape(N, C)
+
     def enable_motion(self) -> Motion:
         """Enable `Motion` object to animate the attribute."""
         if self._motion is None:

@@ -4,6 +4,9 @@ from typing import Hashable, Protocol
 
 import numpy as np
 
+AUDIO_SAMPLING_RATE = 48000
+AUDIO_BLOCK_SIZE = 2048
+
 
 class Layer(Protocol):
     """The protocol that defimes the minimal interface for a layer."""
@@ -55,3 +58,27 @@ class BasicLayer(Layer):
             A hashable key that represents the state of the layer at the given time.
         """
         return time
+
+
+class AudioLayer(Layer):
+
+    def get_audio(self, start_time: float, end_time: float) -> tuple[np.ndarray, int] | None:
+        """An optional method for implementing an audio layer.
+
+        This method returns an audio clip of the layer between the given start and end times.
+        The returned audio clip should be a two-dimensional ``numpy.ndarray`` with a shape of ``(T,2)``,
+        where ``T`` is the number of samples in the audio clip and ``2`` is the number of channels.
+        The sample rate of the audio clip should be ``AUDIO_SAMPLING_RATE`` (= 48000).
+
+        If not implemented, Movis assumes that the layer does not have any audio.
+
+        Args:
+            start_time: The start time of the audio clip.
+            end_time: The end time of the audio clip.
+
+        Returns:
+            A tuple of ``(audio_clip, sample_rate)``, where ``audio_clip`` is a two-dimensional
+            ``numpy.ndarray`` with a shape of ``(T,C)`` and ``sample_rate`` is an integer representing
+            the sample rate of the audio clip.
+        """
+        raise NotImplementedError

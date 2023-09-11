@@ -17,7 +17,7 @@ from ..effect import Effect
 from ..enum import BlendingMode, CacheType, Direction
 from ..imgproc import alpha_composite
 from ..transform import Transform, TransformValue
-from .protocol import Layer
+from .protocol import Layer, AudioLayer, AUDIO_SAMPLING_RATE
 
 
 class Composition:
@@ -311,6 +311,44 @@ class Composition:
                 frame, time, preview_level=self._preview_level)
         self._cache[key] = frame
         return frame
+
+    def get_audio(self, start_time: float = 0.0, end_time: float | None = None) -> np.ndarray | None:
+        """Returns the audio of the composition as a numpy array.
+
+        Args:
+            start_time:
+                The start time of the audio. This variable is used to clip the audio in the time axis direction.
+            end_time:
+                The end time of the audio. This variable is used to clip the audio in the time axis direction.
+                If not specified, the composition's duration is used for ``end_time``.
+
+        Returns:
+            The audio of the composition as a numpy array. If no audio is found, ``None`` is returned.
+        """
+        assert start_time >= 0, "start_time must be nonnegative"
+        assert end_time is None or start_time < end_time
+        if end_time is None:
+            end_time = self.duration
+        target_layers = [li for li in self.layers if hasattr(li.layer, 'get_audio')]
+        if len(target_layers) == 0:
+            return None
+
+        n_samples = int((end_time - start_time) * AUDIO_SAMPLING_RATE)
+        audio = np.zeros((n_samples, 2), dtype=np.float32)
+        is_empty = True
+        for layer_item in target_layers:
+            layer: AudioLayer = layer_item.layer  # type: ignore
+            layer_time_start = max(layer_item.start_time, start_time - layer_item.offset)
+            layer_time_end = min(layer_item.end_time, end_time - layer_item.offset)
+            if layer_time_start >= layer_time_end:
+                continue
+            audio_i = layer.get_audio(layer_time_start, layer_time_end)
+            if audio_i is None:
+                continue
+            ind_start = int((layer_time_start + layer_item.offset) * AUDIO_SAMPLING_RATE)
+            audio[ind_start: ind_start + len(audio_i), :] = audio_i
+            is_empty = False
+        return None if is_empty else audio
 
     def write_video(
         self,
