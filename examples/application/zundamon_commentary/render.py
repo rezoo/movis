@@ -136,14 +136,16 @@ def main():
             transform=Transform.from_positions(scene.size, bottom=40.0))
         item.add_effect(mv.effect.DropShadow(offset=5.0))
 
-    bgm = mv.make_loop_music('assets/bgm2.wav', tl['end_time'].max()) - 25
-    bgm = bgm.fade_out(5 * 1000)
-    voice = mv.concat_audio_files(tl['start_time'], tl['audio_file'])
-    bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
+    #bgm = mv.make_loop_music('assets/bgm2.wav', tl['end_time'].max()) - 25
+    #bgm = bgm.fade_out(5 * 1000)
+    #voice = mv.concat_audio_files(tl['start_time'], tl['audio_file'])
+    #bgm.overlay(voice).export('outputs/dialogue.wav', format='wav')
+    scene.add_layer(mv.layer.AudioSequence(tl['start_time'], tl['end_time'], tl['audio_file']))
 
     mv.write_srt_file(
         tl['start_time'], tl['end_time'], tl['text'], 'outputs/dialogue.srt')
-    scene.write_video('outputs/video.mp4', audio_path='outputs/dialogue.wav')
+    #scene.write_video('outputs/video.mp4', audio_path='outputs/dialogue.wav')
+    scene.write_video('outputs/video.mp4', audio=True)
 
 
 if __name__ == '__main__':
