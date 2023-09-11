@@ -342,7 +342,7 @@ def _get_scale_by_block(audio_level: Attribute, start_time: float, n_samples: in
     n_blocks = (n_samples + AUDIO_BLOCK_SIZE - 1) // AUDIO_BLOCK_SIZE
     block_times = start_time + np.arange(n_blocks) * (AUDIO_BLOCK_SIZE / AUDIO_SAMPLING_RATE)
     block_level = audio_level.get_values(block_times)
-    block_scale = 10.0 ** (block_level / 10.0)
+    block_scale = 10.0 ** (block_level / 20.0)
     C = block_scale.shape[1]
     scale = np.broadcast_to(
         block_scale.transpose().reshape(C, n_blocks, 1),

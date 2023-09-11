@@ -347,7 +347,7 @@ class Composition:
             if audio_i is None:
                 continue
             ind_start = int((layer_time_start + layer_item.offset) * AUDIO_SAMPLING_RATE)
-            audio[:, ind_start: ind_start + audio_i.shape[1]] = audio_i
+            audio[:, ind_start: ind_start + audio_i.shape[1]] += audio_i
             is_empty = False
         return None if is_empty else audio
 
