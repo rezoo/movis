@@ -62,7 +62,7 @@ class BasicLayer(Layer):
 
 class AudioLayer(Layer):
 
-    def get_audio(self, start_time: float, end_time: float) -> tuple[np.ndarray, int] | None:
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
         """An optional method for implementing an audio layer.
 
         This method returns an audio clip of the layer between the given start and end times.

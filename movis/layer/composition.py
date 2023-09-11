@@ -8,6 +8,7 @@ from weakref import WeakValueDictionary
 
 import cv2
 import imageio
+import soundfile as sf
 import numpy as np
 from diskcache import Cache
 from tqdm import tqdm
@@ -334,7 +335,7 @@ class Composition:
             return None
 
         n_samples = int((end_time - start_time) * AUDIO_SAMPLING_RATE)
-        audio = np.zeros((n_samples, 2), dtype=np.float32)
+        audio = np.zeros((2, n_samples), dtype=np.float32)
         is_empty = True
         for layer_item in target_layers:
             layer: AudioLayer = layer_item.layer  # type: ignore
@@ -346,7 +347,7 @@ class Composition:
             if audio_i is None:
                 continue
             ind_start = int((layer_time_start + layer_item.offset) * AUDIO_SAMPLING_RATE)
-            audio[ind_start: ind_start + len(audio_i), :] = audio_i
+            audio[:, ind_start: ind_start + audio_i.shape[1]] = audio_i
             is_empty = False
         return None if is_empty else audio
 
@@ -358,7 +359,7 @@ class Composition:
         codec: str = "libx264",
         pixelformat: str = "yuv420p",
         fps: float = 30.0,
-        audio_path: str | Path | None = None,
+        audio: bool = False,
     ) -> None:
         """Writes the composition's contents to a video file.
 
@@ -382,17 +383,29 @@ class Composition:
         if end_time is None:
             end_time = self.duration
         times = np.arange(start_time, end_time, 1.0 / fps)
-        if audio_path is not None:
-            audio_path = str(audio_path)
-        writer = imageio.get_writer(
-            dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
-            macro_block_size=None, audio_path=audio_path,
-            ffmpeg_log_level="error",
-        )
-        for t in tqdm(times, total=len(times)):
-            frame = np.asarray(self(t))
-            writer.append_data(frame)
-        writer.close()
+        with tempfile.NamedTemporaryFile(suffix='.wav') as audio_fp:
+            if audio:
+                audio_array = self.get_audio(start_time, end_time)
+                if audio_array is None:
+                    audio_path = None
+                else:
+                    sf.write(
+                        audio_fp,
+                        audio_array.transpose(),
+                        samplerate=AUDIO_SAMPLING_RATE,
+                        subtype='PCM_16')
+                    audio_path = audio_fp.name
+            else:
+                audio_path = None
+            writer = imageio.get_writer(
+                dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
+                macro_block_size=None, audio_path=audio_path,
+                ffmpeg_log_level="error",
+            )
+            for t in tqdm(times, total=len(times)):
+                frame = np.asarray(self(t))
+                writer.append_data(frame)
+            writer.close()
         self._cache.clear()
 
     def render_and_play(
