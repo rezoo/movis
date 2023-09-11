@@ -383,25 +383,29 @@ class Composition:
         if end_time is None:
             end_time = self.duration
         times = np.arange(start_time, end_time, 1.0 / fps)
-        with tempfile.NamedTemporaryFile(suffix='.wav') as audio_fp:
-            if audio:
+        if audio:
+            with tempfile.NamedTemporaryFile(suffix='.wav') as audio_fp:
                 audio_array = self.get_audio(start_time, end_time)
                 if audio_array is None:
                     audio_path = None
                 else:
                     sf.write(
-                        audio_fp,
-                        audio_array.transpose(),
+                        audio_fp, audio_array.transpose(),
                         samplerate=AUDIO_SAMPLING_RATE,
                         subtype='PCM_16')
                     audio_path = audio_fp.name
-            else:
-                audio_path = None
+                writer = imageio.get_writer(
+                    uri=dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
+                    macro_block_size=None, ffmpeg_log_level="error",
+                    audio_path=audio_path)
+                for t in tqdm(times, total=len(times)):
+                    frame = np.asarray(self(t))
+                    writer.append_data(frame)
+                writer.close()
+        else:
             writer = imageio.get_writer(
-                dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
-                macro_block_size=None, audio_path=audio_path,
-                ffmpeg_log_level="error",
-            )
+                uri=dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
+                macro_block_size=None, ffmpeg_log_level="error")
             for t in tqdm(times, total=len(times)):
                 frame = np.asarray(self(t))
                 writer.append_data(frame)
