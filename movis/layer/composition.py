@@ -8,6 +8,7 @@ from weakref import WeakValueDictionary
 
 import cv2
 import imageio
+import soundfile as sf
 import numpy as np
 from diskcache import Cache
 from tqdm import tqdm
@@ -17,7 +18,7 @@ from ..effect import Effect
 from ..enum import BlendingMode, CacheType, Direction
 from ..imgproc import alpha_composite
 from ..transform import Transform, TransformValue
-from .protocol import Layer
+from .protocol import Layer, AudioLayer, AUDIO_SAMPLING_RATE
 
 
 class Composition:
@@ -134,6 +135,9 @@ class Composition:
 
     def __getitem__(self, key: str) -> LayerItem:
         return self._name_to_layer[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self._name_to_layer
 
     def __setitem__(self, key: str, value: LayerItem | Layer) -> None:
         if isinstance(value, LayerItem):
@@ -294,6 +298,9 @@ class Composition:
         self._layers.clear()
 
     def __call__(self, time: float) -> np.ndarray | None:
+        if time < 0.0 or self.duration <= time:
+            return None
+
         L = self._preview_level
         current_shape = self.size[1] // L, self.size[0] // L
 
@@ -312,6 +319,44 @@ class Composition:
         self._cache[key] = frame
         return frame
 
+    def get_audio(self, start_time: float = 0.0, end_time: float | None = None) -> np.ndarray | None:
+        """Returns the audio of the composition as a numpy array.
+
+        Args:
+            start_time:
+                The start time of the audio. This variable is used to clip the audio in the time axis direction.
+            end_time:
+                The end time of the audio. This variable is used to clip the audio in the time axis direction.
+                If not specified, the composition's duration is used for ``end_time``.
+
+        Returns:
+            The audio of the composition as a numpy array. If no audio is found, ``None`` is returned.
+        """
+        assert start_time >= 0, "start_time must be nonnegative"
+        assert end_time is None or start_time < end_time
+        if end_time is None:
+            end_time = self.duration
+        target_layers = [li for li in self.layers if hasattr(li.layer, 'get_audio')]
+        if len(target_layers) == 0:
+            return None
+
+        n_samples = int((end_time - start_time) * AUDIO_SAMPLING_RATE)
+        audio = None
+        for layer_item in target_layers:
+            layer: AudioLayer = layer_item.layer  # type: ignore
+            layer_time_start = max(layer_item.start_time, start_time - layer_item.offset)
+            layer_time_end = min(layer_item.end_time, end_time - layer_item.offset)
+            if layer_time_start >= layer_time_end:
+                continue
+            audio_i = layer.get_audio(layer_time_start, layer_time_end)
+            if audio_i is None:
+                continue
+            ind_start = int((layer_time_start + layer_item.offset) * AUDIO_SAMPLING_RATE)
+            if audio is None:
+                audio = np.zeros((2, n_samples), dtype=np.float32)
+            audio[:, ind_start: ind_start + audio_i.shape[1]] += audio_i
+        return audio
+
     def write_video(
         self,
         dst_file: str | Path,
@@ -320,7 +365,7 @@ class Composition:
         codec: str = "libx264",
         pixelformat: str = "yuv420p",
         fps: float = 30.0,
-        audio_path: str | Path | None = None,
+        audio: bool = False,
     ) -> None:
         """Writes the composition's contents to a video file.
 
@@ -338,23 +383,39 @@ class Composition:
                 The pixel format of the video. Default is ``yuv420p``.
             fps:
                 The frame rate of the video. Default is ``30.0``.
-            audio_path:
-                The path to the audio file to be added to the video. Default is ``None``.
+            audio:
+                A flag specifying whether to include audio in the video.
         """
         if end_time is None:
             end_time = self.duration
         times = np.arange(start_time, end_time, 1.0 / fps)
-        if audio_path is not None:
-            audio_path = str(audio_path)
-        writer = imageio.get_writer(
-            dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
-            macro_block_size=None, audio_path=audio_path,
-            ffmpeg_log_level="error",
-        )
-        for t in tqdm(times, total=len(times)):
-            frame = np.asarray(self(t))
-            writer.append_data(frame)
-        writer.close()
+        if audio:
+            with tempfile.NamedTemporaryFile(suffix='.wav') as audio_fp:
+                audio_array = self.get_audio(start_time, end_time)
+                if audio_array is None:
+                    audio_path = None
+                else:
+                    sf.write(
+                        audio_fp, audio_array.transpose(),
+                        samplerate=AUDIO_SAMPLING_RATE,
+                        subtype='PCM_16')
+                    audio_path = audio_fp.name
+                writer = imageio.get_writer(
+                    uri=dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
+                    macro_block_size=None, ffmpeg_log_level="error",
+                    audio_path=audio_path)
+                for t in tqdm(times, total=len(times)):
+                    frame = np.asarray(self(t))
+                    writer.append_data(frame)
+                writer.close()
+        else:
+            writer = imageio.get_writer(
+                uri=dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
+                macro_block_size=None, ffmpeg_log_level="error")
+            for t in tqdm(times, total=len(times)):
+                frame = np.asarray(self(t))
+                writer.append_data(frame)
+            writer.close()
         self._cache.clear()
 
     def render_and_play(

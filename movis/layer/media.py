@@ -4,10 +4,13 @@ from pathlib import Path
 from typing import Sequence
 
 import imageio
+import librosa
 import numpy as np
 from PIL import Image as PILImage
 
 from .mixin import TimelineMixin
+from .protocol import AUDIO_BLOCK_SIZE, AUDIO_SAMPLING_RATE
+from ..attribute import Attribute, AttributeType
 
 
 class Image:
@@ -226,3 +229,130 @@ class Video:
         frame = self._reader.get_data(frame_index)
         pil_frame = PILImage.fromarray(frame).convert("RGBA")
         return np.asarray(pil_frame)
+
+
+class Audio:
+
+    def __init__(self, audio_file: str | Path, audio_level: float = 0.0) -> None:
+        self._audio_file: Path | None = None
+        self._audio: np.ndarray | None = None
+        self._duration: float | None = None
+        self.audio_level = Attribute(audio_level, AttributeType.SCALAR, range=(-50.0, 50.0))
+        if isinstance(audio_file, (str, Path)):
+            self._audio_file = Path(audio_file)
+            assert self._audio_file.exists(), f"{self._audio_file} does not exist"
+        else:
+            raise ValueError(f"Invalid audio_file type: {type(audio_file)}")
+
+    def _load_audio(self) -> np.ndarray:
+        if self._audio is None:
+            audio, _ = librosa.load(self._audio_file, sr=AUDIO_SAMPLING_RATE, mono=False)
+            if audio.ndim == 1:
+                audio = np.broadcast_to(audio[None, :], (2, len(audio)))
+            self._audio = audio
+        return self._audio
+
+    @property
+    def audio_file(self) -> Path | None:
+        return self._audio_file
+
+    @property
+    def duration(self) -> float:
+        if self._duration is not None:
+            return self._duration
+        duration = librosa.get_duration(path=self._audio_file)
+        self._duration = duration
+        return duration
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        return None
+
+    def get_key(self, time: float) -> int:
+        return 0
+
+    @property
+    def attributes(self) -> dict[str, Attribute]:
+        return {'audio_level': self.audio_level}
+
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        audio = self._load_audio()
+        start_index = int(start_time * AUDIO_SAMPLING_RATE)
+        end_index = int(end_time * AUDIO_SAMPLING_RATE)
+        dst_audio = audio[:, start_index:end_index]
+        scale = _get_scale_by_block(self.audio_level, start_time, dst_audio.shape[1])
+        return scale * dst_audio
+
+
+class AudioSequence:
+
+    def __init__(
+        self,
+        start_times: Sequence[float],
+        end_times: Sequence[float],
+        audio_files: Sequence[str | Path],
+        audio_level: float = 0.0,
+    ) -> None:
+        assert len(start_times) == len(end_times) == len(audio_files)
+        self.start_times = np.asarray(start_times, dtype=float)
+        self.end_times = np.asarray(end_times, dtype=float)
+        self.audio_files = list(audio_files)
+        self.audio_level = Attribute(audio_level, AttributeType.SCALAR, range=(-1000.0, 1000.0))
+        self._audio: list[np.ndarray | None] = [None] * len(audio_files)
+
+    @property
+    def duration(self) -> float:
+        return self.end_times[-1]
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        return None
+
+    def get_key(self, time: float) -> int:
+        return 0
+
+    @property
+    def attributes(self) -> dict[str, Attribute]:
+        return {'audio_level': self.audio_level}
+
+    def _load_audio(self, index: int) -> np.ndarray:
+        a = self._audio[index]
+        if a is None:
+            audio_file = self.audio_files[index]
+            if isinstance(audio_file, (str, Path)):
+                a_i, _ = librosa.load(audio_file, sr=AUDIO_SAMPLING_RATE, mono=False)
+                if a_i.ndim == 1:
+                    a_i = np.broadcast_to(a_i[None, :], (2, len(a_i)))
+            else:
+                raise ValueError(f"Invalid audio_file type: {type(audio_file)}")
+            self._audio[index] = a_i
+            return a_i
+        return a
+
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        assert start_time < end_time
+        audio: list[np.ndarray] = []
+        for i, (s, e) in enumerate(zip(self.start_times, self.end_times)):
+            if s < end_time and e > start_time:
+                audio_i = self._load_audio(i)
+                start_index = int(max(start_time - s, 0) * AUDIO_SAMPLING_RATE)
+                end_index = int(min(end_time - s, e - s) * AUDIO_SAMPLING_RATE)
+                if len(audio_i) < end_index:
+                    # Pad with zeros
+                    audio_i = np.pad(audio_i, ((0, 0), (0, end_index - len(audio_i))))
+                audio.append(audio_i[:, start_index:end_index])
+        if len(audio) == 0:
+            return None
+        dst_audio = np.concatenate(audio, axis=1)
+        scale = _get_scale_by_block(self.audio_level, start_time, dst_audio.shape[1])
+        return scale * dst_audio
+
+
+def _get_scale_by_block(audio_level: Attribute, start_time: float, n_samples: int) -> np.ndarray:
+    n_blocks = (n_samples + AUDIO_BLOCK_SIZE - 1) // AUDIO_BLOCK_SIZE
+    block_times = start_time + np.arange(n_blocks) * (AUDIO_BLOCK_SIZE / AUDIO_SAMPLING_RATE)
+    block_level = audio_level.get_values(block_times)
+    block_scale = 10.0 ** (block_level / 20.0)
+    C = block_scale.shape[1]
+    scale = np.broadcast_to(
+        block_scale.transpose().reshape(C, n_blocks, 1),
+        (C, n_blocks, AUDIO_BLOCK_SIZE)).reshape(C, n_blocks * AUDIO_BLOCK_SIZE)
+    return scale[:, :n_samples]

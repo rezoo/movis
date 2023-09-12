@@ -2,7 +2,6 @@ from . import effect  # noqa
 from . import layer  # noqa
 from .attribute import (Attribute, AttributesMixin,  # noqa
                         transform_to_hashable)
-from .audio import concat_audio_files, make_loop_music  # noqa
 from .enum import (AttributeType, BlendingMode, Direction, MatteMode,  # noqa
                    MotionType, TextAlignment)
 from .imgproc import alpha_composite  # noqa
