@@ -234,27 +234,35 @@ class Video:
 class Audio:
 
     def __init__(self, audio_file: str | Path, audio_level: float = 0.0) -> None:
-        self.audio_file: Path | None = None
+        self._audio_file: Path | None = None
         self._audio: np.ndarray | None = None
+        self._duration: float | None = None
         self.audio_level = Attribute(audio_level, AttributeType.SCALAR, range=(-50.0, 50.0))
         if isinstance(audio_file, (str, Path)):
-            self.audio_file = Path(audio_file)
-            assert self.audio_file.exists(), f"{self.audio_file} does not exist"
+            self._audio_file = Path(audio_file)
+            assert self._audio_file.exists(), f"{self._audio_file} does not exist"
         else:
             raise ValueError(f"Invalid audio_file type: {type(audio_file)}")
 
     def _load_audio(self) -> np.ndarray:
         if self._audio is None:
-            audio, _ = librosa.load(self.audio_file, sr=AUDIO_SAMPLING_RATE, mono=False)
+            audio, _ = librosa.load(self._audio_file, sr=AUDIO_SAMPLING_RATE, mono=False)
             if audio.ndim == 1:
                 audio = np.broadcast_to(audio[None, :], (2, len(audio)))
             self._audio = audio
         return self._audio
 
     @property
+    def audio_file(self) -> Path | None:
+        return self._audio_file
+
+    @property
     def duration(self) -> float:
-        audio = self._load_audio()
-        return audio.shape[1] / AUDIO_SAMPLING_RATE
+        if self._duration is not None:
+            return self._duration
+        duration = librosa.get_duration(path=self._audio_file)
+        self._duration = duration
+        return duration
 
     def __call__(self, time: float) -> np.ndarray | None:
         return None

@@ -6,13 +6,12 @@ from pathlib import Path
 from typing import Hashable
 
 import pandas as pd
-from pydub import AudioSegment
+import librosa
 
 
 def make_voicevox_dataframe(audio_dir: str | Path) -> pd.DataFrame:
     def get_audio_length(filename: str | Path) -> float:
-        audio = AudioSegment.from_file(str(filename), format="wav")
-        return audio.duration_seconds
+        return librosa.get_duration(path=str(filename))
 
     wav_files = sorted(f for f in Path(audio_dir).iterdir() if f.suffix == ".wav")
     rows = []
