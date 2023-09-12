@@ -96,7 +96,11 @@ class Line(AttributesMixin):
         self.width = Attribute(width, value_type=AttributeType.SCALAR, range=(0., 1e6))
         self.trim_start = Attribute(0., value_type=AttributeType.SCALAR, range=(0., 1.))
         self.trim_end = Attribute(1., value_type=AttributeType.SCALAR, range=(0., 1.))
-        self.duration = duration
+        self._duration = duration
+
+    @property
+    def duration(self) -> float:
+        return self._duration
 
     def __call__(self, time: float) -> np.ndarray | None:
         p0 = self.start(time)
@@ -157,7 +161,11 @@ class Rectangle(AttributesMixin):
             self.contents = contents
         else:
             self.contents = (FillProperty(color=to_rgb(color)),)
-        self.duration = duration
+        self._duration = duration
+
+    @property
+    def duration(self) -> float:
+        return self._duration
 
     def __call__(self, time: float) -> np.ndarray | None:
         if len(self.contents) == 0:
@@ -233,7 +241,11 @@ class Ellipse(AttributesMixin):
             self.contents = contents
         else:
             self.contents = (FillProperty(color=to_rgb(color)),)
-        self.duration = duration
+        self._duration = duration
+
+    @property
+    def duration(self) -> float:
+        return self._duration
 
     def __call__(self, time: float) -> np.ndarray | None:
         if len(self.contents) == 0:
@@ -380,20 +392,48 @@ class Text(AttributesMixin):
         text_alignment: TextAlignment | str = TextAlignment.CENTER,
         duration: float = 1e6
     ) -> None:
-        self.text = text
-        self.font_family = font_family
-        self.font_style = font_style
+        self._text = text
+        self._font_family = font_family
+        self._font_style = font_style
         self.font_size = Attribute(font_size, value_type=AttributeType.SCALAR, range=(0., 1e6))
         if color is None:
-            self.contents = contents
+            self._contents = tuple(contents)
         else:
-            self.contents = (FillProperty(color=to_rgb(color)),)
-        self.line_spacing = line_spacing
-        self.text_alignment = TextAlignment.from_string(text_alignment) \
+            self._contents = (FillProperty(color=to_rgb(color)),)
+        self._line_spacing = line_spacing
+        self._text_alignment = TextAlignment.from_string(text_alignment) \
             if isinstance(text_alignment, str) else text_alignment
-        self.duration = duration
+        self._duration = duration
         if QCoreApplication.instance() is None:
             QApplication(sys.argv[:1])
+
+    @property
+    def text(self) -> str | Callable[[float], str]:
+        return self._text
+
+    @property
+    def font_family(self) -> str:
+        return self._font_family
+
+    @property
+    def font_style(self) -> str | None:
+        return self._font_style
+
+    @property
+    def contents(self) -> tuple[FillProperty | StrokeProperty, ...]:
+        return self._contents
+
+    @property
+    def line_spacing(self) -> int | None:
+        return self._line_spacing
+
+    @property
+    def text_alignment(self) -> TextAlignment:
+        return self._text_alignment
+
+    @property
+    def duration(self) -> float:
+        return self._duration
 
     def get_text(self, time: float = 0.) -> str:
         """Returns the text to be drawn at the given time."""

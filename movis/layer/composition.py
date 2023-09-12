@@ -54,21 +54,10 @@ class Composition:
         """The size of the composition in the form of ``(width, height)``."""
         return self._size
 
-    @size.setter
-    def size(self, size: tuple[int, int]) -> None:
-        assert len(size) == 2
-        assert size[0] > 0 and size[1] > 0
-        self._size = (int(size[0]), int(size[1]))
-
     @property
     def duration(self) -> float:
         """The duration of the composition."""
         return self._duration
-
-    @duration.setter
-    def duration(self, duration: float) -> None:
-        assert duration > 0
-        self._duration = float(duration)
 
     @property
     def preview_level(self) -> int:
@@ -280,6 +269,7 @@ class Composition:
         )
         self._layers.append(layer_item)
         self._name_to_layer[name] = layer_item
+        self._cache.clear()
         return layer_item
 
     def pop_layer(self, name: str) -> LayerItem:
@@ -295,11 +285,13 @@ class Composition:
             raise KeyError(f"Layer with name {name} does not exist")
         index = next(i for i in range(len(self._layers)) if self._layers[i].name == name)
         layer_item = self._layers.pop(index)
+        self._cache.clear()
         return layer_item
 
     def clear(self) -> None:
         """Removes all layers from the composition."""
         self._layers.clear()
+        self._cache.clear()
 
     def __call__(self, time: float) -> np.ndarray | None:
         if time < 0.0 or self.duration <= time:
@@ -412,7 +404,6 @@ class Composition:
                 frame = np.asarray(self(t))
                 writer.append_data(frame)
             writer.close()
-        self._cache.clear()
 
     def render_and_play(
         self,
@@ -454,8 +445,6 @@ class Composition:
                     frame = np.asarray(self(t))
                     writer.append_data(frame)
                 writer.close()
-                self._cache.clear()
-
                 display(Video.from_file(filename, autoplay=True, loop=True))
 
 
