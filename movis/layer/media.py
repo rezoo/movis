@@ -8,7 +8,6 @@ import librosa
 import numpy as np
 from PIL import Image as PILImage
 
-from ..attribute import Attribute, AttributeType
 from .mixin import TimelineMixin
 from .protocol import AUDIO_SAMPLING_RATE
 
@@ -185,7 +184,8 @@ class Video:
     """Video layer to encapsulate various formats of video data.
 
     Args:
-        video_file: the source of the video data. It can be a file path (``str`` or ``Path``).
+        video_file:
+            the source of the video data. It can be a file path (``str`` or ``Path``).
     """
 
     def __init__(self, video_file: str | Path) -> None:
@@ -232,12 +232,17 @@ class Video:
 
 
 class Audio:
+    """Audio layer to encapsulate various formats of audio data.
+
+    Args:
+        audio_file:
+            the source of the audio data. It can be a file path (``str`` or ``Path``).
+    """
 
     def __init__(self, audio_file: str | Path, audio_level: float = 0.0) -> None:
         self._audio_file: Path | None = None
         self._audio: np.ndarray | None = None
         self._duration: float | None = None
-        self.audio_level = Attribute(audio_level, AttributeType.SCALAR, range=(-50.0, 50.0))
         if isinstance(audio_file, (str, Path)):
             self._audio_file = Path(audio_file)
             assert self._audio_file.exists(), f"{self._audio_file} does not exist"
@@ -254,10 +259,12 @@ class Audio:
 
     @property
     def audio_file(self) -> Path | None:
+        """The file path of the audio data."""
         return self._audio_file
 
     @property
     def duration(self) -> float:
+        """The duration of the audio data."""
         if self._duration is not None:
             return self._duration
         duration = librosa.get_duration(path=self._audio_file)
@@ -268,13 +275,23 @@ class Audio:
         return None
 
     def get_key(self, time: float) -> int:
+        """Get the state index for the given time.
+
+        Note:
+            This method always returns a constant value because the audio data does not affect the image data.
+        """
         return 0
 
-    @property
-    def attributes(self) -> dict[str, Attribute]:
-        return {'audio_level': self.audio_level}
-
     def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        """Get the audio data for the given time range.
+
+        Args:
+            start_time: the start time of the audio data.
+            end_time: the end time of the audio data.
+
+        Returns:
+            The audio data for the given time range. If no audio data is found, ``None`` is returned.
+        """
         audio = self._load_audio()
         start_index = int(start_time * AUDIO_SAMPLING_RATE)
         end_index = int(end_time * AUDIO_SAMPLING_RATE)
@@ -282,34 +299,43 @@ class Audio:
 
 
 class AudioSequence:
+    """Audio sequence layer to handle multiple audio files.
+
+    Args:
+        start_times:
+            a sequence of start times for each audio.
+        end_times:
+            a sequence of end times for each audio.
+        audio_files:
+            a sequence of audio data. Each element can be a file path (``str`` or ``Path``).
+        """
 
     def __init__(
         self,
         start_times: Sequence[float],
         end_times: Sequence[float],
         audio_files: Sequence[str | Path],
-        audio_level: float = 0.0,
     ) -> None:
         assert len(start_times) == len(end_times) == len(audio_files)
         self.start_times = np.asarray(start_times, dtype=float)
         self.end_times = np.asarray(end_times, dtype=float)
         self.audio_files = list(audio_files)
-        self.audio_level = Attribute(audio_level, AttributeType.SCALAR, range=(-1000.0, 1000.0))
         self._audio: list[np.ndarray | None] = [None] * len(audio_files)
 
     @property
     def duration(self) -> float:
+        """The duration of the audio sequence."""
         return self.end_times[-1]
 
     def __call__(self, time: float) -> np.ndarray | None:
         return None
 
     def get_key(self, time: float) -> int:
-        return 0
+        """Get the state index for the given time.
 
-    @property
-    def attributes(self) -> dict[str, Attribute]:
-        return {'audio_level': self.audio_level}
+        Note:
+            This method always returns a constant value because the audio data does not affect the image data."""
+        return 0
 
     def _load_audio(self, index: int) -> np.ndarray:
         a = self._audio[index]
@@ -326,6 +352,17 @@ class AudioSequence:
         return a
 
     def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        """Get the audio data for the given time range.
+
+        Args:
+            start_time:
+                the start time of the audio data.
+            end_time:
+                the end time of the audio data.
+
+        Returns:
+            The audio data for the given time range. If no audio data is found, ``None`` is returned.
+        """
         assert start_time < end_time
         audio: list[np.ndarray] = []
         for i, (s, e) in enumerate(zip(self.start_times, self.end_times)):
