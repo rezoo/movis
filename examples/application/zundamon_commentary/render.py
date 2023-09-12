@@ -117,7 +117,7 @@ def main():
             scene.add_layer(
                 make_table_of_contents(
                     section, font_size=46, duration=duration),
-                position=(1920 + 10, 35), origin_point='center_right',
+                position=(1920 + 10, 90), origin_point='center_right',
                 offset=start_time),
             np.array([500, 0]))
 
@@ -137,10 +137,9 @@ def main():
         item.add_effect(mv.effect.DropShadow(offset=5.0))
 
     scene.add_layer(mv.layer.AudioSequence(tl['start_time'], tl['end_time'], tl['audio_file']))
-    bgm = mv.layer.Audio('assets/bgm2.wav')
+    bgm = scene.add_layer(mv.layer.Audio('assets/bgm2.wav'))
     bgm.audio_level.enable_motion().extend(
         keyframes=[scene.duration - 5, scene.duration], values=[-25, -50])
-    scene.add_layer(bgm)
 
     mv.write_srt_file(
         tl['start_time'], tl['end_time'], tl['text'], 'outputs/dialogue.srt')

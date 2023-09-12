@@ -10,7 +10,7 @@ from PIL import Image as PILImage
 
 from ..attribute import Attribute, AttributeType
 from .mixin import TimelineMixin
-from .protocol import AUDIO_BLOCK_SIZE, AUDIO_SAMPLING_RATE
+from .protocol import AUDIO_SAMPLING_RATE
 
 
 class Image:
@@ -278,9 +278,7 @@ class Audio:
         audio = self._load_audio()
         start_index = int(start_time * AUDIO_SAMPLING_RATE)
         end_index = int(end_time * AUDIO_SAMPLING_RATE)
-        dst_audio = audio[:, start_index:end_index]
-        scale = _get_scale_by_block(self.audio_level, start_time, dst_audio.shape[1])
-        return scale * dst_audio
+        return audio[:, start_index:end_index]
 
 
 class AudioSequence:
@@ -341,18 +339,4 @@ class AudioSequence:
                 audio.append(audio_i[:, start_index:end_index])
         if len(audio) == 0:
             return None
-        dst_audio = np.concatenate(audio, axis=1)
-        scale = _get_scale_by_block(self.audio_level, start_time, dst_audio.shape[1])
-        return scale * dst_audio
-
-
-def _get_scale_by_block(audio_level: Attribute, start_time: float, n_samples: int) -> np.ndarray:
-    n_blocks = (n_samples + AUDIO_BLOCK_SIZE - 1) // AUDIO_BLOCK_SIZE
-    block_times = start_time + np.arange(n_blocks) * (AUDIO_BLOCK_SIZE / AUDIO_SAMPLING_RATE)
-    block_level = audio_level.get_values(block_times)
-    block_scale = 10.0 ** (block_level / 20.0)
-    C = block_scale.shape[1]
-    scale = np.broadcast_to(
-        block_scale.transpose().reshape(C, n_blocks, 1),
-        (C, n_blocks, AUDIO_BLOCK_SIZE)).reshape(C, n_blocks * AUDIO_BLOCK_SIZE)
-    return scale[:, :n_samples]
+        return np.concatenate(audio, axis=1)

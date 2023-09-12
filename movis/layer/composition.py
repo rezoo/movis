@@ -13,12 +13,12 @@ import soundfile as sf
 from diskcache import Cache
 from tqdm import tqdm
 
-from ..attribute import Attribute
+from ..attribute import Attribute, AttributeType
 from ..effect import Effect
 from ..enum import BlendingMode, CacheType, Direction
 from ..imgproc import alpha_composite
 from ..transform import Transform, TransformValue
-from .protocol import AUDIO_SAMPLING_RATE, AudioLayer, Layer
+from .protocol import AUDIO_BLOCK_SIZE, AUDIO_SAMPLING_RATE, AudioLayer, Layer
 
 
 class Composition:
@@ -180,6 +180,7 @@ class Composition:
         offset: float = 0.0,
         start_time: float = 0.0,
         end_time: float | None = None,
+        audio_level: float = 0.0,
         visible: bool = True,
     ) -> LayerItem:
         """Add a layer to the composition.
@@ -240,6 +241,8 @@ class Composition:
                 For example, if ``start_time=0.0``, ``end_time=1.0``, and ``offset=0.0``,
                 this layer will disappear after one second. If not specified,
                 the layer's duration is used for ``end_time``.
+            audio_level:
+                The audio level of the layer (dB). If the layer has no audio, this value is ignored.
             visible:
                 A flag specifying whether the layer is visible or not;
                 if ``visible=False``, the layer in the composition is not rendered.
@@ -272,6 +275,7 @@ class Composition:
             offset=offset,
             start_time=start_time,
             end_time=end_time,
+            audio_level=audio_level,
             visible=visible,
         )
         self._layers.append(layer_item)
@@ -319,7 +323,7 @@ class Composition:
         self._cache[key] = frame
         return frame
 
-    def get_audio(self, start_time: float = 0.0, end_time: float | None = None) -> np.ndarray | None:
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
         """Returns the audio of the composition as a numpy array.
 
         Args:
@@ -334,25 +338,17 @@ class Composition:
         """
         assert start_time >= 0, "start_time must be nonnegative"
         assert end_time is None or start_time < end_time
-        if end_time is None:
-            end_time = self.duration
         target_layers = [li for li in self.layers if hasattr(li.layer, 'get_audio')]
-        if len(target_layers) == 0:
-            return None
 
-        n_samples = int((end_time - start_time) * AUDIO_SAMPLING_RATE)
         audio = None
         for layer_item in target_layers:
-            layer: AudioLayer = layer_item.layer  # type: ignore
-            layer_time_start = max(layer_item.start_time, start_time - layer_item.offset)
-            layer_time_end = min(layer_item.end_time, end_time - layer_item.offset)
-            if layer_time_start >= layer_time_end:
+            result = layer_item._get_audio_data(start_time, end_time)
+            if result is None:
                 continue
-            audio_i = layer.get_audio(layer_time_start, layer_time_end)
-            if audio_i is None:
-                continue
+            layer_time_start, _, audio_i = result
             ind_start = int((layer_time_start + layer_item.offset) * AUDIO_SAMPLING_RATE)
             if audio is None:
+                n_samples = int((end_time - start_time) * AUDIO_SAMPLING_RATE)
                 audio = np.zeros((2, n_samples), dtype=np.float32)
             audio[:, ind_start: ind_start + audio_i.shape[1]] += audio_i
         return audio
@@ -494,6 +490,8 @@ class LayerItem:
             For example, if ``start_time=0.0``, ``end_time=1.0``, and ``offset=0.0``,
             this layer will disappear after one second.
             If not specified, the layer's duration is used for ``end_time``.
+        audio_level:
+            The relative audio level of the layer (dB). If the layer has no audio, this value is ignored.
         visible:
             A flag specifying whether the layer is visible or not;
             if ``visible=False``, the layer in the composition is not rendered.
@@ -501,13 +499,14 @@ class LayerItem:
     def __init__(
             self, layer: Layer, name: str = 'layer', transform: Transform | None = None,
             offset: float = 0.0, start_time: float = 0.0, end_time: float | None = None,
-            visible: bool = True):
+            audio_level: float = 0.0, visible: bool = True):
         self.layer: Layer = layer
         self.name: str = name
         self.transform: Transform = transform if transform is not None else Transform()
         self.offset: float = offset
         self.start_time: float = start_time
         self.end_time: float = end_time if end_time is not None else getattr(layer, "duration", 1e6)
+        self.audio_level: Attribute = Attribute(audio_level, AttributeType.SCALAR, range=(-1000, 1000))
         self.visible: bool = visible
         self._effects: list[Effect] = []
 
@@ -647,6 +646,21 @@ class LayerItem:
             frame = effect(frame, layer_time)
         return frame
 
+    def _get_audio_data(self, start_time: float, end_time: float) -> tuple[float, float, np.ndarray] | None:
+        layer_time_start = max(self.start_time, start_time - self.offset)
+        layer_time_end = min(self.end_time, end_time - self.offset)
+        if layer_time_start >= layer_time_end:
+            return None
+        if not hasattr(self.layer, 'get_audio'):
+            return None
+        layer: AudioLayer = self.layer  # type: ignore
+        audio = layer.get_audio(layer_time_start, layer_time_end)
+        if audio is None:
+            return None
+        scale = _get_scale_by_block(
+            self.audio_level, layer_time_start, audio.shape[1])
+        return layer_time_start, layer_time_end, scale * audio
+
     def __repr__(self) -> str:
         return f"LayerItem(name={self.name!r}, layer={self.layer!r}, transform={self.transform!r}, " \
             f"offset={self.offset}, visible={self.visible})"
@@ -714,3 +728,15 @@ def _get_T2(p: TransformValue, size: tuple[int, int], origin_point: Direction) -
         [0, 1, - p.anchor_point[1] - center_point[1]],
         [0, 0, 1]], dtype=np.float64)
     return T2
+
+
+def _get_scale_by_block(audio_level: Attribute, start_time: float, n_samples: int) -> np.ndarray:
+    n_blocks = (n_samples + AUDIO_BLOCK_SIZE - 1) // AUDIO_BLOCK_SIZE
+    block_times = start_time + np.arange(n_blocks) * (AUDIO_BLOCK_SIZE / AUDIO_SAMPLING_RATE)
+    block_level = audio_level.get_values(block_times)
+    block_scale = 10.0 ** (block_level / 20.0)
+    C = block_scale.shape[1]
+    scale = np.broadcast_to(
+        block_scale.transpose().reshape(C, n_blocks, 1),
+        (C, n_blocks, AUDIO_BLOCK_SIZE)).reshape(C, n_blocks * AUDIO_BLOCK_SIZE)
+    return scale[:, :n_samples]
