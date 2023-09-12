@@ -341,8 +341,7 @@ class Composition:
             return None
 
         n_samples = int((end_time - start_time) * AUDIO_SAMPLING_RATE)
-        audio = np.zeros((2, n_samples), dtype=np.float32)
-        is_empty = True
+        audio = None
         for layer_item in target_layers:
             layer: AudioLayer = layer_item.layer  # type: ignore
             layer_time_start = max(layer_item.start_time, start_time - layer_item.offset)
@@ -353,9 +352,10 @@ class Composition:
             if audio_i is None:
                 continue
             ind_start = int((layer_time_start + layer_item.offset) * AUDIO_SAMPLING_RATE)
+            if audio is None:
+                audio = np.zeros((2, n_samples), dtype=np.float32)
             audio[:, ind_start: ind_start + audio_i.shape[1]] += audio_i
-            is_empty = False
-        return None if is_empty else audio
+        return audio
 
     def write_video(
         self,
