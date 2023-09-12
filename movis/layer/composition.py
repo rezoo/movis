@@ -136,6 +136,9 @@ class Composition:
     def __getitem__(self, key: str) -> LayerItem:
         return self._name_to_layer[key]
 
+    def __contains__(self, key: str) -> bool:
+        return key in self._name_to_layer
+
     def __setitem__(self, key: str, value: LayerItem | Layer) -> None:
         if isinstance(value, LayerItem):
             self._layers.append(value)

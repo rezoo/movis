@@ -45,7 +45,7 @@ def test_composition_add_layer_with_name():
 
     item = scene.add_layer(mv.layer.Rectangle((256, 256), color='#ffffff'), name='layer')
     assert len(scene.layers) == 1
-    # assert 'layer' in scene
+    assert 'layer' in scene
     item2 = scene['layer']
     assert item is item2
 
