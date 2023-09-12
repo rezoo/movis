@@ -295,6 +295,9 @@ class Composition:
         self._layers.clear()
 
     def __call__(self, time: float) -> np.ndarray | None:
+        if time < 0.0 or self.duration <= time:
+            return None
+
         L = self._preview_level
         current_shape = self.size[1] // L, self.size[0] // L
 
@@ -377,8 +380,8 @@ class Composition:
                 The pixel format of the video. Default is ``yuv420p``.
             fps:
                 The frame rate of the video. Default is ``30.0``.
-            audio_path:
-                The path to the audio file to be added to the video. Default is ``None``.
+            audio:
+                A flag specifying whether to include audio in the video.
         """
         if end_time is None:
             end_time = self.duration
