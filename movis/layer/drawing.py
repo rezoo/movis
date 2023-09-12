@@ -134,7 +134,7 @@ class Rectangle(AttributesMixin):
         radius:
             The radius of the rounded corners. The default value is ``0``.
         color:
-            The color of the rectangle with a tuple of ``(r, g, b)``.
+            The color of the rectangle with a tuple of ``(r, g, b)`` or a string (e.g., ``"#ff0000" or "red"``).
             If ``None``, this layer uses the ``contents`` argument to draw the rectangle.
         contents:
             A sequence of ``FillProperty`` or ``StrokeProperty`` objects,
