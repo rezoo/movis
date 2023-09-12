@@ -8,9 +8,9 @@ import librosa
 import numpy as np
 from PIL import Image as PILImage
 
+from ..attribute import Attribute, AttributeType
 from .mixin import TimelineMixin
 from .protocol import AUDIO_BLOCK_SIZE, AUDIO_SAMPLING_RATE
-from ..attribute import Attribute, AttributeType
 
 
 class Image:

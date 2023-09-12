@@ -5,8 +5,8 @@ import hashlib
 from pathlib import Path
 from typing import Hashable
 
-import pandas as pd
 import librosa
+import pandas as pd
 
 
 def make_voicevox_dataframe(audio_dir: str | Path) -> pd.DataFrame:

@@ -8,8 +8,8 @@ from weakref import WeakValueDictionary
 
 import cv2
 import imageio
-import soundfile as sf
 import numpy as np
+import soundfile as sf
 from diskcache import Cache
 from tqdm import tqdm
 
@@ -18,7 +18,7 @@ from ..effect import Effect
 from ..enum import BlendingMode, CacheType, Direction
 from ..imgproc import alpha_composite
 from ..transform import Transform, TransformValue
-from .protocol import Layer, AudioLayer, AUDIO_SAMPLING_RATE
+from .protocol import AUDIO_SAMPLING_RATE, AudioLayer, Layer
 
 
 class Composition:
