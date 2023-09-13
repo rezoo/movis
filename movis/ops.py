@@ -1,10 +1,11 @@
 from __future__ import annotations
+
 from typing import Sequence
 
 import numpy as np
 
-from movis.layer.protocol import BasicLayer
 from movis.layer.composition import Composition
+from movis.layer.protocol import BasicLayer
 
 
 def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None) -> Composition:
@@ -89,4 +90,34 @@ def trim(
     composition = Composition(size=size, duration=total_duration)
     for start, end, offset in zip(starts, ends, offsets):
         composition.add_layer(layer, start_time=start, end_time=end, offset=offset)
+    return composition
+
+
+def tile(layers: Sequence[BasicLayer], rows: int, cols: int) -> Composition:
+    """Tile layers into a single composition.
+
+    Args:
+        layers: Layers to tile.
+        size: Size of the composition. If None, the size of the layer is estimated.
+
+    Returns:
+        Composition with all layers tiled.
+    """
+    assert len(layers) == rows * cols, \
+        f"Number of layers ({len(layers)}) must be equal to rows * cols ({rows * cols})."
+    result = layers[0](0.0)
+    if result is None:
+        raise ValueError("Cannot determine size of composition.")
+    w, h = result.shape[1], result.shape[0]
+
+    W = cols * w
+    H = rows * h
+    duration = max(layer.duration for layer in layers)
+    composition = Composition(size=(W, H), duration=duration)
+    for i in range(rows):
+        for j in range(cols):
+            x = (j + 0.5) * w
+            y = (i + 0.5) * H
+            composition.add_layer(
+                layers[i * cols + j], position=(x, y))
     return composition

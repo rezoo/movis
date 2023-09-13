@@ -6,7 +6,7 @@ from .enum import (AttributeType, BlendingMode, Direction, MatteMode,  # noqa
                    MotionType, TextAlignment)
 from .imgproc import alpha_composite  # noqa
 from .motion import Motion  # noqa
-from .ops import concatenate, repeat, trim  # noqa
+from .ops import concatenate, repeat, tile, trim  # noqa
 from .subtitle import (ASSStyleType, rgb_to_ass_color, write_ass_file,  # noqa
                        write_srt_file)
 from .transform import Transform  # noqa
