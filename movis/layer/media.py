@@ -251,7 +251,7 @@ class Audio:
 
     def _load_audio(self) -> np.ndarray:
         if self._audio is None:
-            audio, _ = librosa.load(self._audio_file, sr=AUDIO_SAMPLING_RATE, mono=False)
+            audio, _ = librosa.load(str(self._audio_file), sr=AUDIO_SAMPLING_RATE, mono=False)
             if audio.ndim == 1:
                 audio = np.broadcast_to(audio[None, :], (2, len(audio)))
             self._audio = audio
