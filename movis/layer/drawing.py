@@ -536,7 +536,10 @@ class Text(AttributesMixin):
             elif isinstance(c, StrokeProperty):
                 r, g, b = c.color
                 a = round(255 * c.opacity)
-                painter.setPen(QPen(QColor(b, g, r, a), c.width))
+                pen = QPen(
+                    QColor(b, g, r, a), c.width, Qt.PenStyle.SolidLine,
+                    Qt.PenCapStyle.RoundCap, Qt.PenJoinStyle.RoundJoin)
+                painter.setPen(pen)
                 painter_path = QPainterPath()
                 cursor_y = margin
                 for i, line in enumerate(lines):
