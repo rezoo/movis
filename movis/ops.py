@@ -19,10 +19,10 @@ def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None) -> C
         Composition with all layers concatenated.
     """
     if size is None:
-        shape = layers[0](0.0)
-        if shape is None:
+        img = layers[0](0.0)
+        if img is None:
             raise ValueError("Cannot determine size of composition.")
-        size = shape[1], shape[0]
+        size = img.shape[1], img.shape[0]
     duration = sum(layer.duration for layer in layers)
     composition = Composition(size=size, duration=duration)
     time = 0.0
@@ -47,10 +47,10 @@ def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None) -> Co
         Composition with the layer repeated.
     """
     if size is None:
-        shape = layer(0.0)
-        if shape is None:
+        img = layer(0.0)
+        if img is None:
             raise ValueError("Cannot determine size of composition.")
-        size = shape[1], shape[0]
+        size = img.shape[1], img.shape[0]
     duration = layer.duration * n_repeat
     composition = Composition(size=size, duration=duration)
     for i in range(n_repeat):
@@ -60,7 +60,7 @@ def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None) -> Co
 
 def trim(
     layer: BasicLayer, start_times: Sequence[float], end_times: Sequence[float],
-    size: tuple[int, int] | None
+    size: tuple[int, int] | None = None
 ) -> Composition:
     """Trim a layer with given time intervals and concatenate them.
 
@@ -79,17 +79,17 @@ def trim(
     ends = np.array(end_times, dtype=np.float64)
     assert np.all(starts < ends)
     if size is None:
-        shape = layer(0.0)
-        if shape is None:
+        img = layer(0.0)
+        if img is None:
             raise ValueError("Cannot determine size of composition.")
-        size = shape[1], shape[0]
+        size = img.shape[1], img.shape[0]
     durations = ends - starts
     total_duration = float(durations.sum())
     offsets = np.cumsum(np.concatenate([[0.], durations]))[:-1] - starts
 
     composition = Composition(size=size, duration=total_duration)
     for start, end, offset in zip(starts, ends, offsets):
-        composition.add_layer(layer, start_time=start, end_time=end, offset=offset)
+        composition.add_layer(layer, offset=offset, start_time=start, end_time=end)
     return composition
 
 
@@ -117,7 +117,7 @@ def tile(layers: Sequence[BasicLayer], rows: int, cols: int) -> Composition:
     for i in range(rows):
         for j in range(cols):
             x = (j + 0.5) * w
-            y = (i + 0.5) * H
+            y = (i + 0.5) * h
             composition.add_layer(
                 layers[i * cols + j], position=(x, y))
     return composition
