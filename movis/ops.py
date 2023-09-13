@@ -12,11 +12,21 @@ def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None) -> C
     """Concatenate layers into a single composition.
 
     Args:
-        layers: Layers to concatenate.
-        size: Size of the composition. If None, the size of the layer is estimated.
+        layers:
+            Layers to concatenate.
+        size:
+            Size of the composition. If None, the size of the layer is estimated.
 
     Returns:
         Composition with all layers concatenated.
+
+    Examples:
+        >>> import movis as mv
+        >>> layer1 = mv.layer.Image("image1.png", duration=1.0)
+        >>> layer2 = mv.layer.Image("image2.png", duration=2.0)
+        >>> composition = mv.concatenate([layer1, layer2])  # concatenate two layers
+        >>> composition.duration
+        3.0
     """
     if size is None:
         img = layers[0](0.0)
@@ -45,6 +55,13 @@ def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None) -> Co
 
     Returns:
         Composition with the layer repeated.
+
+    Examples:
+        >>> import movis as mv
+        >>> layer = mv.layer.Image("image.png", duration=1.0)
+        >>> composition = mv.repeat(layer, 3)  # repeat 3 times
+        >>> composition.duration
+        3.0
     """
     if size is None:
         img = layer(0.0)
@@ -72,7 +89,18 @@ def trim(
         end_times:
             End times of the intervals.
         size:
-            Size of the composition. If None, the size of the layer is estimated."""
+            Size of the composition. If None, the size of the layer is estimated.
+
+    Returns:
+        Composition with the layer trimmed and concatenated.
+
+    Examples:
+        >>> import movis as mv
+        >>> layer = mv.layer.Video("video.mp4")
+        >>> composition = mv.trim(layer, [0.0, 2.0], [1.0, 3.0])  # trim 1 second from the beginning and end
+        >>> composition.duration
+        2.0
+    """
     assert 0 < len(start_times)
     assert len(start_times) == len(end_times)
     starts = np.array(start_times, dtype=np.float64)
