@@ -10,10 +10,10 @@ The video format in which two characters, *Zundamon* and *Shikoku Metan*, talk t
 
 A video is created by executing `make_video.py`. Please execute the following:
 
-動画は `make_video.py` を実行することで作られます。次のコマンドを実行してみましょう。
+動画は `render.py` を実行することで作られます。次のコマンドを実行してみましょう。
 
 ```bash
-$ python3 make_video.py
+$ python3 render.py
 ```
 
 It will export the subtitle file, dialogs, etc. and generate `outputs/video.mp4`.
