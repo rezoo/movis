@@ -97,7 +97,7 @@ def trim(
     Examples:
         >>> import movis as mv
         >>> layer = mv.layer.Video("video.mp4")
-        >>> composition = mv.trim(layer, [0.0, 2.0], [1.0, 3.0])  # trim 1 second from the beginning and end
+        >>> composition = mv.trim(layer, [0.0, 2.0], [1.0, 3.0])  # select 0.0-1.0 and 2.0-3.0, and concatenate them
         >>> composition.duration
         2.0
     """
@@ -130,6 +130,14 @@ def tile(layers: Sequence[BasicLayer], rows: int, cols: int) -> Composition:
 
     Returns:
         Composition with all layers tiled.
+
+    Examples:
+        >>> import movis as mv
+        >>> layer1 = mv.layer.Image("image1.png", duration=1.0)
+        >>> layer2 = mv.layer.Image("image2.png", duration=1.0)
+        >>> composition = mv.tile([layer1, layer2], rows=1, cols=2)  # tile 1x2
+        >>> composition.duration
+        1.0
     """
     assert len(layers) == rows * cols, \
         f"Number of layers ({len(layers)}) must be equal to rows * cols ({rows * cols})."
