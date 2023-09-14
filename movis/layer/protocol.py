@@ -28,8 +28,24 @@ class Layer(Protocol):
         raise NotImplementedError
 
 
-class BasicLayer(Layer):
+class BasicLayer(Protocol):
     """The protocol that defines the basic interface for a layer with some optional properties."""
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        """The minimum required method to implement a layer. All layers must implement it.
+
+        Specifically, this method returns a ``numpy.ndarray`` of shape ``(H, W, 4)`` with RGBA order and dtype as
+        ``numpy.uint8``, or ``None``, given a time.
+        When a ``numpy.ndarray`` is returned, Movis considers this array as an image and uses it as one of the layers
+        for rendering the video. If ``None`` is returned, Movis does not render its layer.
+
+        Args:
+            time: A scalar variable representing time.
+
+        Returns:
+            ``None`` if nothing is to be rendered, otherwise ``numpy.ndarray``.
+        """
+        raise NotImplementedError
 
     @property
     def duration(self) -> float:
@@ -60,7 +76,23 @@ class BasicLayer(Layer):
         return time
 
 
-class AudioLayer(Layer):
+class AudioLayer(Protocol):
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        """The minimum required method to implement a layer. All layers must implement it.
+
+        Specifically, this method returns a ``numpy.ndarray`` of shape ``(H, W, 4)`` with RGBA order and dtype as
+        ``numpy.uint8``, or ``None``, given a time.
+        When a ``numpy.ndarray`` is returned, Movis considers this array as an image and uses it as one of the layers
+        for rendering the video. If ``None`` is returned, Movis does not render its layer.
+
+        Args:
+            time: A scalar variable representing time.
+
+        Returns:
+            ``None`` if nothing is to be rendered, otherwise ``numpy.ndarray``.
+        """
+        raise NotImplementedError
 
     def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
         """An optional method for implementing an audio layer.
