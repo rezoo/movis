@@ -1,5 +1,7 @@
 # Image Gallery Video Using Movis Library
 
+![title](thumbnail.jpg)
+
 This Python sample code demonstrates how to create an image gallery video using the Movis library (`movis` as `mv`). It also uses Pandas (`pd`) to manage the timeline of images.
 
 ## Overall Structure

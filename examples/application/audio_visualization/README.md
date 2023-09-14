@@ -1,5 +1,7 @@
 # Enhanced Audio Visualizer
 
+![title](thumbnail.jpg)
+
 This project allows you to create visually appealing videos with audio waveforms using Python libraries like `librosa`, `PySide6`, and `movis`. With just a few lines of code, you can generate a custom audio visualizer to showcase your musical performances, podcasts, or any other audio.
 
 ## Features

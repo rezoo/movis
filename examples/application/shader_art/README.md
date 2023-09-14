@@ -1,5 +1,7 @@
 # Shader Art Example with Optimization Note
 
+![title](thumbnail.jpg)
+
 This sample code demonstrates how to generate a shader art video using Python and the Movis library (`movis` as `mv`). It also uses NumPy (`np`) for numerical operations.
 
 > **Optimization Note**: Some other samples for shader art make use of the `jax` library for speeding up numerical computations. If performance is a concern, you may look into those examples as well.
@@ -73,6 +75,6 @@ if __name__ == '__main__':
 
 Here, the program defines the scene size as `(1024, 576)` and the duration as `10.0` seconds. Then it adds the `render` layer and writes the final output to a video file named `shader_art_intro.mp4`.
 
-> **Note**: The code has been adapted from a YouTube video, which can be found in the comments within the code.
+> **Note**: The code has been adapted from a [YouTube video](https://www.youtube.com/watch?v=f4s1h2YETNY), which can be found in the comments within the code.
 
 And that's it! This is how the Movis library can be used to generate shader art in Python. If you're interested in optimization, don't forget to explore other examples that make use of the `jax` library for faster numerical computations.
