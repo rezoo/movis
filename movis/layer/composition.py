@@ -44,9 +44,12 @@ class Composition:
     ) -> None:
         self._layers: list[LayerItem] = []
         self._name_to_layer: WeakValueDictionary[str, LayerItem] = WeakValueDictionary()
+        assert duration > 0, "duration must be positive"
         self._duration = duration
         self._cache: Cache = Cache(size_limit=1024 * 1024 * 1024)
         self._preview_level: int = 1
+        assert isinstance(size, tuple) and len(size) == 2, "size must be a tuple of length 2"
+        assert size[0] > 0 and size[1] > 0, "size must be positive"
         self._size = size
 
     @property
@@ -148,7 +151,7 @@ class Composition:
             if layer_time < layer_item.start_time or layer_item.end_time <= layer_time:
                 layer_keys.append(None)
             else:
-                layer_keys.append(layer_item.get_key(layer_time))
+                layer_keys.append(layer_item.get_key(time))
         return tuple(layer_keys)
 
     def __repr__(self) -> str:
@@ -311,7 +314,8 @@ class Composition:
         frame = np.zeros(current_shape + (4,), dtype=np.uint8)
         for layer_item in self._layers:
             frame = layer_item._composite(
-                frame, time, preview_level=self._preview_level)
+                frame, time, preview_level=self._preview_level,
+                cache=self._cache)
         self._cache[key] = frame
         return frame
 
@@ -342,7 +346,9 @@ class Composition:
             if audio is None:
                 n_samples = int((end_time - start_time) * AUDIO_SAMPLING_RATE)
                 audio = np.zeros((2, n_samples), dtype=np.float32)
-            audio[:, ind_start: ind_start + audio_i.shape[1]] += audio_i
+            ind_end = min(ind_start + audio_i.shape[1], audio.shape[1])
+            length = ind_end - ind_start
+            audio[:, ind_start:ind_end] += audio_i[:, :length]
         return audio
 
     def write_video(
@@ -570,17 +576,18 @@ class LayerItem:
         """The blending mode of the layer."""
         return self.transform.blending_mode
 
-    def get_key(self, layer_time: float) -> tuple[Hashable, Hashable, Hashable]:
+    def get_key(self, time: float) -> tuple[Hashable, Hashable, Hashable]:
         """Returns the state of the layer item at the given time.
 
         Args:
-            layer_time:
+            time:
                 The time at which the layer is rendered.
 
         Returns:
             A tuple of hashable keys representing the state of the layer at the given time."""
         if not self.visible:
             return (None, None, None)
+        layer_time = time - self.offset
         transform_key = self.transform.get_current_value(layer_time)
         layer_key = self.layer.get_key(layer_time) if hasattr(self.layer, 'get_key') else layer_time
 
@@ -590,22 +597,37 @@ class LayerItem:
         effects_key = None if len(self._effects) == 0 else tuple([get_effect_key(e) for e in self._effects])
         return (transform_key, layer_key, effects_key)
 
+    def _get_fg_image(self, time: float, cache: Cache | None = None) -> np.ndarray | None:
+        key = None
+        if cache is not None:
+            key_body = self.get_key(time)
+            key = (CacheType.LAYER, self.name, key_body)
+            if key in cache:
+                return cache[key]
+        fg_image = self(time)
+        if fg_image is None:
+            return None
+        assert isinstance(fg_image, np.ndarray), "Rendered layer image must be a numpy array"
+        assert fg_image.dtype == np.uint8, "Rendered layer image must have dtype=np.uint8"
+        assert fg_image.ndim == 3, "Rendered layer image must have 3 dimensions (H, W, C)"
+        assert fg_image.shape[2] == 4, "Rendered layer image must have 4 channels (RGBA)"
+        if key is not None:
+            cache[key] = fg_image
+        return fg_image
+
     def _composite(
         self, bg_image: np.ndarray, time: float,
         parent: tuple[int, int] = (0, 0),
         preview_level: int = 1,
+        cache: Cache | None = None,
     ) -> np.ndarray:
         # Retrieve layer image
         layer_time = time - self.offset
         if layer_time < self.start_time or self.end_time <= layer_time:
             return bg_image
-        fg_image = self(time)
+        fg_image = self._get_fg_image(time, cache)
         if fg_image is None:
             return bg_image
-        assert isinstance(fg_image, np.ndarray), "Rendered layer image must be a numpy array"
-        assert fg_image.dtype == np.uint8, "Rendered layer image must have dtype=np.uint8"
-        assert fg_image.ndim == 3, "Rendered layer image must have 3 dimensions (H, W, C)"
-        assert fg_image.shape[2] == 4, "Rendered layer image must have 4 channels (RGBA)"
 
         # Get affine matrix and transform layer image
         p = self.transform.get_current_value(layer_time)
