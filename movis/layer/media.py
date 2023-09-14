@@ -10,6 +10,7 @@ from PIL import Image as PILImage
 
 from .mixin import TimelineMixin
 from .protocol import AUDIO_SAMPLING_RATE
+from ..util import to_rgb
 
 
 class Image:
@@ -53,6 +54,27 @@ class Image:
             raise ValueError(f"Invalid img_file type: {type(img_file)}")
 
         self._duration = duration
+
+    @classmethod
+    def from_color(clf, color: str | tuple[int, int, int], size: tuple[int, int], duration: float = 1e6) -> "Image":
+        """Create a plain image with a given color.
+
+        Args:
+            color:
+                the color of the image. It can be a color name (``str``) or a tuple of ``(R, G, B)``.
+            size:
+                the size of the image with a tuple of ``(width, height)``.
+            duration:
+                the duration for which the image should be displayed. Default is ``1000000.0`` (long enough time).
+
+        Returns:
+            An ``Image`` object.
+        """
+        assert size[0] > 0 and size[1] > 0
+        rgb = np.array(to_rgb(color)).reshape(1, 1, 3)
+        image = np.full((size[1], size[0], 4), 255, dtype=np.uint8)
+        image[:, :, :3] = rgb
+        return clf(image, duration=duration)
 
     @property
     def duration(self) -> float:
@@ -188,7 +210,7 @@ class Video:
             the source of the video data. It can be a file path (``str`` or ``Path``).
     """
 
-    def __init__(self, video_file: str | Path) -> None:
+    def __init__(self, video_file: str | Path, audio: bool = False) -> None:
         self.video_file = Path(video_file)
         self._reader = imageio.get_reader(video_file)
         meta_data = self._reader.get_meta_data()
@@ -196,6 +218,9 @@ class Video:
         self._size = meta_data["size"]
         self._n_frame = meta_data["nframes"]
         self._duration = meta_data["duration"]
+        self._audio = audio
+        if audio:
+            self._audio_layer = Audio(video_file)
 
     @property
     def fps(self) -> float:
@@ -217,6 +242,11 @@ class Video:
         """The duration of the video."""
         return self._duration
 
+    @property
+    def audio(self) -> bool:
+        """Whether the video has audio data."""
+        return self._audio
+
     def get_key(self, time: float) -> int:
         """Get the state index for the given time."""
         if time < 0 or self.duration < time:
@@ -229,6 +259,11 @@ class Video:
         frame = self._reader.get_data(frame_index)
         pil_frame = PILImage.fromarray(frame).convert("RGBA")
         return np.asarray(pil_frame)
+
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        if self._audio:
+            return self._audio_layer.get_audio(start_time, end_time)
+        return None
 
 
 class Audio:
