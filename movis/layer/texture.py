@@ -59,9 +59,9 @@ class Gradient(AttributesMixin):
             raise ValueError(f"Invalid gradation_type: {gradient_type}. 'linear' or 'radial' is expected.")
         self.gradient_type = gradient_type
 
-    def __call__(self, time: float) -> np.ndarray:
-        if self.gradient_type == 'radial':
-            raise NotImplementedError
+    def __call__(self, time: float) -> np.ndarray | None:
+        if time < 0 or time >= self.duration:
+            return None
         width, height = self.size
         image = QImage(width, height, QImage.Format.Format_ARGB32)
         painter = QPainter(image)
@@ -71,13 +71,13 @@ class Gradient(AttributesMixin):
         ce = np.round(self.end_color(time)).astype(int)
         if self.gradient_type == 'linear':
             grad_linear = QLinearGradient(
-                float(ps[0]), float(ps[1]), float(pe[0]), float(pe[1]))
+                float(ps[0]) + 0.5, float(ps[1]) + 0.5, float(pe[0]) - 0.5, float(pe[1]) - 0.5)
             grad_linear.setColorAt(0, QColor(cs[2], cs[1], cs[0], 255))
             grad_linear.setColorAt(1, QColor(ce[2], ce[1], ce[0], 255))
             painter.fillRect(0, 0, width, height, grad_linear)
         elif self.gradient_type == 'radial':
-            radial = np.sqrt(((ps - pe) ** 2).sum())
-            grad_radial = QRadialGradient(float(ps[0]), float(ps[1]), float(radial))
+            radius = np.sqrt(((ps - pe) ** 2).sum())
+            grad_radial = QRadialGradient(float(ps[0]) + 0.5, float(ps[1]) + 0.5, float(radius))
             grad_radial.setColorAt(0, QColor(cs[2], cs[1], cs[0], 255))
             grad_radial.setColorAt(1, QColor(ce[2], ce[1], ce[0], 255))
             painter.fillRect(0, 0, width, height, grad_radial)
@@ -150,6 +150,8 @@ class Stripe(AttributesMixin):
         self.ratio = Attribute(ratio, AttributeType.SCALAR, range=(0., 1.0))
 
     def __call__(self, time: float) -> np.ndarray:
+        if time < 0 or time >= self.duration:
+            return None
         width, height = self.size
         ratio = float(self.ratio(time))
         c1 = np.concatenate([

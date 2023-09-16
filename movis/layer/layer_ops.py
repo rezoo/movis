@@ -53,6 +53,8 @@ class AlphaMatte(AttributesMixin):
         return self.mask.duration
 
     def __call__(self, time: float) -> np.ndarray | None:
+        if time < 0 or self.duration <= time:
+            return None
         mask_frame = self.mask(time)
         if mask_frame is None:
             return None
@@ -95,6 +97,8 @@ class LuminanceMatte:
         return self.mask.duration
 
     def __call__(self, time: float) -> np.ndarray | None:
+        if time < 0 or self.duration <= time:
+            return None
         mask_frame = self.mask(time)
         if mask_frame is None:
             return None
