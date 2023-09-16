@@ -8,9 +8,9 @@ import librosa
 import numpy as np
 from PIL import Image as PILImage
 
+from ..util import to_rgb
 from .mixin import TimelineMixin
 from .protocol import AUDIO_SAMPLING_RATE
-from ..util import to_rgb
 
 
 class Image:
@@ -28,32 +28,46 @@ class Image:
         img_file: str | Path | PILImage.Image | np.ndarray,
         duration: float = 1e6
     ) -> None:
-        self.image: np.ndarray | None = None
+        self._image: np.ndarray | None = None
         self._img_file: Path | None = None
         if isinstance(img_file, (str, Path)):
             self._img_file = Path(img_file)
             assert self._img_file.exists(), f"{self._img_file} does not exist"
         elif isinstance(img_file, PILImage.Image):
             image = np.asarray(img_file.convert("RGBA"))
-            self.image = image
+            self._image = image
         elif isinstance(img_file, np.ndarray):
+            assert img_file.dtype == np.uint8
             if img_file.ndim == 2:
-                assert img_file.dtype == np.uint8
-                img = np.expand_dims(img_file, axis=-1)
+                img = img_file[:, :, None]
                 img = np.concatenate([
                     np.repeat(img, 3, axis=-1),
                     np.full_like(img, 255, dtype=np.uint8)],
                     axis=-1)
-                self.image = img
+                self._image = img
             elif img_file.ndim == 3:
+                if img_file.shape[2] == 3:
+                    img = np.concatenate([
+                        img_file,
+                        np.full_like(img_file[:, :, :1], 255, dtype=np.uint8)],
+                        axis=-1)
+                    self._image = img
+                elif img_file.shape[2] == 4:
+                    self._image = img_file
+                else:
+                    raise ValueError(f"Invalid img_file shape: {img_file.shape}. Must be (H, W, 3) or (H, W, 4).")
                 assert img_file.shape[2] == 4, "Image must have 4 channels (RGBA)"
-                self.image = img_file
             else:
                 raise ValueError(f"Invalid img_file shape: {img_file.shape}")
         else:
             raise ValueError(f"Invalid img_file type: {type(img_file)}")
 
         self._duration = duration
+
+    @property
+    def image(self) -> np.ndarray | None:
+        """The image data."""
+        return self._read_image()
 
     @classmethod
     def from_color(clf, color: str | tuple[int, int, int], size: tuple[int, int], duration: float = 1e6) -> "Image":
@@ -92,11 +106,11 @@ class Image:
         return 0 <= time < self.duration
 
     def _read_image(self) -> np.ndarray:
-        if self.image is None:
+        if self._image is None:
             assert self._img_file is not None
             image = np.asarray(PILImage.open(self._img_file).convert("RGBA"))
-            self.image = image
-        return self.image
+            self._image = image
+        return self._image
 
     def __call__(self, time: float) -> np.ndarray | None:
         if 0 <= time < self.duration:
