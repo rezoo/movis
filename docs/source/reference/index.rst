@@ -2,11 +2,14 @@ API Reference
 =============
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 3
 
     attribute
+    contrib/index
     effects/index
     imgproc
     layers/index
+    motion
+    ops
     transform
     util

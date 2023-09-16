@@ -113,6 +113,19 @@ class Attribute:
             self._motion.init_value = value
 
     def set(self, init_value: float | Sequence[float] | np.ndarray) -> None:
+        """Set the initial value of the attribute.
+
+        Note that this method is equivalent to ``init_value = value``.
+
+        Args:
+            init_value: The value to set.
+
+        Examples:
+            >>> import movis as mv
+            >>> layer = mv.layer.Rectangle(size=(100, 100), color=(255, 0, 0))
+            >>> layer.size.set((200, 200))
+            >>> layer.color.set((0, 255, 0))
+        """
         value = transform_to_numpy(init_value, self._value_type)
         self._init_value = value
         if self._motion is not None:

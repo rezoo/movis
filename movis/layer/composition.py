@@ -32,6 +32,20 @@ class Composition:
     Another composition can also be added as a layer within a composition.
     By nesting compositions in this way, more complex motions can be created.
 
+    Examples:
+        >>> import movis as mv
+        >>> composition = mv.layer.Composition(size=(640, 480), duration=5.0)
+        >>> composition.add_layer(
+        ...     mv.layer.Rectangle(size=(640, 480), color=(127, 127, 127), duration=5.0),
+        ...     name='bg')
+        >>> len(composition)
+        1
+        >>> composition['bg'].opacity.enable_motion().extend(
+        ...     keyframes=[0, 1, 2, 3, 4],
+        ...     values=[1.0, 0.0, 1.0, 0.0, 1.0],
+        ...     motion_types=['ease_out5'] * 5)
+        >>> composition.write_video('output.mp4')
+
     Args:
         size:
             A tuple representing the size of the composition in the form of ``(width, height)``.

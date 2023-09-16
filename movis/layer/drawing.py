@@ -18,6 +18,15 @@ from .mixin import TimelineMixin
 
 
 class FillProperty:
+    """A property for filling a shape.
+
+    Args:
+        color:
+            The color of the shape with a tuple of ``(r, g, b)``
+            or a string representing a color name (`e.g.,` ``"#ff0000" or "red"``).
+        opacify:
+            The opacity of the shape in the range of ``[0, 1]``.
+    """
 
     def __init__(self, color: tuple[int, int, int] | str, opacify: float = 1.):
         self._color: tuple[int, int, int] = to_rgb(color)
@@ -33,6 +42,17 @@ class FillProperty:
 
 
 class StrokeProperty:
+    """A property for stroking a shape.
+
+    Args:
+        color:
+            The color of the shape with a tuple of ``(r, g, b)``
+            or a string representing a color name (`e.g.,` ``"#ff0000" or "red"``).
+        width:
+            The width of the stroke.
+        opacity:
+            The opacity of the shape in the range of ``[0, 1]``.
+    """
 
     def __init__(self, color: tuple[int, int, int] | str, width: float = 1., opacity: float = 1.):
         self._color: tuple[int, int, int] = to_rgb(color)

@@ -8,11 +8,8 @@ The :mod:`~movis.effect` module defines base protocols for representing video ef
 :class:`~movis.effect.protocol.Effect` and :class:`~movis.effect.protocol.BasicEffect`.
 The remaining classes in this module represent its implementations.
 
-Implementations
-----------------
-
 Blur effects
-^^^^^^^^^^^^
+------------
 
 .. autosummary::
    :toctree: generated/
@@ -22,7 +19,7 @@ Blur effects
    movis.effect.blur.Glow
 
 Color correction effects
-^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------
 
 .. autosummary::
    :toctree: generated/
@@ -32,7 +29,7 @@ Color correction effects
    movis.effect.color.HSLShift
 
 Layer style effects
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 .. autosummary::
    :toctree: generated/
@@ -41,7 +38,7 @@ Layer style effects
    movis.effect.style.DropShadow
 
 
-Effect protocol
+Protocol
 ---------------
 
 .. autoclass:: movis.effect.protocol.Effect
