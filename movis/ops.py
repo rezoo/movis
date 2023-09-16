@@ -133,11 +133,14 @@ def tile(layers: Sequence[BasicLayer], rows: int, cols: int) -> Composition:
 
     Examples:
         >>> import movis as mv
-        >>> layer1 = mv.layer.Image("image1.png", duration=1.0)
-        >>> layer2 = mv.layer.Image("image2.png", duration=1.0)
+        >>> import numpy as np
+        >>> layer1 = mv.layer.Image(np.zeros((100, 100, 4), dtype=np.uint8), duration=1.0)
+        >>> layer2 = mv.layer.Image(np.zeros((100, 100, 4), dtype=np.uint8), duration=1.0)
         >>> composition = mv.tile([layer1, layer2], rows=1, cols=2)  # tile 1x2
         >>> composition.duration
         1.0
+        >>> composition.size
+        (200, 100)
     """
     assert len(layers) == rows * cols, \
         f"Number of layers ({len(layers)}) must be equal to rows * cols ({rows * cols})."
