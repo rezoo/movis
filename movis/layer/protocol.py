@@ -5,7 +5,7 @@ from typing import Hashable, Protocol
 import numpy as np
 
 AUDIO_SAMPLING_RATE = 48000
-AUDIO_BLOCK_SIZE = 2048
+AUDIO_BLOCK_SIZE = 1024
 
 
 class Layer(Protocol):
