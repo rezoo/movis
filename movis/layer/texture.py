@@ -149,7 +149,7 @@ class Stripe(AttributesMixin):
         self.phase = Attribute(phase, AttributeType.SCALAR)
         self.ratio = Attribute(ratio, AttributeType.SCALAR, range=(0., 1.0))
 
-    def __call__(self, time: float) -> np.ndarray:
+    def __call__(self, time: float) -> np.ndarray | None:
         if time < 0 or time >= self.duration:
             return None
         width, height = self.size
