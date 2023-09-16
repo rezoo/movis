@@ -1,8 +1,9 @@
 from __future__ import annotations
-from pathlib import Path
+
 import hashlib
-import urllib.request
 import sys
+import urllib.request
+from pathlib import Path
 
 import numpy as np
 
