@@ -99,7 +99,9 @@ class Image:
         return self.image
 
     def __call__(self, time: float) -> np.ndarray | None:
-        return self._read_image()
+        if 0 <= time < self.duration:
+            return self._read_image()
+        return None
 
 
 class ImageSequence(TimelineMixin):

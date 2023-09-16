@@ -107,7 +107,16 @@ class Attribute:
 
     @init_value.setter
     def init_value(self, value: float | tuple[float, ...] | np.ndarray) -> None:
-        self._init_value = transform_to_numpy(value, self._value_type)
+        value = transform_to_numpy(value, self._value_type)
+        self._init_value = value
+        if self._motion is not None:
+            self._motion.init_value = value
+
+    def set(self, init_value: float | Sequence[float] | np.ndarray) -> None:
+        value = transform_to_numpy(init_value, self._value_type)
+        self._init_value = value
+        if self._motion is not None:
+            self._motion.init_value = value
 
     @property
     def value_type(self) -> AttributeType:
