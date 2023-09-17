@@ -2,7 +2,7 @@ import movis as mv
 import numpy as np
 import pandas as pd
 from movis import Transform
-from movis.contrib.commentary import Character, Slide
+from movis.contrib.presentation import Character, Slide
 from movis.contrib.voicevox import make_voicevox_dataframe
 
 
@@ -42,7 +42,7 @@ def main():
     scene.add_layer(
         Slide(
             tl['start_time'], tl['end_time'],
-            slide_file='slide.pdf', slide_counter=tl['slide']),
+            slide_file='slide.pdf', slide_counter=np.cumsum(tl['slide'])),
         position=(960, 421), scale=0.71)
     scene.add_layer(
         Character(

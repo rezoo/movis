@@ -4,8 +4,15 @@ movis.contrib
 =============
 
 
-Commentary Video
+Presentation
 ----------------
+
+.. autosummary::
+   :toctree: generated/
+   :nosignatures:
+
+   movis.contrib.presentation.Slide
+   movis.contrib.presentation.Character
 
 
 Segmentation
