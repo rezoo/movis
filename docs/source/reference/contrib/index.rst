@@ -3,6 +3,20 @@
 movis.contrib
 ==================
 
+.. note::
+
+   Please be advised that this module is experimental in nature.
+   It is not imported automatically and does not enforce testing requirements.
+   However, it is subject to active development and updates.
+
+Overview
+--------
+
+The `movis.contrib` module serves as a sandbox for experimental functionalities and
+features that are not yet part of the core Movis library.
+It offers a wide range of utilities and tools that are under active development.
+This module provides a platform for users to test new features before they are integrated into the main package.
+
 Presentation
 ----------------
 
