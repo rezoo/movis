@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from typing import NamedTuple
+from typing import NamedTuple, Sequence
 
 import numpy as np
 
 from movis.enum import BlendingMode, Direction
 
 from .attribute import Attribute, AttributeType
-from .motion import transform_to_1dscalar, transform_to_2dvector
 
 
 class TransformValue(NamedTuple):
@@ -204,3 +203,70 @@ class Transform:
     def __repr__(self) -> str:
         return f"Transform(ap={self.anchor_point}, pos={self.position}, " \
             f"s={self.scale}, rot={self.rotation}, op={self.opacity}, blend={self.blending_mode})"
+
+
+def transform_to_1dscalar(x: float | Sequence[float] | np.ndarray) -> float:
+    """Transform a scalar, tuple, list or numpy array to a scalar.
+
+    Args:
+        x:
+            The value to transform.
+
+    Returns:
+        A scalar.
+    """
+    if isinstance(x, float):
+        return x
+    elif isinstance(x, np.ndarray) and x.shape == ():
+        return float(x)
+    else:
+        return float(x[0])
+
+
+def transform_to_2dvector(
+    x: float | Sequence[float] | np.ndarray
+) -> tuple[float, float]:
+    """Transform a scalar, tuple, list or numpy array to a 2D vector.
+
+    Args:
+        x:
+            The value to transform.
+
+    Returns:
+        A 2D vector.
+    """
+    if isinstance(x, float):
+        return (x, x)
+    elif isinstance(x, np.ndarray) and x.shape == ():
+        return (float(x), float(x))
+    elif len(x) == 1:
+        return (float(x[0]), float(x[0]))
+    elif len(x) == 2:
+        return (float(x[0]), float(x[1]))
+    else:
+        raise ValueError(f"Invalid value: {x}")
+
+
+def transform_to_3dvector(
+    x: float | Sequence[float] | np.ndarray
+) -> tuple[float, float, float]:
+    """Transform a scalar, tuple, list or numpy array to a 3D vector.
+
+    Args:
+        x:
+            The value to transform.
+
+    Returns:
+        A 3D vector.
+    """
+    if isinstance(x, float):
+        return (x, x, x)
+    elif isinstance(x, np.ndarray) and x.shape == ():
+        return (float(x), float(x), float(x))
+    elif len(x) == 1:
+        y = float(x[0])
+        return (y, y, y)
+    elif len(x) == 3:
+        return (float(x[0]), float(x[1]), float(x[2]))
+    else:
+        raise ValueError(f"Invalid value: {x}")

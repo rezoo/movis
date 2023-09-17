@@ -264,7 +264,8 @@ def qimage_to_numpy(image: QImage) -> np.ndarray:
     The memory layout of the returned numpy array corresponds to the QImage layout.
 
     Args:
-        image: The input QImage object. The function assumes that the image format
+        image:
+            The input QImage object. The function assumes that the image format
             is ``QImage.Format.Format_ARGB32``.
 
     Returns:

@@ -67,6 +67,34 @@ MOTION_TYPES_TO_FUNC = {
 
 
 class Motion:
+    """Defines a motion of ``Attribute`` instances used for keyframe animations.
+
+    This instance is basically initialized by calling ``enable_motion()`` in ``Attribute`` instances.
+    keyframes, values and correspoing motion types can be added using ``append()`` or ``extend()``.
+    By using these keyframes, ``Motion`` instance returns the complemented values at the given time.
+
+    Args:
+        init_value:
+            The initial value to use. It is used when no animation is set,
+            or when an animation with zero keyframes is set.
+        value_type:
+            Specifies the type of value that the ``Attribute`` will handle.
+
+    Examples:
+        >>> import movis as mv
+        >>> attr = mv.Attribute(1.0, mv.AttributeType.SCALAR)
+        >>> attr.enable_motion().append(0.0, 0.0).append(1.0, 1.0)
+        >>> len(attr.motion)
+        2
+        >>> attr.enable_motion().extend([2.0, 3.0], [2.0, 3.0], ['ease_in_out'])
+        >>> len(attr.motion)
+        4
+        >>> attr.motion.clear()
+        >>> len(attr.motion)
+        0
+        >>> assert attr(0.0) == attr.init_value
+    """
+
     def __init__(
         self,
         init_value: float | Sequence[float] | np.ndarray | None = None,
@@ -78,6 +106,9 @@ class Motion:
         self.init_value: np.ndarray | None = transform_to_numpy(init_value, value_type) \
             if init_value is not None else None
         self.value_type = value_type
+
+    def __len__(self) -> int:
+        return len(self.keyframes)
 
     def __call__(self, prev_value: np.ndarray, layer_time: float) -> np.ndarray:
         if len(self.keyframes) == 0:
@@ -105,6 +136,17 @@ class Motion:
         value: float | Sequence[float] | np.ndarray,
         motion_type: str | MotionType = MotionType.LINEAR,
     ) -> "Motion":
+        """Append a single keyframe.
+
+        Args:
+            keyframe:
+                time of the keyframe.
+            value:
+                value of the keyframe.
+            motion_type:
+                motion type of the keyframe. This can be either a string or a ``MotionType`` instance.
+                The default is ``MotionType.LINEAR`` (linear completion).
+        """
         i = bisect.bisect(self.keyframes, keyframe)
         if 0 < i and self.keyframes[i - 1] == keyframe:
             raise ValueError(f"Keyframe {keyframe} already exists")
@@ -121,6 +163,30 @@ class Motion:
         values: Sequence[float | Sequence[float] | np.ndarray],
         motion_types: Sequence[str | MotionType] | None = None,
     ) -> "Motion":
+        """Append multiple keyframes.
+
+        Args:
+            keyframes:
+                times of the keyframes.
+            values:
+                values of the keyframes. The length of ``values`` must be the same as ``keyframes``.
+            motion_types:
+                motion types of the keyframes. This can be either a string or a ``MotionType`` instance.
+                The length of ``motion_types`` must be the same as ``len(keyframes)`` or ``len(keyframes) - 1``.
+                If ``motion_types`` is ``None``, ``MotionType.LINEAR`` is used for all keyframes.
+                If ``len(motion_types) == len(keyframes) - 1``, ``Motion`` automatically adds ``MotionType.LINEAR``
+                to the end of ``motion_types``.
+
+        Examples:
+            >>> import movis as mv
+            >>> motion = mv.Motion(value_type=mv.AttributeType.SCALAR)
+            >>> # add two keyframes and The type of motion for that period is ``MotionType.EASE_IN_OUT``
+            >>> motion.extend(keyframes=[0.0, 1.0], values=[0.0, 1.0], motion_types=['ease_in_out'])
+            >>> # add other two keyframes and The type of motion for that period is ``MotionType.LINEAR``
+            >>> motion.extend([2.0, 3.0], [2.0, 3.0])
+            >>> len(motion)
+            4
+        """
         assert len(keyframes) == len(values)
         if motion_types is not None:
             if len(motion_types) == len(keyframes) - 1:
@@ -165,6 +231,27 @@ class Motion:
 
 
 def transform_to_numpy(value: int | float | Sequence[float] | np.ndarray, value_type: AttributeType) -> np.ndarray:
+    """Transform a scalar, tuple, list or numpy array to a numpy array.
+
+    Args:
+        value:
+            The value to transform.
+        value_type:
+            The type of value that the attribute handles.
+
+    Returns:
+        A numpy array with the length of 1, 2 or 3.
+        This length is determined by the ``value_type``.
+
+    Examples:
+        >>> from movis.motion import transform_to_numpy
+        >>> transform_to_numpy(1.0, mv.AttributeType.SCALAR)
+        array([1.])
+        >>> transform_to_numpy([1.0, 2.0], mv.AttributeType.VECTOR2D)
+        array([1., 2.])
+        >>> transform_to_numpy(1.0, mv.AttributeType.VECTOR3D)
+        array([1., 1., 1.])
+    """
     if isinstance(value, (int, float)):
         if value_type in (AttributeType.SCALAR, AttributeType.ANGLE):
             return np.array([value], dtype=np.float64)
@@ -180,54 +267,3 @@ def transform_to_numpy(value: int | float | Sequence[float] | np.ndarray, value_
         else:
             raise ValueError(f"Invalid value type: {value_type}")
     raise ValueError(f"Invalid value type: {value_type}")
-
-
-def transform_to_1dscalar(x: float | Sequence[float] | np.ndarray) -> float:
-    if isinstance(x, float):
-        return x
-    elif isinstance(x, np.ndarray) and x.shape == ():
-        return float(x)
-    else:
-        return float(x[0])
-
-
-def transform_to_2dvector(
-    x: float | Sequence[float] | np.ndarray
-) -> tuple[float, float]:
-    if isinstance(x, float):
-        return (x, x)
-    elif isinstance(x, np.ndarray) and x.shape == ():
-        return (float(x), float(x))
-    elif len(x) == 1:
-        return (float(x[0]), float(x[0]))
-    elif len(x) == 2:
-        return (float(x[0]), float(x[1]))
-    else:
-        raise ValueError(f"Invalid value: {x}")
-
-
-def transform_to_3dvector(
-    x: float | Sequence[float] | np.ndarray
-) -> tuple[float, float, float]:
-    if isinstance(x, float):
-        return (x, x, x)
-    elif isinstance(x, np.ndarray) and x.shape == ():
-        return (float(x), float(x), float(x))
-    elif len(x) == 1:
-        y = float(x[0])
-        return (y, y, y)
-    elif len(x) == 3:
-        return (float(x[0]), float(x[1]), float(x[2]))
-    else:
-        raise ValueError(f"Invalid value: {x}")
-
-
-def transform_to_hashable(
-    x: float | Sequence[float] | np.ndarray
-) -> float | tuple[float, ...]:
-    if isinstance(x, (int, float)):
-        return float(x)
-    elif len(x) == 1:
-        return float(x[0])
-    else:
-        return tuple([float(v) for v in x])

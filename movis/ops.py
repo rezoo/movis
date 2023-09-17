@@ -15,7 +15,7 @@ def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None) -> C
         layers:
             Layers to concatenate.
         size:
-            Size of the composition. If None, the size of the layer is estimated.
+            Size of the composition. If ``None``, the size of the layer is estimated.
 
     Returns:
         Composition with all layers concatenated.
@@ -51,7 +51,7 @@ def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None) -> Co
         n_repeat:
             Number of times to repeat the layer.
         size:
-            Size of the composition. If None, the size of the layer is estimated.
+            Size of the composition. If ``None``, the size of the layer is estimated.
 
     Returns:
         Composition with the layer repeated.
@@ -89,7 +89,7 @@ def trim(
         end_times:
             End times of the intervals.
         size:
-            Size of the composition. If None, the size of the layer is estimated.
+            Size of the composition. If ``None``, the size of the layer is estimated.
 
     Returns:
         Composition with the layer trimmed and concatenated.
@@ -126,7 +126,7 @@ def tile(layers: Sequence[BasicLayer], rows: int, cols: int) -> Composition:
 
     Args:
         layers: Layers to tile.
-        size: Size of the composition. If None, the size of the layer is estimated.
+        size: Size of the composition. If ``None``, the size of the layer is estimated.
 
     Returns:
         Composition with all layers tiled.

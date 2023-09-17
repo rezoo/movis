@@ -5,7 +5,7 @@ from typing import Callable, Hashable, Sequence
 import numpy as np
 
 from movis.enum import AttributeType
-from movis.motion import Motion, transform_to_hashable, transform_to_numpy
+from movis.motion import Motion, transform_to_numpy
 
 
 class Attribute:
@@ -207,3 +207,22 @@ class AttributesMixin:
     def get_key(self, time: float) -> tuple[Hashable, ...]:
         """Returns a tuple of hashable values that represent the state of the instance at a given time."""
         return tuple([transform_to_hashable(attr(time)) for attr in self.attributes.values()])
+
+
+def transform_to_hashable(
+    x: float | Sequence[float] | np.ndarray
+) -> float | tuple[float, ...]:
+    """Transform a scalar, tuple, list or numpy array to a hashable object used for caching.
+
+    Args:
+        x: The value to transform.
+
+    Returns:
+        A hashable object.
+    """
+    if isinstance(x, (int, float)):
+        return float(x)
+    elif len(x) == 1:
+        return float(x[0])
+    else:
+        return tuple([float(v) for v in x])
