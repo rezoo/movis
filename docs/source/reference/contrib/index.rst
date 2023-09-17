@@ -1,8 +1,7 @@
 .. module: movis.contrib
 
 movis.contrib
-=============
-
+==================
 
 Presentation
 ----------------
@@ -18,7 +17,20 @@ Presentation
 Segmentation
 ----------------
 
+.. autosummary::
+   :toctree: generated/
+   :nosignatures:
+
+   movis.contrib.segmentation.RobustVideoMatting
+
 
 Voicevox
 -----------------
 
+.. autosummary::
+   :toctree: generated/
+   :nosignatures:
+
+   movis.contrib.voicevox.make_voicevox_dataframe
+   movis.contrib.voicevox.make_timeline_from_voicevox
+   movis.contrib.voicevox.merge_timeline
