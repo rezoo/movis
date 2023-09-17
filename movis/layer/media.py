@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from os import PathLike
 from pathlib import Path
 from typing import Sequence
 
@@ -18,19 +19,19 @@ class Image:
     time-based keying.
 
     Args:
-        img_file: the source of the image data. It can be a file path (``str`` or ``Path``),
+        img_file: the source of the image data. It can be a file path (``str`` or ``PathLike``),
             a `PIL.Image` object, or a two or three-dimensional ``numpy.ndarray`` with a shape of ``(H, W, C)``.
         duration: the duration for which the image should be displayed.
             Default is ``1000000.0`` (long enough time).
     """
     def __init__(
         self,
-        img_file: str | Path | PILImage.Image | np.ndarray,
+        img_file: str | PathLike | PILImage.Image | np.ndarray,
         duration: float = 1e6
     ) -> None:
         self._image: np.ndarray | None = None
         self._img_file: Path | None = None
-        if isinstance(img_file, (str, Path)):
+        if isinstance(img_file, (str, PathLike)):
             self._img_file = Path(img_file)
             assert self._img_file.exists(), f"{self._img_file} does not exist"
         elif isinstance(img_file, PILImage.Image):
@@ -134,7 +135,7 @@ class ImageSequence(TimelineMixin):
     @classmethod
     def from_files(
         cls,
-        img_files: Sequence[str | Path | PILImage.Image | np.ndarray],
+        img_files: Sequence[str | PathLike | PILImage.Image | np.ndarray],
         each_duration: float = 1.0
     ) -> "ImageSequence":
         """Create an ``ImageSequence`` object from a sequence of image files.
@@ -144,7 +145,7 @@ class ImageSequence(TimelineMixin):
 
         Args:
             img_files:
-                a sequence of image data. Each element can be a file path (``str`` or ``Path``),
+                a sequence of image data. Each element can be a file path (``str`` or ``PathLike``),
                 a `PIL.Image` object, or a two or four-dimensional ``numpy.ndarray`` with a shape of ``(H, W, C)``.
             each_duration:
                 the duration for which each image should be displayed. Default is ``1.0``.
@@ -159,7 +160,7 @@ class ImageSequence(TimelineMixin):
     @classmethod
     def from_dir(
         cls,
-        img_dir: str | Path,
+        img_dir: str | PathLike,
         each_duration: float = 1.0
     ) -> "ImageSequence":
         """Create an ``ImageSequence`` object from a directory of image files.
@@ -183,13 +184,13 @@ class ImageSequence(TimelineMixin):
         self,
         start_times: Sequence[float],
         end_times: Sequence[float],
-        img_files: Sequence[str | Path | PILImage.Image | np.ndarray]
+        img_files: Sequence[str | PathLike | PILImage.Image | np.ndarray]
     ) -> None:
         super().__init__(start_times, end_times)
         self.img_files = img_files
         self.images: list[np.ndarray | None] = [None] * len(img_files)
         for i, img_file in enumerate(img_files):
-            if isinstance(img_file, (str, Path)):
+            if isinstance(img_file, (str, PathLike)):
                 img_file = Path(img_file)
                 assert Path(img_file).exists(), f"{img_file} does not exist"
             elif isinstance(img_file, PILImage.Image):
@@ -212,8 +213,8 @@ class ImageSequence(TimelineMixin):
             return None
         if self.images[idx] is None:
             img_file = self.img_files[idx]
-            assert isinstance(img_file, (str, Path))
-            image = np.asarray(PILImage.open(img_file).convert("RGBA"))
+            assert isinstance(img_file, (str, PathLike))
+            image = np.asarray(PILImage.open(str(img_file)).convert("RGBA"))
             self.images[idx] = image
         return self.images[idx]
 
@@ -226,9 +227,9 @@ class Video:
             the source of the video data. It can be a file path (``str`` or ``Path``).
     """
 
-    def __init__(self, video_file: str | Path, audio: bool = False) -> None:
+    def __init__(self, video_file: str | PathLike, audio: bool = False) -> None:
         self.video_file = Path(video_file)
-        self._reader = imageio.get_reader(video_file)
+        self._reader = imageio.get_reader(Path(video_file))
         meta_data = self._reader.get_meta_data()
         self._fps = meta_data["fps"]
         self._size = meta_data["size"]
@@ -290,11 +291,11 @@ class Audio:
             the source of the audio data. It can be a file path (``str`` or ``Path``).
     """
 
-    def __init__(self, audio_file: str | Path, audio_level: float = 0.0) -> None:
+    def __init__(self, audio_file: str | PathLike, audio_level: float = 0.0) -> None:
         self._audio_file: Path | None = None
         self._audio: np.ndarray | None = None
         self._duration: float | None = None
-        if isinstance(audio_file, (str, Path)):
+        if isinstance(audio_file, (str, PathLike)):
             self._audio_file = Path(audio_file)
             assert self._audio_file.exists(), f"{self._audio_file} does not exist"
         else:

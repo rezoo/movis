@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+from os import PathLike
 from pathlib import Path
 from typing import Sequence
 
@@ -22,7 +23,7 @@ class Slide(TimelineMixin):
         self,
         start_times: Sequence[float],
         end_times: Sequence[float],
-        slide_file: str | Path,
+        slide_file: str | PathLike,
         slide_counter: Sequence[int],
     ) -> None:
         if not pdf2image_available:
@@ -44,7 +45,7 @@ class Slide(TimelineMixin):
         slide_number = self.slide_timeline[idx]
         if self.slide_images is None:
             slide_images = []
-            for img in convert_from_path(self.slide_file):
+            for img in convert_from_path(Path(self.slide_file)):
                 img_np = np.asarray(img.convert("RGBA"))
                 slide_images.append(img_np)
             self.slide_images = slide_images
@@ -57,7 +58,7 @@ class Character(TimelineMixin):
         start_times: Sequence[float],
         end_times: Sequence[float],
         character_name: str,
-        character_dir: str | Path,
+        character_dir: str | PathLike,
         characters: Sequence[str],
         character_status: Sequence[str],
         initial_status: str = "n",

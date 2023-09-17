@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 from collections.abc import Sequence as SequenceType
-from pathlib import Path
+from os import PathLike
 from typing import Sequence
 
 
 def add_materials_to_video(
-    video_file: str | Path,
-    audio_file: str | Path,
-    dst_file: str | Path,
-    subtitle_file: str | Path | None = None,
+    video_file: str | PathLike,
+    audio_file: str | PathLike,
+    dst_file: str | PathLike,
+    subtitle_file: str | PathLike | None = None,
 ) -> None:
     """Merges a video file, an audio file, and optionally a subtitle file into a new video file.
 
@@ -18,13 +18,13 @@ def add_materials_to_video(
 
     Args:
         video_file:
-            A ``str`` or ``Path`` object representing the path to the source video file.
+            A ``str`` or ``PathLike`` object representing the path to the source video file.
         audio_file:
-            A ``str`` or ``Path`` object representing the path to the audio file to be added.
+            A ``str`` or ``PathLike`` object representing the path to the audio file to be added.
         dst_file:
-            A ``str`` or ``Path`` object representing the path to the destination video file.
+            A ``str`` or ``PathLike`` object representing the path to the destination video file.
         subtitle_file:
-            A ``str``, ``Path``, or ``None`` representing the path to
+            A ``str``, ``PathLike``, or ``None`` representing the path to
             the subtitle file to be added. Default is ``None``.
     """
     import ffmpeg

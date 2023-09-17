@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import difflib
 import hashlib
+from os import PathLike
 from pathlib import Path
 from typing import Hashable
 
@@ -9,9 +10,9 @@ import librosa
 import pandas as pd
 
 
-def make_voicevox_dataframe(audio_dir: str | Path) -> pd.DataFrame:
-    def get_audio_length(filename: str | Path) -> float:
-        return librosa.get_duration(path=str(filename))
+def make_voicevox_dataframe(audio_dir: str | PathLike) -> pd.DataFrame:
+    def get_audio_length(filename: str | PathLike) -> float:
+        return librosa.get_duration(path=filename)
 
     wav_files = sorted(f for f in Path(audio_dir).iterdir() if f.suffix == ".wav")
     rows = []
@@ -31,13 +32,13 @@ def make_voicevox_dataframe(audio_dir: str | Path) -> pd.DataFrame:
 
 
 def make_timeline_from_voicevox(
-    audio_dir: str | Path,
+    audio_dir: str | PathLike,
     max_text_length: int = 25,
     extra_columns: tuple[tuple[str, Hashable], ...] = (
         ("slide", 0), ("status", "n"), ("action", "")),
 ) -> pd.DataFrame:
 
-    def get_paths(src_dir: str | Path, ext: str) -> list[Path]:
+    def get_paths(src_dir: Path, ext: str) -> list[Path]:
         src_dir = Path(src_dir)
         return sorted(f for f in src_dir.iterdir() if f.suffix == ext)
 
@@ -48,7 +49,7 @@ def make_timeline_from_voicevox(
         prefix = hashed_text[:6]
         return prefix
 
-    txt_files = get_paths(audio_dir, ".txt")
+    txt_files = get_paths(Path(audio_dir), ".txt")
     lines = []
     for txt_file in txt_files:
         raw_text = open(txt_file, "r", encoding="utf-8-sig").read()

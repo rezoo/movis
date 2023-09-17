@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import tempfile
 from contextlib import contextmanager
-from pathlib import Path
+from os import PathLike
 from typing import Hashable, Iterator, Sequence
 from weakref import WeakValueDictionary
 
@@ -367,7 +367,7 @@ class Composition:
 
     def write_video(
         self,
-        dst_file: str | Path,
+        dst_file: str | PathLike,
         start_time: float = 0.0,
         end_time: float | None = None,
         codec: str = "libx264",
@@ -409,7 +409,7 @@ class Composition:
                         subtype='PCM_16')
                     audio_path = audio_fp.name
                 writer = imageio.get_writer(
-                    uri=dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
+                    uri=str(dst_file), fps=fps, codec=codec, pixelformat=pixelformat,
                     macro_block_size=None, ffmpeg_log_level="error",
                     audio_path=audio_path)
                 for t in tqdm(times, total=len(times)):
@@ -418,7 +418,7 @@ class Composition:
                 writer.close()
         else:
             writer = imageio.get_writer(
-                uri=dst_file, fps=fps, codec=codec, pixelformat=pixelformat,
+                uri=str(dst_file), fps=fps, codec=codec, pixelformat=pixelformat,
                 macro_block_size=None, ffmpeg_log_level="error")
             for t in tqdm(times, total=len(times)):
                 frame = np.asarray(self(t))

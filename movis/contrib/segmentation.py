@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import sys
 import urllib.request
+from os import PathLike
 from pathlib import Path
 
 import numpy as np
@@ -35,12 +36,11 @@ class RobustVideoMatting:
     default_md5_digest = 'f8c8ae3ed12f3d6ba09211b58a406a28'
 
     def __init__(
-            self, onnx_file: str | Path | None = None, downsample_ratio: float = 0.25,
+            self, onnx_file: str | PathLike | None = None, downsample_ratio: float = 0.25,
             recurrent_state: bool = True):
         import onnxruntime
         self._downsample_ratio = np.array([downsample_ratio], dtype=np.float32)
-        assert onnx_file is None or isinstance(onnx_file, (str, Path))
-        self._onnx_file = onnx_file
+        self._onnx_file = Path(onnx_file) if onnx_file is not None else None
         self._session: onnxruntime.InferenceSession | None = None
         self._state: list[np.ndarray] = [np.zeros([1, 1, 1, 1], dtype=np.float16)] * 4
         self._recurrent_state = recurrent_state
