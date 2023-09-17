@@ -17,7 +17,7 @@ Composition
    movis.layer.composition.LayerItem
 
 
-Image file, Video file, etc.
+Image, Video, Audio, etc.
 -----------------------------
 
 .. autosummary::
