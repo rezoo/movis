@@ -56,7 +56,7 @@ class Attribute:
         self._functions = [] if functions is None else list(functions)
 
     def __call__(self, layer_time: float) -> np.ndarray:
-        if self._motion is None:
+        if self._motion is None and len(self._functions) == 0:
             return transform_to_numpy(self._init_value, self._value_type)
         else:
             value = self._init_value
