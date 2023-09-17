@@ -122,8 +122,8 @@ import cv2
 import movis as mv
 import numpy as np
 
-def apply_gaussian_blur(prev_image: np.ndarray) -> np.ndarray:
-    return cv2.GaussianBlur(prev_image, ksize=(7, 7))
+def apply_gaussian_blur(prev_image: np.ndarray, time: float) -> np.ndarray:
+    return cv2.GaussianBlur(prev_image, (7, 7), -1)
 
 scene = mv.layer.Composition(size=(1920, 1080), duration=5.0)
 scene.add_layer(mv.layer.Rectangle(scene.size, color='#fb4562'))
