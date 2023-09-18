@@ -2,11 +2,13 @@ from enum import Enum
 
 
 class CacheType(Enum):
+    """A cache type used to determine how a result is cached during rendering."""
     COMPOSITION = 0
     LAYER = 1
 
 
 class AttributeType(Enum):
+    """A type used to determine the type and dimension of an attribute."""
     SCALAR = 0
     VECTOR2D = 1
     VECTOR3D = 2
@@ -15,6 +17,7 @@ class AttributeType(Enum):
 
     @staticmethod
     def from_string(s: str) -> "AttributeType":
+        """Convert a string to an attribute type."""
         if s == 'scalar':
             return AttributeType.SCALAR
         elif s == 'vector2d':
@@ -28,6 +31,7 @@ class AttributeType(Enum):
 
 
 class MotionType(Enum):
+    """Constants for determining the completion function between keyframes."""
     LINEAR = 0
     EASE_IN = 1
     EASE_OUT = 2
@@ -86,6 +90,7 @@ class MotionType(Enum):
 
     @staticmethod
     def from_string(s: str) -> "MotionType":
+        """Convert a string to a motion type."""
         if s in STRING_TO_MOTION_TYPE:
             return STRING_TO_MOTION_TYPE[s]
         else:
@@ -152,6 +157,7 @@ STRING_TO_MOTION_TYPE = {
 
 
 class BlendingMode(Enum):
+    """Constants for determining the blending mode when compositing layers."""
     NORMAL = 0
     MULTIPLY = 1
     SCREEN = 2
@@ -173,6 +179,7 @@ class BlendingMode(Enum):
 
     @staticmethod
     def from_string(s: str) -> "BlendingMode":
+        """Convert a string to a blending mode."""
         if s in STRING_TO_BLENDING_MODE:
             return STRING_TO_BLENDING_MODE[s]
         else:
@@ -202,6 +209,7 @@ STRING_TO_BLENDING_MODE = {
 
 
 class MatteMode(Enum):
+    """Constants for determining the matte mode when compositing layers."""
     NONE = 0
     ALPHA = 1
     LUMINANCE = 2
@@ -222,6 +230,7 @@ STRING_TO_MATTE_MODE = {
 
 
 class Direction(Enum):
+    """Constants for determining the origin point of a layer."""
     BOTTOM_LEFT = 1
     BOTTOM_CENTER = 2
     BOTTOM_RIGHT = 3
@@ -234,6 +243,7 @@ class Direction(Enum):
 
     @staticmethod
     def from_string(s: str) -> "Direction":
+        """Convert a string to a direction."""
         if s in STRING_TO_DIRECTION:
             return STRING_TO_DIRECTION[s]
         else:
@@ -241,6 +251,7 @@ class Direction(Enum):
 
     @staticmethod
     def to_vector(d: "Direction", size: tuple[float, float]) -> tuple[float, float]:
+        """Convert a direction to a vector."""
         if d == Direction.BOTTOM_LEFT:
             return (0, size[1])
         elif d == Direction.BOTTOM_CENTER:
@@ -277,12 +288,14 @@ STRING_TO_DIRECTION = {
 
 
 class TextAlignment(Enum):
+    """Constants for determining the alignment of text."""
     LEFT = 0
     CENTER = 1
     RIGHT = 2
 
     @staticmethod
     def from_string(s: str) -> "TextAlignment":
+        """Convert a string to a text alignment."""
         if s in STRING_TO_TEXT_ALIGNMENT:
             return STRING_TO_TEXT_ALIGNMENT[s]
         else:
