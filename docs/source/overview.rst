@@ -16,8 +16,6 @@ but it serves as an advantage for automation.
 Specifically, engineers can
 *integrate their own ML models to execute tasks* such as
 facial image anonymization or automatic summarization of videos.
-Additionally, this library works with highly programmable interactive
-interfaces like LLMs to facilitate automated video editing processes.
 
 Creating Video with Compositions
 --------------------------------
@@ -36,12 +34,19 @@ Here's some example code:
 
     scene = mv.layer.Composition(size=(1920, 1080), duration=5.0)
     scene.add_layer(mv.layer.Rectangle(scene.size, color='#fb4562'))
+
+    pos = scene.size[0] // 2, scene.size[1] // 2
     scene.add_layer(
         mv.layer.Text('Hello World!', font_size=256, font_family='Helvetica', color='#ffffff'),
-        name='text')
-    scene['text'].add_effect(mv.effect.DropShadow(offset=10.0))
+        name='text',  # The layer item can be accessed by name
+        offset=1.0,  # Show the text after one second
+        position=pos,  # The layer is centered by default, but it can also be specified explicitly
+        opacity=1.0, scale=1.0, rotation=0.0,  # opacity, scale, and rotation are also supported
+        blending_mode='normal')  # Blending mode can be specified for each layer.
+    scene['text'].add_effect(mv.effect.DropShadow(offset=10.0))  # Multiple effects can be added.
     scene['text'].scale.enable_motion().extend(
         keyframes=[0.0, 1.0], values=[0.0, 1.0], motion_types=['ease_in_out'])
+    # Fade-in effect. It means that the text appears fully two seconds later.
     scene['text'].opacity.enable_motion().extend([0.0, 1.0], [0.0, 1.0])
 
     scene.write_video('output.mp4')
@@ -49,8 +54,8 @@ Here's some example code:
 The composition can also be used as a layer.
 By combining multiple compositions and layers, users can create complex videos.
 
-Simple implementation of custom layers and effects
----------------------------------------------------
+Simple implementation of custom layers, effects, and animations
+---------------------------------------------------------------
 
 Movis is engineered to facilitate the straightforward implementation of user-defined layers,
 thereby enabling the seamless integration of unique visual effects into video projects.
@@ -64,7 +69,7 @@ one may employ separate, specialized libraries such as
 Jax or PyTorch to execute computations at an elevated speed via a GPU.
 
 For example, to implement a user-defined layer, you only need to create a function that, given a time,
-returns an `np.ndarray` with a shape of `(H, W, 4)` and dtype of `np.uint8` in RGBA order, or returns `None`.
+returns an ``np.ndarray`` with a shape of ``(H, W, 4)`` and dtype of ``numpy.uint8`` in RGBA order, or returns ``None``.
 
 .. code-block:: python
 
@@ -91,9 +96,9 @@ returns an `np.ndarray` with a shape of `(H, W, 4)` and dtype of `np.uint8` in R
     scene.write_video('output.mp4')
 
 If you want to specify the duration of a layer,
-the `duration` property is required. Movis also offers caching features
+the ``duration`` property is required. Movis also offers caching features
 to accelerate rendering. If you wish to speed up rendering for layers
-where the frame remains static, you can implement the `get_key(time: float)` method:
+where the frame remains static, you can implement the ``get_key(time: float)`` method:
 
 .. code-block:: python
 
@@ -130,3 +135,24 @@ Effects for layers can also be implemented in a similar straightforward manner.
         mv.layer.Text('Hello World!', font_size=256, font_family='Helvetica', color='#ffffff'),
         name='text')
     scene['text'].add_effect(apply_gaussian_blur)
+
+
+User-defined animations
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Animation can be set up on a keyframe basis, but in some cases,
+users may want to animate using user-defined functions.
+movis provides methods to handle such situations as well.
+
+.. code-block:: python
+
+    import movis as mv
+    import numpy as np
+
+    scene = mv.layer.Composition(size=(1920, 1080), duration=5.0)
+    scene.add_layer(
+        mv.layer.Text('Hello World!', font_size=256, font_family='Helvetica', color='#ffffff'),
+        name='text')
+    scene['text'].position.add_function(
+        lambda prev_value, time: prev_value + np.array([0, np.sin(time * 2 * np.pi) * 100]),
+    )
