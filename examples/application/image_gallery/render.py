@@ -3,19 +3,22 @@ import pandas as pd
 import movis as mv
 
 
-def make_logo(text: str, duration: float, font_size: int, margin_x: int = 20, margin_y: int = -20):
+def make_logo(
+    text: str, duration: float, font_size: int,
+    margin_x: int = 20, margin_y: int = -20
+) -> mv.layer.Composition:
     text_layer = mv.layer.Text(
         text, font_family='Helvetica Neue', font_size=font_size,
         font_style='Thin', color='#ffffff', duration=duration)
-    w, h = text_layer.get_size(0.0)
+    w, h = text_layer.get_size(time=0.0)
     W, H = (w + 2 * margin_x, h + 2 * margin_y)
     title = mv.layer.Composition(size=(W, H), duration=duration)
-    rect = title.add_layer(
+    rect_item = title.add_layer(
         mv.layer.Rectangle(size=(W, H), color='#202020', duration=duration),
         position=(W, H / 2), opacity=0.75, origin_point=mv.Direction.CENTER_RIGHT)
     text_item = title.add_layer(text_layer, name='text')
 
-    rect.scale.enable_motion().extend(
+    rect_item.scale.enable_motion().extend(
         keyframes=[0.0, 1.0, duration - 1.0, duration],
         values=[(0.0, 1.0), (1.0, 1.0), (1.0, 1.0), (0.0, 1.0)],
         motion_types=['ease_in_out5', 'linear', 'ease_in_out5'])
