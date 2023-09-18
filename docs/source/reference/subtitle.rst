@@ -1,7 +1,7 @@
 .. module:: movis.subtitle
 
-movis.ops
-=========
+movis.subtitle
+==============
 
 The :mod:`~movis.subtitle` module privides serveral helper funcions for making subtitle files.
 
