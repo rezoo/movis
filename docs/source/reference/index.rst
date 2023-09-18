@@ -11,5 +11,6 @@ API Reference
     layers/index
     motion
     ops
+    subtitle
     transform
     util

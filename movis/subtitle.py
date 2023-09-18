@@ -31,7 +31,15 @@ class ASSStyleType(NamedTuple):
     margin_v: int = 30
 
 
-def rgb_to_ass_color(rgb_array: Sequence[int]) -> str:
+def _rgb_to_ass_color(rgb_array: Sequence[int]) -> str:
+    """Transform the rgb array into the string used in ASS file.
+
+    Args:
+        rgb_array:
+            an three-dimensional rgb array.
+
+    Returns:
+        the color string used in ASS file."""
     if len(rgb_array) == 3:
         return "&H{:02x}{:02x}{:02x}".format(rgb_array[2], rgb_array[1], rgb_array[0])
     elif len(rgb_array) == 4:
@@ -66,6 +74,24 @@ def write_ass_file(
     characters: Sequence[str] | None = None,
     styles: Sequence[ASSStyleType] | None = None,
 ) -> None:
+    """Writes an ASS (Advanced SubStation Alpha) subtitle file.
+
+    Args:
+        start_times:
+            A list of start times in seconds for each subtitle entry.
+        end_times:
+            A list of end times in seconds for each subtitle entry.
+        texts:
+            A list of text strings corresponding to each subtitle entry.
+        dst_ass_file:
+            The destination path for the generated ASS file.
+        size:
+            The resolution of the video, defaults to (1920, 1080).
+        characters:
+            A list of character names for each subtitle entry. Defaults to None.
+        styles:
+            A list of styles for each subtitle entry. Defaults to None.
+    """
     assert len(start_times) == len(end_times) == len(texts)
 
     if characters is None:
@@ -112,6 +138,19 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 def write_srt_file(
         start_times: Sequence[float], end_times: Sequence[float], texts: Sequence[str],
         dst_srt_file: str | PathLike) -> None:
+    """
+    Writes an SRT (SubRip Text) subtitle file.
+
+    Args:
+        start_times:
+            A list of start times in seconds for each subtitle entry.
+        end_times:
+            A list of end times in seconds for each subtitle entry.
+        texts:
+            A list of text strings corresponding to each subtitle entry.
+        dst_srt_file:
+            The destination path for the generated SRT file.
+    """
     assert len(start_times) == len(end_times) == len(texts)
     with open(dst_srt_file, 'w') as srt:
         for i, (start_time, end_time, text) in enumerate(zip(start_times, end_times, texts)):

@@ -7,7 +7,6 @@ from .enum import (AttributeType, BlendingMode, Direction, MatteMode,  # noqa
 from .imgproc import alpha_composite  # noqa
 from .motion import Motion  # noqa
 from .ops import concatenate, repeat, tile, trim  # noqa
-from .subtitle import (ASSStyleType, rgb_to_ass_color, write_ass_file,  # noqa
-                       write_srt_file)
+from .subtitle import ASSStyleType, write_ass_file, write_srt_file  # noqa
 from .transform import Transform  # noqa
 from .util import add_materials_to_video, to_rgb  # noqa
