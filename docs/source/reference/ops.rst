@@ -10,6 +10,7 @@ The :mod:`~movis.ops` module contains a set of functions that transform a given 
    :nosignatures:
 
    movis.ops.concatenate
+   movis.ops.crop
    movis.ops.repeat
    movis.ops.tile
    movis.ops.trim
