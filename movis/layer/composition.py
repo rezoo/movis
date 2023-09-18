@@ -129,7 +129,8 @@ class Composition:
     def keys(self) -> list[str]:
         """Returns a list of layer names.
 
-        Note that the keys are sorted in the order in which they will be rendered.
+        .. note::
+            The keys are sorted in the order in which they will be rendered.
 
         Returns:
             A list of layer names sorted in the rendering order.
@@ -139,8 +140,9 @@ class Composition:
     def values(self) -> list[LayerItem]:
         """Returns a list of LayerItem objects.
 
-        Note that the elements of the list are not the layers themselves,
-        but `LayerItem` containing information of the layers.
+        .. note::
+            The elements of the list are not the layers themselves,
+            but ``LayerItem`` containing information of the layers.
 
         Returns:
             A list of ``LayerItem`` objects.
@@ -542,8 +544,9 @@ class LayerItem:
     def duration(self) -> float:
         """The duration of the layer item.
 
-        Note that this value is determined by the difference between `end_time` and `start_time`,
-        not by the duration of the layer.
+        .. note::
+            This value is determined by the difference between ``end_time`` and ``start_time``,
+            not by the duration of the layer.
         """
         return self.end_time - self.start_time
 

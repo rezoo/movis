@@ -19,7 +19,9 @@ class Attribute:
     For example, the values will be one-dimensional if ``value_type`` is set to ``AttributeType.SCALAR``.
     If set to ``AttributeType.COLOR``, the values will be three-dimensional.
     Regardless of ``value_type``, the returned type will always be ``numpy.ndarray``.
-    Note that even if it's scalar, the returned value will be an array like ``np.array([value])``.
+
+    .. note::
+        Even if it's scalar, the returned value will be an array like ``np.array([value])``.
 
     Args:
         init_value:
@@ -115,7 +117,8 @@ class Attribute:
     def set(self, init_value: float | Sequence[float] | np.ndarray) -> None:
         """Set the initial value of the attribute.
 
-        Note that this method is equivalent to ``init_value = value``.
+        .. note::
+            This method is equivalent to ``init_value = value``.
 
         Args:
             init_value: The value to set.

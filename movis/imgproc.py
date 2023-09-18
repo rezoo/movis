@@ -260,8 +260,9 @@ def alpha_composite(
 def qimage_to_numpy(image: QImage) -> np.ndarray:
     """Convert a QImage to a numpy ndarray.
 
-    Note that it asserts that the input QImage format is ``QImage.Format.Format_ARGB32``.
-    The memory layout of the returned numpy array corresponds to the QImage layout.
+    .. note::
+        It asserts that the input QImage format is ``QImage.Format.Format_ARGB32``.
+        The memory layout of the returned numpy array corresponds to the QImage layout.
 
     Args:
         image:

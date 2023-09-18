@@ -70,8 +70,9 @@ class AlphaMatte(AttributesMixin):
 class LuminanceMatte:
     """A layer that replaces the alpha channel of the target layer with the luminance of the mask layer.
 
-    Note that the mask layer and the target layer should have the same size and the same duration.
-    Using the `Composition` layer is preferred if users want to align them.
+    .. note::
+        The mask layer and the target layer should have the same size and the same duration.
+        Using the `Composition` layer is preferred if users want to align them.
 
     Args:
         mask:

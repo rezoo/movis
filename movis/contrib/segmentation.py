@@ -13,10 +13,13 @@ class RobustVideoMatting:
     """Extract the foreground using the RobustVideoMatting [Li2021].
 
     This effect uses a deep learning model to automatically identify the area of persons in a given frame
-    and extract it as the foreground. Note that while there is no need to set up greenbacks or
-    other special imaging environments, the quality is not at the production level.
-    This effect is useful in areas that generally do not require foreground extraction quality,
-    such as explainer videos.
+    and extract it as the foreground.
+
+    .. note::
+        While there is no need to set up greenbacks or
+        other special imaging environments, the quality is not at the production level.
+        This effect is useful in areas that generally do not require foreground extraction quality,
+        such as presentation videos.
 
     Args:
         onnx_file:

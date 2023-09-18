@@ -474,8 +474,9 @@ class Text(AttributesMixin):
     def get_size(self, time: float = 0.) -> tuple[int, int]:
         """Returns the size of the text at the given time.
 
-        Note that the returned size is the size of the text drawn on the canvas,
-        and it may be different from the size of the text itself.
+        .. note::
+            The returned size is the size of the text drawn on the canvas,
+            and it may be different from the size of the text itself.
 
         Args:
             time:

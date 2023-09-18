@@ -9,8 +9,10 @@ class GaussianBlur(AttributesMixin):
     """Gaussian blur effect.
 
     It applies Gaussian blur to the input image.
-    Note that the resolution of the output image is greater than
-    that of the input image ot preserve the blurring of the edges.
+
+    .. note::
+        The resolution of the output image is greater than
+        that of the input image to preserve the blurring of the edges.
 
     Args:
         radius:
