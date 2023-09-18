@@ -87,6 +87,8 @@ class Composition:
     def preview_level(self, level: int) -> None:
         assert level > 0, "preview_level must be greater than 0"
         self._preview_level = int(level)
+        if self._preview_level != level:
+            self._cache.clear()
 
     @contextmanager
     def preview(self, level: int = 2) -> Iterator[None]:
@@ -95,12 +97,12 @@ class Composition:
         For example, ``with self.preview(level=2):`` would change the ``preview_level`` to 2 in that scope.
         """
         assert level > 0
-        original_level = self._preview_level
-        self._preview_level = level
+        original_level = self.preview_level
+        self.preview_level = level
         try:
             yield
         finally:
-            self._preview_level = original_level
+            self.preview_level = original_level
 
     @property
     def layers(self) -> Sequence[LayerItem]:
