@@ -1,0 +1,2 @@
+pydata-sphinx-theme==0.14.0
+sphinx-copybutton==0.5.2
