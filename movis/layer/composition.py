@@ -95,6 +95,23 @@ class Composition:
         """Context manager method to temporarily change the ``preview_level`` using the `with` syntax.
 
         For example, ``with self.preview(level=2):`` would change the ``preview_level`` to 2 in that scope.
+
+        Args:
+            level:
+                The resolution of the rendering of the composition.
+                For example, if ``level=2`` is set, the composition's resolution is ``(W / 2, H / 2)``.
+
+        Examples:
+            >>> import movis as mv
+            >>> composition = mv.layer.Composition(size=(640, 480), duration=5.0)
+            >>> with composition.preview(level=2):
+            ...     image = composition(0.0)
+            >>> image.shape
+            (240, 320, 4)
+            >>> with composition.preview(level=4):
+            ...     image = composition(0.0)
+            >>> image.shape
+            (120, 160, 4)
         """
         assert level > 0
         original_level = self.preview_level

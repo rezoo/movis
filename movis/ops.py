@@ -160,3 +160,32 @@ def tile(layers: Sequence[BasicLayer], rows: int, cols: int) -> Composition:
             composition.add_layer(
                 layers[i * cols + j], position=(x, y))
     return composition
+
+
+def crop(layer: BasicLayer, rect: tuple[int, int, int, int]) -> Composition:
+    """Crop a layer from a specified rectangle.
+
+    Args:
+        layer:
+            Layer to crop.
+        rect:
+            Rectangle to crop. (x, y, width, height)
+
+    Returns:
+        Composition with the layer cropped.
+
+    Examples:
+        >>> import movis as mv
+        >>> layer = mv.layer.Image("image.png", duration=1.0)
+        >>> composition = mv.crop(layer, (10, 20, 100, 200))  # crop from (10, 20) with size (100, 200)
+        >>> composition.duration
+        1.0
+        >>> composition.size
+        (100, 200)
+    """
+    assert len(rect) == 4
+    x, y, w, h = rect
+    duration = layer.duration
+    composition = Composition(size=(w, h), duration=duration)
+    composition.add_layer(layer, position=(x + w / 2, y + h / 2))
+    return composition
