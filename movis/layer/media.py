@@ -71,14 +71,14 @@ class Image:
         return self._read_image()
 
     @classmethod
-    def from_color(clf, color: str | tuple[int, int, int], size: tuple[int, int], duration: float = 1e6) -> "Image":
+    def from_color(clf, size: tuple[int, int], color: str | tuple[int, int, int], duration: float = 1e6) -> "Image":
         """Create a plain image with a given color.
 
         Args:
-            color:
-                the color of the image. It can be a color name (``str``) or a tuple of ``(R, G, B)``.
             size:
                 the size of the image with a tuple of ``(width, height)``.
+            color:
+                the color of the image. It can be a color name (``str``) or a tuple of ``(R, G, B)``.
             duration:
                 the duration for which the image should be displayed. Default is ``1000000.0`` (long enough time).
 

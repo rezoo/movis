@@ -56,7 +56,7 @@ def render(args: argparse.Namespace):
             size=(video.size[0], 200),
             start_point=(0.0, 0.0), end_point=(0.0, 200.0),
             start_color='#000000', end_color='#ffffff'),
-        target=mv.layer.Image.from_color('#1b4290', (video.size[0], 200)))
+        target=mv.layer.Image.from_color((video.size[0], 200), '#1b4290'))
     bg = scene.add_layer(
         bg_layer,
         position=(video.size[0] / 2, video.size[1]),
