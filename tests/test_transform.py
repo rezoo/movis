@@ -1,7 +1,10 @@
 import numpy as np
+import pytest
 
 from movis.attribute import Attribute
-from movis.transform import Transform, TransformValue, Direction
+from movis.transform import (Direction, Transform, TransformValue,
+                             transform_to_1dscalar, transform_to_2dvector,
+                             transform_to_3dvector)
 
 
 def test_anchor_point():
@@ -151,3 +154,44 @@ def test_transform_value_custom_values():
     assert transform.rotation == 45.0
     assert transform.opacity == 0.5
     assert transform.origin_point == Direction.TOP_LEFT
+
+
+def test_transform_to_1dscalar():
+    assert transform_to_1dscalar(3.0) == 3.0
+    assert transform_to_1dscalar([3.0]) == 3.0
+    assert transform_to_1dscalar((3.0,)) == 3.0
+    assert transform_to_1dscalar(np.array(3.0)) == 3.0
+    assert transform_to_1dscalar(np.array([3.0])) == 3.0
+
+    with pytest.raises(ValueError):
+        transform_to_1dscalar([])
+
+
+def test_transform_to_2dvector():
+    assert transform_to_2dvector(3.0) == (3.0, 3.0)
+    assert transform_to_2dvector([3.0]) == (3.0, 3.0)
+    assert transform_to_2dvector((3.0,)) == (3.0, 3.0)
+    assert transform_to_2dvector([3.0, 4.0]) == (3.0, 4.0)
+    assert transform_to_2dvector(np.array(3.0)) == (3.0, 3.0)
+    assert transform_to_2dvector(np.array([3.0])) == (3.0, 3.0)
+
+    with pytest.raises(ValueError):
+        transform_to_2dvector([3.0, 4.0, 5.0])
+    with pytest.raises(ValueError):
+        transform_to_2dvector([])
+
+
+def test_transform_to_3dvector():
+    assert transform_to_3dvector(3.0) == (3.0, 3.0, 3.0)
+    assert transform_to_3dvector([3.0]) == (3.0, 3.0, 3.0)
+    assert transform_to_3dvector((3.0,)) == (3.0, 3.0, 3.0)
+    assert transform_to_3dvector([3.0, 4.0, 5.0]) == (3.0, 4.0, 5.0)
+    assert transform_to_3dvector(np.array(3.0)) == (3.0, 3.0, 3.0)
+    assert transform_to_3dvector(np.array([3.0])) == (3.0, 3.0, 3.0)
+
+    with pytest.raises(ValueError):
+        transform_to_3dvector([3.0, 4.0])
+    with pytest.raises(ValueError):
+        transform_to_3dvector([3.0, 4.0, 5.0, 6.0])
+    with pytest.raises(ValueError):
+        transform_to_3dvector([])
