@@ -1,9 +1,8 @@
 import numpy as np
-
 import pytest
-from movis.imgproc import alpha_composite
-from movis.enum import BlendingMode, MatteMode
 
+from movis.enum import BlendingMode, MatteMode
+from movis.imgproc import alpha_composite
 
 alpha_composite_params = [
     (0.5, BlendingMode.NORMAL),

@@ -1,7 +1,7 @@
+import numpy as np
 import pytest
 
 import movis as mv
-import numpy as np
 
 
 def test_gradient_init():

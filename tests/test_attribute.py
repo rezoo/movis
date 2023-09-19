@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
-from movis.attribute import Attribute, AttributeType
 
+from movis.attribute import Attribute, AttributeType
 
 attribute_params = [
     (0.5, AttributeType.SCALAR),
