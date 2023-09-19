@@ -225,18 +225,21 @@ class Video:
     Args:
         video_file:
             the source of the video data. It can be a file path (``str`` or ``Path``).
+        audio:
+            whether to include the audio layer. Default is ``True``.
     """
 
-    def __init__(self, video_file: str | PathLike, audio: bool = False) -> None:
+    def __init__(self, video_file: str | PathLike, audio: bool = True) -> None:
         self.video_file = Path(video_file)
-        self._reader = imageio.get_reader(Path(video_file))
+        self._reader = imageio.get_reader(self.video_file)
         meta_data = self._reader.get_meta_data()
         self._fps = meta_data["fps"]
         self._size = meta_data["size"]
         self._n_frame = meta_data["nframes"]
         self._duration = meta_data["duration"]
         self._audio = audio
-        if audio:
+        self._audio_layer = None
+        if audio and "audio_codec" in meta_data:
             self._audio_layer = Audio(video_file)
 
     @property
@@ -259,6 +262,10 @@ class Video:
         """The duration of the video."""
         return self._duration
 
+    def has_audio(self) -> bool:
+        """Return True if the video has audio layer."""
+        return self._audio_layer is not None
+
     @property
     def audio(self) -> bool:
         """Whether the video has audio data."""
@@ -278,7 +285,7 @@ class Video:
         return np.asarray(pil_frame)
 
     def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
-        if self._audio:
+        if self._audio and self._audio_layer is not None:
             return self._audio_layer.get_audio(start_time, end_time)
         return None
 
@@ -291,7 +298,7 @@ class Audio:
             the source of the audio data. It can be a file path (``str`` or ``Path``).
     """
 
-    def __init__(self, audio_file: str | PathLike, audio_level: float = 0.0) -> None:
+    def __init__(self, audio_file: str | PathLike) -> None:
         self._audio_file: Path | None = None
         self._audio: np.ndarray | None = None
         self._duration: float | None = None
