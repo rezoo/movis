@@ -61,7 +61,7 @@ if it fails, consider building from source, as described on `PySide6's PyPI page
 
     Be aware that PySide6 is an LGPL library.
     If you consider distributing Movis as a single binary,
-    you'll need to comply with the LGPL license, which requires source code disclosure.
+    you'll need to comply with the LGPL, which requires source code disclosure.
 
 imageio / imageio-ffmpeg
 ------------------------

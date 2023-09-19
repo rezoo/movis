@@ -30,10 +30,10 @@ In either case, the type of ``new_value`` will be appropriately converted and us
 
 There are two ways to apply animation:
 
-1. By using the ``enable_motion()`` method to attach a Motion instance.
-2. By using the ``add_function()`` method to attach a user-defined function.
+1. Use the ``enable_motion()`` method to attach a Motion instance.
+2. Use the ``add_function()`` method to attach a user-defined function.
 
-The more convenient way for users is to use the ``enable_motion()`` method.
+The more convenient way for users is to use the ``enable_motion()``.
 You only need to specify the keyframes and their associated values, along with the easing method.
 
 enable_motion()

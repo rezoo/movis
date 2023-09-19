@@ -59,7 +59,7 @@ scene.write_video('output.mp4')
 The composition can also be used as a layer.
 By combining multiple compositions and layers, users can create complex videos.
 
-### Simple implementation of custom layers, effects, and animations
+### Implementation of custom layers, effects, and animations
 
 Movis is engineered to facilitate the straightforward implementation of user-defined layers,
 thereby enabling the seamless integration of unique visual effects into video projects.
@@ -128,7 +128,7 @@ import cv2
 import movis as mv
 import numpy as np
 
-def apply_gaussian_blur(prev_image: np.ndarray, time: float) -> np.ndarray:
+def apply_gaussian_blur(prev_image: np.ndarray, time: float) -> np.ndarray | None:
     return cv2.GaussianBlur(prev_image, (7, 7), -1)
 
 scene = mv.layer.Composition(size=(1920, 1080), duration=5.0)
@@ -157,6 +157,45 @@ scene['text'].position.add_function(
     lambda prev_value, time: prev_value + np.array([0, np.sin(time * 2 * np.pi) * 100]),
 )
 ```
+
+### Fast Prototyping in Jupyter Notebook
+
+Jupyter notebooks are commonly used for data analysis that requires a lot of trial and error using Python.
+Various methods for Jupyter notebooks are also included in movis to speed up the video production process.
+
+For example, ``composition.render_and_play()`` is often used to
+preview a section of a video within a Jupyter notebook.
+
+```python
+import movis as mv
+
+scene = mv.layer.Composition(size=(1920, 1080), duration=10.0)
+... # add layers and effects...
+scene.render_and_play(
+    start_time=5.0, end_time=10.0, preview_level=2)  # play the video from 5 to 10 seconds
+```
+
+This method has an argument called ``preview_level``.
+For example, by setting it to 2, you can sacrifice video quality
+by reducing the final resolution to 1/2 in exchange for faster rendering.
+
+If you want to reduce the resolution when exporting videos or still images using
+``composition.write_video()`` or similar methods,
+you can use the syntax ``with composition.preview(level=2)``.
+
+```python
+import movis as mv
+
+scene = mv.layer.Composition(size=(1920, 1080), duration=10.0)
+... # add layers and effects...
+with scene.preview(level=2):
+    scene.write_video('output.mp4')  # The resolution of the output video is 1/2.
+    img = scene(5.0)  # retrieve an image at t = 5.0
+assert img.shape == (540, 960, 4)
+```
+
+Within this scope, the resolution of all videos and images will be reduced to 1/2.
+This can be useful during the trial and error process.
 
 ## Installation
 
