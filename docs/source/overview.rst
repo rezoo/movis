@@ -54,6 +54,27 @@ Here's some example code:
 The composition can also be used as a layer.
 By combining multiple compositions and layers, users can create complex videos.
 
+Simple video processing
+-----------------------
+
+Of course, movis also supports simple video processing such as video merging and trimming.
+
+.. code-block:: python
+
+    intro = mv.layer.Video('intro.mp4')
+    title = mv.layer.Video('title.mp4')
+    chapter1 = mv.layer.Video('chapter1.mp4')
+    ...
+    scene = mv.concatenate([intro, title, chapter1, ...])
+    scene.write_video('output.mp4')
+
+.. code-block:: python
+
+    raw_video = mv.layer.Video('video.mp4')
+    # select 0.0-1.0 secs and 2.0-3.0 secs, and concatenate them
+    scene = mv.trim(layer, start_times=[0.0, 2.0], end_times=[1.0, 3.0])
+    scene.write_video('output.mp4')
+
 Implementation of custom layers, effects, and animations
 ---------------------------------------------------------------
 
@@ -157,7 +178,7 @@ movis provides methods to handle such situations as well.
         lambda prev_value, time: prev_value + np.array([0, np.sin(time * 2 * np.pi) * 100]),
     )
 
-Fast Prototyping in Jupyter Notebook
+Fast Prototyping on Jupyter Notebook
 ---------------------------------------------------------------
 
 Jupyter notebooks are commonly used for data analysis that requires a lot of trial and error using Python.
