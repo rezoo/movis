@@ -6,9 +6,10 @@ import numpy as np
 
 from movis.layer.composition import Composition
 from movis.layer.protocol import BasicLayer
+from movis.enum import Direction
 
 
-def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None) -> Composition:
+def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None = None) -> Composition:
     """Concatenate layers into a single composition.
 
     Args:
@@ -42,7 +43,7 @@ def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None) -> C
     return composition
 
 
-def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None) -> Composition:
+def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None = None) -> Composition:
     """Repeat a layer multiple times.
 
     Args:
@@ -187,5 +188,6 @@ def crop(layer: BasicLayer, rect: tuple[int, int, int, int]) -> Composition:
     x, y, w, h = rect
     duration = layer.duration
     composition = Composition(size=(w, h), duration=duration)
-    composition.add_layer(layer, position=(x + w / 2, y + h / 2))
+    composition.add_layer(
+        layer, position=(-x, -y), origin_point=Direction.TOP_LEFT)
     return composition
