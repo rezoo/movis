@@ -220,7 +220,10 @@ def transform_to_1dscalar(x: float | Sequence[float] | np.ndarray) -> float:
     elif isinstance(x, np.ndarray) and x.shape == ():
         return float(x)
     else:
-        return float(x[0])
+        if 0 < len(x):
+            return float(x[0])
+        else:
+            raise ValueError(f"Invalid value: {x}")
 
 
 def transform_to_2dvector(
