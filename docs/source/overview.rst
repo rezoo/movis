@@ -3,19 +3,8 @@ Overview
 
 Movis is an engine written in Python, purposed for video production tasks.
 This library allows users to generate various types of videos,
-including but not limited to presentation videos, explainer videos,
-training videos, and game commentary videos, through Python.
-
-Library without GUI for automation
-----------------------------------
-
-Contrary to many existing video production software solutions,
-Movis does not offer a Graphical User Interface (GUI).
-This may be perceived as a limitation for users new to video editing,
-but it serves as an advantage for automation.
-Specifically, engineers can
-*integrate their own ML models to execute tasks* such as
-facial image anonymization or automatic summarization of videos.
+including but not limited to presentation videos, motion graphics,
+shader art coding, and game commentary videos, through Python.
 
 Creating Video with Compositions
 --------------------------------
@@ -78,16 +67,15 @@ Of course, movis also supports simple video processing such as video merging and
 Implementation of custom layers, effects, and animations
 ---------------------------------------------------------------
 
-Movis is engineered to facilitate the straightforward implementation of user-defined layers,
-thereby enabling the seamless integration of unique visual effects into video projects.
-This design obviates the necessity for users to possess
-intricate knowledge of the library or to become proficient
-in advanced programming languages exemplified by C++.
-Thus, users may focus their attention predominantly on
-their creative concepts.
-In instances where accelerated computational performance is requisite,
-one may employ separate, specialized libraries such as
-Jax or PyTorch to execute computations at an elevated speed via a GPU.
+Movis is designed to make it easy for users to implement custom layers and effects.
+This means that engineers can easily integrate their preferred visual effects and animations using Python.
+
+For example, let's say you want to create a demo video using your own machine learning model for tasks
+like anonymizing face images or segmenting videos.
+With Movis, you can easily do this without the need for more complex languages like C++,
+by directly using popular libraries such as `PyTorch <https://pytorch.org/>`_ or `Jax <https://github.com/google/jax>`_.
+Additionally, for videos that make use of GPGPU like `shader art <https://www.shadertoy.com/>`_,
+you can implement these intuitively through Python libraries like `Jax <https://github.com/google/jax>`_ or `cupy <https://cupy.dev/>`_.
 
 For example, to implement a user-defined layer, you only need to create a function that, given a time,
 returns an ``np.ndarray`` with a shape of ``(H, W, 4)`` and dtype of ``numpy.uint8`` in RGBA order, or returns ``None``.
@@ -181,8 +169,8 @@ movis provides methods to handle such situations as well.
 Fast Prototyping on Jupyter Notebook
 ---------------------------------------------------------------
 
-Jupyter notebooks are commonly used for data analysis that requires a lot of trial and error using Python.
-Various methods for Jupyter notebooks are also included in movis to speed up the video production process.
+`Jupyter notebooks <https://jupyter.org/>`_ are commonly used for data analysis that requires a lot of trial and error using Python.
+Some methods for Jupyter notebooks are also included in movis to speed up the video production process.
 
 For example, ``composition.render_and_play()`` is often used to
 preview a section of a video within a Jupyter notebook.

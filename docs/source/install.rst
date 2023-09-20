@@ -11,7 +11,7 @@ If you want to install the latest development version, you can install it from t
 
 .. code-block:: bash
 
-    pip install git+https://github.pfidev.jp/msaito/movis.git
+    pip install git+https://github.com/rezoo/movis.git
 
 
 Movis relies on several relatively large packages.
@@ -24,7 +24,7 @@ proceed with the following troubleshooting steps.
 librosa
 -------
 
-librosa is a library for audio analysis.
+`librosa <https://librosa.org/>`_ is a library for audio analysis.
 You can usually install it via pip. Alternatively, you can use conda with the following command:
 
 .. code-block:: bash
@@ -36,7 +36,8 @@ If the installation doesn't work, refer to `librosa installation documentation <
 OpenCV
 -------
 
-OpenCV is used for layer geometric transformations and filter processing like blurring.
+`OpenCV <https://opencv.org/>`_ is used for layer geometric transformations
+and filter processing like blurring.
 While building from source can maximize performance,
 installing the prebuilt ``opencv-python`` package via pip is usually more convenient.
 It is also available from conda-forge:
@@ -47,26 +48,27 @@ It is also available from conda-forge:
 
 .. note::
 
-    Although installing OpenCV from conda-forge or pip usually installs the CPU-only version,
+    Although installing OpenCV from ``conda-forge`` or ``pip`` usually installs the CPU-only version,
     movis currently does not utilize GPU acceleration.
 
 PySide6
 -------
 
-PySide6 is used for high-quality text and rectangle rendering.
+`PySide6 <https://wiki.qt.io/Qt_for_Python>`_ is used for high-quality text and rectangle rendering.
 In the author's experience, installing via pip usually works without issues, however,
 if it fails, consider building from source, as described on `PySide6's PyPI page <https://pypi.org/project/PySide6/>`_.
 
 .. note::
 
-    Be aware that PySide6 is an LGPL library.
+    Be aware that ``PySide6`` is an LGPL library.
     If you consider distributing Movis as a single binary,
     you'll need to comply with the LGPL, which requires source code disclosure.
 
 imageio / imageio-ffmpeg
 ------------------------
 
-imageio and imageio-ffmpeg are used for reading and writing videos.
+`imageio <https://github.com/imageio/imageio>`_ and
+`imageio-ffmpeg <https://github.com/imageio/imageio-ffmpeg>`_ are used for reading and writing videos.
 The author has not experienced any installation failures in their environment, however,
 the installation might fail in special environments.
 For more details, visit `imageio-ffmpeg's GitHub page <https://github.com/imageio/imageio-ffmpeg>`_.
