@@ -101,7 +101,7 @@ import movis as mv
 
 size = (640, 480)
 
-def get_radial_gradient_image(time: float) -> np.ndarray:
+def get_radial_gradient_image(time: float) -> np.ndarray | None:
     if time < 0.:
         return None
     center = np.array([size[1] // 2, size[0] // 2])
@@ -148,7 +148,7 @@ import cv2
 import movis as mv
 import numpy as np
 
-def apply_gaussian_blur(prev_image: np.ndarray, time: float) -> np.ndarray | None:
+def apply_gaussian_blur(prev_image: np.ndarray, time: float) -> np.ndarray:
     return cv2.GaussianBlur(prev_image, (7, 7), -1)
 
 scene = mv.layer.Composition(size=(1920, 1080), duration=5.0)
