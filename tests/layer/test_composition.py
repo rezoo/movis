@@ -1,5 +1,6 @@
 import numpy as np
 
+import pytest
 import movis as mv
 from movis.layer import Composition
 
@@ -139,7 +140,9 @@ def test_composition_pop_layer():
     item2 = scene.pop_layer('layer')
     assert item1 is item2
     assert len(scene) == 0
-    # なんか存在しないとエラー出すやつを追加
+
+    with pytest.raises(KeyError):
+        scene.pop_layer('layer')
 
 
 def test_composition_del():
@@ -151,6 +154,9 @@ def test_composition_del():
     del scene['layer']
     assert len(scene) == 0
 
+    with pytest.raises(KeyError):
+        del scene['layer']
+
 
 def test_composition_clear():
     scene = Composition(size=(640, 480), duration=1.0)
@@ -160,6 +166,9 @@ def test_composition_clear():
     assert len(scene) == 1
     scene.clear()
     assert len(scene) == 0
+
+    with pytest.raises(KeyError):
+        del scene['layer']
 
 
 def test_composition_get_key():
@@ -175,6 +184,8 @@ def test_composition_get_key():
     key4 = scene.get_key(0.75)
     assert key2 != key3
     assert key3 == key4
+    key5 = scene.get_key(1.0)
+    assert key5 is None
 
 
 def test_composition_preview():

@@ -178,8 +178,10 @@ class Composition:
     def __delitem__(self, key: str) -> None:
         self.pop_layer(key)
 
-    def get_key(self, time: float) -> tuple[Hashable, ...]:
+    def get_key(self, time: float) -> tuple[Hashable, ...] | None:
         """Returns a tuple of hashable keys representing the state for each layer at the given time."""
+        if time < 0.0 or self.duration <= time:
+            return None
         layer_keys: list[Hashable] = [CacheType.COMPOSITION]
         for layer_item in self._layers:
             layer_time = time - layer_item.offset
@@ -323,6 +325,7 @@ class Composition:
             raise KeyError(f"Layer with name {name} does not exist")
         index = next(i for i in range(len(self._layers)) if self._layers[i].name == name)
         layer_item = self._layers.pop(index)
+        self._name_to_layer.pop(name)
         self._cache.clear()
         return layer_item
 
