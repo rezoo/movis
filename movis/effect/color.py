@@ -49,7 +49,7 @@ class HSLShift(AttributesMixin):
     """
 
     def __init__(self, hue: float = 0.0, saturation: float = 0.0, luminance: float = 0.0):
-        self.hue = Attribute(hue, AttributeType.SCALAR, range=(-180., 180.))
+        self.hue = Attribute(hue, AttributeType.SCALAR)
         self.saturation = Attribute(saturation, AttributeType.SCALAR, range=(-1., 1.))
         self.luminance = Attribute(luminance, AttributeType.SCALAR, range=(-1., 1.))
 
@@ -58,10 +58,10 @@ class HSLShift(AttributesMixin):
         assert prev_image.shape[2] == 4, f'prev_image must be RGBA image, but {prev_image.shape}'
         hsv_image = cv2.cvtColor(prev_image[:, :, :3], cv2.COLOR_RGB2HSV).astype(np.float32)
         h, s, v = hsv_image[:, :, 0], hsv_image[:, :, 1], hsv_image[:, :, 2]
-        dh = self.hue(time).astype(np.float32)
-        ds = self.saturation(time).astype(np.float32)
-        dl = self.luminance(time).astype(np.float32)
-        h = np.round((h + dh * (127.5 / 180)) % 255).astype(np.uint8)
+        dh = np.float32(self.hue(time))
+        ds = np.float32(self.saturation(time))
+        dl = np.float32(self.luminance(time))
+        h = np.round((h + dh / 2) % 180).astype(np.uint8)
         s = np.clip(np.round(s + ds * 255), 0, 255).astype(np.uint8)
         v = np.clip(np.round(v + dl * 255), 0, 255).astype(np.uint8)
         new_hsv_image = cv2.cvtColor(np.stack([h, s, v], axis=2), cv2.COLOR_HSV2RGB)
