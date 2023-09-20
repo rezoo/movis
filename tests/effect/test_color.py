@@ -24,9 +24,10 @@ def test_hsl_shift():
     scene.add_layer(image_layer, name='layer')
     assert np.all(scene(0.0) == image)
 
-    hsl_shift = mv.effect.HSLShift(hue=360.0, saturation=0.0, luminance=0.0)
-    scene['layer'].add_effect(hsl_shift)
-
+    scene['layer'].add_effect(mv.effect.HSLShift(hue=360.0, saturation=0.0, luminance=0.0))
     shifted_image = scene(0.0)
-    print(shifted_image[0, 0, :])
     assert np.all(shifted_image[0, 0, :] == [0, 0, 255, 255])
+
+    scene['layer'].add_effect(mv.effect.HSLShift(hue=180.0, saturation=0.0, luminance=0.0))
+    shifted_image = scene(0.0)
+    assert np.all(shifted_image[0, 0, :] == [255, 255, 0, 255])
