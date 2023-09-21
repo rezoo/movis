@@ -15,8 +15,5 @@ jobs:
       contents: read
       id-token: write
     steps:
-    - uses: actions/checkout@v3
     - id: deployment
       uses: sphinx-notes/pages@v3
-      with:
-        checkout: false
