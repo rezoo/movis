@@ -12,6 +12,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       pages: write
+      contents: read
       id-token: write
     steps:
     - uses: actions/checkout@v3
