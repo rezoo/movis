@@ -18,6 +18,8 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx_copybutton",
     "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
 ]
 
 templates_path = ['_templates']
