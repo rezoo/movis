@@ -12,7 +12,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       pages: write
-      contents: read
+      contents: write
       id-token: write
     steps:
     - id: deployment
