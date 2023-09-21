@@ -6,13 +6,39 @@ on:
 
 jobs:
   pages:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-    - id: deployment
-      uses: sphinx-notes/pages@v3
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
       with:
-        publish: false
-    - uses: peaceiris/actions-gh-pages@v3
+        python-version: 3.10
+    - name: Setup FFmpeg
+      uses: FedericoCarboni/setup-ffmpeg@v2
+    - name: Install packages
+      run: |
+        sudo apt-get install -y libgl1-mesa-dev libglib2.0-0
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install flake8 pytest mypy
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        python -m pip install -r docs/requirements.txt
+    - name: Install repository
+      run: |
+        python -m pip install -e .
+    - name: Build HTML
+      run: |
+        cd docs
+        make html
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: html-docs
+        path: docs/build/html/
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{ steps.deployment.outputs.artifact }}
+        publish_dir: docs/build/html
