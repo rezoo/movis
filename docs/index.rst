@@ -12,7 +12,6 @@ Movis: Video Editing as a Code
 
    overview
    install
-   reference/index
 
 
 Indices and tables
