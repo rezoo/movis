@@ -8,6 +8,12 @@ from pathlib import Path
 
 import numpy as np
 
+try:
+    import onnxruntime
+    onnxruntime_available = True
+except ImportError:
+    onnxruntime_available = False
+
 
 class RobustVideoMatting:
     """Extract the foreground using the RobustVideoMatting [Li2021].
@@ -41,7 +47,8 @@ class RobustVideoMatting:
     def __init__(
             self, onnx_file: str | PathLike | None = None, downsample_ratio: float = 0.25,
             recurrent_state: bool = True):
-        import onnxruntime
+        if not onnxruntime_available:
+            raise ImportError("onnxruntime is not installed")
         self._downsample_ratio = np.array([downsample_ratio], dtype=np.float32)
         self._onnx_file = Path(onnx_file) if onnx_file is not None else None
         self._session: onnxruntime.InferenceSession | None = None
@@ -61,7 +68,8 @@ class RobustVideoMatting:
             return -1.0
 
     def __call__(self, prev_frame: np.ndarray, time: float) -> np.ndarray:
-        import onnxruntime
+        if not onnxruntime_available:
+            raise ImportError("onnxruntime is not installed")
         if self._session is None:
             if self._onnx_file is None:
                 self._onnx_file = _download_and_cache(self.default_model_url, self.default_md5_digest)

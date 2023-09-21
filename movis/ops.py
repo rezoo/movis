@@ -4,9 +4,9 @@ from typing import Sequence
 
 import numpy as np
 
+from movis.enum import Direction
 from movis.layer.composition import Composition
 from movis.layer.protocol import BasicLayer
-from movis.enum import Direction
 
 
 def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None = None) -> Composition:
