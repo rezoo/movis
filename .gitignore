@@ -9,10 +9,10 @@
 /.vscode
 .DS_Store
 /proj
-/docs/source/reference/generated
-/docs/source/reference/contrib/generated
-/docs/source/reference/layers/generated
-/docs/source/reference/effects/generated
+/docs/reference/generated
+/docs/reference/contrib/generated
+/docs/reference/layers/generated
+/docs/reference/effects/generated
 
 
 # Byte-compiled / optimized / DLL files

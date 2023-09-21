@@ -1,6 +1,6 @@
 .. module:: movis
 
-.. image:: ../../images/movis_logo.png
+.. image:: ../images/movis_logo.png
 
 Movis: Video Editing as a Code
 =================================

@@ -77,7 +77,7 @@ by directly using popular libraries such as `PyTorch <https://pytorch.org/>`_ or
 Additionally, for videos that make use of GPGPU like `shader art <https://www.shadertoy.com/>`_,
 you can implement these intuitively through Python libraries like `Jax <https://github.com/google/jax>`_ or `cupy <https://cupy.dev/>`_.
 
-For example, to implement a user-defined layer, you only need to create a function that, given a time,
+Specifically, to implement a user-defined layer, you only need to create a function that, given a time,
 returns an ``np.ndarray`` with a shape of ``(H, W, 4)`` and dtype of ``numpy.uint8`` in RGBA order, or returns ``None``.
 
 .. code-block:: python
