@@ -756,8 +756,11 @@ document.write(`
         <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;libx264&quot;</span><span class="p">,</span>
         <span class="n">pixelformat</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;yuv420p&quot;</span><span class="p">,</span>
+        <span class="n">input_params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">output_params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">fps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30.0</span><span class="p">,</span>
         <span class="n">audio</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">audio_codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes the composition&#39;s contents to a video file.</span>
 
@@ -773,10 +776,17 @@ document.write(`
 <span class="sd">                The codec used to encode the video. Default is ``libx264``.</span>
 <span class="sd">            pixelformat:</span>
 <span class="sd">                The pixel format of the video. Default is ``yuv420p``.</span>
+<span class="sd">            input_params:</span>
+<span class="sd">                A list of parameters to be passed to the ffmpeg input.</span>
+<span class="sd">            output_params:</span>
+<span class="sd">                A list of parameters to be passed to the ffmpeg output.</span>
+<span class="sd">                For example, ``[&quot;-preset&quot;, &quot;medium&quot;]`` or ``[&quot;-crf&quot;, &quot;18&quot;]``.</span>
 <span class="sd">            fps:</span>
 <span class="sd">                The frame rate of the video. Default is ``30.0``.</span>
 <span class="sd">            audio:</span>
 <span class="sd">                A flag specifying whether to include audio in the video.</span>
+<span class="sd">            audio_codec:</span>
+<span class="sd">                The codec used to encode the audio. If not specified, the default codec is used.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">end_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
@@ -795,7 +805,8 @@ document.write(`
                 <span class="n">writer</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span>
                     <span class="n">uri</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">dst_file</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">,</span> <span class="n">pixelformat</span><span class="o">=</span><span class="n">pixelformat</span><span class="p">,</span>
                     <span class="n">macro_block_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ffmpeg_log_level</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
-                    <span class="n">audio_path</span><span class="o">=</span><span class="n">audio_path</span><span class="p">)</span>
+                    <span class="n">input_params</span><span class="o">=</span><span class="n">input_params</span><span class="p">,</span> <span class="n">output_params</span><span class="o">=</span><span class="n">output_params</span><span class="p">,</span>
+                    <span class="n">audio_path</span><span class="o">=</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">audio_codec</span><span class="o">=</span><span class="n">audio_codec</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)):</span>
                     <span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
                     <span class="n">writer</span><span class="o">.</span><span class="n">append_data</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
@@ -803,6 +814,7 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span>
                 <span class="n">uri</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">dst_file</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">,</span> <span class="n">pixelformat</span><span class="o">=</span><span class="n">pixelformat</span><span class="p">,</span>
+                <span class="n">input_params</span><span class="o">=</span><span class="n">input_params</span><span class="p">,</span> <span class="n">output_params</span><span class="o">=</span><span class="n">output_params</span><span class="p">,</span>
                 <span class="n">macro_block_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ffmpeg_log_level</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)):</span>
                 <span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
