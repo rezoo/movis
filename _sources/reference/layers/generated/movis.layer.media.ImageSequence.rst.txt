@@ -1,0 +1,31 @@
+﻿movis.layer.media.ImageSequence
+===============================
+
+.. currentmodule:: movis.layer.media
+
+.. autoclass:: ImageSequence
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: from_dir
+   .. automethod:: from_files
+   .. automethod:: get_key
+   .. automethod:: get_state
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ImageSequence.duration
+   
+   

@@ -1,0 +1,6 @@
+﻿movis.imgproc.alpha\_composite
+==============================
+
+.. currentmodule:: movis.imgproc
+
+.. autofunction:: alpha_composite

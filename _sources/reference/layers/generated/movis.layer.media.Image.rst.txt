@@ -1,0 +1,31 @@
+﻿movis.layer.media.Image
+=======================
+
+.. currentmodule:: movis.layer.media
+
+.. autoclass:: Image
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: from_color
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Image.duration
+      ~Image.image
+      ~Image.size
+   
+   

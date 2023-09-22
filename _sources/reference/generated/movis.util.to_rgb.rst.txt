@@ -1,0 +1,6 @@
+﻿movis.util.to\_rgb
+==================
+
+.. currentmodule:: movis.util
+
+.. autofunction:: to_rgb

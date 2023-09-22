@@ -1,0 +1,29 @@
+﻿movis.transform.Transform
+=========================
+
+.. currentmodule:: movis.transform
+
+.. autoclass:: Transform
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: from_positions
+   .. automethod:: get_current_value
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Transform.attributes
+   
+   

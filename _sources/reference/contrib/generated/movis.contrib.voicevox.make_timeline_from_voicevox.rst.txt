@@ -1,0 +1,6 @@
+﻿movis.contrib.voicevox.make\_timeline\_from\_voicevox
+=====================================================
+
+.. currentmodule:: movis.contrib.voicevox
+
+.. autofunction:: make_timeline_from_voicevox

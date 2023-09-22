@@ -1,0 +1,28 @@
+﻿movis.layer.layer\_ops.LuminanceMatte
+=====================================
+
+.. currentmodule:: movis.layer.layer_ops
+
+.. autoclass:: LuminanceMatte
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LuminanceMatte.duration
+   
+   

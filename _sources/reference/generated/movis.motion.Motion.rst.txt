@@ -1,0 +1,24 @@
+﻿movis.motion.Motion
+===================
+
+.. currentmodule:: movis.motion
+
+.. autoclass:: Motion
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: append
+   .. automethod:: clear
+   .. automethod:: extend
+   
+
+
+
+   
+   
+   

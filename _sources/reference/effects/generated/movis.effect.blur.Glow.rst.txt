@@ -1,0 +1,28 @@
+﻿movis.effect.blur.Glow
+======================
+
+.. currentmodule:: movis.effect.blur
+
+.. autoclass:: Glow
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Glow.attributes
+   
+   

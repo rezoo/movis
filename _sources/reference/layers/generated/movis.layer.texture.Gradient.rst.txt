@@ -1,0 +1,28 @@
+﻿movis.layer.texture.Gradient
+============================
+
+.. currentmodule:: movis.layer.texture
+
+.. autoclass:: Gradient
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Gradient.attributes
+   
+   

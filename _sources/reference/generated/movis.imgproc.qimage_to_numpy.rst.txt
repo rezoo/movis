@@ -1,0 +1,6 @@
+﻿movis.imgproc.qimage\_to\_numpy
+===============================
+
+.. currentmodule:: movis.imgproc
+
+.. autofunction:: qimage_to_numpy

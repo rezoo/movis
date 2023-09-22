@@ -1,0 +1,28 @@
+﻿movis.effect.style.DropShadow
+=============================
+
+.. currentmodule:: movis.effect.style
+
+.. autoclass:: DropShadow
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~DropShadow.attributes
+   
+   

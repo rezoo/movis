@@ -1,0 +1,29 @@
+﻿movis.layer.drawing.Ellipse
+===========================
+
+.. currentmodule:: movis.layer.drawing
+
+.. autoclass:: Ellipse
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Ellipse.attributes
+      ~Ellipse.duration
+   
+   

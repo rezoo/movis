@@ -1,0 +1,6 @@
+﻿movis.ops.crop
+==============
+
+.. currentmodule:: movis.ops
+
+.. autofunction:: crop

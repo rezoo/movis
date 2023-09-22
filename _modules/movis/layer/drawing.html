@@ -1,0 +1,1051 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>movis.layer.drawing &#8212; movis  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=927b94d3fcb96560df09"></script>
+
+    <script src="../../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/movis/layer/drawing';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">movis  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">movis.layer.drawing</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for movis.layer.drawing</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QCoreApplication</span><span class="p">,</span> <span class="n">QPointF</span><span class="p">,</span> <span class="n">QRectF</span><span class="p">,</span> <span class="n">Qt</span>
+<span class="kn">from</span> <span class="nn">PySide6.QtGui</span> <span class="kn">import</span> <span class="p">(</span><span class="n">QBrush</span><span class="p">,</span> <span class="n">QColor</span><span class="p">,</span> <span class="n">QFont</span><span class="p">,</span> <span class="n">QFontDatabase</span><span class="p">,</span> <span class="n">QFontMetrics</span><span class="p">,</span>
+                           <span class="n">QImage</span><span class="p">,</span> <span class="n">QPainter</span><span class="p">,</span> <span class="n">QPainterPath</span><span class="p">,</span> <span class="n">QPen</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="n">QApplication</span>
+
+<span class="kn">from</span> <span class="nn">movis.imgproc</span> <span class="kn">import</span> <span class="n">qimage_to_numpy</span>
+
+<span class="kn">from</span> <span class="nn">..attribute</span> <span class="kn">import</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">AttributesMixin</span><span class="p">,</span> <span class="n">AttributeType</span>
+<span class="kn">from</span> <span class="nn">..enum</span> <span class="kn">import</span> <span class="n">TextAlignment</span>
+<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">to_rgb</span>
+<span class="kn">from</span> <span class="nn">.mixin</span> <span class="kn">import</span> <span class="n">TimelineMixin</span>
+
+
+<div class="viewcode-block" id="FillProperty">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.FillProperty.html#movis.layer.drawing.FillProperty">[docs]</a>
+<span class="k">class</span> <span class="nc">FillProperty</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A property for filling a shape.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        color:</span>
+<span class="sd">            The color of the shape with a tuple of ``(r, g, b)``</span>
+<span class="sd">            or a string representing a color name (`e.g.,` ``&quot;#ff0000&quot; or &quot;red&quot;``).</span>
+<span class="sd">        opacify:</span>
+<span class="sd">            The opacity of the shape in the range of ``[0, 1]``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">opacify</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">opacify</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">opacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opacity</span></div>
+
+
+
+<div class="viewcode-block" id="StrokeProperty">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.StrokeProperty.html#movis.layer.drawing.StrokeProperty">[docs]</a>
+<span class="k">class</span> <span class="nc">StrokeProperty</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A property for stroking a shape.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        color:</span>
+<span class="sd">            The color of the shape with a tuple of ``(r, g, b)``</span>
+<span class="sd">            or a string representing a color name (`e.g.,` ``&quot;#ff0000&quot; or &quot;red&quot;``).</span>
+<span class="sd">        width:</span>
+<span class="sd">            The width of the stroke.</span>
+<span class="sd">        opacity:</span>
+<span class="sd">            The opacity of the shape in the range of ``[0, 1]``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">opacity</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">opacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opacity</span></div>
+
+
+
+<div class="viewcode-block" id="Line">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Line.html#movis.layer.drawing.Line">[docs]</a>
+<span class="k">class</span> <span class="nc">Line</span><span class="p">(</span><span class="n">AttributesMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw a line from ``start`` to ``end``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        size:</span>
+<span class="sd">            The size of the canvas with a tuple of ``(width, height)``.</span>
+<span class="sd">        start:</span>
+<span class="sd">            The start point of the line with a tuple of ``(x, y)``.</span>
+<span class="sd">        end:</span>
+<span class="sd">            The end point of the line with a tuple of ``(x, y)``.</span>
+<span class="sd">        color:</span>
+<span class="sd">            The color of the line with a tuple of ``(r, g, b)``</span>
+<span class="sd">            or a string representing a color name (`e.g.,` ``&quot;#ff0000&quot; or &quot;red&quot;``).</span>
+<span class="sd">        width:</span>
+<span class="sd">            The width of the line.</span>
+<span class="sd">        duration:</span>
+<span class="sd">            The duration for which the line should be displayed.</span>
+
+<span class="sd">    Animateable Attributes:</span>
+<span class="sd">        ``trim_start``</span>
+<span class="sd">            The start point of the line to be drawn in the range of ``[0, 1]``.</span>
+<span class="sd">            The default value is ``0``.</span>
+<span class="sd">        ``trim_end``</span>
+<span class="sd">            The end point of the line to be drawn in the range of ``[0, 1]``.</span>
+<span class="sd">            The default value is ``1``.</span>
+<span class="sd">        ``start`` ``end`` ``color`` ``width``</span>
+<span class="sd">            These attributes can be animated as well.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+        <span class="n">start</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span>
+        <span class="n">end</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">),</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="n">width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span>
+        <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">VECTOR2D</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">VECTOR2D</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">),</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">COLOR</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">255.</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trim_start</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trim_end</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span> <span class="o">=</span> <span class="n">duration</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">trim_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trim_start</span><span class="p">(</span><span class="n">time</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">trim_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trim_end</span><span class="p">(</span><span class="n">time</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="mf">0.</span> <span class="o">&lt;=</span> <span class="n">trim_start</span> <span class="o">&lt;=</span> <span class="n">trim_end</span> <span class="o">&lt;=</span> <span class="mf">1.</span>
+        <span class="n">p_start</span> <span class="o">=</span> <span class="n">p0</span> <span class="o">+</span> <span class="n">trim_start</span> <span class="o">*</span> <span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p0</span><span class="p">)</span>
+        <span class="n">p_end</span> <span class="o">=</span> <span class="n">p0</span> <span class="o">+</span> <span class="n">trim_end</span> <span class="o">*</span> <span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p0</span><span class="p">)</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="n">time</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+
+        <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">QImage</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">setRenderHint</span><span class="p">(</span><span class="n">QPainter</span><span class="o">.</span><span class="n">RenderHint</span><span class="o">.</span><span class="n">Antialiasing</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">(</span><span class="n">time</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="o">*</span><span class="n">p_start</span><span class="p">),</span> <span class="n">QPointF</span><span class="p">(</span><span class="o">*</span><span class="n">p_end</span><span class="p">))</span>
+
+        <span class="n">painter</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">qimage_to_numpy</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Rectangle">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Rectangle.html#movis.layer.drawing.Rectangle">[docs]</a>
+<span class="k">class</span> <span class="nc">Rectangle</span><span class="p">(</span><span class="n">AttributesMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw a rectangle with rounded corners.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        size:</span>
+<span class="sd">            The size of the rectangle with a tuple of ``(width, height)``.</span>
+<span class="sd">        radius:</span>
+<span class="sd">            The radius of the rounded corners. The default value is ``0``.</span>
+<span class="sd">        color:</span>
+<span class="sd">            The color of the rectangle with a tuple of ``(r, g, b)`` or a string (e.g., ``&quot;#ff0000&quot; or &quot;red&quot;``).</span>
+<span class="sd">            If ``None``, this layer uses the ``contents`` argument to draw the rectangle.</span>
+<span class="sd">        contents:</span>
+<span class="sd">            A sequence of ``FillProperty`` or ``StrokeProperty`` objects,</span>
+<span class="sd">            which will be drawn on top of the rectangle.</span>
+<span class="sd">            If an empty sequence is given, the rectangle will be filled with the ``color`` argument.</span>
+<span class="sd">        duration:</span>
+<span class="sd">            The duration for which the rectangle should be displayed.</span>
+
+<span class="sd">    Animateable Attributes:</span>
+<span class="sd">        ``size``</span>
+<span class="sd">        ``radius``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">),</span>
+        <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">contents</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FillProperty</span> <span class="o">|</span> <span class="n">StrokeProperty</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">VECTOR2D</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">contents</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="p">(</span><span class="n">FillProperty</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">)),)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span> <span class="o">=</span> <span class="n">duration</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">time</span><span class="p">)]</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+
+        <span class="n">eps</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="n">max_stroke</span> <span class="o">=</span> <span class="n">_get_max_stroke</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">QImage</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+        <span class="n">max_color</span> <span class="o">=</span> <span class="n">_get_max_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">max_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="o">*</span><span class="n">max_color</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">setRenderHint</span><span class="p">(</span><span class="n">QPainter</span><span class="o">.</span><span class="n">RenderHint</span><span class="o">.</span><span class="n">Antialiasing</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">QRectF</span><span class="p">(</span><span class="n">eps</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">eps</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">FillProperty</span><span class="p">):</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">color</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">opacity</span><span class="p">)</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setBrush</span><span class="p">(</span><span class="n">QBrush</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">)))</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">drawRoundedRect</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">SizeMode</span><span class="o">.</span><span class="n">AbsoluteSize</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">StrokeProperty</span><span class="p">):</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">color</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">opacity</span><span class="p">)</span>
+                <span class="n">painter_path</span> <span class="o">=</span> <span class="n">QPainterPath</span><span class="p">()</span>
+                <span class="n">painter_path</span><span class="o">.</span><span class="n">addRoundedRect</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">SizeMode</span><span class="o">.</span><span class="n">AbsoluteSize</span><span class="p">)</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setBrush</span><span class="p">(</span><span class="n">QBrush</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">),</span> <span class="n">c</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">drawPath</span><span class="p">(</span><span class="n">painter_path</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid content type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">qimage_to_numpy</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Ellipse">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Ellipse.html#movis.layer.drawing.Ellipse">[docs]</a>
+<span class="k">class</span> <span class="nc">Ellipse</span><span class="p">(</span><span class="n">AttributesMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw an ellipse.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        size:</span>
+<span class="sd">            The size of the ellipse with a tuple of ``(width, height)``.</span>
+<span class="sd">        color:</span>
+<span class="sd">            The color of the ellipse with a tuple of ``(r, g, b)``,</span>
+<span class="sd">            or a string representing a color name (`e.g.,` ``&quot;#ff0000&quot; or &quot;red&quot;``).</span>
+<span class="sd">            If ``None``, this layer uses the ``contents`` argument to draw the ellipse.</span>
+<span class="sd">        contents:</span>
+<span class="sd">            A sequence of ``FillProperty`` or ``StrokeProperty`` objects,</span>
+<span class="sd">            which will be drawn on top of the ellipse.</span>
+<span class="sd">            If an empty sequence is given, the ellipse will be filled with the ``color`` argument.</span>
+<span class="sd">        duration:</span>
+<span class="sd">            The duration for which the ellipse should be displayed.</span>
+
+<span class="sd">    Animateable Attributes:</span>
+<span class="sd">        ``size``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">),</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">contents</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FillProperty</span> <span class="o">|</span> <span class="n">StrokeProperty</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">VECTOR2D</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">contents</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="p">(</span><span class="n">FillProperty</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">)),)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span> <span class="o">=</span> <span class="n">duration</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">time</span><span class="p">)]</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">eps</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="n">max_stroke</span> <span class="o">=</span> <span class="n">_get_max_stroke</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">QImage</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+        <span class="n">max_color</span> <span class="o">=</span> <span class="n">_get_max_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">max_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="o">*</span><span class="n">max_color</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">setRenderHint</span><span class="p">(</span><span class="n">QPainter</span><span class="o">.</span><span class="n">RenderHint</span><span class="o">.</span><span class="n">Antialiasing</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">QRectF</span><span class="p">(</span><span class="n">eps</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">eps</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">FillProperty</span><span class="p">):</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">color</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">opacity</span><span class="p">)</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setBrush</span><span class="p">(</span><span class="n">QBrush</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">)))</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">drawEllipse</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">StrokeProperty</span><span class="p">):</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">color</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">opacity</span><span class="p">)</span>
+                <span class="n">painter_path</span> <span class="o">=</span> <span class="n">QPainterPath</span><span class="p">()</span>
+                <span class="n">painter_path</span><span class="o">.</span><span class="n">addEllipse</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">),</span> <span class="n">c</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setBrush</span><span class="p">(</span><span class="n">QBrush</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">drawPath</span><span class="p">(</span><span class="n">painter_path</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid content type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">qimage_to_numpy</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Text">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Text.html#movis.layer.drawing.Text">[docs]</a>
+<span class="k">class</span> <span class="nc">Text</span><span class="p">(</span><span class="n">AttributesMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw a text.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text:</span>
+<span class="sd">            the text to be drawn. It can be a string or a callable object.</span>
+<span class="sd">            If it is a callable object, it must accept a float value representing the time,</span>
+<span class="sd">            and return a string.</span>
+<span class="sd">        font_size:</span>
+<span class="sd">            the font size of the text.</span>
+<span class="sd">        font_family:</span>
+<span class="sd">            the font family of the text. It must be one of the available fonts (`e.g.,` ``&quot;Helvetica&quot;``).</span>
+<span class="sd">            To see the list of available fonts, run ``movis.layer.Text.available_fonts()``.</span>
+<span class="sd">        font_style:</span>
+<span class="sd">            the font style of the text. It must be one of the available styles of the given font family</span>
+<span class="sd">            (`e.g.,` ``&quot;Bold&quot;``). To see the list of available styles,</span>
+<span class="sd">            un ``movis.layer.Text.available_styles(font_name)``.</span>
+<span class="sd">        color:</span>
+<span class="sd">            the color of the text with a tuple of ``(r, g, b)``,</span>
+<span class="sd">            or a string representing a color name (`e.g.,` ``&quot;#ff0000&quot; or &quot;red&quot;``).</span>
+<span class="sd">            If ``None``, this layer uses the ``contents`` argument to draw the text.</span>
+<span class="sd">        contents:</span>
+<span class="sd">            A sequence of ``FillProperty`` or ``StrokeProperty`` objects,</span>
+<span class="sd">            which will be drawn on top of the text.</span>
+<span class="sd">            If an empty sequence is given, the text will be filled with the ``color`` argument.</span>
+<span class="sd">        line_spacing:</span>
+<span class="sd">            the line spacing of the text. If ``None``, the line spacing is automatically determined.</span>
+<span class="sd">        text_alignment:</span>
+<span class="sd">            the text alignment. If string is given, it must be one of ``&quot;left&quot;``, ``&quot;center&quot;``, or ``&quot;right&quot;``.</span>
+<span class="sd">            It also accepts a ``TextAlignment`` enum.</span>
+<span class="sd">        duration:</span>
+<span class="sd">            the duration for which the text should be displayed.</span>
+
+<span class="sd">        Animateable Attributes:</span>
+<span class="sd">            ``font_size``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Text.available_fonts">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Text.html#movis.layer.drawing.Text.available_fonts">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">available_fonts</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the list of available fonts.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">QFontDatabase</span><span class="o">.</span><span class="n">families</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Text.available_styles">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Text.html#movis.layer.drawing.Text.available_styles">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">available_styles</span><span class="p">(</span><span class="n">font_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the list of available styles of the given font family.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">QFontDatabase</span><span class="o">.</span><span class="n">styles</span><span class="p">(</span><span class="n">font_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Text.from_timeline">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Text.html#movis.layer.drawing.Text.from_timeline">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_timeline</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">start_times</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">end_times</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">texts</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Text&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a text layer from a timeline.</span>
+
+<span class="sd">        This method is useful when you want to display different texts at different times</span>
+<span class="sd">        (e.g., displaying a subtitle). Note that other arguments are the same as the constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_times:</span>
+<span class="sd">                A sequence of start times of the texts.</span>
+<span class="sd">            end_times:</span>
+<span class="sd">                A sequence of end times of the texts.</span>
+<span class="sd">            texts:</span>
+<span class="sd">                A sequence of texts to be displayed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new `Text` object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">start_times</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+
+        <span class="k">class</span> <span class="nc">TextWithTime</span><span class="p">(</span><span class="n">TimelineMixin</span><span class="p">):</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">start_times</span><span class="p">,</span> <span class="n">end_times</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">texts</span> <span class="o">=</span> <span class="n">texts</span>
+
+            <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">texts</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">end_times</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">TextWithTime</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">font_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">font_family</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Sans Serif&#39;</span><span class="p">,</span>
+        <span class="n">font_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">contents</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FillProperty</span> <span class="o">|</span> <span class="n">StrokeProperty</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">line_spacing</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">text_alignment</span><span class="p">:</span> <span class="n">TextAlignment</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">TextAlignment</span><span class="o">.</span><span class="n">CENTER</span><span class="p">,</span>
+        <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e6</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_font_family</span> <span class="o">=</span> <span class="n">font_family</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_font_style</span> <span class="o">=</span> <span class="n">font_style</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">font_size</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AttributeType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_contents</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_contents</span> <span class="o">=</span> <span class="p">(</span><span class="n">FillProperty</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">)),)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line_spacing</span> <span class="o">=</span> <span class="n">line_spacing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text_alignment</span> <span class="o">=</span> <span class="n">TextAlignment</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">text_alignment</span><span class="p">)</span> \
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text_alignment</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">text_alignment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span> <span class="o">=</span> <span class="n">duration</span>
+        <span class="k">if</span> <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">font_family</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_font_family</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">font_style</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_font_style</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">contents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">FillProperty</span> <span class="o">|</span> <span class="n">StrokeProperty</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contents</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">line_spacing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_line_spacing</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">text_alignment</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextAlignment</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_alignment</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span>
+
+<div class="viewcode-block" id="Text.get_text">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Text.html#movis.layer.drawing.Text.get_text">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the text to be drawn at the given time.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
+        <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid text type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_get_qfont</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFont</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">font_style</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font_family</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font_size</span><span class="p">(</span><span class="n">time</span><span class="p">))))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QFontDatabase</span><span class="o">.</span><span class="n">font</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">font_family</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">font_style</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font_size</span><span class="p">(</span><span class="n">time</span><span class="p">))))</span>
+
+<div class="viewcode-block" id="Text.get_size">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Text.html#movis.layer.drawing.Text.get_size">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the size of the text at the given time.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            The returned size is the size of the text drawn on the canvas,</span>
+<span class="sd">            and it may be different from the size of the text itself.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            time:</span>
+<span class="sd">                The time at which the size of the text is measured.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qfont</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_qfont</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="n">QFontMetrics</span><span class="p">(</span><span class="n">qfont</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+            <span class="n">rect</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">boundingRect</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="o">+</span> <span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">())</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_spacing</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">H</span> <span class="o">+=</span> <span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">H</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_spacing</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Text.get_key">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.drawing.Text.html#movis.layer.drawing.Text.get_key">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the state of the layer at the given time.&quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">time</span><span class="p">),</span> <span class="n">key</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># XXX: The returned rectangle and the area of the text</span>
+        <span class="c1"># actually drawn seem to be different. We will keep</span>
+        <span class="c1"># more margin in the interim</span>
+        <span class="n">margin</span> <span class="o">=</span> <span class="mf">40.</span>
+        <span class="n">max_stroke</span> <span class="o">=</span> <span class="n">_get_max_stroke</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">margin</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">max_stroke</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">margin</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">QImage</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+        <span class="n">max_color</span> <span class="o">=</span> <span class="n">_get_max_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">max_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="o">*</span><span class="n">max_color</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="n">painter</span> <span class="o">=</span> <span class="n">QPainter</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">setRenderHint</span><span class="p">(</span><span class="n">QPainter</span><span class="o">.</span><span class="n">RenderHint</span><span class="o">.</span><span class="n">Antialiasing</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">qfont</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_qfont</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="n">QFontMetrics</span><span class="p">(</span><span class="n">qfont</span><span class="p">)</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="n">qfont</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">FillProperty</span><span class="p">):</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">color</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">opacity</span><span class="p">)</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>
+                <span class="n">cursor_y</span> <span class="o">=</span> <span class="n">margin</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+                    <span class="n">rect</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">boundingRect</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">cursor_y</span> <span class="o">+=</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_spacing</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">cursor_y</span> <span class="o">+=</span> <span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">())</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">cursor_y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_spacing</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_alignment</span> <span class="o">==</span> <span class="n">TextAlignment</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+                        <span class="n">cursor_x</span> <span class="o">=</span> <span class="mf">0.</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_alignment</span> <span class="o">==</span> <span class="n">TextAlignment</span><span class="o">.</span><span class="n">CENTER</span><span class="p">:</span>
+                        <span class="n">cursor_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_alignment</span> <span class="o">==</span> <span class="n">TextAlignment</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+                        <span class="n">cursor_x</span> <span class="o">=</span> <span class="n">w</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid text alignment: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text_alignment</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">painter</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">max_stroke</span> <span class="o">+</span> <span class="n">margin</span> <span class="o">+</span> <span class="n">cursor_x</span><span class="p">,</span> <span class="n">cursor_y</span><span class="p">),</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">StrokeProperty</span><span class="p">):</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">color</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">opacity</span><span class="p">)</span>
+                <span class="n">pen</span> <span class="o">=</span> <span class="n">QPen</span><span class="p">(</span>
+                    <span class="n">QColor</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">),</span> <span class="n">c</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">PenStyle</span><span class="o">.</span><span class="n">SolidLine</span><span class="p">,</span>
+                    <span class="n">Qt</span><span class="o">.</span><span class="n">PenCapStyle</span><span class="o">.</span><span class="n">RoundCap</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">PenJoinStyle</span><span class="o">.</span><span class="n">RoundJoin</span><span class="p">)</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">pen</span><span class="p">)</span>
+                <span class="n">painter_path</span> <span class="o">=</span> <span class="n">QPainterPath</span><span class="p">()</span>
+                <span class="n">cursor_y</span> <span class="o">=</span> <span class="n">margin</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+                    <span class="n">rect</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">boundingRect</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">cursor_y</span> <span class="o">+=</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_spacing</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">cursor_y</span> <span class="o">+=</span> <span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">())</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">cursor_y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_spacing</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_alignment</span> <span class="o">==</span> <span class="n">TextAlignment</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+                        <span class="n">cursor_x</span> <span class="o">=</span> <span class="mf">0.</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_alignment</span> <span class="o">==</span> <span class="n">TextAlignment</span><span class="o">.</span><span class="n">CENTER</span><span class="p">:</span>
+                        <span class="n">cursor_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_alignment</span> <span class="o">==</span> <span class="n">TextAlignment</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+                        <span class="n">cursor_x</span> <span class="o">=</span> <span class="n">w</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="o">-</span> <span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid text alignment: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text_alignment</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">painter_path</span><span class="o">.</span><span class="n">addText</span><span class="p">(</span><span class="n">QPointF</span><span class="p">(</span><span class="n">max_stroke</span> <span class="o">+</span> <span class="n">margin</span> <span class="o">+</span> <span class="n">cursor_x</span><span class="p">,</span> <span class="n">cursor_y</span><span class="p">),</span> <span class="n">qfont</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="n">painter</span><span class="o">.</span><span class="n">drawPath</span><span class="p">(</span><span class="n">painter_path</span><span class="p">)</span>
+        <span class="n">painter</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">qimage_to_numpy</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_clip_image</span><span class="p">(</span><span class="n">array</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_clip_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">image</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span>
+    <span class="n">non_empty_pixels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">image</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">non_empty_row_indices</span><span class="p">,</span> <span class="n">non_empty_col_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">non_empty_pixels</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">non_empty_row_indices</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">non_empty_col_indices</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">image</span>
+    <span class="n">top</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">non_empty_row_indices</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">non_empty_row_indices</span><span class="p">)</span>
+    <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">non_empty_col_indices</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">non_empty_col_indices</span><span class="p">)</span>
+    <span class="n">clipped_image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">top</span><span class="p">:</span> <span class="n">bottom</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">left</span><span class="p">:</span> <span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">clipped_image</span>
+
+
+<span class="k">def</span> <span class="nf">_get_max_stroke</span><span class="p">(</span><span class="n">contents</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FillProperty</span> <span class="o">|</span> <span class="n">StrokeProperty</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">strokes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">width</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contents</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">StrokeProperty</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">strokes</span><span class="p">))</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">strokes</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.</span>
+
+
+<span class="k">def</span> <span class="nf">_get_max_color</span><span class="p">(</span>
+    <span class="n">contents</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FillProperty</span> <span class="o">|</span> <span class="n">StrokeProperty</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">strokes</span> <span class="o">=</span> <span class="p">[(</span><span class="n">c</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">color</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contents</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">StrokeProperty</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">strokes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fills</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">color</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contents</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">FillProperty</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">fills</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">fills</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">strokes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Masaki Saito.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

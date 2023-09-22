@@ -1,0 +1,38 @@
+﻿movis.layer.composition.LayerItem
+=================================
+
+.. currentmodule:: movis.layer.composition
+
+.. autoclass:: LayerItem
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: add_effect
+   .. automethod:: get_key
+   .. automethod:: remove_effect
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LayerItem.anchor_point
+      ~LayerItem.blending_mode
+      ~LayerItem.duration
+      ~LayerItem.effects
+      ~LayerItem.opacity
+      ~LayerItem.origin_point
+      ~LayerItem.position
+      ~LayerItem.rotation
+      ~LayerItem.scale
+   
+   

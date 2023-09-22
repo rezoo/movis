@@ -1,0 +1,6 @@
+﻿movis.ops.concatenate
+=====================
+
+.. currentmodule:: movis.ops
+
+.. autofunction:: concatenate

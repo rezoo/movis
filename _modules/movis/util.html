@@ -1,0 +1,640 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>movis.util &#8212; movis  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=927b94d3fcb96560df09"></script>
+
+    <script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/movis/util';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">movis  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">movis.util</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for movis.util</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span> <span class="k">as</span> <span class="n">SequenceType</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">PathLike</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+
+
+<div class="viewcode-block" id="add_materials_to_video">
+<a class="viewcode-back" href="../../reference/generated/movis.util.add_materials_to_video.html#movis.util.add_materials_to_video">[docs]</a>
+<span class="k">def</span> <span class="nf">add_materials_to_video</span><span class="p">(</span>
+    <span class="n">video_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">,</span>
+    <span class="n">audio_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">,</span>
+    <span class="n">dst_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">,</span>
+    <span class="n">subtitle_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Merges a video file, an audio file, and optionally a subtitle file into a new video file.</span>
+
+<span class="sd">    It uses the ffmpeg library for media processing. The resulting video will have the audio</span>
+<span class="sd">    and optionally the subtitles embedded.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        video_file:</span>
+<span class="sd">            A ``str`` or ``PathLike`` object representing the path to the source video file.</span>
+<span class="sd">        audio_file:</span>
+<span class="sd">            A ``str`` or ``PathLike`` object representing the path to the audio file to be added.</span>
+<span class="sd">        dst_file:</span>
+<span class="sd">            A ``str`` or ``PathLike`` object representing the path to the destination video file.</span>
+<span class="sd">        subtitle_file:</span>
+<span class="sd">            A ``str``, ``PathLike``, or ``None`` representing the path to</span>
+<span class="sd">            the subtitle file to be added. Default is ``None``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">ffmpeg</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;vf&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;ass=</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">subtitle_file</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span> <span class="k">if</span> <span class="n">subtitle_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{</span><span class="s1">&#39;vcodec&#39;</span><span class="p">:</span> <span class="s1">&#39;copy&#39;</span><span class="p">}</span>
+    <span class="n">video_input</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">video_file</span><span class="p">)</span>
+    <span class="n">audio_input</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">audio_file</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">output</span><span class="p">(</span>
+        <span class="n">video_input</span><span class="o">.</span><span class="n">video</span><span class="p">,</span>
+        <span class="n">audio_input</span><span class="o">.</span><span class="n">audio</span><span class="p">,</span>
+        <span class="n">dst_file</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="n">acodec</span><span class="o">=</span><span class="s2">&quot;aac&quot;</span><span class="p">,</span>
+        <span class="n">ab</span><span class="o">=</span><span class="s2">&quot;128k&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">overwrite_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_csscolor_to_rgb</span><span class="p">(</span><span class="n">css_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="n">color_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;aliceblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#F0F8FF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;antiquewhite&#39;</span><span class="p">:</span> <span class="s1">&#39;#FAEBD7&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;aqua&#39;</span><span class="p">:</span> <span class="s1">&#39;#00FFFF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;aquamarine&#39;</span><span class="p">:</span> <span class="s1">&#39;#7FFFD4&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;azure&#39;</span><span class="p">:</span> <span class="s1">&#39;#F0FFFF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;beige&#39;</span><span class="p">:</span> <span class="s1">&#39;#F5F5DC&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;bisque&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFE4C4x&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;black&#39;</span><span class="p">:</span> <span class="s1">&#39;#000000&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;blanchedalmond&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFEBCD&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;blue&#39;</span><span class="p">:</span> <span class="s1">&#39;#0000FF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;blueviolet&#39;</span><span class="p">:</span> <span class="s1">&#39;#8A2BE2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;brown&#39;</span><span class="p">:</span> <span class="s1">&#39;#A52A2A&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;burlywood&#39;</span><span class="p">:</span> <span class="s1">&#39;#DEB887&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;cadetblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#5F9EA0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;chartreuse&#39;</span><span class="p">:</span> <span class="s1">&#39;#7FFF00&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;chocolate&#39;</span><span class="p">:</span> <span class="s1">&#39;#D2691E&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;coral&#39;</span><span class="p">:</span> <span class="s1">&#39;#FF7F50&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;cornflowerblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#6495ED&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;cornsilk&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFF8DC&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;crimson&#39;</span><span class="p">:</span> <span class="s1">&#39;#DC143C&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;cyan&#39;</span><span class="p">:</span> <span class="s1">&#39;#00FFFF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#00008B&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkcyan&#39;</span><span class="p">:</span> <span class="s1">&#39;#008B8B&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkgoldenrod&#39;</span><span class="p">:</span> <span class="s1">&#39;#B8860B&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkgray&#39;</span><span class="p">:</span> <span class="s1">&#39;#A9A9A9&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkgrey&#39;</span><span class="p">:</span> <span class="s1">&#39;#A9A9A9&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkgreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#006400&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkkhaki&#39;</span><span class="p">:</span> <span class="s1">&#39;#BDB76B&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkmagenta&#39;</span><span class="p">:</span> <span class="s1">&#39;#8B008B&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkolivegreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#556B2F&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkorange&#39;</span><span class="p">:</span> <span class="s1">&#39;#FF8C00&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkorchid&#39;</span><span class="p">:</span> <span class="s1">&#39;#9932CC&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkred&#39;</span><span class="p">:</span> <span class="s1">&#39;#8B0000&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darksalmon&#39;</span><span class="p">:</span> <span class="s1">&#39;#E9967A&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkseagreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#8FBC8F&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkslateblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#483D8B&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkslategray&#39;</span><span class="p">:</span> <span class="s1">&#39;#2F4F4F&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkslategrey&#39;</span><span class="p">:</span> <span class="s1">&#39;#2F4F4F&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkturquoise&#39;</span><span class="p">:</span> <span class="s1">&#39;#00CED1&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;darkviolet&#39;</span><span class="p">:</span> <span class="s1">&#39;#9400D3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;deeppink&#39;</span><span class="p">:</span> <span class="s1">&#39;#FF1493&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;deepskyblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#00BFFF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;dimgray&#39;</span><span class="p">:</span> <span class="s1">&#39;#696969&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;dimgrey&#39;</span><span class="p">:</span> <span class="s1">&#39;#696969&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;dodgerblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#1E90FF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;firebrick&#39;</span><span class="p">:</span> <span class="s1">&#39;#B22222&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;floralwhite&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFFAF0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;forestgreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#228B22&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fuchsia&#39;</span><span class="p">:</span> <span class="s1">&#39;#FF00FF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;gainsboro&#39;</span><span class="p">:</span> <span class="s1">&#39;#DCDCDC&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ghostwhite&#39;</span><span class="p">:</span> <span class="s1">&#39;#F8F8FF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;gold&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFD700&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;goldenrod&#39;</span><span class="p">:</span> <span class="s1">&#39;#DAA520&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;gray&#39;</span><span class="p">:</span> <span class="s1">&#39;#808080&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;grey&#39;</span><span class="p">:</span> <span class="s1">&#39;#808080&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;green&#39;</span><span class="p">:</span> <span class="s1">&#39;#008000&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;greenyellow&#39;</span><span class="p">:</span> <span class="s1">&#39;#ADFF2F&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;honeydew&#39;</span><span class="p">:</span> <span class="s1">&#39;#F0FFF0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;hotpink&#39;</span><span class="p">:</span> <span class="s1">&#39;#FF69B4&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indianred&#39;</span><span class="p">:</span> <span class="s1">&#39;#CD5C5C&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indigo&#39;</span><span class="p">:</span> <span class="s1">&#39;#4B0082&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ivory&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFFFF0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;khaki&#39;</span><span class="p">:</span> <span class="s1">&#39;#F0E68C&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lavender&#39;</span><span class="p">:</span> <span class="s1">&#39;#E6E6FA&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lavenderblush&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFF0F5&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lawngreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#7CFC00&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lemonchiffon&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFFACD&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#ADD8E6&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightcoral&#39;</span><span class="p">:</span> <span class="s1">&#39;#F08080&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightcyan&#39;</span><span class="p">:</span> <span class="s1">&#39;#E0FFFF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightgoldenrodyellow&#39;</span><span class="p">:</span> <span class="s1">&#39;#FAFAD2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightgray&#39;</span><span class="p">:</span> <span class="s1">&#39;#D3D3D3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightgrey&#39;</span><span class="p">:</span> <span class="s1">&#39;#D3D3D3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightgreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#90EE90&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightpink&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFB6C1&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightsalmon&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFA07A&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightseagreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#20B2AA&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightskyblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#87CEFA&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightslategray&#39;</span><span class="p">:</span> <span class="s1">&#39;#778899&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightslategrey&#39;</span><span class="p">:</span> <span class="s1">&#39;#778899&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightsteelblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#B0C4DE&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lightyellow&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFFFE0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;lime&#39;</span><span class="p">:</span> <span class="s1">&#39;#00FF00&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;limegreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#32CD32&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;linen&#39;</span><span class="p">:</span> <span class="s1">&#39;#FAF0E6&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;magenta&#39;</span><span class="p">:</span> <span class="s1">&#39;#FF00FF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;maroon&#39;</span><span class="p">:</span> <span class="s1">&#39;#800000&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mediumaquamarine&#39;</span><span class="p">:</span> <span class="s1">&#39;#66CDAA&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mediumblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#0000CD&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mediumorchid&#39;</span><span class="p">:</span> <span class="s1">&#39;#BA55D3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mediumpurple&#39;</span><span class="p">:</span> <span class="s1">&#39;#9370DB&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mediumseagreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#3CB371&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mediumslateblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#7B68EE&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mediumspringgreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#00FA9A&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mediumturquoise&#39;</span><span class="p">:</span> <span class="s1">&#39;#48D1CC&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mediumvioletred&#39;</span><span class="p">:</span> <span class="s1">&#39;#C71585&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;midnightblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#191970&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mintcream&#39;</span><span class="p">:</span> <span class="s1">&#39;#F5FFFA&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mistyrose&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFE4E1&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;moccasin&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFE4B5&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;navajowhite&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFDEAD&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;navy&#39;</span><span class="p">:</span> <span class="s1">&#39;#000080&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;oldlace&#39;</span><span class="p">:</span> <span class="s1">&#39;#FDF5E6&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;olive&#39;</span><span class="p">:</span> <span class="s1">&#39;#808000&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;olivedrab&#39;</span><span class="p">:</span> <span class="s1">&#39;#6B8E23&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;orange&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFA500&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;orangered&#39;</span><span class="p">:</span> <span class="s1">&#39;#FF4500&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;orchid&#39;</span><span class="p">:</span> <span class="s1">&#39;#DA70D6&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;palegoldenrod&#39;</span><span class="p">:</span> <span class="s1">&#39;#EEE8AA&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;palegreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#98FB98&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;paleturquoise&#39;</span><span class="p">:</span> <span class="s1">&#39;#AFEEEE&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;palevioletred&#39;</span><span class="p">:</span> <span class="s1">&#39;#DB7093&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;papayawhip&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFEFD5&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;peachpuff&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFDAB9&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;peru&#39;</span><span class="p">:</span> <span class="s1">&#39;#CD853F&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;pink&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFC0CB&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;plum&#39;</span><span class="p">:</span> <span class="s1">&#39;#DDA0DD&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;powderblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#B0E0E6&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;purple&#39;</span><span class="p">:</span> <span class="s1">&#39;#800080&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;rebeccapurple&#39;</span><span class="p">:</span> <span class="s1">&#39;#663399&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;red&#39;</span><span class="p">:</span> <span class="s1">&#39;#FF0000&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;rosybrown&#39;</span><span class="p">:</span> <span class="s1">&#39;#BC8F8F&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;royalblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#4169E1&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;saddlebrown&#39;</span><span class="p">:</span> <span class="s1">&#39;#8B4513&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;salmon&#39;</span><span class="p">:</span> <span class="s1">&#39;#FA8072&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sandybrown&#39;</span><span class="p">:</span> <span class="s1">&#39;#F4A460&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;seagreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#2E8B57&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;seashell&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFF5EE&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sienna&#39;</span><span class="p">:</span> <span class="s1">&#39;#A0522D&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;silver&#39;</span><span class="p">:</span> <span class="s1">&#39;#C0C0C0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;skyblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#87CEEB&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;slateblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#6A5ACD&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;slategray&#39;</span><span class="p">:</span> <span class="s1">&#39;#708090&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;slategrey&#39;</span><span class="p">:</span> <span class="s1">&#39;#708090&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;snow&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFFAFA&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;springgreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#00FF7F&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;steelblue&#39;</span><span class="p">:</span> <span class="s1">&#39;#4682B4&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;tan&#39;</span><span class="p">:</span> <span class="s1">&#39;#D2B48C&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;teal&#39;</span><span class="p">:</span> <span class="s1">&#39;#008080&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;thistle&#39;</span><span class="p">:</span> <span class="s1">&#39;#D8BFD8&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;tomato&#39;</span><span class="p">:</span> <span class="s1">&#39;#FF6347&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;turquoise&#39;</span><span class="p">:</span> <span class="s1">&#39;#40E0D0&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;violet&#39;</span><span class="p">:</span> <span class="s1">&#39;#EE82EE&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;wheat&#39;</span><span class="p">:</span> <span class="s1">&#39;#F5DEB3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;white&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFFFFF&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;whitesmoke&#39;</span><span class="p">:</span> <span class="s1">&#39;#F5F5F5&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;yellow&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFFF00&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;yellowgreen&#39;</span><span class="p">:</span> <span class="s1">&#39;#9ACD32&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">css_name</span> <span class="ow">in</span> <span class="n">color_dict</span><span class="p">:</span>
+        <span class="n">hex_str</span> <span class="o">=</span> <span class="n">color_dict</span><span class="p">[</span><span class="n">css_name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">_hex_to_rgb</span><span class="p">(</span><span class="n">hex_str</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid color name: </span><span class="si">{</span><span class="n">css_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_hex_to_rgb</span><span class="p">(</span><span class="n">hex_color</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="n">hex_color</span> <span class="o">=</span> <span class="n">hex_color</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hex_color</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hex_color</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hex_color</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="to_rgb">
+<a class="viewcode-back" href="../../reference/generated/movis.util.to_rgb.html#movis.util.to_rgb">[docs]</a>
+<span class="k">def</span> <span class="nf">to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a color input to its RGB tuple representation.</span>
+
+<span class="sd">    The input can be either a string representing a color name or a hex code,</span>
+<span class="sd">    or a sequence of integers representing the RGB values.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        color:</span>
+<span class="sd">            A union type that can be either a string or a tuple containing RGB integers or a sequence of integers.</span>
+<span class="sd">            If ``str``: The string can be either a CSS color name (e.g., &#39;red&#39;) or a hexadecimal RGB string</span>
+<span class="sd">            (e.g., ``&#39;#FF0000&#39;``). If ``tuple[int, int, int]`` or ``Sequence[int]``, it represents RGB values</span>
+<span class="sd">            as integers between 0 and 255 (`e.g.`, ``(255, 0, 0)``).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple of three integers ``(R, G, B)`` that represent the RGB values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">SequenceType</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">color</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">color</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">_csscolor_to_rgb</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_hex_to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Masaki Saito.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

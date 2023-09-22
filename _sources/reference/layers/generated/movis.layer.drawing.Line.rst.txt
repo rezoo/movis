@@ -1,0 +1,29 @@
+﻿movis.layer.drawing.Line
+========================
+
+.. currentmodule:: movis.layer.drawing
+
+.. autoclass:: Line
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Line.attributes
+      ~Line.duration
+   
+   

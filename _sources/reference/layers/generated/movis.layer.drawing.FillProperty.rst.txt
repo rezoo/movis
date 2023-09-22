@@ -1,0 +1,23 @@
+﻿movis.layer.drawing.FillProperty
+================================
+
+.. currentmodule:: movis.layer.drawing
+
+.. autoclass:: FillProperty
+
+   
+   
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~FillProperty.color
+      ~FillProperty.opacity
+   
+   

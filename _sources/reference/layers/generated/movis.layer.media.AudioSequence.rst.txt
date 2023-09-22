@@ -1,0 +1,29 @@
+﻿movis.layer.media.AudioSequence
+===============================
+
+.. currentmodule:: movis.layer.media
+
+.. autoclass:: AudioSequence
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_audio
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AudioSequence.duration
+   
+   

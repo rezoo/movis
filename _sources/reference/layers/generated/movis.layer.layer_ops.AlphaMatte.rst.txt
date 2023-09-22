@@ -1,0 +1,29 @@
+﻿movis.layer.layer\_ops.AlphaMatte
+=================================
+
+.. currentmodule:: movis.layer.layer_ops
+
+.. autoclass:: AlphaMatte
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AlphaMatte.attributes
+      ~AlphaMatte.duration
+   
+   

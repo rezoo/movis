@@ -1,0 +1,6 @@
+﻿movis.subtitle.write\_srt\_file
+===============================
+
+.. currentmodule:: movis.subtitle
+
+.. autofunction:: write_srt_file

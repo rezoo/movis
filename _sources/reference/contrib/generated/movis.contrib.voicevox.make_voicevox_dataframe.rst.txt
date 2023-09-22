@@ -1,0 +1,6 @@
+﻿movis.contrib.voicevox.make\_voicevox\_dataframe
+================================================
+
+.. currentmodule:: movis.contrib.voicevox
+
+.. autofunction:: make_voicevox_dataframe

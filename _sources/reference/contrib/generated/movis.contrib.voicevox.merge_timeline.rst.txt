@@ -1,0 +1,6 @@
+﻿movis.contrib.voicevox.merge\_timeline
+======================================
+
+.. currentmodule:: movis.contrib.voicevox
+
+.. autofunction:: merge_timeline

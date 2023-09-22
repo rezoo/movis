@@ -1,0 +1,833 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>movis.layer.composition.Composition &#8212; movis  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=927b94d3fcb96560df09"></script>
+
+    <script src="../../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/layers/generated/movis.layer.composition.Composition';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="movis.layer.composition.LayerItem" href="movis.layer.composition.LayerItem.html" />
+    <link rel="prev" title="movis.layer" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">movis  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../attribute.html">movis.attribute</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.attribute.Attribute.html">movis.attribute.Attribute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.attribute.AttributesMixin.html">movis.attribute.AttributesMixin</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../contrib/index.html">movis.contrib</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../contrib/generated/movis.contrib.presentation.Slide.html">movis.contrib.presentation.Slide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../contrib/generated/movis.contrib.presentation.Character.html">movis.contrib.presentation.Character</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../contrib/generated/movis.contrib.segmentation.RobustVideoMatting.html">movis.contrib.segmentation.RobustVideoMatting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../contrib/generated/movis.contrib.voicevox.make_voicevox_dataframe.html">movis.contrib.voicevox.make_voicevox_dataframe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../contrib/generated/movis.contrib.voicevox.make_timeline_from_voicevox.html">movis.contrib.voicevox.make_timeline_from_voicevox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../contrib/generated/movis.contrib.voicevox.merge_timeline.html">movis.contrib.voicevox.merge_timeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../effects/index.html">movis.effect</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../effects/generated/movis.effect.blur.GaussianBlur.html">movis.effect.blur.GaussianBlur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../effects/generated/movis.effect.blur.Glow.html">movis.effect.blur.Glow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../effects/generated/movis.effect.color.FillColor.html">movis.effect.color.FillColor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../effects/generated/movis.effect.color.HSLShift.html">movis.effect.color.HSLShift</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../effects/generated/movis.effect.style.DropShadow.html">movis.effect.style.DropShadow</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../imgproc.html">movis.imgproc</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.imgproc.alpha_composite.html">movis.imgproc.alpha_composite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.imgproc.qimage_to_numpy.html">movis.imgproc.qimage_to_numpy</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">movis.layer</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.layer.composition.Composition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.composition.LayerItem.html">movis.layer.composition.LayerItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.media.Image.html">movis.layer.media.Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.media.ImageSequence.html">movis.layer.media.ImageSequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.media.Video.html">movis.layer.media.Video</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.media.Audio.html">movis.layer.media.Audio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.media.AudioSequence.html">movis.layer.media.AudioSequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.drawing.Line.html">movis.layer.drawing.Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.drawing.Rectangle.html">movis.layer.drawing.Rectangle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.drawing.Ellipse.html">movis.layer.drawing.Ellipse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.drawing.Text.html">movis.layer.drawing.Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.drawing.FillProperty.html">movis.layer.drawing.FillProperty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.drawing.StrokeProperty.html">movis.layer.drawing.StrokeProperty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.texture.Gradient.html">movis.layer.texture.Gradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.texture.Stripe.html">movis.layer.texture.Stripe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.layer_ops.AlphaMatte.html">movis.layer.layer_ops.AlphaMatte</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.layer.layer_ops.LuminanceMatte.html">movis.layer.layer_ops.LuminanceMatte</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../motion.html">movis.motion</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.motion.Motion.html">movis.motion.Motion</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../ops.html">movis.ops</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.ops.concatenate.html">movis.ops.concatenate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.ops.crop.html">movis.ops.crop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.ops.repeat.html">movis.ops.repeat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.ops.tile.html">movis.ops.tile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.ops.trim.html">movis.ops.trim</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../subtitle.html">movis.subtitle</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.subtitle.write_ass_file.html">movis.subtitle.write_ass_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.subtitle.write_srt_file.html">movis.subtitle.write_srt_file</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../transform.html">movis.transform</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.transform.Transform.html">movis.transform.Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.transform.TransformValue.html">movis.transform.TransformValue</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../util.html">movis.util</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.util.add_materials_to_video.html">movis.util.add_materials_to_video</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/movis.util.to_rgb.html">movis.util.to_rgb</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">movis.layer</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">movis.layer.composition.Composition</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="movis-layer-composition-composition">
+<h1>movis.layer.composition.Composition<a class="headerlink" href="#movis-layer-composition-composition" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">movis.layer.composition.</span></span><span class="sig-name descname"><span class="pre">Composition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1920,</span> <span class="pre">1080)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition" title="Link to this definition">#</a></dt>
+<dd><p>A base layer that integrates multiple layers into one video.</p>
+<p>Users create a composition by specifying both time and resolution. Next, multiple layers can be added to
+the target composition through <code class="docutils literal notranslate"><span class="pre">Composition.add_layer()</span></code>. During this process, additional information such as
+the layer’s name, start time, position, opacity, and drawing mode can be specified.
+Finally, the composition integrates the layers in the order they were added to create a single video.</p>
+<p>Another composition can also be added as a layer within a composition.
+By nesting compositions in this way, more complex motions can be created.</p>
+<dl>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">movis</span> <span class="k">as</span> <span class="nn">mv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Composition</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">127</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">127</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="mf">5.0</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">composition</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">[</span><span class="s1">&#39;bg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">opacity</span><span class="o">.</span><span class="n">enable_motion</span><span class="p">()</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">keyframes</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">motion_types</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ease_out5&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="o">.</span><span class="n">write_video</span><span class="p">(</span><span class="s1">&#39;output.mp4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>size:</dt><dd><p>A tuple representing the size of the composition in the form of <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code>.</p>
+</dd>
+<dt>duration:</dt><dd><p>The duration along the time axis for the composition.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.add_layer">
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../index.html#movis.layer.protocol.Layer" title="movis.layer.protocol.Layer"><span class="pre">Layer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">ndarray</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blending_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BlendingMode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">BlendingMode.NORMAL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchor_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">ndarray</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Direction</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Direction.CENTER</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../generated/movis.transform.Transform.html#movis.transform.Transform" title="movis.transform.Transform"><span class="pre">Transform</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem" title="movis.layer.composition.LayerItem"><span class="pre">LayerItem</span></a></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.add_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.add_layer" title="Link to this definition">#</a></dt>
+<dd><p>Add a layer to the composition.</p>
+<p>This method appends the target layer to the composition, along with details about the layer such as
+position, scale, opacity, and rendering mode. The composition registers layers wrapped within
+a <code class="docutils literal notranslate"><span class="pre">LayerItem</span></code> object, which consolidates these related details.
+Users can also add the layer with a unique name to the composition.
+In this case, the LayerItem can be accessed using <code class="docutils literal notranslate"><span class="pre">composition['layer_name']</span></code>.
+To access the layer directly, users can reference it as <code class="docutils literal notranslate"><span class="pre">composition['layer_name'].layer</span></code>,
+or ideally, retain it in a separate variable before registering with <code class="docutils literal notranslate"><span class="pre">add_layer()</span></code>.</p>
+<p>A composition can also be treated as a layer.
+This means that users can embed one composition within another using the <code class="docutils literal notranslate"><span class="pre">add_layer()</span></code> method.
+This allows for more intricate image compositions and animations.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>layer:</dt><dd><p>An instance or function of the layer to be added to the composition,
+conforming to the <code class="docutils literal notranslate"><span class="pre">Layer</span></code> protocol.</p>
+</dd>
+<dt>name:</dt><dd><p>The unique name for the layer within the composition.</p>
+</dd>
+<dt>position:</dt><dd><p>The position of the layer. If unspecified,
+the layer is placed at the center of the composition by default.</p>
+</dd>
+<dt>scale:</dt><dd><p>Scale <code class="docutils literal notranslate"><span class="pre">(sx,</span> <span class="pre">sy)</span></code> of the layer. Defaults to <code class="docutils literal notranslate"><span class="pre">(1.0,</span> <span class="pre">1.0)</span></code>.</p>
+</dd>
+<dt>rotation:</dt><dd><p>Clockwise rotation angle (in degrees) of the layer. Default is <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p>
+</dd>
+<dt>opacity:</dt><dd><p>Opacity of the layer. Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
+</dd>
+<dt>blending_mode:</dt><dd><p>Rendering mode of the layer. Can be specified as an Enum from <code class="docutils literal notranslate"><span class="pre">BlendingMode</span></code>
+or as a string. Defaults to <code class="docutils literal notranslate"><span class="pre">BlendingMode.NORMAL</span></code>.</p>
+</dd>
+<dt>anchor_point:</dt><dd><p>Defines the origin of the layer’s coordinate system.
+The origin is determined by the sum of <code class="docutils literal notranslate"><span class="pre">origin_point</span></code> and <code class="docutils literal notranslate"><span class="pre">anchor_point</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">origin_point</span></code> is <code class="docutils literal notranslate"><span class="pre">Direction.CENTER</span></code> and <code class="docutils literal notranslate"><span class="pre">anchor_point</span></code> is <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>,
+the origin is the center of the layer. Default is <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code>.</p>
+</dd>
+<dt>origin_point:</dt><dd><p>Initial reference point for the layer’s coordinate system.
+The final origin is determined by the sum of <code class="docutils literal notranslate"><span class="pre">origin_point</span></code> and <code class="docutils literal notranslate"><span class="pre">anchor_point</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">Direction.CENTER</span></code> (center of the layer).</p>
+</dd>
+<dt>transform:</dt><dd><p>A Transform object managing the geometric properties and rendering mode of the layer.
+If specified, the arguments for <code class="docutils literal notranslate"><span class="pre">position</span></code>, <code class="docutils literal notranslate"><span class="pre">scale</span></code>, <code class="docutils literal notranslate"><span class="pre">rotation</span></code>, <code class="docutils literal notranslate"><span class="pre">anchor_point</span></code>,
+<code class="docutils literal notranslate"><span class="pre">origin_point</span></code>, and <code class="docutils literal notranslate"><span class="pre">blending_mode</span></code> in <code class="docutils literal notranslate"><span class="pre">add_layer()</span></code> are ignored
+in favor of the values in <code class="docutils literal notranslate"><span class="pre">transform</span></code>.</p>
+</dd>
+<dt>offset:</dt><dd><p>The starting time of the layer. For example, if <code class="docutils literal notranslate"><span class="pre">start_time=0.0</span></code> and <code class="docutils literal notranslate"><span class="pre">offset=1.0</span></code>,
+the layer will appear after 1 second in the composition.</p>
+</dd>
+<dt>start_time:</dt><dd><p>The start time of the layer. This variable is used to clip the layer in the time axis direction.
+For example, if <code class="docutils literal notranslate"><span class="pre">start_time=1.0</span></code> and <code class="docutils literal notranslate"><span class="pre">offset=0.0</span></code>, this layer will appear immediately
+with one second skipped.</p>
+</dd>
+<dt>end_time:</dt><dd><p>The end time of the layer. This variable is used to clip the layer in the time axis direction.
+For example, if <code class="docutils literal notranslate"><span class="pre">start_time=0.0</span></code>, <code class="docutils literal notranslate"><span class="pre">end_time=1.0</span></code>, and <code class="docutils literal notranslate"><span class="pre">offset=0.0</span></code>,
+this layer will disappear after one second. If not specified,
+the layer’s duration is used for <code class="docutils literal notranslate"><span class="pre">end_time</span></code>.</p>
+</dd>
+<dt>audio_level:</dt><dd><p>The audio level of the layer (dB). If the layer has no audio, this value is ignored.</p>
+</dd>
+<dt>visible:</dt><dd><p>A flag specifying whether the layer is visible or not;
+if <code class="docutils literal notranslate"><span class="pre">visible=False</span></code>, the layer in the composition is not rendered.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">LayerItem</span></code> object that wraps the layer and its corresponding information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.clear" title="Link to this definition">#</a></dt>
+<dd><p>Removes all layers from the composition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.get_audio">
+<span class="sig-name descname"><span class="pre">get_audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">ndarray</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.get_audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.get_audio" title="Link to this definition">#</a></dt>
+<dd><p>Returns the audio of the composition as a numpy array.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>start_time:</dt><dd><p>The start time of the audio. This variable is used to clip the audio in the time axis direction.</p>
+</dd>
+<dt>end_time:</dt><dd><p>The end time of the audio. This variable is used to clip the audio in the time axis direction.
+If not specified, the composition’s duration is used for <code class="docutils literal notranslate"><span class="pre">end_time</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>The audio of the composition as a numpy array. If no audio is found, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.get_key">
+<span class="sig-name descname"><span class="pre">get_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Hashable" title="(in Python v3.11)"><span class="pre">Hashable</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.get_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.get_key" title="Link to this definition">#</a></dt>
+<dd><p>Returns a tuple of hashable keys representing the state for each layer at the given time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem" title="movis.layer.composition.LayerItem"><span class="pre">LayerItem</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.items" title="Link to this definition">#</a></dt>
+<dd><p>Returns a list of tuples, each consisting of a layer name and its corresponding item.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of tuples, where each tuple contains a layer name and its layer item.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.keys" title="Link to this definition">#</a></dt>
+<dd><p>Returns a list of layer names.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The keys are sorted in the order in which they will be rendered.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of layer names sorted in the rendering order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.pop_layer">
+<span class="sig-name descname"><span class="pre">pop_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem" title="movis.layer.composition.LayerItem"><span class="pre">LayerItem</span></a></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.pop_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.pop_layer" title="Link to this definition">#</a></dt>
+<dd><p>Removes a layer item from the composition and returns it.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name: The name of the layer to be removed.</p>
+</dd>
+<dt>Returns:</dt><dd><p>The layer item that was removed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.preview">
+<span class="sig-name descname"><span class="pre">preview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.11)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.preview"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.preview" title="Link to this definition">#</a></dt>
+<dd><p>Context manager method to temporarily change the <code class="docutils literal notranslate"><span class="pre">preview_level</span></code> using the <cite>with</cite> syntax.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">self.preview(level=2):</span></code> would change the <code class="docutils literal notranslate"><span class="pre">preview_level</span></code> to 2 in that scope.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>level:</dt><dd><p>The resolution of the rendering of the composition.
+For example, if <code class="docutils literal notranslate"><span class="pre">level=2</span></code> is set, the composition’s resolution is <code class="docutils literal notranslate"><span class="pre">(W</span> <span class="pre">/</span> <span class="pre">2,</span> <span class="pre">H</span> <span class="pre">/</span> <span class="pre">2)</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">movis</span> <span class="k">as</span> <span class="nn">mv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Composition</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">composition</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">image</span> <span class="o">=</span> <span class="n">composition</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(240, 320, 4)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">composition</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">image</span> <span class="o">=</span> <span class="n">composition</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(120, 160, 4)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.render_and_play">
+<span class="sig-name descname"><span class="pre">render_and_play</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preview_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.render_and_play"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.render_and_play" title="Link to this definition">#</a></dt>
+<dd><p>Renders the composition and plays it in a Jupyter notebook.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>start_time:</dt><dd><p>The start time of the video. This variable is used to clip the video in the time axis direction.</p>
+</dd>
+<dt>end_time:</dt><dd><p>The end time of the video. This variable is used to clip the video in the time axis direction.</p>
+</dd>
+<dt>fps:</dt><dd><p>The frame rate of the video. Default is <code class="docutils literal notranslate"><span class="pre">30.0</span></code>.</p>
+</dd>
+<dt>preview_level:</dt><dd><p>The resolution of the rendering of the composition.
+For example, if <code class="docutils literal notranslate"><span class="pre">preview_level=2</span></code> is set, the resolution of the output is <code class="docutils literal notranslate"><span class="pre">(W</span> <span class="pre">/</span> <span class="pre">2,</span> <span class="pre">H</span> <span class="pre">/</span> <span class="pre">2)</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem" title="movis.layer.composition.LayerItem"><span class="pre">LayerItem</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.values" title="Link to this definition">#</a></dt>
+<dd><p>Returns a list of LayerItem objects.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The elements of the list are not the layers themselves,
+but <code class="docutils literal notranslate"><span class="pre">LayerItem</span></code> containing information of the layers.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of <code class="docutils literal notranslate"><span class="pre">LayerItem</span></code> objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.layer.composition.Composition.write_video">
+<span class="sig-name descname"><span class="pre">write_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dst_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.11)"><span class="pre">PathLike</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'libx264'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixelformat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'yuv420p'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/movis/layer/composition.html#Composition.write_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.composition.Composition.write_video" title="Link to this definition">#</a></dt>
+<dd><p>Writes the composition’s contents to a video file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>dst_file:</dt><dd><p>The path to the destination video file.</p>
+</dd>
+<dt>start_time:</dt><dd><p>The start time of the video. This variable is used to clip the video in the time axis direction.</p>
+</dd>
+<dt>end_time:</dt><dd><p>The end time of the video. This variable is used to clip the video in the time axis direction.
+If not specified, the composition’s duration is used for <code class="docutils literal notranslate"><span class="pre">end_time</span></code>.</p>
+</dd>
+<dt>codec:</dt><dd><p>The codec used to encode the video. Default is <code class="docutils literal notranslate"><span class="pre">libx264</span></code>.</p>
+</dd>
+<dt>pixelformat:</dt><dd><p>The pixel format of the video. Default is <code class="docutils literal notranslate"><span class="pre">yuv420p</span></code>.</p>
+</dd>
+<dt>fps:</dt><dd><p>The frame rate of the video. Default is <code class="docutils literal notranslate"><span class="pre">30.0</span></code>.</p>
+</dd>
+<dt>audio:</dt><dd><p>A flag specifying whether to include audio in the video.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">duration</span></code></p></td>
+<td><p>The duration of the composition.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">layers</span></code></p></td>
+<td><p>Returns a list of <code class="docutils literal notranslate"><span class="pre">LayerItem</span></code> objects.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">preview_level</span></code></p></td>
+<td><p>The resolution of the rendering of the composition.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p>The size of the composition in the form of <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">movis.layer</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="movis.layer.composition.LayerItem.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">movis.layer.composition.LayerItem</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition"><code class="docutils literal notranslate"><span class="pre">Composition</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.add_layer"><code class="docutils literal notranslate"><span class="pre">Composition.add_layer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.clear"><code class="docutils literal notranslate"><span class="pre">Composition.clear()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.get_audio"><code class="docutils literal notranslate"><span class="pre">Composition.get_audio()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.get_key"><code class="docutils literal notranslate"><span class="pre">Composition.get_key()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.items"><code class="docutils literal notranslate"><span class="pre">Composition.items()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.keys"><code class="docutils literal notranslate"><span class="pre">Composition.keys()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.pop_layer"><code class="docutils literal notranslate"><span class="pre">Composition.pop_layer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.preview"><code class="docutils literal notranslate"><span class="pre">Composition.preview()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.render_and_play"><code class="docutils literal notranslate"><span class="pre">Composition.render_and_play()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.values"><code class="docutils literal notranslate"><span class="pre">Composition.values()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.layer.composition.Composition.write_video"><code class="docutils literal notranslate"><span class="pre">Composition.write_video()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/reference/layers/generated/movis.layer.composition.Composition.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Masaki Saito.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

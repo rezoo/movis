@@ -1,0 +1,6 @@
+﻿movis.util.add\_materials\_to\_video
+====================================
+
+.. currentmodule:: movis.util
+
+.. autofunction:: add_materials_to_video

@@ -1,0 +1,40 @@
+﻿movis.layer.drawing.Text
+========================
+
+.. currentmodule:: movis.layer.drawing
+
+.. autoclass:: Text
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: available_fonts
+   .. automethod:: available_styles
+   .. automethod:: from_timeline
+   .. automethod:: get_key
+   .. automethod:: get_size
+   .. automethod:: get_text
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Text.attributes
+      ~Text.contents
+      ~Text.duration
+      ~Text.font_family
+      ~Text.font_style
+      ~Text.line_spacing
+      ~Text.text
+      ~Text.text_alignment
+   
+   

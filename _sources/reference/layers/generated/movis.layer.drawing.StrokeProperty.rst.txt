@@ -1,0 +1,24 @@
+﻿movis.layer.drawing.StrokeProperty
+==================================
+
+.. currentmodule:: movis.layer.drawing
+
+.. autoclass:: StrokeProperty
+
+   
+   
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StrokeProperty.color
+      ~StrokeProperty.opacity
+      ~StrokeProperty.width
+   
+   

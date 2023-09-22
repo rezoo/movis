@@ -1,0 +1,6 @@
+﻿movis.ops.trim
+==============
+
+.. currentmodule:: movis.ops
+
+.. autofunction:: trim

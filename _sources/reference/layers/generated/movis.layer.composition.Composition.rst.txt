@@ -1,0 +1,41 @@
+﻿movis.layer.composition.Composition
+===================================
+
+.. currentmodule:: movis.layer.composition
+
+.. autoclass:: Composition
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: add_layer
+   .. automethod:: clear
+   .. automethod:: get_audio
+   .. automethod:: get_key
+   .. automethod:: items
+   .. automethod:: keys
+   .. automethod:: pop_layer
+   .. automethod:: preview
+   .. automethod:: render_and_play
+   .. automethod:: values
+   .. automethod:: write_video
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Composition.duration
+      ~Composition.layers
+      ~Composition.preview_level
+      ~Composition.size
+   
+   

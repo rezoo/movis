@@ -1,0 +1,28 @@
+﻿movis.effect.blur.GaussianBlur
+==============================
+
+.. currentmodule:: movis.effect.blur
+
+.. autoclass:: GaussianBlur
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~GaussianBlur.attributes
+   
+   

@@ -1,0 +1,28 @@
+﻿movis.effect.color.FillColor
+============================
+
+.. currentmodule:: movis.effect.color
+
+.. autoclass:: FillColor
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~FillColor.attributes
+   
+   

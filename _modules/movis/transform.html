@@ -1,0 +1,686 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>movis.transform &#8212; movis  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=927b94d3fcb96560df09"></script>
+
+    <script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/movis/transform';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">movis  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">movis.transform</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for movis.transform</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">movis.enum</span> <span class="kn">import</span> <span class="n">BlendingMode</span><span class="p">,</span> <span class="n">Direction</span>
+
+<span class="kn">from</span> <span class="nn">.attribute</span> <span class="kn">import</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">AttributeType</span>
+
+
+<div class="viewcode-block" id="TransformValue">
+<a class="viewcode-back" href="../../reference/generated/movis.transform.TransformValue.html#movis.transform.TransformValue">[docs]</a>
+<span class="k">class</span> <span class="nc">TransformValue</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A named tuple that encapsulates various transformation properties that can be applied to a layer.</span>
+
+<span class="sd">    The properties of `TransformValue` include the anchor point, position, scale, rotation, opacity, and origin point.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        anchor_point:</span>
+<span class="sd">            A tuple of two floats representing the anchor point ``(x, y)`` of an object. Defaults to ``(0.0, 0.0)``.</span>
+<span class="sd">        position:</span>
+<span class="sd">            A tuple of two floats representing the position ``(x, y)`` of an object. Defaults to ``(0.0, 0.0)``.</span>
+<span class="sd">        scale:</span>
+<span class="sd">            A tuple of two floats representing the scale ``(x, y)`` of an object. Defaults to ``(1.0, 1.0)``.</span>
+<span class="sd">        rotation:</span>
+<span class="sd">            A float value representing the rotation angle in degrees. Defaults to ``0.0``.</span>
+<span class="sd">        opacity:</span>
+<span class="sd">            A float value representing the opacity of an object. Must be in the range ``[0, 1]``. Defaults to ``1.0``.</span>
+<span class="sd">        origin_point:</span>
+<span class="sd">            An enum value from Direction representing the origin point for transformations.</span>
+<span class="sd">            Defaults to ``Direction.CENTER``.</span>
+<span class="sd">        origin_point:</span>
+<span class="sd">            An enum value from Direction representing the blending mode of the layer.</span>
+<span class="sd">            Defaults to ``BlendingMode.NORMAL``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">anchor_point</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">rotation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">origin_point</span><span class="p">:</span> <span class="n">Direction</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTER</span>
+    <span class="n">blending_mode</span><span class="p">:</span> <span class="n">BlendingMode</span> <span class="o">=</span> <span class="n">BlendingMode</span><span class="o">.</span><span class="n">NORMAL</span></div>
+
+
+
+<div class="viewcode-block" id="Transform">
+<a class="viewcode-back" href="../../reference/generated/movis.transform.Transform.html#movis.transform.Transform">[docs]</a>
+<span class="k">class</span> <span class="nc">Transform</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class responsible for encapsulating the various transformation attributes for a layer.</span>
+
+<span class="sd">    It utilizes ``Attribute`` class to enforce types and optionally ranges for each attribute.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        position:</span>
+<span class="sd">            A float, tuple of floats, or numpy ndarray representing the position ``(x, y)`` of an object.</span>
+<span class="sd">            Defaults to ``(0.0, 0.0)``.</span>
+<span class="sd">        scale:</span>
+<span class="sd">            A float, tuple of floats, or numpy ndarray representing the scale ``(x, y)`` of an object.</span>
+<span class="sd">            Defaults to ``(1.0, 1.0)``.</span>
+<span class="sd">        rotation:</span>
+<span class="sd">            A float value representing the rotation angle in degrees. Defaults to ``0.0``.</span>
+<span class="sd">        opacity:</span>
+<span class="sd">            A float value representing the opacity of an object. Must be in the range ``[0, 1]``. Defaults to ``1.0``.</span>
+<span class="sd">        anchor_point:</span>
+<span class="sd">            A float, tuple of floats, or ``numpy.ndarray`` representing the anchor point ``(x, y)`` of an object.</span>
+<span class="sd">            Defaults to ``(0.0, 0.0)``.</span>
+<span class="sd">        origin_point:</span>
+<span class="sd">            An enum value from Direction or a string representing the origin point for transformations.</span>
+<span class="sd">            Defaults to ``Direction.CENTER``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">position</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">rotation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">anchor_point</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">origin_point</span><span class="p">:</span> <span class="n">Direction</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTER</span><span class="p">,</span>
+        <span class="n">blending_mode</span><span class="p">:</span> <span class="n">BlendingMode</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">BlendingMode</span><span class="o">.</span><span class="n">NORMAL</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">VECTOR2D</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">VECTOR2D</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opacity</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">opacity</span><span class="p">,</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">anchor_point</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">anchor_point</span><span class="p">,</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">VECTOR2D</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">origin_point</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">origin_point</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">origin_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blending_mode</span> <span class="o">=</span> <span class="n">BlendingMode</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">blending_mode</span><span class="p">)</span> \
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blending_mode</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">blending_mode</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;anchor_point&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">anchor_point</span><span class="p">,</span>
+            <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span>
+            <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span>
+            <span class="s2">&quot;rotation&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">,</span>
+            <span class="s2">&quot;opacity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">opacity</span><span class="p">,</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="Transform.from_positions">
+<a class="viewcode-back" href="../../reference/generated/movis.transform.Transform.html#movis.transform.Transform.from_positions">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_positions</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">top</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">bottom</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">left</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">right</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">object_fit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Transform&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Allows to create `Transform` by specifying the position based on the edges ``(top, bottom, left, right)``.</span>
+
+<span class="sd">        The ``object_fit`` parameter specifies how the object should scale to fit the canvas or container.</span>
+<span class="sd">        If ``object_fit=&#39;contain&#39;``, the object will scale to fit within the canvas while preserving its aspect ratio.</span>
+<span class="sd">        If ``&#39;cover&#39;``, the object will scale to completely cover the canvas, also preserving its aspect ratio.</span>
+
+<span class="sd">        The method calculates the position and origin point of the object based on the supplied arguments</span>
+<span class="sd">        and returns a new Transform object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            size:</span>
+<span class="sd">                A tuple of two integers representing the width (``W``) and height (``H``) of the canvas or container.</span>
+<span class="sd">            top:</span>
+<span class="sd">                Optional float, distance from the top edge of the layer. Default is ``None``.</span>
+<span class="sd">            bottom:</span>
+<span class="sd">                Optional float, distance from the bottom edge of the layer. Default is ``None``.</span>
+<span class="sd">            left:</span>
+<span class="sd">                Optional float, distance from the left edge of the layer. Default is ``None``.</span>
+<span class="sd">            right:</span>
+<span class="sd">                Optional float, distance from the right edge of the layer. Default is ``None``.</span>
+<span class="sd">            object_fit:</span>
+<span class="sd">                Optional string, specifies the scaling behavior. Accepts either ``&#39;contain&#39;`` or ``&#39;cover&#39;``.</span>
+<span class="sd">                Default is ``None`` (do nothing).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new `Transform` object with the specified position, scale, and origin point.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">H</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTER</span>
+            <span class="k">if</span> <span class="n">object_fit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">elif</span> <span class="n">object_fit</span> <span class="o">==</span> <span class="s2">&quot;contain&quot;</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">object_fit</span> <span class="o">==</span> <span class="s2">&quot;cover&quot;</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span> <span class="o">/</span> <span class="nb">min</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid object_fit: </span><span class="si">{</span><span class="n">object_fit</span><span class="si">}</span><span class="s2">. contain or cover is expected.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">top</span>
+                <span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">TOP_CENTER</span>
+            <span class="k">elif</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">H</span> <span class="o">-</span> <span class="n">bottom</span>
+                <span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">BOTTOM_CENTER</span>
+            <span class="k">elif</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">left</span><span class="p">,</span> <span class="n">H</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTER_LEFT</span>
+            <span class="k">elif</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">W</span> <span class="o">-</span> <span class="n">right</span><span class="p">,</span> <span class="n">H</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTER_RIGHT</span>
+            <span class="k">elif</span> <span class="n">top</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span>
+                <span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">TOP_LEFT</span>
+            <span class="k">elif</span> <span class="n">top</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">W</span> <span class="o">-</span> <span class="n">right</span><span class="p">,</span> <span class="n">top</span>
+                <span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">TOP_RIGHT</span>
+            <span class="k">elif</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">left</span><span class="p">,</span> <span class="n">H</span> <span class="o">-</span> <span class="n">bottom</span>
+                <span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">BOTTOM_LEFT</span>
+            <span class="k">elif</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">W</span> <span class="o">-</span> <span class="n">right</span><span class="p">,</span> <span class="n">H</span> <span class="o">-</span> <span class="n">bottom</span>
+                <span class="n">origin_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">BOTTOM_RIGHT</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid pair of arguments&quot;</span><span class="p">)</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">origin_point</span><span class="o">=</span><span class="n">origin_point</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Transform.get_current_value">
+<a class="viewcode-back" href="../../reference/generated/movis.transform.Transform.html#movis.transform.Transform.get_current_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_current_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformValue</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieves the current transformation attributes for a given time, encapsulated within a ``TransformValue``.</span>
+
+<span class="sd">        This includes the anchor point, position, scale, rotation, and opacity, all evaluated at ``layer_time``.</span>
+<span class="sd">        The transformation attributes are converted to their corresponding 2D vectors or scalar values as appropriate,</span>
+<span class="sd">        for easy use or manipulation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            layer_time:</span>
+<span class="sd">                A float representing the time for which you want to get the current value of</span>
+<span class="sd">                all the transformation attributes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ``TransformValue`` that encapsulates the current transformation properties</span>
+<span class="sd">            (anchor point, position, scale, rotation, opacity, and origin point) for the given ``layer_time``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">TransformValue</span><span class="p">(</span>
+            <span class="n">anchor_point</span><span class="o">=</span><span class="n">transform_to_2dvector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">anchor_point</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)),</span>
+            <span class="n">position</span><span class="o">=</span><span class="n">transform_to_2dvector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)),</span>
+            <span class="n">scale</span><span class="o">=</span><span class="n">transform_to_2dvector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)),</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="n">transform_to_1dscalar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)),</span>
+            <span class="n">opacity</span><span class="o">=</span><span class="n">transform_to_1dscalar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opacity</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)),</span>
+            <span class="n">origin_point</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">origin_point</span><span class="p">,</span>
+            <span class="n">blending_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">blending_mode</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Transform(ap=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">anchor_point</span><span class="si">}</span><span class="s2">, pos=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">, &quot;</span> \
+            <span class="sa">f</span><span class="s2">&quot;s=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="si">}</span><span class="s2">, rot=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="si">}</span><span class="s2">, op=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">opacity</span><span class="si">}</span><span class="s2">, blend=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">blending_mode</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">transform_to_1dscalar</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform a scalar, tuple, list or numpy array to a scalar.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x:</span>
+<span class="sd">            The value to transform.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A scalar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">():</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid value: </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">transform_to_2dvector</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform a scalar, tuple, list or numpy array to a 2D vector.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x:</span>
+<span class="sd">            The value to transform.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A 2D vector.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">():</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid value: </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">transform_to_3dvector</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform a scalar, tuple, list or numpy array to a 3D vector.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x:</span>
+<span class="sd">            The value to transform.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A 3D vector.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">():</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid value: </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Masaki Saito.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1239 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>movis.layer.composition &#8212; movis  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=927b94d3fcb96560df09"></script>
+
+    <script src="../../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/movis/layer/composition';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">movis  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">movis.layer.composition</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for movis.layer.composition</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">PathLike</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">weakref</span> <span class="kn">import</span> <span class="n">WeakValueDictionary</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">imageio</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">soundfile</span> <span class="k">as</span> <span class="nn">sf</span>
+<span class="kn">from</span> <span class="nn">diskcache</span> <span class="kn">import</span> <span class="n">Cache</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">..attribute</span> <span class="kn">import</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">AttributeType</span>
+<span class="kn">from</span> <span class="nn">..effect</span> <span class="kn">import</span> <span class="n">Effect</span>
+<span class="kn">from</span> <span class="nn">..enum</span> <span class="kn">import</span> <span class="n">BlendingMode</span><span class="p">,</span> <span class="n">CacheType</span><span class="p">,</span> <span class="n">Direction</span>
+<span class="kn">from</span> <span class="nn">..imgproc</span> <span class="kn">import</span> <span class="n">alpha_composite</span>
+<span class="kn">from</span> <span class="nn">..transform</span> <span class="kn">import</span> <span class="n">Transform</span><span class="p">,</span> <span class="n">TransformValue</span>
+<span class="kn">from</span> <span class="nn">.protocol</span> <span class="kn">import</span> <span class="n">AUDIO_BLOCK_SIZE</span><span class="p">,</span> <span class="n">AUDIO_SAMPLING_RATE</span><span class="p">,</span> <span class="n">AudioLayer</span><span class="p">,</span> <span class="n">Layer</span>
+
+
+<div class="viewcode-block" id="Composition">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition">[docs]</a>
+<span class="k">class</span> <span class="nc">Composition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A base layer that integrates multiple layers into one video.</span>
+
+<span class="sd">    Users create a composition by specifying both time and resolution. Next, multiple layers can be added to</span>
+<span class="sd">    the target composition through ``Composition.add_layer()``. During this process, additional information such as</span>
+<span class="sd">    the layer&#39;s name, start time, position, opacity, and drawing mode can be specified.</span>
+<span class="sd">    Finally, the composition integrates the layers in the order they were added to create a single video.</span>
+
+<span class="sd">    Another composition can also be added as a layer within a composition.</span>
+<span class="sd">    By nesting compositions in this way, more complex motions can be created.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import movis as mv</span>
+<span class="sd">        &gt;&gt;&gt; composition = mv.layer.Composition(size=(640, 480), duration=5.0)</span>
+<span class="sd">        &gt;&gt;&gt; composition.add_layer(</span>
+<span class="sd">        ...     mv.layer.Rectangle(size=(640, 480), color=(127, 127, 127), duration=5.0),</span>
+<span class="sd">        ...     name=&#39;bg&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; len(composition)</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; composition[&#39;bg&#39;].opacity.enable_motion().extend(</span>
+<span class="sd">        ...     keyframes=[0, 1, 2, 3, 4],</span>
+<span class="sd">        ...     values=[1.0, 0.0, 1.0, 0.0, 1.0],</span>
+<span class="sd">        ...     motion_types=[&#39;ease_out5&#39;] * 5)</span>
+<span class="sd">        &gt;&gt;&gt; composition.write_video(&#39;output.mp4&#39;)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        size:</span>
+<span class="sd">            A tuple representing the size of the composition in the form of ``(width, height)``.</span>
+<span class="sd">        duration:</span>
+<span class="sd">            The duration along the time axis for the composition.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">),</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LayerItem</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_layer</span><span class="p">:</span> <span class="n">WeakValueDictionary</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">LayerItem</span><span class="p">]</span> <span class="o">=</span> <span class="n">WeakValueDictionary</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">duration</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;duration must be positive&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span> <span class="o">=</span> <span class="n">duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span> <span class="n">Cache</span> <span class="o">=</span> <span class="n">Cache</span><span class="p">(</span><span class="n">size_limit</span><span class="o">=</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_preview_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;size must be a tuple of length 2&quot;</span>
+        <span class="k">assert</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;size must be positive&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="o">=</span> <span class="n">size</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The size of the composition in the form of ``(width, height)``.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The duration of the composition.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_duration</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">preview_level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The resolution of the rendering of the composition.</span>
+<span class="sd">        For example, if ``preview_level=2`` is set,</span>
+<span class="sd">        the composition&#39;s resolution is ``(W / 2, H / 2)``.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_preview_level</span>
+
+    <span class="nd">@preview_level</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">preview_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">level</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;preview_level must be greater than 0&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_preview_level</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_preview_level</span> <span class="o">!=</span> <span class="n">level</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Composition.preview">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.preview">[docs]</a>
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager method to temporarily change the ``preview_level`` using the `with` syntax.</span>
+
+<span class="sd">        For example, ``with self.preview(level=2):`` would change the ``preview_level`` to 2 in that scope.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            level:</span>
+<span class="sd">                The resolution of the rendering of the composition.</span>
+<span class="sd">                For example, if ``level=2`` is set, the composition&#39;s resolution is ``(W / 2, H / 2)``.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; import movis as mv</span>
+<span class="sd">            &gt;&gt;&gt; composition = mv.layer.Composition(size=(640, 480), duration=5.0)</span>
+<span class="sd">            &gt;&gt;&gt; with composition.preview(level=2):</span>
+<span class="sd">            ...     image = composition(0.0)</span>
+<span class="sd">            &gt;&gt;&gt; image.shape</span>
+<span class="sd">            (240, 320, 4)</span>
+<span class="sd">            &gt;&gt;&gt; with composition.preview(level=4):</span>
+<span class="sd">            ...     image = composition(0.0)</span>
+<span class="sd">            &gt;&gt;&gt; image.shape</span>
+<span class="sd">            (120, 160, 4)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">level</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">original_level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preview_level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preview_level</span> <span class="o">=</span> <span class="n">level</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">preview_level</span> <span class="o">=</span> <span class="n">original_level</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">LayerItem</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of ``LayerItem`` objects.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span>
+
+<div class="viewcode-block" id="Composition.keys">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.keys">[docs]</a>
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of layer names.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            The keys are sorted in the order in which they will be rendered.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of layer names sorted in the rendering order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">layer</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Composition.values">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.values">[docs]</a>
+    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">LayerItem</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of LayerItem objects.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            The elements of the list are not the layers themselves,</span>
+<span class="sd">            but ``LayerItem`` containing information of the layers.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of ``LayerItem`` objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span></div>
+
+
+<div class="viewcode-block" id="Composition.items">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.items">[docs]</a>
+    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">LayerItem</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of tuples, each consisting of a layer name and its corresponding item.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of tuples, where each tuple contains a layer name and its layer item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="n">layer</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LayerItem</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_layer</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_layer</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">LayerItem</span> <span class="o">|</span> <span class="n">Layer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">LayerItem</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_layer</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;value must be LayerItem or Layer (i.e., callable)&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pop_layer</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Composition.get_key">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.get_key">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a tuple of hashable keys representing the state for each layer at the given time.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">time</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">time</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">layer_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Hashable</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">CacheType</span><span class="o">.</span><span class="n">COMPOSITION</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">layer_item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">:</span>
+            <span class="n">layer_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">-</span> <span class="n">layer_item</span><span class="o">.</span><span class="n">offset</span>
+            <span class="k">if</span> <span class="n">layer_time</span> <span class="o">&lt;</span> <span class="n">layer_item</span><span class="o">.</span><span class="n">start_time</span> <span class="ow">or</span> <span class="n">layer_item</span><span class="o">.</span><span class="n">end_time</span> <span class="o">&lt;=</span> <span class="n">layer_time</span><span class="p">:</span>
+                <span class="n">layer_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">layer_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer_item</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">layer_keys</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Composition(size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">, duration=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="si">}</span><span class="s2">, layers=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+
+<div class="viewcode-block" id="Composition.add_layer">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.add_layer">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_layer</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">rotation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">blending_mode</span><span class="p">:</span> <span class="n">BlendingMode</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">BlendingMode</span><span class="o">.</span><span class="n">NORMAL</span><span class="p">,</span>
+        <span class="n">anchor_point</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">origin_point</span><span class="p">:</span> <span class="n">Direction</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTER</span><span class="p">,</span>
+        <span class="n">transform</span><span class="p">:</span> <span class="n">Transform</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">audio_level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LayerItem</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a layer to the composition.</span>
+
+<span class="sd">        This method appends the target layer to the composition, along with details about the layer such as</span>
+<span class="sd">        position, scale, opacity, and rendering mode. The composition registers layers wrapped within</span>
+<span class="sd">        a ``LayerItem`` object, which consolidates these related details.</span>
+<span class="sd">        Users can also add the layer with a unique name to the composition.</span>
+<span class="sd">        In this case, the LayerItem can be accessed using ``composition[&#39;layer_name&#39;]``.</span>
+<span class="sd">        To access the layer directly, users can reference it as ``composition[&#39;layer_name&#39;].layer``,</span>
+<span class="sd">        or ideally, retain it in a separate variable before registering with ``add_layer()``.</span>
+
+<span class="sd">        A composition can also be treated as a layer.</span>
+<span class="sd">        This means that users can embed one composition within another using the ``add_layer()`` method.</span>
+<span class="sd">        This allows for more intricate image compositions and animations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            layer:</span>
+<span class="sd">                An instance or function of the layer to be added to the composition,</span>
+<span class="sd">                conforming to the ``Layer`` protocol.</span>
+<span class="sd">            name:</span>
+<span class="sd">                The unique name for the layer within the composition.</span>
+<span class="sd">            position:</span>
+<span class="sd">                The position of the layer. If unspecified,</span>
+<span class="sd">                the layer is placed at the center of the composition by default.</span>
+<span class="sd">            scale:</span>
+<span class="sd">                Scale ``(sx, sy)`` of the layer. Defaults to ``(1.0, 1.0)``.</span>
+<span class="sd">            rotation:</span>
+<span class="sd">                Clockwise rotation angle (in degrees) of the layer. Default is ``0.0``.</span>
+<span class="sd">            opacity:</span>
+<span class="sd">                Opacity of the layer. Default is ``1.0``.</span>
+<span class="sd">            blending_mode:</span>
+<span class="sd">                Rendering mode of the layer. Can be specified as an Enum from ``BlendingMode``</span>
+<span class="sd">                or as a string. Defaults to ``BlendingMode.NORMAL``.</span>
+<span class="sd">            anchor_point:</span>
+<span class="sd">                Defines the origin of the layer&#39;s coordinate system.</span>
+<span class="sd">                The origin is determined by the sum of ``origin_point`` and ``anchor_point``.</span>
+<span class="sd">                If ``origin_point`` is ``Direction.CENTER`` and ``anchor_point`` is ``(0, 0)``,</span>
+<span class="sd">                the origin is the center of the layer. Default is ``(0, 0)``.</span>
+<span class="sd">            origin_point:</span>
+<span class="sd">                Initial reference point for the layer&#39;s coordinate system.</span>
+<span class="sd">                The final origin is determined by the sum of ``origin_point`` and ``anchor_point``.</span>
+<span class="sd">                Defaults to ``Direction.CENTER`` (center of the layer).</span>
+<span class="sd">            transform:</span>
+<span class="sd">                A Transform object managing the geometric properties and rendering mode of the layer.</span>
+<span class="sd">                If specified, the arguments for ``position``, ``scale``, ``rotation``, ``anchor_point``,</span>
+<span class="sd">                ``origin_point``, and ``blending_mode`` in ``add_layer()`` are ignored</span>
+<span class="sd">                in favor of the values in ``transform``.</span>
+<span class="sd">            offset:</span>
+<span class="sd">                The starting time of the layer. For example, if ``start_time=0.0`` and ``offset=1.0``,</span>
+<span class="sd">                the layer will appear after 1 second in the composition.</span>
+<span class="sd">            start_time:</span>
+<span class="sd">                The start time of the layer. This variable is used to clip the layer in the time axis direction.</span>
+<span class="sd">                For example, if ``start_time=1.0`` and ``offset=0.0``, this layer will appear immediately</span>
+<span class="sd">                with one second skipped.</span>
+<span class="sd">            end_time:</span>
+<span class="sd">                The end time of the layer. This variable is used to clip the layer in the time axis direction.</span>
+<span class="sd">                For example, if ``start_time=0.0``, ``end_time=1.0``, and ``offset=0.0``,</span>
+<span class="sd">                this layer will disappear after one second. If not specified,</span>
+<span class="sd">                the layer&#39;s duration is used for ``end_time``.</span>
+<span class="sd">            audio_level:</span>
+<span class="sd">                The audio level of the layer (dB). If the layer has no audio, this value is ignored.</span>
+<span class="sd">            visible:</span>
+<span class="sd">                A flag specifying whether the layer is visible or not;</span>
+<span class="sd">                if ``visible=False``, the layer in the composition is not rendered.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A ``LayerItem`` object that wraps the layer and its corresponding information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;layer_</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_layer</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Layer with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> already exists&quot;</span><span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="k">if</span> <span class="n">end_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="s2">&quot;duration&quot;</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">transform</span> <span class="o">=</span> <span class="n">Transform</span><span class="p">(</span>
+                <span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">,</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
+                <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span>
+                <span class="n">opacity</span><span class="o">=</span><span class="n">opacity</span><span class="p">,</span>
+                <span class="n">anchor_point</span><span class="o">=</span><span class="n">anchor_point</span><span class="p">,</span>
+                <span class="n">origin_point</span><span class="o">=</span><span class="n">origin_point</span><span class="p">,</span>
+                <span class="n">blending_mode</span><span class="o">=</span><span class="n">blending_mode</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">layer_item</span> <span class="o">=</span> <span class="n">LayerItem</span><span class="p">(</span>
+            <span class="n">layer</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+            <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
+            <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span>
+            <span class="n">audio_level</span><span class="o">=</span><span class="n">audio_level</span><span class="p">,</span>
+            <span class="n">visible</span><span class="o">=</span><span class="n">visible</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer_item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_layer</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer_item</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">layer_item</span></div>
+
+
+<div class="viewcode-block" id="Composition.pop_layer">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.pop_layer">[docs]</a>
+    <span class="k">def</span> <span class="nf">pop_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LayerItem</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes a layer item from the composition and returns it.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: The name of the layer to be removed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The layer item that was removed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_layer</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Layer with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">layer_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_layer</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">layer_item</span></div>
+
+
+<div class="viewcode-block" id="Composition.clear">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.clear">[docs]</a>
+    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes all layers from the composition.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">time</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">time</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_preview_level</span>
+        <span class="n">current_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">L</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">L</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
+            <span class="n">cached_frame</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">cached_frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">current_shape</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">cached_frame</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">current_shape</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">layer_item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">layer_item</span><span class="o">.</span><span class="n">_composite</span><span class="p">(</span>
+                <span class="n">frame</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">preview_level</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_preview_level</span><span class="p">,</span>
+                <span class="n">cache</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="k">return</span> <span class="n">frame</span>
+
+<div class="viewcode-block" id="Composition.get_audio">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.get_audio">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_audio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the audio of the composition as a numpy array.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_time:</span>
+<span class="sd">                The start time of the audio. This variable is used to clip the audio in the time axis direction.</span>
+<span class="sd">            end_time:</span>
+<span class="sd">                The end time of the audio. This variable is used to clip the audio in the time axis direction.</span>
+<span class="sd">                If not specified, the composition&#39;s duration is used for ``end_time``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The audio of the composition as a numpy array. If no audio is found, ``None`` is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">start_time</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;start_time must be nonnegative&quot;</span>
+        <span class="k">assert</span> <span class="n">end_time</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">start_time</span> <span class="o">&lt;</span> <span class="n">end_time</span>
+        <span class="n">target_layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">li</span> <span class="k">for</span> <span class="n">li</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">li</span><span class="o">.</span><span class="n">layer</span><span class="p">,</span> <span class="s1">&#39;get_audio&#39;</span><span class="p">)]</span>
+
+        <span class="n">audio</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">layer_item</span> <span class="ow">in</span> <span class="n">target_layers</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">layer_item</span><span class="o">.</span><span class="n">_get_audio_data</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">layer_time_start</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">audio_i</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="n">ind_start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">layer_time_start</span> <span class="o">+</span> <span class="n">layer_item</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span> <span class="o">*</span> <span class="n">AUDIO_SAMPLING_RATE</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">audio</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">n_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="n">AUDIO_SAMPLING_RATE</span><span class="p">)</span>
+                <span class="n">audio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">ind_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ind_start</span> <span class="o">+</span> <span class="n">audio_i</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">audio</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">ind_end</span> <span class="o">-</span> <span class="n">ind_start</span>
+            <span class="n">audio</span><span class="p">[:,</span> <span class="n">ind_start</span><span class="p">:</span><span class="n">ind_end</span><span class="p">]</span> <span class="o">+=</span> <span class="n">audio_i</span><span class="p">[:,</span> <span class="p">:</span><span class="n">length</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">audio</span></div>
+
+
+<div class="viewcode-block" id="Composition.write_video">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.write_video">[docs]</a>
+    <span class="k">def</span> <span class="nf">write_video</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dst_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">,</span>
+        <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;libx264&quot;</span><span class="p">,</span>
+        <span class="n">pixelformat</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;yuv420p&quot;</span><span class="p">,</span>
+        <span class="n">fps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30.0</span><span class="p">,</span>
+        <span class="n">audio</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes the composition&#39;s contents to a video file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dst_file:</span>
+<span class="sd">                The path to the destination video file.</span>
+<span class="sd">            start_time:</span>
+<span class="sd">                The start time of the video. This variable is used to clip the video in the time axis direction.</span>
+<span class="sd">            end_time:</span>
+<span class="sd">                The end time of the video. This variable is used to clip the video in the time axis direction.</span>
+<span class="sd">                If not specified, the composition&#39;s duration is used for ``end_time``.</span>
+<span class="sd">            codec:</span>
+<span class="sd">                The codec used to encode the video. Default is ``libx264``.</span>
+<span class="sd">            pixelformat:</span>
+<span class="sd">                The pixel format of the video. Default is ``yuv420p``.</span>
+<span class="sd">            fps:</span>
+<span class="sd">                The frame rate of the video. Default is ``30.0``.</span>
+<span class="sd">            audio:</span>
+<span class="sd">                A flag specifying whether to include audio in the video.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">end_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fps</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">audio</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;.wav&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">audio_fp</span><span class="p">:</span>
+                <span class="n">audio_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_audio</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">audio_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">audio_path</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                        <span class="n">audio_fp</span><span class="p">,</span> <span class="n">audio_array</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
+                        <span class="n">samplerate</span><span class="o">=</span><span class="n">AUDIO_SAMPLING_RATE</span><span class="p">,</span>
+                        <span class="n">subtype</span><span class="o">=</span><span class="s1">&#39;PCM_16&#39;</span><span class="p">)</span>
+                    <span class="n">audio_path</span> <span class="o">=</span> <span class="n">audio_fp</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">writer</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span>
+                    <span class="n">uri</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">dst_file</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">,</span> <span class="n">pixelformat</span><span class="o">=</span><span class="n">pixelformat</span><span class="p">,</span>
+                    <span class="n">macro_block_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ffmpeg_log_level</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
+                    <span class="n">audio_path</span><span class="o">=</span><span class="n">audio_path</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)):</span>
+                    <span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">append_data</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span>
+                <span class="n">uri</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">dst_file</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">,</span> <span class="n">pixelformat</span><span class="o">=</span><span class="n">pixelformat</span><span class="p">,</span>
+                <span class="n">macro_block_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ffmpeg_log_level</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)):</span>
+                <span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">append_data</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Composition.render_and_play">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.render_and_play">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_and_play</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30.0</span><span class="p">,</span>
+        <span class="n">preview_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Renders the composition and plays it in a Jupyter notebook.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_time:</span>
+<span class="sd">                The start time of the video. This variable is used to clip the video in the time axis direction.</span>
+<span class="sd">            end_time:</span>
+<span class="sd">                The end time of the video. This variable is used to clip the video in the time axis direction.</span>
+<span class="sd">            fps:</span>
+<span class="sd">                The frame rate of the video. Default is ``30.0``.</span>
+<span class="sd">            preview_level:</span>
+<span class="sd">                The resolution of the rendering of the composition.</span>
+<span class="sd">                For example, if ``preview_level=2`` is set, the resolution of the output is ``(W / 2, H / 2)``.</span>
+<span class="sd">                Default is ``2``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
+        <span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">Video</span>
+
+        <span class="k">if</span> <span class="n">end_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+
+        <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fps</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;.mp4&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">preview_level</span><span class="p">):</span>
+                <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">writer</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span>
+                    <span class="n">filename</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="s2">&quot;libx264&quot;</span><span class="p">,</span>
+                    <span class="n">ffmpeg_params</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;-preset&quot;</span><span class="p">,</span> <span class="s2">&quot;veryfast&quot;</span><span class="p">],</span>
+                    <span class="n">pixelformat</span><span class="o">=</span><span class="s2">&quot;yuv444p&quot;</span><span class="p">,</span> <span class="n">macro_block_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">ffmpeg_log_level</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)):</span>
+                    <span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">append_data</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">display</span><span class="p">(</span><span class="n">Video</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">autoplay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LayerItem">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem">[docs]</a>
+<span class="k">class</span> <span class="nc">LayerItem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A wrapper layer for managing additional info. (e.g., the name and position) of each layer in a composition.</span>
+
+<span class="sd">    Usually, there is no need for the user to create this layer directly.</span>
+<span class="sd">    However, editing additional information like the layer&#39;s position or opacity,</span>
+<span class="sd">    or when adding animations or effects, requires editing this layer.</span>
+
+<span class="sd">    ``LayerItem`` can be accessed as the return value of ``composition.add_layer()``</span>
+<span class="sd">    or by specifying it like ``composition[&#39;layer_name&#39;]``.</span>
+<span class="sd">    If you want to directly access the layer, refer to the ``layer_item.layer`` property.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        layer:</span>
+<span class="sd">            The layer to be wrapped.</span>
+<span class="sd">        name:</span>
+<span class="sd">            The name of the layer. The layer name must be unique within the composition.</span>
+<span class="sd">        transform:</span>
+<span class="sd">            An instance of ``Transform`` that includes multiple properties</span>
+<span class="sd">            used to transform the layer within the composition.</span>
+<span class="sd">        offset:</span>
+<span class="sd">            The starting time of the layer. For example, if ``start_time=0.0`` and ``offset=1.0``,</span>
+<span class="sd">            the layer will appear after 1 second in the composition.</span>
+<span class="sd">        start_time:</span>
+<span class="sd">            The start time of the layer. This variable is used to clip the layer in the time axis direction.</span>
+<span class="sd">            For example, if ``start_time=1.0`` and ``offset=0.0``, this layer will appear immediately</span>
+<span class="sd">            with one second skipped.</span>
+<span class="sd">        end_time:</span>
+<span class="sd">            The end time of the layer. This variable is used to clip the layer in the time axis direction.</span>
+<span class="sd">            For example, if ``start_time=0.0``, ``end_time=1.0``, and ``offset=0.0``,</span>
+<span class="sd">            this layer will disappear after one second.</span>
+<span class="sd">            If not specified, the layer&#39;s duration is used for ``end_time``.</span>
+<span class="sd">        audio_level:</span>
+<span class="sd">            The relative audio level of the layer (dB). If the layer has no audio, this value is ignored.</span>
+<span class="sd">        visible:</span>
+<span class="sd">            A flag specifying whether the layer is visible or not;</span>
+<span class="sd">            if ``visible=False``, the layer in the composition is not rendered.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;layer&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="p">:</span> <span class="n">Transform</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">audio_level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span> <span class="o">=</span> <span class="n">layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">:</span> <span class="n">Transform</span> <span class="o">=</span> <span class="n">transform</span> <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Transform</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">start_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">end_time</span> <span class="k">if</span> <span class="n">end_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="s2">&quot;duration&quot;</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio_level</span><span class="p">:</span> <span class="n">Attribute</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">audio_level</span><span class="p">,</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">visible</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_effects</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Effect</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The duration of the layer item.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            This value is determined by the difference between ``end_time`` and ``start_time``,</span>
+<span class="sd">            not by the duration of the layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
+
+<div class="viewcode-block" id="LayerItem.add_effect">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem.add_effect">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">:</span> <span class="n">Effect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Effect</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds an effect to the layer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            effect:</span>
+<span class="sd">                The effect to be added to the layer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The effect that was added.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_effects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">effect</span></div>
+
+
+<div class="viewcode-block" id="LayerItem.remove_effect">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem.remove_effect">[docs]</a>
+    <span class="k">def</span> <span class="nf">remove_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">:</span> <span class="n">Effect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes an effect from the layer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            effect:</span>
+<span class="sd">                The effect to be removed from the layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_effects</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">effects</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Effect</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A list of effects applied to the layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_effects</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">anchor_point</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Attribute</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The anchor point of the layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">anchor_point</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Attribute</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The position of the layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">position</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Attribute</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The scale of the layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Attribute</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The rotation of the layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">rotation</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">opacity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Attribute</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The opacity of the layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">opacity</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">origin_point</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The origin point of the layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">origin_point</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">blending_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BlendingMode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The blending mode of the layer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">blending_mode</span>
+
+<div class="viewcode-block" id="LayerItem.get_key">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem.get_key">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the state of the layer item at the given time.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            time:</span>
+<span class="sd">                The time at which the layer is rendered.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A tuple of hashable keys representing the state of the layer at the given time.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">layer_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+        <span class="n">transform_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">get_current_value</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)</span>
+        <span class="n">layer_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">,</span> <span class="s1">&#39;get_key&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">layer_time</span>
+
+        <span class="k">def</span> <span class="nf">get_effect_key</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">Effect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Hashable</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;get_key&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">layer_time</span>
+
+        <span class="n">effects_key</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_effects</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">get_effect_key</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_effects</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">transform_key</span><span class="p">,</span> <span class="n">layer_key</span><span class="p">,</span> <span class="n">effects_key</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_get_fg_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="n">Cache</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">key_body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">CacheType</span><span class="o">.</span><span class="n">LAYER</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">key_body</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">fg_image</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fg_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fg_image</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span> <span class="s2">&quot;Rendered layer image must be a numpy array&quot;</span>
+        <span class="k">assert</span> <span class="n">fg_image</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="s2">&quot;Rendered layer image must have dtype=np.uint8&quot;</span>
+        <span class="k">assert</span> <span class="n">fg_image</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Rendered layer image must have 3 dimensions (H, W, C)&quot;</span>
+        <span class="k">assert</span> <span class="n">fg_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Rendered layer image must have 4 channels (RGBA)&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">fg_image</span>
+        <span class="k">return</span> <span class="n">fg_image</span>
+
+    <span class="k">def</span> <span class="nf">_composite</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">bg_image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">preview_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">cache</span><span class="p">:</span> <span class="n">Cache</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Retrieve layer image</span>
+        <span class="n">layer_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+        <span class="k">if</span> <span class="n">layer_time</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span> <span class="o">&lt;=</span> <span class="n">layer_time</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bg_image</span>
+        <span class="n">fg_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fg_image</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fg_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bg_image</span>
+
+        <span class="c1"># Get affine matrix and transform layer image</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">get_current_value</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">_get_fixed_affine_matrix</span><span class="p">(</span><span class="n">fg_image</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">preview_level</span><span class="o">=</span><span class="n">preview_level</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bg_image</span>
+        <span class="n">affine_matrix_fixed</span><span class="p">,</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">),</span> <span class="p">(</span><span class="n">offset_x</span><span class="p">,</span> <span class="n">offset_y</span><span class="p">)</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="n">fg_image_transformed</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">warpAffine</span><span class="p">(</span>
+            <span class="n">fg_image</span><span class="p">,</span> <span class="n">affine_matrix_fixed</span><span class="p">,</span> <span class="n">dsize</span><span class="o">=</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">),</span>
+            <span class="n">flags</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_LINEAR</span><span class="p">,</span> <span class="n">borderMode</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">BORDER_CONSTANT</span><span class="p">)</span>
+
+        <span class="c1"># Composite bg_image and fg_image</span>
+        <span class="n">bg_image</span> <span class="o">=</span> <span class="n">alpha_composite</span><span class="p">(</span>
+            <span class="n">bg_image</span><span class="p">,</span> <span class="n">fg_image_transformed</span><span class="p">,</span>
+            <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="n">offset_x</span> <span class="o">-</span> <span class="n">parent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">offset_y</span> <span class="o">-</span> <span class="n">parent</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">opacity</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">opacity</span><span class="p">,</span> <span class="n">blending_mode</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">blending_mode</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bg_image</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">layer_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_effects</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">effect</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">layer_time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">frame</span>
+
+    <span class="k">def</span> <span class="nf">_get_audio_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">layer_time_start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">start_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
+        <span class="n">layer_time_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span> <span class="n">end_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">layer_time_start</span> <span class="o">&gt;=</span> <span class="n">layer_time_end</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">,</span> <span class="s1">&#39;get_audio&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">layer</span><span class="p">:</span> <span class="n">AudioLayer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span>  <span class="c1"># type: ignore</span>
+        <span class="n">audio</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_audio</span><span class="p">(</span><span class="n">layer_time_start</span><span class="p">,</span> <span class="n">layer_time_end</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">audio</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">_get_scale_by_block</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">audio_level</span><span class="p">,</span> <span class="n">layer_time_start</span><span class="p">,</span> <span class="n">audio</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">layer_time_start</span><span class="p">,</span> <span class="n">layer_time_end</span><span class="p">,</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">audio</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;LayerItem(name=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">, layer=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="si">!r}</span><span class="s2">, transform=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="si">!r}</span><span class="s2">, &quot;</span> \
+            <span class="sa">f</span><span class="s2">&quot;offset=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="si">}</span><span class="s2">, visible=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">visible</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_get_fixed_affine_matrix</span><span class="p">(</span>
+    <span class="n">fg_image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">TransformValue</span><span class="p">,</span>
+    <span class="n">preview_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">fg_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">T1</span><span class="p">,</span> <span class="n">SR</span> <span class="o">=</span> <span class="n">_get_T1</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">_get_SR</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">T2</span> <span class="o">=</span> <span class="n">_get_T2</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span> <span class="n">p</span><span class="o">.</span><span class="n">origin_point</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">T1</span> <span class="o">@</span> <span class="n">SR</span> <span class="o">@</span> <span class="n">T2</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span> <span class="o">/</span> <span class="n">preview_level</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">preview_level</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">affine_matrix</span> <span class="o">=</span> <span class="p">(</span><span class="n">P</span> <span class="o">@</span> <span class="n">M</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">corners_layer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">corners_global</span> <span class="o">=</span> <span class="n">corners_layer</span> <span class="o">@</span> <span class="n">affine_matrix</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="n">min_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">corners_global</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">max_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">corners_global</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">WH</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_coords</span> <span class="o">-</span> <span class="n">min_coords</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">WH</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">WH</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">W</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">H</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">offset_x</span><span class="p">,</span> <span class="n">offset_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">min_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">min_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span> <span class="o">/</span> <span class="n">preview_level</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span> <span class="n">offset_x</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">preview_level</span><span class="p">,</span> <span class="o">-</span> <span class="n">offset_y</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">affine_matrix_fixed</span> <span class="o">=</span> <span class="p">(</span><span class="n">Pf</span> <span class="o">@</span> <span class="n">M</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">affine_matrix_fixed</span><span class="p">,</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">),</span> <span class="p">(</span><span class="n">offset_x</span><span class="p">,</span> <span class="n">offset_y</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_T1</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">TransformValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">anchor_point</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">anchor_point</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_SR</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">TransformValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">cos_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span> <span class="o">/</span> <span class="mi">360</span><span class="p">)</span>
+    <span class="n">sin_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span> <span class="o">/</span> <span class="mi">360</span><span class="p">)</span>
+    <span class="n">SR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos_t</span><span class="p">,</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin_t</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin_t</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos_t</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">SR</span>
+
+
+<span class="k">def</span> <span class="nf">_get_T2</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">TransformValue</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">origin_point</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">center_point</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">to_vector</span><span class="p">(</span>
+        <span class="n">origin_point</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+    <span class="n">T2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">anchor_point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">center_point</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">anchor_point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">center_point</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">T2</span>
+
+
+<span class="k">def</span> <span class="nf">_get_scale_by_block</span><span class="p">(</span><span class="n">audio_level</span><span class="p">:</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">n_blocks</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">+</span> <span class="n">AUDIO_BLOCK_SIZE</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">AUDIO_BLOCK_SIZE</span>
+    <span class="n">block_times</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_blocks</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">AUDIO_BLOCK_SIZE</span> <span class="o">/</span> <span class="n">AUDIO_SAMPLING_RATE</span><span class="p">)</span>
+    <span class="n">block_level</span> <span class="o">=</span> <span class="n">audio_level</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="n">block_times</span><span class="p">)</span>
+    <span class="n">block_scale</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="n">block_level</span> <span class="o">/</span> <span class="mf">20.0</span><span class="p">)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">block_scale</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+        <span class="n">block_scale</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">n_blocks</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">n_blocks</span><span class="p">,</span> <span class="n">AUDIO_BLOCK_SIZE</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">n_blocks</span> <span class="o">*</span> <span class="n">AUDIO_BLOCK_SIZE</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scale</span><span class="p">[:,</span> <span class="p">:</span><span class="n">n_samples</span><span class="p">]</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Masaki Saito.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

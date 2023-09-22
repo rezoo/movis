@@ -1,0 +1,30 @@
+﻿movis.contrib.segmentation.RobustVideoMatting
+=============================================
+
+.. currentmodule:: movis.contrib.segmentation
+
+.. autoclass:: RobustVideoMatting
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RobustVideoMatting.default_md5_digest
+      ~RobustVideoMatting.default_model_url
+      ~RobustVideoMatting.recurrent_state
+   
+   

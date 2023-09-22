@@ -1,0 +1,28 @@
+﻿movis.layer.texture.Stripe
+==========================
+
+.. currentmodule:: movis.layer.texture
+
+.. autoclass:: Stripe
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Stripe.attributes
+   
+   

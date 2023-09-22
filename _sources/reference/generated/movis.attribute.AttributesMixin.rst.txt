@@ -1,0 +1,28 @@
+﻿movis.attribute.AttributesMixin
+===============================
+
+.. currentmodule:: movis.attribute
+
+.. autoclass:: AttributesMixin
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AttributesMixin.attributes
+   
+   

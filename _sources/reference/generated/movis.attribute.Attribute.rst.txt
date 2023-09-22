@@ -1,0 +1,38 @@
+﻿movis.attribute.Attribute
+=========================
+
+.. currentmodule:: movis.attribute
+
+.. autoclass:: Attribute
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: add_function
+   .. automethod:: clear_functions
+   .. automethod:: disable_motion
+   .. automethod:: enable_motion
+   .. automethod:: get_values
+   .. automethod:: pop_function
+   .. automethod:: set
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Attribute.functions
+      ~Attribute.init_value
+      ~Attribute.motion
+      ~Attribute.range
+      ~Attribute.value_type
+   
+   

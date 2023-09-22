@@ -1,0 +1,29 @@
+﻿movis.layer.drawing.Rectangle
+=============================
+
+.. currentmodule:: movis.layer.drawing
+
+.. autoclass:: Rectangle
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Rectangle.attributes
+      ~Rectangle.duration
+   
+   

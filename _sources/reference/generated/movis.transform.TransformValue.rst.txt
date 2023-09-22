@@ -1,0 +1,35 @@
+﻿movis.transform.TransformValue
+==============================
+
+.. currentmodule:: movis.transform
+
+.. autoclass:: TransformValue
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: count
+   .. automethod:: index
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TransformValue.anchor_point
+      ~TransformValue.blending_mode
+      ~TransformValue.opacity
+      ~TransformValue.origin_point
+      ~TransformValue.position
+      ~TransformValue.rotation
+      ~TransformValue.scale
+   
+   

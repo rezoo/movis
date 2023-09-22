@@ -1,0 +1,28 @@
+﻿movis.effect.color.HSLShift
+===========================
+
+.. currentmodule:: movis.effect.color
+
+.. autoclass:: HSLShift
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_key
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~HSLShift.attributes
+   
+   

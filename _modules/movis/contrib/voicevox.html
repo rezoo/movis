@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>movis.contrib.voicevox &#8212; movis  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=927b94d3fcb96560df09"></script>
+
+    <script src="../../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/movis/contrib/voicevox';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">movis  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../overview.html">
+                        Overview
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">movis.contrib.voicevox</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for movis.contrib.voicevox</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">difflib</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">PathLike</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Hashable</span>
+
+<span class="kn">import</span> <span class="nn">librosa</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+    <span class="n">pandas_available</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">pandas_available</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="make_voicevox_dataframe">
+<a class="viewcode-back" href="../../../reference/contrib/generated/movis.contrib.voicevox.make_voicevox_dataframe.html#movis.contrib.voicevox.make_voicevox_dataframe">[docs]</a>
+<span class="k">def</span> <span class="nf">make_voicevox_dataframe</span><span class="p">(</span><span class="n">audio_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DataFrame&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a ``pandas.DataFrame`` representing the timeline of audio files generated by Voicevox.</span>
+
+<span class="sd">    This function takes a directory containing `.wav` files generated by Voicevox (https://voicevox.hiroshiba.jp/),</span>
+<span class="sd">    and returns a DataFrame where each row represents an audio file, sorted by the filename.</span>
+<span class="sd">    The DataFrame will have columns ``start_time``, ``end_time``, and ``audio_file``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        audio_dir:</span>
+<span class="sd">            The directory containing `.wav` files generated by Voicevox.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A DataFrame with columns `start_time`, `end_time`, and `audio_file`.</span>
+
+<span class="sd">        - ``start_time``: The start time of the audio clip in seconds.</span>
+<span class="sd">        - ``end_time``: The end time of the audio clip in seconds.</span>
+<span class="sd">        - ``audio_file``: The path to the audio file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pandas_available</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;pandas is not installed&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_audio_length</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">librosa</span><span class="o">.</span><span class="n">get_duration</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">wav_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">audio_dir</span><span class="p">)</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.wav&quot;</span><span class="p">)</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">wav_file</span> <span class="ow">in</span> <span class="n">wav_files</span><span class="p">:</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="n">get_audio_length</span><span class="p">(</span><span class="n">wav_file</span><span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="n">duration</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span>
+            <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">end_time</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+    <span class="n">frame</span><span class="p">[</span><span class="s2">&quot;audio_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">wav_files</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">frame</span></div>
+
+
+
+<div class="viewcode-block" id="make_timeline_from_voicevox">
+<a class="viewcode-back" href="../../../reference/contrib/generated/movis.contrib.voicevox.make_timeline_from_voicevox.html#movis.contrib.voicevox.make_timeline_from_voicevox">[docs]</a>
+<span class="k">def</span> <span class="nf">make_timeline_from_voicevox</span><span class="p">(</span>
+    <span class="n">audio_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">,</span>
+    <span class="n">max_text_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+    <span class="n">extra_columns</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;slide&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">)),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DataFrame&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a Pandas DataFrame based on text files generated by Voicevox.</span>
+
+<span class="sd">    This function reads ``.txt`` files from a directory generated by Voicevox and constructs a DataFrame.</span>
+<span class="sd">    Each row of the DataFrame corresponds to a text file and includes columns such as ``&#39;character&#39;``,</span>
+<span class="sd">    ``&#39;hash&#39;``, and ``&#39;text&#39;``, as well as any additional columns specified in ``extra_columns``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        audio_dir:</span>
+<span class="sd">            The directory containing ``.txt`` files generated by Voicevox.</span>
+<span class="sd">        max_text_length:</span>
+<span class="sd">            The maximum length of text for each entry in the ``&#39;text&#39;`` column.</span>
+<span class="sd">            Strings longer than ``max_text_length`` are automatically line-breaked</span>
+<span class="sd">            for subtitling convenience. Defaults to 25.</span>
+<span class="sd">        extra_columns:</span>
+<span class="sd">            Additional columns to be added to the DataFrame. Each inner tuple should contain a</span>
+<span class="sd">            column name and a default value. Defaults to ``((&quot;slide&quot;, 0), (&quot;status&quot;, &quot;n&quot;))``.</span>
+<span class="sd">            For example, ``extra_columns=((&quot;slide&quot;, 0), (&quot;status&quot;, &quot;n&quot;))`` will add two columns</span>
+<span class="sd">            named ``&#39;slide&#39;`` and ``&#39;status&#39;`` with default values ``0`` and ``&#39;n&#39;``, respectively.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        The ``&#39;character&#39;`` column is automatically added to the DataFrame based on the filename.</span>
+<span class="sd">        For example, if the filename is ``&#39;001_ずんだもん（ノーマル）.txt&#39;``, the ``&#39;character&#39;`` column</span>
+<span class="sd">        will be set to ``&#39;zunda&#39;``.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        The ``&#39;hash&#39;`` column is automatically added to the DataFrame based on the content of the text file.</span>
+<span class="sd">        This is used in ``merget_timeline`` to detect changes in the text file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A DataFrame with columns that may include &#39;character&#39;, &#39;hash&#39;, &#39;text&#39;, and any additional columns.</span>
+
+<span class="sd">        - ``character``: The identifier for the Voicevox character.</span>
+<span class="sd">        - ``hash``: A hash prefix based on the content of the text file.</span>
+<span class="sd">        - ``text``: The text content, potentially divided into multiple parts if it exceeds ``max_text_length``.</span>
+<span class="sd">        - Any additional columns specified in ``extra_columns``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pandas_available</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;pandas is not installed&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_paths</span><span class="p">(</span><span class="n">src_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">ext</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+        <span class="n">src_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">src_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">src_dir</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="n">ext</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_hash_prefix</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="n">text_bytes</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">sha1_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">text_bytes</span><span class="p">)</span>
+        <span class="n">hashed_text</span> <span class="o">=</span> <span class="n">sha1_hash</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">hashed_text</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">prefix</span>
+
+    <span class="n">txt_files</span> <span class="o">=</span> <span class="n">get_paths</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">audio_dir</span><span class="p">),</span> <span class="s2">&quot;.txt&quot;</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">txt_file</span> <span class="ow">in</span> <span class="n">txt_files</span><span class="p">:</span>
+        <span class="n">raw_text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">txt_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8-sig&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">raw_text</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Empty text file: </span><span class="si">{</span><span class="n">txt_file</span><span class="si">}</span><span class="s2">. Please remove it and try again.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">character_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ずんだもん&quot;</span><span class="p">:</span> <span class="s2">&quot;zunda&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;四国めたん&quot;</span><span class="p">:</span> <span class="s2">&quot;metan&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;春日部つむぎ&quot;</span><span class="p">:</span> <span class="s2">&quot;tsumugi&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">character</span> <span class="o">=</span> <span class="n">txt_file</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;（&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="n">raw_text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">max_text_length</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_text</span><span class="p">),</span> <span class="n">max_text_length</span><span class="p">)]</span>
+        <span class="p">)</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;character&quot;</span><span class="p">:</span> <span class="n">character_dict</span><span class="p">[</span><span class="n">character</span><span class="p">],</span>
+            <span class="s2">&quot;hash&quot;</span><span class="p">:</span> <span class="n">get_hash_prefix</span><span class="p">(</span><span class="n">raw_text</span><span class="p">),</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">default_value</span> <span class="ow">in</span> <span class="n">extra_columns</span><span class="p">:</span>
+            <span class="n">dic</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_value</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="merge_timeline">
+<a class="viewcode-back" href="../../../reference/contrib/generated/movis.contrib.voicevox.merge_timeline.html#movis.contrib.voicevox.merge_timeline">[docs]</a>
+<span class="k">def</span> <span class="nf">merge_timeline</span><span class="p">(</span>
+    <span class="n">old_timeline</span><span class="p">:</span> <span class="s2">&quot;DataFrame&quot;</span><span class="p">,</span>
+    <span class="n">new_timeline</span><span class="p">:</span> <span class="s2">&quot;DataFrame&quot;</span><span class="p">,</span>
+    <span class="n">key</span><span class="o">=</span><span class="s2">&quot;hash&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DataFrame&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Merge an old DataFrame with a new DataFrame to update its timeline information.</span>
+
+<span class="sd">    This function takes an old DataFrame and a new DataFrame, both generated by `make_timeline_from_voicevox`,</span>
+<span class="sd">    and merges them to create an updated DataFrame. Rows in both DataFrames are compared based on the</span>
+<span class="sd">    specified key column. Any discrepancies between the old and new DataFrames are flagged in the</span>
+<span class="sd">    specified description column with ``&quot;&gt;&gt;&gt;&gt;&gt;&quot;`` for added rows and ``&quot;&lt;&lt;&lt;&lt;&lt;&quot;`` for removed rows.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        old_timeline:</span>
+<span class="sd">            The old DataFrame to be updated.</span>
+<span class="sd">        new_timeline:</span>
+<span class="sd">            The new DataFrame to update the old one.</span>
+<span class="sd">        key:</span>
+<span class="sd">            The column used for comparison. Defaults to &quot;hash&quot;.</span>
+<span class="sd">        description:</span>
+<span class="sd">            The column where discrepancies will be flagged. Defaults to &quot;text&quot;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An updated DataFrame that merges the old and new timelines.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; old_timeline = pd.DataFrame({&#39;hash&#39;: [1, 2], &#39;text&#39;: [&#39;a&#39;, &#39;b&#39;]})</span>
+<span class="sd">        &gt;&gt;&gt; new_timeline = pd.DataFrame({&#39;hash&#39;: [2, 3], &#39;text&#39;: [&#39;b&#39;, &#39;c&#39;]})</span>
+<span class="sd">        &gt;&gt;&gt; merge_timeline(old_timeline, new_timeline)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pandas_available</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;pandas is not installed&quot;</span><span class="p">)</span>
+
+    <span class="n">differ</span> <span class="o">=</span> <span class="n">difflib</span><span class="o">.</span><span class="n">Differ</span><span class="p">()</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">differ</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">old_timeline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">new_timeline</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">old_indices</span> <span class="o">=</span> <span class="n">old_timeline</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">new_indices</span> <span class="o">=</span> <span class="n">new_timeline</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">old_idx</span><span class="p">,</span> <span class="n">new_idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">diff</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">old_timeline</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">old_indices</span><span class="p">[</span><span class="n">old_idx</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">row</span><span class="p">[</span><span class="n">description</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;&lt;&lt;&lt;&lt; </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">description</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="n">old_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">d</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">new_timeline</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">new_indices</span><span class="p">[</span><span class="n">new_idx</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">row</span><span class="p">[</span><span class="n">description</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt;&gt;&gt; </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">description</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="n">new_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">old_timeline</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">old_indices</span><span class="p">[</span><span class="n">old_idx</span><span class="p">]])</span>
+            <span class="n">old_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">new_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Masaki Saito.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

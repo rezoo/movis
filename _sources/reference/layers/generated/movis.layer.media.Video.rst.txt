@@ -1,0 +1,34 @@
+﻿movis.layer.media.Video
+=======================
+
+.. currentmodule:: movis.layer.media
+
+.. autoclass:: Video
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: get_audio
+   .. automethod:: get_key
+   .. automethod:: has_audio
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Video.audio
+      ~Video.duration
+      ~Video.fps
+      ~Video.n_frame
+      ~Video.size
+   
+   
