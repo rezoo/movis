@@ -28,6 +28,9 @@ jobs:
       - name: Print directory structure
         run: |
           ls -R
+      - name: Check if movis is installed
+        run: |
+          python -c "import movis"
       - name: Build documentation
         run: |
           cd docs
