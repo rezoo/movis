@@ -396,8 +396,11 @@ class Composition:
         end_time: float | None = None,
         codec: str = "libx264",
         pixelformat: str = "yuv420p",
+        input_params: list[str] | None = None,
+        output_params: list[str] | None = None,
         fps: float = 30.0,
         audio: bool = False,
+        audio_codec: str | None = None,
     ) -> None:
         """Writes the composition's contents to a video file.
 
@@ -413,10 +416,17 @@ class Composition:
                 The codec used to encode the video. Default is ``libx264``.
             pixelformat:
                 The pixel format of the video. Default is ``yuv420p``.
+            input_params:
+                A list of parameters to be passed to the ffmpeg input.
+            output_params:
+                A list of parameters to be passed to the ffmpeg output.
+                For example, ``["-preset", "medium"]`` or ``["-crf", "18"]``.
             fps:
                 The frame rate of the video. Default is ``30.0``.
             audio:
                 A flag specifying whether to include audio in the video.
+            audio_codec:
+                The codec used to encode the audio. If not specified, the default codec is used.
         """
         if end_time is None:
             end_time = self.duration
@@ -435,7 +445,8 @@ class Composition:
                 writer = imageio.get_writer(
                     uri=str(dst_file), fps=fps, codec=codec, pixelformat=pixelformat,
                     macro_block_size=None, ffmpeg_log_level="error",
-                    audio_path=audio_path)
+                    input_params=input_params, output_params=output_params,
+                    audio_path=audio_path, audio_codec=audio_codec)
                 for t in tqdm(times, total=len(times)):
                     frame = np.asarray(self(t))
                     writer.append_data(frame)
@@ -443,6 +454,7 @@ class Composition:
         else:
             writer = imageio.get_writer(
                 uri=str(dst_file), fps=fps, codec=codec, pixelformat=pixelformat,
+                input_params=input_params, output_params=output_params,
                 macro_block_size=None, ffmpeg_log_level="error")
             for t in tqdm(times, total=len(times)):
                 frame = np.asarray(self(t))
