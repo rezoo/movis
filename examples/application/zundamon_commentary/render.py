@@ -137,9 +137,10 @@ def main():
         item.add_effect(mv.effect.DropShadow(offset=5.0))
 
     scene.add_layer(mv.layer.AudioSequence(tl['start_time'], tl['end_time'], tl['audio_file']))
-    bgm = scene.add_layer(mv.layer.Audio('assets/bgm2.wav'))
-    bgm.audio_level.enable_motion().extend(
-        keyframes=[scene.duration - 5, scene.duration], values=[-25, -50])
+    # If you want to add BGM, put it in assets/bgm.wav and uncomment the following lines.
+    # bgm = scene.add_layer(mv.layer.Audio('assets/bgm.wav'))
+    # bgm.audio_level.enable_motion().extend(
+    #     keyframes=[scene.duration - 5, scene.duration], values=[-25, -50])
 
     mv.write_srt_file(
         tl['start_time'], tl['end_time'], tl['text'], 'outputs/dialogue.srt')
