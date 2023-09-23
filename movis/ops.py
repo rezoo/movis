@@ -122,15 +122,33 @@ def trim(
     return composition
 
 
-def tile(layers: Sequence[BasicLayer], rows: int, cols: int) -> Composition:
+def tile(
+    layers: Sequence[BasicLayer], rows: int, cols: int,
+    size: tuple[int, int] | None = None,
+) -> Composition:
     """Tile layers into a single composition.
 
     Args:
-        layers: Layers to tile.
-        size: Size of the composition. If ``None``, the size of the layer is estimated.
+        layers:
+            Layers to tile. Note that the order of the layers is row-major.
+            For example, if ``layers`` is ``[a, b, c, d]`` and
+            ``rows`` and ``cols`` are both ``2``, the composition will be: ``[[a, b], [c, d]]``.
+        rows:
+            Number of rows.
+        cols:
+            Number of columns.
+        size:
+            Size of each layer. Note that ``tile`` assumes that all layers have the same size.
+            If ``None``, the size of the layer is estimated.
+
+    .. note::
+        The layer resolution specified in ``size`` does not have to be the actual layer resolution.
+        For example, if ``size`` is specified to be larger than the actual layer size,
+        each layer is placed in the center of each tile.
 
     Returns:
-        Composition with all layers tiled.
+        Composition with all layers tiled. The size is ``(cols * w, rows * h)``,
+        where ``w`` and ``h`` are the width and height of each layer, respectively.
 
     Examples:
         >>> import movis as mv
@@ -145,10 +163,13 @@ def tile(layers: Sequence[BasicLayer], rows: int, cols: int) -> Composition:
     """
     assert len(layers) == rows * cols, \
         f"Number of layers ({len(layers)}) must be equal to rows * cols ({rows * cols})."
-    result = layers[0](0.0)
-    if result is None:
-        raise ValueError("Cannot determine size of composition.")
-    w, h = result.shape[1], result.shape[0]
+    if size is None:
+        result = layers[0](0.0)
+        if result is None:
+            raise ValueError("Cannot determine size of composition.")
+        w, h = result.shape[1], result.shape[0]
+    else:
+        w, h = size
 
     W = cols * w
     H = rows * h
