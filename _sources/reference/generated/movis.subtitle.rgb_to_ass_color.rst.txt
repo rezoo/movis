@@ -1,0 +1,6 @@
+﻿movis.subtitle.rgb\_to\_ass\_color
+==================================
+
+.. currentmodule:: movis.subtitle
+
+.. autofunction:: rgb_to_ass_color

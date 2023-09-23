@@ -44,7 +44,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/movis.subtitle.write_ass_file';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="movis.subtitle.write_srt_file" href="movis.subtitle.write_srt_file.html" />
+    <link rel="next" title="movis.subtitle.rgb_to_ass_color" href="movis.subtitle.rgb_to_ass_color.html" />
     <link rel="prev" title="movis.subtitle" href="../subtitle.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -347,6 +347,7 @@ document.write(`
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../subtitle.html">movis.subtitle</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.subtitle.write_ass_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.subtitle.rgb_to_ass_color.html">movis.subtitle.rgb_to_ass_color</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.subtitle.write_srt_file.html">movis.subtitle.write_srt_file</a></li>
 </ul>
 </li>
@@ -426,7 +427,7 @@ document.write(`
 <dt class="sig sig-object py" id="movis.subtitle.write_ass_file">
 <span class="sig-prename descclassname"><span class="pre">movis.subtitle.</span></span><span class="sig-name descname"><span class="pre">write_ass_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ass_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.11)"><span class="pre">PathLike</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1920,</span> <span class="pre">1080)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">characters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">styles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ASSStyleType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/movis/subtitle.html#write_ass_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.subtitle.write_ass_file" title="Link to this definition">#</a></dt>
 <dd><p>Writes an ASS (Advanced SubStation Alpha) subtitle file.</p>
-<dl class="simple">
+<dl>
 <dt>Args:</dt><dd><dl class="simple">
 <dt>start_times:</dt><dd><p>A list of start times in seconds for each subtitle entry.</p>
 </dd>
@@ -443,6 +444,25 @@ document.write(`
 <dt>styles:</dt><dd><p>A list of styles for each subtitle entry. Defaults to None.</p>
 </dd>
 </dl>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">movis</span> <span class="k">as</span> <span class="nn">mv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mv</span><span class="o">.</span><span class="n">write_ass_file</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">start_times</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">end_times</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">texts</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Subtitle1&#39;</span><span class="p">,</span> <span class="s1">&#39;Subtitle2&#39;</span><span class="p">,</span> <span class="s1">&#39;Subtitle3&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">styles</span><span class="o">=</span><span class="p">[</span><span class="n">mv</span><span class="o">.</span><span class="n">ASSStyleType</span><span class="p">(</span><span class="n">font_size</span><span class="o">=</span><span class="mi">96</span><span class="p">)],</span>  <span class="c1"># Set default font size</span>
+<span class="gp">... </span>    <span class="n">dst_ass_file</span><span class="o">=</span><span class="s1">&#39;subtitle1.ass&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mv</span><span class="o">.</span><span class="n">write_ass_file</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">start_times</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">end_times</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">texts</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;text by Alice&#39;</span><span class="p">,</span> <span class="s1">&#39;text by Bob&#39;</span><span class="p">,</span> <span class="s1">&#39;text by Alice&#39;</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">characters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Alice&#39;</span><span class="p">,</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="s1">&#39;Alice&#39;</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">styles</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>       <span class="n">mv</span><span class="o">.</span><span class="n">ASSStyleType</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Alice&#39;</span><span class="p">,</span> <span class="n">primary_color</span><span class="o">=</span><span class="n">mv</span><span class="o">.</span><span class="n">rgb_to_ass_color</span><span class="p">(</span><span class="s1">&#39;red&#39;</span><span class="p">)),</span>
+<span class="gp">... </span>       <span class="n">mv</span><span class="o">.</span><span class="n">ASSStyleType</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="n">primary_color</span><span class="o">=</span><span class="n">mv</span><span class="o">.</span><span class="n">rgb_to_ass_color</span><span class="p">(</span><span class="s1">&#39;blue&#39;</span><span class="p">))],</span>
+<span class="gp">... </span>   <span class="n">dst_ass_file</span><span class="o">=</span><span class="s1">&#39;subtitle2.ass&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd>
 </dl>
 </dd></dl>
@@ -469,11 +489,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="movis.subtitle.write_srt_file.html"
+       href="movis.subtitle.rgb_to_ass_color.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">movis.subtitle.write_srt_file</p>
+        <p class="prev-next-title">movis.subtitle.rgb_to_ass_color</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

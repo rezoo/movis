@@ -333,6 +333,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Sequence</span>
 
 <span class="kn">from</span> <span class="nn">.enum</span> <span class="kn">import</span> <span class="n">Direction</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">to_rgb</span>
 
 
 <span class="k">class</span> <span class="nc">ASSStyleType</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -360,21 +361,31 @@ document.write(`
     <span class="n">margin_v</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>
 
 
-<span class="k">def</span> <span class="nf">_rgb_to_ass_color</span><span class="p">(</span><span class="n">rgb_array</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="rgb_to_ass_color">
+<a class="viewcode-back" href="../../reference/generated/movis.subtitle.rgb_to_ass_color.html#movis.subtitle.rgb_to_ass_color">[docs]</a>
+<span class="k">def</span> <span class="nf">rgb_to_ass_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform the rgb array into the string used in ASS file.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        rgb_array:</span>
-<span class="sd">            an three-dimensional rgb array.</span>
+<span class="sd">        color:</span>
+<span class="sd">            A union type that can be either a string or a tuple containing RGB integers or a sequence of integers.</span>
+<span class="sd">            If ``str``: The string can be either a CSS color name (e.g., &#39;red&#39;) or a hexadecimal RGB string</span>
+<span class="sd">            (e.g., ``&#39;#FF0000&#39;``). If ``tuple[int, int, int]`` or ``Sequence[int]``, it represents RGB values</span>
+<span class="sd">            as integers between 0 and 255 (`e.g.`, ``(255, 0, 0)``).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        the color string used in ASS file.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rgb_array</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;&amp;H</span><span class="si">{:02x}{:02x}{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rgb_array</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">rgb_array</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rgb_array</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">rgb_array</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;&amp;H</span><span class="si">{:02x}{:02x}{:02x}{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rgb_array</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">rgb_array</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">rgb_array</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rgb_array</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;length of rgb_array must be 3(rgb) or 4(rgba)&#39;</span><span class="p">)</span>
+<span class="sd">        the color string used in ASS file.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import movis as mv</span>
+<span class="sd">        &gt;&gt;&gt; mv.rgb_to_ass_color((255, 0, 0))</span>
+<span class="sd">        &#39;&amp;H0000ff&#39;</span>
+<span class="sd">        &gt;&gt;&gt; mv.rgb_to_ass_color(&#39;blue&#39;)</span>
+<span class="sd">        &#39;&amp;Hff0000&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rgb_array</span> <span class="o">=</span> <span class="n">to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;&amp;H</span><span class="si">{:02x}{:02x}{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rgb_array</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">rgb_array</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rgb_array</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">_make_ass_style_header</span><span class="p">():</span>
@@ -422,6 +433,24 @@ document.write(`
 <span class="sd">            A list of character names for each subtitle entry. Defaults to None.</span>
 <span class="sd">        styles:</span>
 <span class="sd">            A list of styles for each subtitle entry. Defaults to None.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import movis as mv</span>
+<span class="sd">        &gt;&gt;&gt; mv.write_ass_file(</span>
+<span class="sd">        ...     start_times=[0.0, 1.0, 3.0],</span>
+<span class="sd">        ...     end_times=[1.0, 3.0, 4.0],</span>
+<span class="sd">        ...     texts=[&#39;Subtitle1&#39;, &#39;Subtitle2&#39;, &#39;Subtitle3&#39;],</span>
+<span class="sd">        ...     styles=[mv.ASSStyleType(font_size=96)],  # Set default font size</span>
+<span class="sd">        ...     dst_ass_file=&#39;subtitle1.ass&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; mv.write_ass_file(</span>
+<span class="sd">        ...    start_times=[0.0, 1.0, 3.0],</span>
+<span class="sd">        ...    end_times=[1.0, 3.0, 4.0],</span>
+<span class="sd">        ...    texts=[&#39;text by Alice&#39;, &#39;text by Bob&#39;, &#39;text by Alice&#39;],</span>
+<span class="sd">        ...    characters=[&#39;Alice&#39;, &#39;Bob&#39;, &#39;Alice&#39;],</span>
+<span class="sd">        ...    styles=[</span>
+<span class="sd">        ...        mv.ASSStyleType(name=&#39;Alice&#39;, primary_color=mv.rgb_to_ass_color(&#39;red&#39;)),</span>
+<span class="sd">        ...        mv.ASSStyleType(name=&#39;Bob&#39;, primary_color=mv.rgb_to_ass_color(&#39;blue&#39;))],</span>
+<span class="sd">        ...    dst_ass_file=&#39;subtitle2.ass&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">start_times</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">end_times</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
 
