@@ -9,7 +9,9 @@
 [**Docs**](https://rezoo.github.io/movis/)
 | [**Overview**](https://rezoo.github.io/movis/overview.html)
 | [**Install Guide**](https://rezoo.github.io/movis/install.html)
+| [**Examples**](https://github.com/rezoo/movis/tree/main/examples)
 | [**API Reference**](https://rezoo.github.io/movis/reference/index.html)
+| [**Contribution Guide**](https://rezoo.github.io/movis/reference/contribution.html)
 
 ## What is Movis?
 
