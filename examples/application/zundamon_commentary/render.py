@@ -67,7 +67,7 @@ def main():
             .append(item.duration, p + offset)
         item.transform.opacity.enable_motion().extend(
             keyframes=[0, 1, item.duration - 1.0, item.duration], values=[0, 1, 1, 0],
-            motion_types=['ease_out', 'linear', 'ease_in', 'linear'])
+            easings=['ease_out', 'linear', 'ease_in', 'linear'])
         return item
 
     def make_table_of_contents(

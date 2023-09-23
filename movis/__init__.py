@@ -3,7 +3,7 @@ from . import layer  # noqa
 from .attribute import (Attribute, AttributesMixin,  # noqa
                         transform_to_hashable)
 from .enum import (AttributeType, BlendingMode, Direction, MatteMode,  # noqa
-                   MotionType, TextAlignment)
+                   Easing, TextAlignment)
 from .imgproc import alpha_composite  # noqa
 from .motion import Motion  # noqa
 from .ops import concatenate, crop, repeat, tile, trim  # noqa

@@ -21,11 +21,11 @@ def main():
     rectangle.size.enable_motion().extend(
         keyframes=[0, 1, 2, 3, 4],
         values=[(0, 0), (400, 400), (0, 0), (100, 400), (400, 100)],
-        motion_types=['ease_out5'] * 5)
+        easings=['ease_out5'] * 5)
     scene['rect'].rotation.enable_motion().extend(
         keyframes=[0, 1, 2, 3, 4],
         values=[0, 90, 180, 0, 0],
-        motion_types=['ease_out5'] * 5)
+        easings=['ease_out5'] * 5)
 
     scene.write_video('output.mp4')
 

@@ -43,7 +43,7 @@ class Composition:
         >>> composition['bg'].opacity.enable_motion().extend(
         ...     keyframes=[0, 1, 2, 3, 4],
         ...     values=[1.0, 0.0, 1.0, 0.0, 1.0],
-        ...     motion_types=['ease_out5'] * 5)
+        ...     easings=['ease_out5'] * 5)
         >>> composition.write_video('output.mp4')
 
     Args:

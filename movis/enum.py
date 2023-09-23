@@ -30,7 +30,7 @@ class AttributeType(Enum):
             raise ValueError(f"Unknown attribute type: {s}")
 
 
-class MotionType(Enum):
+class Easing(Enum):
     """Constants for determining the completion function between keyframes.
 
     Constants:
@@ -101,70 +101,70 @@ class MotionType(Enum):
     EASE_IN_OUT35 = 335
 
     @staticmethod
-    def from_string(s: str) -> "MotionType":
+    def from_string(s: str) -> "Easing":
         """Convert a string to a motion type."""
-        if s in STRING_TO_MOTION_TYPE:
-            return STRING_TO_MOTION_TYPE[s]
+        if s in STRING_TO_EASING:
+            return STRING_TO_EASING[s]
         else:
             raise ValueError(f"Unknown motion type: {s}")
 
 
-STRING_TO_MOTION_TYPE = {
-    "linear": MotionType.LINEAR,
-    "ease_in": MotionType.EASE_IN,
-    "ease_out": MotionType.EASE_OUT,
-    "ease_in_out": MotionType.EASE_IN_OUT,
-    "ease_in2": MotionType.EASE_IN2,
-    "ease_in3": MotionType.EASE_IN3,
-    "ease_in4": MotionType.EASE_IN4,
-    "ease_in5": MotionType.EASE_IN5,
-    "ease_in6": MotionType.EASE_IN6,
-    "ease_in7": MotionType.EASE_IN7,
-    "ease_in8": MotionType.EASE_IN8,
-    "ease_in9": MotionType.EASE_IN9,
-    "ease_in10": MotionType.EASE_IN10,
-    "ease_in12": MotionType.EASE_IN12,
-    "ease_in14": MotionType.EASE_IN14,
-    "ease_in16": MotionType.EASE_IN16,
-    "ease_in18": MotionType.EASE_IN18,
-    "ease_in20": MotionType.EASE_IN20,
-    "ease_in25": MotionType.EASE_IN25,
-    "ease_in30": MotionType.EASE_IN30,
-    "ease_in35": MotionType.EASE_IN35,
-    "ease_out2": MotionType.EASE_OUT2,
-    "ease_out3": MotionType.EASE_OUT3,
-    "ease_out4": MotionType.EASE_OUT4,
-    "ease_out5": MotionType.EASE_OUT5,
-    "ease_out6": MotionType.EASE_OUT6,
-    "ease_out7": MotionType.EASE_OUT7,
-    "ease_out8": MotionType.EASE_OUT8,
-    "ease_out9": MotionType.EASE_OUT9,
-    "ease_out10": MotionType.EASE_OUT10,
-    "ease_out12": MotionType.EASE_OUT12,
-    "ease_out14": MotionType.EASE_OUT14,
-    "ease_out16": MotionType.EASE_OUT16,
-    "ease_out18": MotionType.EASE_OUT18,
-    "ease_out20": MotionType.EASE_OUT20,
-    "ease_out25": MotionType.EASE_OUT25,
-    "ease_out30": MotionType.EASE_OUT30,
-    "ease_out35": MotionType.EASE_OUT35,
-    "ease_in_out2": MotionType.EASE_IN_OUT2,
-    "ease_in_out3": MotionType.EASE_IN_OUT3,
-    "ease_in_out4": MotionType.EASE_IN_OUT4,
-    "ease_in_out5": MotionType.EASE_IN_OUT5,
-    "ease_in_out6": MotionType.EASE_IN_OUT6,
-    "ease_in_out7": MotionType.EASE_IN_OUT7,
-    "ease_in_out8": MotionType.EASE_IN_OUT8,
-    "ease_in_out9": MotionType.EASE_IN_OUT9,
-    "ease_in_out10": MotionType.EASE_IN_OUT10,
-    "ease_in_out12": MotionType.EASE_IN_OUT12,
-    "ease_in_out14": MotionType.EASE_IN_OUT14,
-    "ease_in_out16": MotionType.EASE_IN_OUT16,
-    "ease_in_out18": MotionType.EASE_IN_OUT18,
-    "ease_in_out20": MotionType.EASE_IN_OUT20,
-    "ease_in_out25": MotionType.EASE_IN_OUT25,
-    "ease_in_out30": MotionType.EASE_IN_OUT30,
-    "ease_in_out35": MotionType.EASE_IN_OUT35,
+STRING_TO_EASING = {
+    "linear": Easing.LINEAR,
+    "ease_in": Easing.EASE_IN,
+    "ease_out": Easing.EASE_OUT,
+    "ease_in_out": Easing.EASE_IN_OUT,
+    "ease_in2": Easing.EASE_IN2,
+    "ease_in3": Easing.EASE_IN3,
+    "ease_in4": Easing.EASE_IN4,
+    "ease_in5": Easing.EASE_IN5,
+    "ease_in6": Easing.EASE_IN6,
+    "ease_in7": Easing.EASE_IN7,
+    "ease_in8": Easing.EASE_IN8,
+    "ease_in9": Easing.EASE_IN9,
+    "ease_in10": Easing.EASE_IN10,
+    "ease_in12": Easing.EASE_IN12,
+    "ease_in14": Easing.EASE_IN14,
+    "ease_in16": Easing.EASE_IN16,
+    "ease_in18": Easing.EASE_IN18,
+    "ease_in20": Easing.EASE_IN20,
+    "ease_in25": Easing.EASE_IN25,
+    "ease_in30": Easing.EASE_IN30,
+    "ease_in35": Easing.EASE_IN35,
+    "ease_out2": Easing.EASE_OUT2,
+    "ease_out3": Easing.EASE_OUT3,
+    "ease_out4": Easing.EASE_OUT4,
+    "ease_out5": Easing.EASE_OUT5,
+    "ease_out6": Easing.EASE_OUT6,
+    "ease_out7": Easing.EASE_OUT7,
+    "ease_out8": Easing.EASE_OUT8,
+    "ease_out9": Easing.EASE_OUT9,
+    "ease_out10": Easing.EASE_OUT10,
+    "ease_out12": Easing.EASE_OUT12,
+    "ease_out14": Easing.EASE_OUT14,
+    "ease_out16": Easing.EASE_OUT16,
+    "ease_out18": Easing.EASE_OUT18,
+    "ease_out20": Easing.EASE_OUT20,
+    "ease_out25": Easing.EASE_OUT25,
+    "ease_out30": Easing.EASE_OUT30,
+    "ease_out35": Easing.EASE_OUT35,
+    "ease_in_out2": Easing.EASE_IN_OUT2,
+    "ease_in_out3": Easing.EASE_IN_OUT3,
+    "ease_in_out4": Easing.EASE_IN_OUT4,
+    "ease_in_out5": Easing.EASE_IN_OUT5,
+    "ease_in_out6": Easing.EASE_IN_OUT6,
+    "ease_in_out7": Easing.EASE_IN_OUT7,
+    "ease_in_out8": Easing.EASE_IN_OUT8,
+    "ease_in_out9": Easing.EASE_IN_OUT9,
+    "ease_in_out10": Easing.EASE_IN_OUT10,
+    "ease_in_out12": Easing.EASE_IN_OUT12,
+    "ease_in_out14": Easing.EASE_IN_OUT14,
+    "ease_in_out16": Easing.EASE_IN_OUT16,
+    "ease_in_out18": Easing.EASE_IN_OUT18,
+    "ease_in_out20": Easing.EASE_IN_OUT20,
+    "ease_in_out25": Easing.EASE_IN_OUT25,
+    "ease_in_out30": Easing.EASE_IN_OUT30,
+    "ease_in_out35": Easing.EASE_IN_OUT35,
 }
 
 

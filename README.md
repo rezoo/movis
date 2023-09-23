@@ -48,7 +48,7 @@ scene.add_layer(
     blending_mode='normal')  # Blending mode can be specified for each layer.
 scene['text'].add_effect(mv.effect.DropShadow(offset=10.0))  # Multiple effects can be added.
 scene['text'].scale.enable_motion().extend(
-    keyframes=[0.0, 1.0], values=[0.0, 1.0], motion_types=['ease_in_out'])
+    keyframes=[0.0, 1.0], values=[0.0, 1.0], easings=['ease_in_out'])
 # Fade-in effect. It means that the text appears fully two seconds later.
 scene['text'].opacity.enable_motion().extend([0.0, 1.0], [0.0, 1.0])
 
