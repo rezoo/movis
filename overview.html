@@ -383,6 +383,12 @@ Effects can also be selectively applied to these layers as needed.</p>
 </div>
 <p>The composition can also be used as a layer.
 By combining multiple compositions and layers, users can create complex videos.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scene2</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Composition</span><span class="p">(</span><span class="n">scene</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">scene</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+<span class="n">layer_item</span> <span class="o">=</span> <span class="n">scene2</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;scene&#39;</span><span class="p">)</span>
+<span class="c1"># Equivalent to scene2[&#39;scene&#39;].add_effect(...)</span>
+<span class="n">layer_item</span><span class="o">.</span><span class="n">add_effect</span><span class="p">(</span><span class="n">mv</span><span class="o">.</span><span class="n">effect</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">10.0</span><span class="p">))</span>
+</pre></div>
+</div>
 </section>
 <section id="simple-video-processing">
 <h2>Simple video processing<a class="headerlink" href="#simple-video-processing" title="Link to this heading">#</a></h2>

@@ -44,6 +44,13 @@ Here's some example code:
 The composition can also be used as a layer.
 By combining multiple compositions and layers, users can create complex videos.
 
+.. code-block:: python
+
+    scene2 = mv.layer.Composition(scene.size, duration=scene.duration)
+    layer_item = scene2.add_layer(scene, name='scene')
+    # Equivalent to scene2['scene'].add_effect(...)
+    layer_item.add_effect(mv.effect.GaussianBlur(radius=10.0))
+
 Simple video processing
 -----------------------
 
