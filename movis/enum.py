@@ -31,7 +31,19 @@ class AttributeType(Enum):
 
 
 class MotionType(Enum):
-    """Constants for determining the completion function between keyframes."""
+    """Constants for determining the completion function between keyframes.
+
+    Constants:
+        ``LINEAR``
+            Linear interpolation between keyframes.
+        ``EASE_IN``
+            Ease in motion between keyframes. The larger the number, the more drastic the rate of change becomes.
+        ``EASE_OUT``
+            Ease out motion between keyframes. The larger the number, the more drastic the rate of change becomes.
+        ``EASE_IN_OUT``
+            Ease in and out motion between keyframes.
+            The larger the number, the more drastic the rate of change becomes.
+    """
     LINEAR = 0
     EASE_IN = 1
     EASE_OUT = 2

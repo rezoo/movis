@@ -20,6 +20,14 @@ The dimensionality of the returned ``np.ndarray`` varies depending on the ``valu
 .. note:: 
    Even if a scalar is specified, the ``ndim`` of the returned ``np.ndarray`` will be 1.
 
+.. autosummary::
+   :toctree: generated/
+   :nosignatures:
+
+   movis.attribute.Attribute
+   movis.attribute.AttributesMixin
+   movis.attribute.AttributeType
+
 Initialization
 --------------
 At the time of initialization, no animation is applied to the ``Attribute``.
@@ -74,10 +82,3 @@ and return a new value. This can be useful for adding some variability to existi
    array([0.])
    >>> attr(0.5)
    array([0.04794255])
-
-.. autosummary::
-   :toctree: generated/
-   :nosignatures:
-
-   movis.attribute.Attribute
-   movis.attribute.AttributesMixin

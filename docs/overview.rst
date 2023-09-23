@@ -22,7 +22,7 @@ Here's some example code:
     import movis as mv
 
     scene = mv.layer.Composition(size=(1920, 1080), duration=5.0)
-    scene.add_layer(mv.layer.Rectangle(scene.size, color='#fb4562'))
+    scene.add_layer(mv.layer.Rectangle(scene.size, color='#fb4562'))  # Set background
 
     pos = scene.size[0] // 2, scene.size[1] // 2
     scene.add_layer(
@@ -30,7 +30,8 @@ Here's some example code:
         name='text',  # The layer item can be accessed by name
         offset=1.0,  # Show the text after one second
         position=pos,  # The layer is centered by default, but it can also be specified explicitly
-        opacity=1.0, scale=1.0, rotation=0.0,  # opacity, scale, and rotation are also supported
+        anchor_point=(0.0, 0.0),
+        opacity=1.0, scale=1.0, rotation=0.0,  # anchor point, opacity, scale, and rotation are also supported
         blending_mode='normal')  # Blending mode can be specified for each layer.
     scene['text'].add_effect(mv.effect.DropShadow(offset=10.0))  # Multiple effects can be added.
     scene['text'].scale.enable_motion().extend(
@@ -87,9 +88,7 @@ returns an ``np.ndarray`` with a shape of ``(H, W, 4)`` and dtype of ``numpy.uin
 
     size = (640, 480)
 
-    def get_radial_gradient_image(time: float) -> np.ndarray | None:
-        if time < 0.:
-            return None
+    def get_radial_gradient_image(time: float) -> np.ndarray:
         center = np.array([size[1] // 2, size[0] // 2])
         radius = min(size)
         inds = np.mgrid[:size[1], :size[0]] - center[:, None, None]
@@ -118,8 +117,8 @@ where the frame remains static, you can implement the ``get_key(time: float)`` m
             self.center = np.array([size[1] // 2, size[0] // 2])
         
         def get_key(self, time: float) -> Hashable:
-            # Returns 0 since the same image is always returned
-            return 0
+            # Returns 1 since the same image is always returned
+            return 1
         
         def __call__(self, time: float) -> None | np.ndarray:
             # ditto.
@@ -144,7 +143,6 @@ Effects for layers can also be implemented in a similar straightforward manner.
         mv.layer.Text('Hello World!', font_size=256, font_family='Helvetica', color='#ffffff'),
         name='text')
     scene['text'].add_effect(apply_gaussian_blur)
-
 
 User-defined animations
 ^^^^^^^^^^^^^^^^^^^^^^^
