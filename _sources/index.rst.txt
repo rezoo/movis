@@ -13,6 +13,7 @@ Movis: Video Editing as a Code
    overview
    install
    reference/index
+   contribution
 
 
 Indices and tables
