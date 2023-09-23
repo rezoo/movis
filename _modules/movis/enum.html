@@ -379,9 +379,9 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="MotionType">
-<a class="viewcode-back" href="../../reference/generated/movis.motion.MotionType.html#movis.attribute.MotionType">[docs]</a>
-<span class="k">class</span> <span class="nc">MotionType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="Easing">
+<a class="viewcode-back" href="../../reference/generated/movis.motion.Easing.html#movis.attribute.Easing">[docs]</a>
+<span class="k">class</span> <span class="nc">Easing</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Constants for determining the completion function between keyframes.</span>
 
 <span class="sd">    Constants:</span>
@@ -451,75 +451,75 @@ document.write(`
     <span class="n">EASE_IN_OUT30</span> <span class="o">=</span> <span class="mi">330</span>
     <span class="n">EASE_IN_OUT35</span> <span class="o">=</span> <span class="mi">335</span>
 
-<div class="viewcode-block" id="MotionType.from_string">
-<a class="viewcode-back" href="../../reference/generated/movis.motion.MotionType.html#movis.attribute.MotionType.from_string">[docs]</a>
+<div class="viewcode-block" id="Easing.from_string">
+<a class="viewcode-back" href="../../reference/generated/movis.motion.Easing.html#movis.attribute.Easing.from_string">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MotionType&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Easing&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a string to a motion type.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">STRING_TO_MOTION_TYPE</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">STRING_TO_MOTION_TYPE</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">STRING_TO_EASING</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">STRING_TO_EASING</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown motion type: </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 </div>
 
 
 
-<span class="n">STRING_TO_MOTION_TYPE</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;linear&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">LINEAR</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in2&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN2</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in3&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN3</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in4&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN4</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in5&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN5</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in6&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN6</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in7&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN7</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in8&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN8</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in9&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN9</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in10&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN10</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in12&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN12</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in14&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN14</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in16&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN16</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in18&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN18</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in20&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN20</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in25&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN25</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in30&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN30</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in35&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN35</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out2&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT2</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out3&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT3</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out4&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT4</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out5&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT5</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out6&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT6</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out7&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT7</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out8&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT8</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out9&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT9</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out10&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT10</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out12&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT12</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out14&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT14</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out16&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT16</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out18&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT18</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out20&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT20</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out25&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT25</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out30&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT30</span><span class="p">,</span>
-    <span class="s2">&quot;ease_out35&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_OUT35</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out2&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT2</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out3&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT3</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out4&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT4</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out5&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT5</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out6&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT6</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out7&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT7</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out8&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT8</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out9&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT9</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out10&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT10</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out12&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT12</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out14&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT14</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out16&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT16</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out18&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT18</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out20&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT20</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out25&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT25</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out30&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT30</span><span class="p">,</span>
-    <span class="s2">&quot;ease_in_out35&quot;</span><span class="p">:</span> <span class="n">MotionType</span><span class="o">.</span><span class="n">EASE_IN_OUT35</span><span class="p">,</span>
+<span class="n">STRING_TO_EASING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;linear&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">LINEAR</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in2&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN2</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in3&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN3</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in4&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN4</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in5&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN5</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in6&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN6</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in7&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN7</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in8&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN8</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in9&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN9</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in10&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN10</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in12&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN12</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in14&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN14</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in16&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN16</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in18&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN18</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in20&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN20</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in25&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN25</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in30&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN30</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in35&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN35</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out2&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT2</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out3&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT3</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out4&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT4</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out5&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT5</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out6&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT6</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out7&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT7</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out8&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT8</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out9&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT9</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out10&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT10</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out12&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT12</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out14&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT14</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out16&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT16</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out18&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT18</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out20&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT20</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out25&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT25</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out30&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT30</span><span class="p">,</span>
+    <span class="s2">&quot;ease_out35&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_OUT35</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out2&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT2</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out3&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT3</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out4&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT4</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out5&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT5</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out6&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT6</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out7&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT7</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out8&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT8</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out9&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT9</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out10&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT10</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out12&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT12</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out14&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT14</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out16&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT16</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out18&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT18</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out20&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT20</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out25&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT25</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out30&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT30</span><span class="p">,</span>
+    <span class="s2">&quot;ease_in_out35&quot;</span><span class="p">:</span> <span class="n">Easing</span><span class="o">.</span><span class="n">EASE_IN_OUT35</span><span class="p">,</span>
 <span class="p">}</span>
 
 

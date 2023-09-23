@@ -1,0 +1,82 @@
+﻿movis.motion.Easing
+===================
+
+.. currentmodule:: movis.motion
+
+.. autoclass:: Easing
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: from_string
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Easing.LINEAR
+      ~Easing.EASE_IN
+      ~Easing.EASE_OUT
+      ~Easing.EASE_IN_OUT
+      ~Easing.EASE_IN2
+      ~Easing.EASE_IN3
+      ~Easing.EASE_IN4
+      ~Easing.EASE_IN5
+      ~Easing.EASE_IN6
+      ~Easing.EASE_IN7
+      ~Easing.EASE_IN8
+      ~Easing.EASE_IN9
+      ~Easing.EASE_IN10
+      ~Easing.EASE_IN12
+      ~Easing.EASE_IN14
+      ~Easing.EASE_IN16
+      ~Easing.EASE_IN18
+      ~Easing.EASE_IN20
+      ~Easing.EASE_IN25
+      ~Easing.EASE_IN30
+      ~Easing.EASE_IN35
+      ~Easing.EASE_OUT2
+      ~Easing.EASE_OUT3
+      ~Easing.EASE_OUT4
+      ~Easing.EASE_OUT5
+      ~Easing.EASE_OUT6
+      ~Easing.EASE_OUT7
+      ~Easing.EASE_OUT8
+      ~Easing.EASE_OUT9
+      ~Easing.EASE_OUT10
+      ~Easing.EASE_OUT12
+      ~Easing.EASE_OUT14
+      ~Easing.EASE_OUT16
+      ~Easing.EASE_OUT18
+      ~Easing.EASE_OUT20
+      ~Easing.EASE_OUT25
+      ~Easing.EASE_OUT30
+      ~Easing.EASE_OUT35
+      ~Easing.EASE_IN_OUT2
+      ~Easing.EASE_IN_OUT3
+      ~Easing.EASE_IN_OUT4
+      ~Easing.EASE_IN_OUT5
+      ~Easing.EASE_IN_OUT6
+      ~Easing.EASE_IN_OUT7
+      ~Easing.EASE_IN_OUT8
+      ~Easing.EASE_IN_OUT9
+      ~Easing.EASE_IN_OUT10
+      ~Easing.EASE_IN_OUT12
+      ~Easing.EASE_IN_OUT14
+      ~Easing.EASE_IN_OUT16
+      ~Easing.EASE_IN_OUT18
+      ~Easing.EASE_IN_OUT20
+      ~Easing.EASE_IN_OUT25
+      ~Easing.EASE_IN_OUT30
+      ~Easing.EASE_IN_OUT35
+   
+   

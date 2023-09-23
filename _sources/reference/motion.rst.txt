@@ -10,4 +10,4 @@ movis.motion
    :nosignatures:
 
    movis.motion.Motion
-   movis.motion.MotionType
+   movis.motion.Easing
