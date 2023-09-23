@@ -449,7 +449,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;An optional method for implementing an audio layer.</span>
 
 <span class="sd">        This method returns an audio clip of the layer between the given start and end times.</span>
-<span class="sd">        The returned audio clip should be a two-dimensional ``numpy.ndarray`` with a shape of ``(T,2)``,</span>
+<span class="sd">        The returned audio clip should be a two-dimensional ``numpy.ndarray`` with a shape of ``(2,T)``,</span>
 <span class="sd">        where ``T`` is the number of samples in the audio clip and ``2`` is the number of channels.</span>
 <span class="sd">        The sample rate of the audio clip should be ``AUDIO_SAMPLING_RATE`` (= 48000).</span>
 
@@ -460,9 +460,8 @@ document.write(`
 <span class="sd">            end_time: The end time of the audio clip.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            A tuple of ``(audio_clip, sample_rate)``, where ``audio_clip`` is a two-dimensional</span>
-<span class="sd">            ``numpy.ndarray`` with a shape of ``(T,C)`` and ``sample_rate`` is an integer representing</span>
-<span class="sd">            the sample rate of the audio clip.</span>
+<span class="sd">            A two-dimensional ``numpy.ndarray`` with a shape of ``(2,T)`` and ``sample_rate``</span>
+<span class="sd">            is an integer representing the sample rate of the audio clip.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 </div>

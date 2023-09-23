@@ -606,7 +606,7 @@ for rendering the video. If <code class="docutils literal notranslate"><span cla
 <span class="sig-name descname"><span class="pre">get_audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">ndarray</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/movis/layer/protocol.html#AudioLayer.get_audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.protocol.AudioLayer.get_audio" title="Link to this definition">#</a></dt>
 <dd><p>An optional method for implementing an audio layer.</p>
 <p>This method returns an audio clip of the layer between the given start and end times.
-The returned audio clip should be a two-dimensional <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> with a shape of <code class="docutils literal notranslate"><span class="pre">(T,2)</span></code>,
+The returned audio clip should be a two-dimensional <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> with a shape of <code class="docutils literal notranslate"><span class="pre">(2,T)</span></code>,
 where <code class="docutils literal notranslate"><span class="pre">T</span></code> is the number of samples in the audio clip and <code class="docutils literal notranslate"><span class="pre">2</span></code> is the number of channels.
 The sample rate of the audio clip should be <code class="docutils literal notranslate"><span class="pre">AUDIO_SAMPLING_RATE</span></code> (= 48000).</p>
 <p>If not implemented, Movis assumes that the layer does not have any audio.</p>
@@ -614,9 +614,8 @@ The sample rate of the audio clip should be <code class="docutils literal notran
 <dt>Args:</dt><dd><p>start_time: The start time of the audio clip.
 end_time: The end time of the audio clip.</p>
 </dd>
-<dt>Returns:</dt><dd><p>A tuple of <code class="docutils literal notranslate"><span class="pre">(audio_clip,</span> <span class="pre">sample_rate)</span></code>, where <code class="docutils literal notranslate"><span class="pre">audio_clip</span></code> is a two-dimensional
-<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> with a shape of <code class="docutils literal notranslate"><span class="pre">(T,C)</span></code> and <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code> is an integer representing
-the sample rate of the audio clip.</p>
+<dt>Returns:</dt><dd><p>A two-dimensional <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> with a shape of <code class="docutils literal notranslate"><span class="pre">(2,T)</span></code> and <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code>
+is an integer representing the sample rate of the audio clip.</p>
 </dd>
 </dl>
 </dd></dl>
