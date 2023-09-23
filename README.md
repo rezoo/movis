@@ -75,6 +75,12 @@ Of course, movis also supports simple video processing such as video merging and
     scene.write_video('output.mp4')
 ```
 
+```python
+    layer = mv.layer.Image("image.png", duration=1.0)
+    # crop from x, y = (10, 20) with size w, h = (100, 200)
+    layer = mv.crop(layer, (10, 20, 100, 200))
+```
+
 ### Implementation of custom layers, effects, and animations
 
 Movis is designed to make it easy for users to implement custom layers and effects.

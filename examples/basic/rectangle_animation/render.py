@@ -27,7 +27,7 @@ def main():
         values=[0, 90, 180, 0, 0],
         motion_types=['ease_out5'] * 5)
 
-    scene.write_video('rectangles.mp4')
+    scene.write_video('output.mp4')
 
 
 if __name__ == '__main__':

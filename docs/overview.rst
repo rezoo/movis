@@ -65,6 +65,12 @@ Of course, movis also supports simple video processing such as video merging and
     scene = mv.trim(layer, start_times=[0.0, 2.0], end_times=[1.0, 3.0])
     scene.write_video('output.mp4')
 
+.. code-block:: python
+
+    layer = mv.layer.Image("image.png", duration=1.0)
+    # crop from x, y = (10, 20) with size w, h = (100, 200)
+    layer = mv.crop(layer, (10, 20, 100, 200))
+
 Implementation of custom layers, effects, and animations
 ---------------------------------------------------------------
 
