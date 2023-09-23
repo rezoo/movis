@@ -22,6 +22,9 @@ class RobustVideoMatting:
     and extract it as the foreground.
 
     .. note::
+        This effect requires `onnxruntime <https://onnxruntime.ai/>`_ to be installed.
+
+    .. note::
         While there is no need to set up greenbacks or
         other special imaging environments, the quality is not at the production level.
         This effect is useful in areas that generally do not require foreground extraction quality,

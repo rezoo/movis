@@ -470,6 +470,10 @@ class Composition:
     ) -> None:
         """Renders the composition and plays it in a Jupyter notebook.
 
+        .. note::
+            This method requires ``ipywidgets`` and ``IPython`` to be installed.
+            These are usually installed automatically when users install Jupyter notebook.
+
         Args:
             start_time:
                 The start time of the video. This variable is used to clip the video in the time axis direction.

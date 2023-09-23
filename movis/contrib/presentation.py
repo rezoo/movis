@@ -24,6 +24,9 @@ class Slide(TimelineMixin):
     Many presentation videos use slides to explain the contents.
     This layer directly show the slides in the specified PDF file for convenience.
 
+    .. note::
+        This layer requires `pdf2image <https://github.com/Belval/pdf2image>`_ to be installed.
+
     Args:
         start_times:
             The start times for displaying slides.
