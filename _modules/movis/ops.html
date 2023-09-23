@@ -462,15 +462,33 @@ document.write(`
 
 <div class="viewcode-block" id="tile">
 <a class="viewcode-back" href="../../reference/generated/movis.ops.tile.html#movis.ops.tile">[docs]</a>
-<span class="k">def</span> <span class="nf">tile</span><span class="p">(</span><span class="n">layers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BasicLayer</span><span class="p">],</span> <span class="n">rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Composition</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">tile</span><span class="p">(</span>
+    <span class="n">layers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BasicLayer</span><span class="p">],</span> <span class="n">rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Composition</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tile layers into a single composition.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        layers: Layers to tile.</span>
-<span class="sd">        size: Size of the composition. If ``None``, the size of the layer is estimated.</span>
+<span class="sd">        layers:</span>
+<span class="sd">            Layers to tile. Note that the order of the layers is row-major.</span>
+<span class="sd">            For example, if ``layers`` is ``[a, b, c, d]`` and</span>
+<span class="sd">            ``rows`` and ``cols`` are both ``2``, the composition will be: ``[[a, b], [c, d]]``.</span>
+<span class="sd">        rows:</span>
+<span class="sd">            Number of rows.</span>
+<span class="sd">        cols:</span>
+<span class="sd">            Number of columns.</span>
+<span class="sd">        size:</span>
+<span class="sd">            Size of each layer. Note that ``tile`` assumes that all layers have the same size.</span>
+<span class="sd">            If ``None``, the size of the layer is estimated.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        The layer resolution specified in ``size`` does not have to be the actual layer resolution.</span>
+<span class="sd">        For example, if ``size`` is specified to be larger than the actual layer size,</span>
+<span class="sd">        each layer is placed in the center of each tile.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Composition with all layers tiled.</span>
+<span class="sd">        Composition with all layers tiled. The size is ``(cols * w, rows * h)``,</span>
+<span class="sd">        where ``w`` and ``h`` are the width and height of each layer, respectively.</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import movis as mv</span>
@@ -485,10 +503,13 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span> <span class="o">==</span> <span class="n">rows</span> <span class="o">*</span> <span class="n">cols</span><span class="p">,</span> \
         <span class="sa">f</span><span class="s2">&quot;Number of layers (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span><span class="si">}</span><span class="s2">) must be equal to rows * cols (</span><span class="si">{</span><span class="n">rows</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cols</span><span class="si">}</span><span class="s2">).&quot;</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mf">0.0</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot determine size of composition.&quot;</span><span class="p">)</span>
-    <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot determine size of composition.&quot;</span><span class="p">)</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">size</span>
 
     <span class="n">W</span> <span class="o">=</span> <span class="n">cols</span> <span class="o">*</span> <span class="n">w</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">rows</span> <span class="o">*</span> <span class="n">h</span>

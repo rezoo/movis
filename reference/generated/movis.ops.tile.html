@@ -289,6 +289,7 @@ document.write(`
 <li class="toctree-l1 has-children"><a class="reference internal" href="../attribute.html">movis.attribute</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="movis.attribute.Attribute.html">movis.attribute.Attribute</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.attribute.AttributesMixin.html">movis.attribute.AttributesMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.attribute.AttributeType.html">movis.attribute.AttributeType</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../contrib/index.html">movis.contrib</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -335,6 +336,7 @@ document.write(`
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../motion.html">movis.motion</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="movis.motion.Motion.html">movis.motion.Motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.motion.MotionType.html">movis.motion.MotionType</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../ops.html">movis.ops</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
@@ -425,13 +427,33 @@ document.write(`
 <h1>movis.ops.tile<a class="headerlink" href="#movis-ops-tile" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="movis.ops.tile">
-<span class="sig-prename descclassname"><span class="pre">movis.ops.</span></span><span class="sig-name descname"><span class="pre">tile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../layers/index.html#movis.layer.protocol.BasicLayer" title="movis.layer.protocol.BasicLayer"><span class="pre">BasicLayer</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition" title="movis.layer.composition.Composition"><span class="pre">Composition</span></a></span></span><a class="reference internal" href="../../_modules/movis/ops.html#tile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.ops.tile" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">movis.ops.</span></span><span class="sig-name descname"><span class="pre">tile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../layers/index.html#movis.layer.protocol.BasicLayer" title="movis.layer.protocol.BasicLayer"><span class="pre">BasicLayer</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition" title="movis.layer.composition.Composition"><span class="pre">Composition</span></a></span></span><a class="reference internal" href="../../_modules/movis/ops.html#tile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.ops.tile" title="Link to this definition">#</a></dt>
 <dd><p>Tile layers into a single composition.</p>
-<dl>
-<dt>Args:</dt><dd><p>layers: Layers to tile.
-size: Size of the composition. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the size of the layer is estimated.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>layers:</dt><dd><p>Layers to tile. Note that the order of the layers is row-major.
+For example, if <code class="docutils literal notranslate"><span class="pre">layers</span></code> is <code class="docutils literal notranslate"><span class="pre">[a,</span> <span class="pre">b,</span> <span class="pre">c,</span> <span class="pre">d]</span></code> and
+<code class="docutils literal notranslate"><span class="pre">rows</span></code> and <code class="docutils literal notranslate"><span class="pre">cols</span></code> are both <code class="docutils literal notranslate"><span class="pre">2</span></code>, the composition will be: <code class="docutils literal notranslate"><span class="pre">[[a,</span> <span class="pre">b],</span> <span class="pre">[c,</span> <span class="pre">d]]</span></code>.</p>
 </dd>
-<dt>Returns:</dt><dd><p>Composition with all layers tiled.</p>
+<dt>rows:</dt><dd><p>Number of rows.</p>
+</dd>
+<dt>cols:</dt><dd><p>Number of columns.</p>
+</dd>
+<dt>size:</dt><dd><p>Size of each layer. Note that <code class="docutils literal notranslate"><span class="pre">tile</span></code> assumes that all layers have the same size.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the size of the layer is estimated.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The layer resolution specified in <code class="docutils literal notranslate"><span class="pre">size</span></code> does not have to be the actual layer resolution.
+For example, if <code class="docutils literal notranslate"><span class="pre">size</span></code> is specified to be larger than the actual layer size,
+each layer is placed in the center of each tile.</p>
+</div>
+<dl>
+<dt>Returns:</dt><dd><p>Composition with all layers tiled. The size is <code class="docutils literal notranslate"><span class="pre">(cols</span> <span class="pre">*</span> <span class="pre">w,</span> <span class="pre">rows</span> <span class="pre">*</span> <span class="pre">h)</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">w</span></code> and <code class="docutils literal notranslate"><span class="pre">h</span></code> are the width and height of each layer, respectively.</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">movis</span> <span class="k">as</span> <span class="nn">mv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>movis.subtitle.write_srt_file &#8212; movis  documentation</title>
+    <title>movis.motion.MotionType &#8212; movis  documentation</title>
   
   
   
@@ -41,11 +41,11 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/movis.subtitle.write_srt_file';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/movis.motion.MotionType';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="movis.transform" href="../transform.html" />
-    <link rel="prev" title="movis.subtitle.rgb_to_ass_color" href="movis.subtitle.rgb_to_ass_color.html" />
+    <link rel="next" title="movis.ops" href="../ops.html" />
+    <link rel="prev" title="movis.motion.Motion" href="movis.motion.Motion.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -334,9 +334,9 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="../layers/generated/movis.layer.layer_ops.LuminanceMatte.html">movis.layer.layer_ops.LuminanceMatte</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../motion.html">movis.motion</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../motion.html">movis.motion</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="movis.motion.Motion.html">movis.motion.Motion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="movis.motion.MotionType.html">movis.motion.MotionType</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.motion.MotionType</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../ops.html">movis.ops</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -347,10 +347,10 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.trim.html">movis.ops.trim</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../subtitle.html">movis.subtitle</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../subtitle.html">movis.subtitle</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="movis.subtitle.write_ass_file.html">movis.subtitle.write_ass_file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.subtitle.rgb_to_ass_color.html">movis.subtitle.rgb_to_ass_color</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.subtitle.write_srt_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.subtitle.write_srt_file.html">movis.subtitle.write_srt_file</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../transform.html">movis.transform</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -404,9 +404,9 @@ document.write(`
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../subtitle.html" class="nav-link">movis.subtitle</a></li>
+    <li class="breadcrumb-item"><a href="../motion.html" class="nav-link">movis.motion</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">movis.subtitle.write_srt_file</li>
+    <li class="breadcrumb-item active" aria-current="page">movis.motion.MotionType</li>
   </ul>
 </nav>
 </div>
@@ -423,25 +423,207 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="movis-subtitle-write-srt-file">
-<h1>movis.subtitle.write_srt_file<a class="headerlink" href="#movis-subtitle-write-srt-file" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="movis.subtitle.write_srt_file">
-<span class="sig-prename descclassname"><span class="pre">movis.subtitle.</span></span><span class="sig-name descname"><span class="pre">write_srt_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_srt_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.11)"><span class="pre">PathLike</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/movis/subtitle.html#write_srt_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.subtitle.write_srt_file" title="Link to this definition">#</a></dt>
-<dd><p>Writes an SRT (SubRip Text) subtitle file.</p>
+  <section id="movis-motion-motiontype">
+<h1>movis.motion.MotionType<a class="headerlink" href="#movis-motion-motiontype" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="movis.motion.MotionType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">movis.motion.</span></span><span class="sig-name descname"><span class="pre">MotionType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/movis/enum.html#MotionType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.motion.MotionType" title="Link to this definition">#</a></dt>
+<dd><p>Constants for determining the completion function between keyframes.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>start_times:</dt><dd><p>A list of start times in seconds for each subtitle entry.</p>
+<dt>Constants:</dt><dd><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code></dt><dd><p>Linear interpolation between keyframes.</p>
 </dd>
-<dt>end_times:</dt><dd><p>A list of end times in seconds for each subtitle entry.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">EASE_IN</span></code></dt><dd><p>Ease in motion between keyframes. The larger the number, the more drastic the rate of change becomes.</p>
 </dd>
-<dt>texts:</dt><dd><p>A list of text strings corresponding to each subtitle entry.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">EASE_OUT</span></code></dt><dd><p>Ease out motion between keyframes. The larger the number, the more drastic the rate of change becomes.</p>
 </dd>
-<dt>dst_srt_file:</dt><dd><p>The destination path for the generated SRT file.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">EASE_IN_OUT</span></code></dt><dd><p>Ease in and out motion between keyframes.
+The larger the number, the more drastic the rate of change becomes.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.motion.MotionType.from_string">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#movis.motion.MotionType" title="movis.enum.MotionType"><span class="pre">MotionType</span></a></span></span><a class="reference internal" href="../../_modules/movis/enum.html#MotionType.from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.motion.MotionType.from_string" title="Link to this definition">#</a></dt>
+<dd><p>Convert a string to a motion type.</p>
+</dd></dl>
+
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LINEAR</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN2</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN3</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN4</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN5</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN6</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN7</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN8</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN9</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN10</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN12</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN14</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN16</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN18</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN20</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN25</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN30</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN35</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT2</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT3</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT4</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT5</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT6</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT7</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT8</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT9</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT10</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT12</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT14</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT16</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT18</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT20</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT25</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT30</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_OUT35</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT2</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT3</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT4</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT5</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT6</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT7</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT8</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT9</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT10</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT12</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT14</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT16</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT18</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT20</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT25</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT30</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EASE_IN_OUT35</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </section>
@@ -457,20 +639,20 @@ document.write(`
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="movis.subtitle.rgb_to_ass_color.html"
+       href="movis.motion.Motion.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">movis.subtitle.rgb_to_ass_color</p>
+        <p class="prev-next-title">movis.motion.Motion</p>
       </div>
     </a>
     <a class="right-next"
-       href="../transform.html"
+       href="../ops.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">movis.transform</p>
+        <p class="prev-next-title">movis.ops</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -489,13 +671,16 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.subtitle.write_srt_file"><code class="docutils literal notranslate"><span class="pre">write_srt_file()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.motion.MotionType"><code class="docutils literal notranslate"><span class="pre">MotionType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.motion.MotionType.from_string"><code class="docutils literal notranslate"><span class="pre">MotionType.from_string()</span></code></a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../../_sources/reference/generated/movis.subtitle.write_srt_file.rst.txt">
+    <a href="../../_sources/reference/generated/movis.motion.MotionType.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

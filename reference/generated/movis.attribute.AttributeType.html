@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>movis.subtitle.write_srt_file &#8212; movis  documentation</title>
+    <title>movis.attribute.AttributeType &#8212; movis  documentation</title>
   
   
   
@@ -41,11 +41,11 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/movis.subtitle.write_srt_file';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/movis.attribute.AttributeType';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="movis.transform" href="../transform.html" />
-    <link rel="prev" title="movis.subtitle.rgb_to_ass_color" href="movis.subtitle.rgb_to_ass_color.html" />
+    <link rel="next" title="movis.contrib" href="../contrib/index.html" />
+    <link rel="prev" title="movis.attribute.AttributesMixin" href="movis.attribute.AttributesMixin.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -286,10 +286,10 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../attribute.html">movis.attribute</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../attribute.html">movis.attribute</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="movis.attribute.Attribute.html">movis.attribute.Attribute</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.attribute.AttributesMixin.html">movis.attribute.AttributesMixin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="movis.attribute.AttributeType.html">movis.attribute.AttributeType</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.attribute.AttributeType</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../contrib/index.html">movis.contrib</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -347,10 +347,10 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.trim.html">movis.ops.trim</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../subtitle.html">movis.subtitle</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../subtitle.html">movis.subtitle</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="movis.subtitle.write_ass_file.html">movis.subtitle.write_ass_file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.subtitle.rgb_to_ass_color.html">movis.subtitle.rgb_to_ass_color</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.subtitle.write_srt_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.subtitle.write_srt_file.html">movis.subtitle.write_srt_file</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../transform.html">movis.transform</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -404,9 +404,9 @@ document.write(`
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../subtitle.html" class="nav-link">movis.subtitle</a></li>
+    <li class="breadcrumb-item"><a href="../attribute.html" class="nav-link">movis.attribute</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">movis.subtitle.write_srt_file</li>
+    <li class="breadcrumb-item active" aria-current="page">movis.attribute.AttributeType</li>
   </ul>
 </nav>
 </div>
@@ -423,25 +423,43 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="movis-subtitle-write-srt-file">
-<h1>movis.subtitle.write_srt_file<a class="headerlink" href="#movis-subtitle-write-srt-file" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="movis.subtitle.write_srt_file">
-<span class="sig-prename descclassname"><span class="pre">movis.subtitle.</span></span><span class="sig-name descname"><span class="pre">write_srt_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_srt_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.11)"><span class="pre">PathLike</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/movis/subtitle.html#write_srt_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.subtitle.write_srt_file" title="Link to this definition">#</a></dt>
-<dd><p>Writes an SRT (SubRip Text) subtitle file.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>start_times:</dt><dd><p>A list of start times in seconds for each subtitle entry.</p>
-</dd>
-<dt>end_times:</dt><dd><p>A list of end times in seconds for each subtitle entry.</p>
-</dd>
-<dt>texts:</dt><dd><p>A list of text strings corresponding to each subtitle entry.</p>
-</dd>
-<dt>dst_srt_file:</dt><dd><p>The destination path for the generated SRT file.</p>
-</dd>
-</dl>
-</dd>
-</dl>
+  <section id="movis-attribute-attributetype">
+<h1>movis.attribute.AttributeType<a class="headerlink" href="#movis-attribute-attributetype" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="movis.attribute.AttributeType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">movis.attribute.</span></span><span class="sig-name descname"><span class="pre">AttributeType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/movis/enum.html#AttributeType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.attribute.AttributeType" title="Link to this definition">#</a></dt>
+<dd><p>A type used to determine the type and dimension of an attribute.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="movis.attribute.AttributeType.from_string">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#movis.attribute.AttributeType" title="movis.enum.AttributeType"><span class="pre">AttributeType</span></a></span></span><a class="reference internal" href="../../_modules/movis/enum.html#AttributeType.from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.attribute.AttributeType.from_string" title="Link to this definition">#</a></dt>
+<dd><p>Convert a string to an attribute type.</p>
+</dd></dl>
+
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SCALAR</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">VECTOR2D</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">VECTOR3D</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ANGLE</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">COLOR</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </section>
@@ -457,20 +475,20 @@ document.write(`
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="movis.subtitle.rgb_to_ass_color.html"
+       href="movis.attribute.AttributesMixin.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">movis.subtitle.rgb_to_ass_color</p>
+        <p class="prev-next-title">movis.attribute.AttributesMixin</p>
       </div>
     </a>
     <a class="right-next"
-       href="../transform.html"
+       href="../contrib/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">movis.transform</p>
+        <p class="prev-next-title">movis.contrib</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -489,13 +507,16 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.subtitle.write_srt_file"><code class="docutils literal notranslate"><span class="pre">write_srt_file()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.attribute.AttributeType"><code class="docutils literal notranslate"><span class="pre">AttributeType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.attribute.AttributeType.from_string"><code class="docutils literal notranslate"><span class="pre">AttributeType.from_string()</span></code></a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../../_sources/reference/generated/movis.subtitle.write_srt_file.rst.txt">
+    <a href="../../_sources/reference/generated/movis.attribute.AttributeType.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

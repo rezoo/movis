@@ -1,0 +1,32 @@
+﻿movis.attribute.AttributeType
+=============================
+
+.. currentmodule:: movis.attribute
+
+.. autoclass:: AttributeType
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: from_string
+   
+
+
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AttributeType.SCALAR
+      ~AttributeType.VECTOR2D
+      ~AttributeType.VECTOR3D
+      ~AttributeType.ANGLE
+      ~AttributeType.COLOR
+   
+   

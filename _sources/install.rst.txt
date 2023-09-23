@@ -51,6 +51,13 @@ It is also available from conda-forge:
     Although installing OpenCV from ``conda-forge`` or ``pip`` usually installs the CPU-only version,
     movis currently does not utilize GPU acceleration.
 
+If you encounter an ``ImportError`` related to OpenCV while trying to run Movis on Docker,
+please add the following package installation to your ``Dockerfile``:
+
+.. code-block:: bash
+
+    sudo apt-get install -y libgl1-mesa-dev libglib2.0-0
+
 PySide6
 -------
 
