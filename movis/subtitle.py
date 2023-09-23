@@ -4,6 +4,7 @@ from os import PathLike
 from typing import NamedTuple, Sequence
 
 from .enum import Direction
+from .util import to_rgb
 
 
 class ASSStyleType(NamedTuple):
@@ -31,21 +32,28 @@ class ASSStyleType(NamedTuple):
     margin_v: int = 30
 
 
-def _rgb_to_ass_color(rgb_array: Sequence[int]) -> str:
+def rgb_to_ass_color(color: str | tuple[int, int, int] | Sequence[int]) -> str:
     """Transform the rgb array into the string used in ASS file.
 
     Args:
-        rgb_array:
-            an three-dimensional rgb array.
+        color:
+            A union type that can be either a string or a tuple containing RGB integers or a sequence of integers.
+            If ``str``: The string can be either a CSS color name (e.g., 'red') or a hexadecimal RGB string
+            (e.g., ``'#FF0000'``). If ``tuple[int, int, int]`` or ``Sequence[int]``, it represents RGB values
+            as integers between 0 and 255 (`e.g.`, ``(255, 0, 0)``).
 
     Returns:
-        the color string used in ASS file."""
-    if len(rgb_array) == 3:
-        return "&H{:02x}{:02x}{:02x}".format(rgb_array[2], rgb_array[1], rgb_array[0])
-    elif len(rgb_array) == 4:
-        return "&H{:02x}{:02x}{:02x}{:02x}".format(rgb_array[3], rgb_array[2], rgb_array[1], rgb_array[0])
-    else:
-        raise ValueError('length of rgb_array must be 3(rgb) or 4(rgba)')
+        the color string used in ASS file.
+
+    Example:
+        >>> import movis as mv
+        >>> mv.rgb_to_ass_color((255, 0, 0))
+        '&H0000ff'
+        >>> mv.rgb_to_ass_color('blue')
+        '&Hff0000'
+    """
+    rgb_array = to_rgb(color)
+    return "&H{:02x}{:02x}{:02x}".format(rgb_array[2], rgb_array[1], rgb_array[0])
 
 
 def _make_ass_style_header():
@@ -91,6 +99,24 @@ def write_ass_file(
             A list of character names for each subtitle entry. Defaults to None.
         styles:
             A list of styles for each subtitle entry. Defaults to None.
+
+    Examples:
+        >>> import movis as mv
+        >>> mv.write_ass_file(
+        ...     start_times=[0.0, 1.0, 3.0],
+        ...     end_times=[1.0, 3.0, 4.0],
+        ...     texts=['Subtitle1', 'Subtitle2', 'Subtitle3'],
+        ...     styles=[mv.ASSStyleType(font_size=96)],  # Set default font size
+        ...     dst_ass_file='subtitle1.ass')
+        >>> mv.write_ass_file(
+        ...    start_times=[0.0, 1.0, 3.0],
+        ...    end_times=[1.0, 3.0, 4.0],
+        ...    texts=['text by Alice', 'text by Bob', 'text by Alice'],
+        ...    characters=['Alice', 'Bob', 'Alice'],
+        ...    styles=[
+        ...        mv.ASSStyleType(name='Alice', primary_color=mv.rgb_to_ass_color('red')),
+        ...        mv.ASSStyleType(name='Bob', primary_color=mv.rgb_to_ass_color('blue'))],
+        ...    dst_ass_file='subtitle2.ass')
     """
     assert len(start_times) == len(end_times) == len(texts)
 
