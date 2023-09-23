@@ -5,6 +5,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)](https://www.python.org)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rezoo/movis)
 ![Continuous integration](https://github.com/rezoo/movis/actions/workflows/python-package.yml/badge.svg)
+![Docs](https://github.com/rezoo/movis/actions/workflows/docs.yml/badge.svg)
 
 [**Docs**](https://rezoo.github.io/movis/)
 | [**Overview**](https://rezoo.github.io/movis/overview.html)
