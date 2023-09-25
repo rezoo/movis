@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 from ..attribute import Attribute, AttributesMixin, AttributeType
+from ..enum import BlendingMode
 from ..imgproc import alpha_composite
 
 
@@ -81,4 +82,4 @@ class Glow(AttributesMixin):
         bimg_rgb = np.clip(strength * blurred_image[:, :, :3].astype(np.float32), 0, 255).astype(np.uint8)
         blurred_image = np.concatenate([bimg_rgb, blurred_image[:, :, 3:]], axis=2)
         return alpha_composite(
-            pad_image, blurred_image, blending_mode='add')
+            pad_image, blurred_image, blending_mode=BlendingMode.LINEAR_DODGE)
