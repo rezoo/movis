@@ -280,7 +280,10 @@ class Video:
 
     def __call__(self, time: float) -> np.ndarray | None:
         frame_index = int(time * self._fps)
-        frame = self._reader.get_data(frame_index)
+        try:
+            frame = self._reader.get_data(frame_index)
+        except IndexError:
+            return None
         pil_frame = PILImage.fromarray(frame).convert("RGBA")
         return np.asarray(pil_frame)
 
