@@ -188,6 +188,8 @@ class Motion:
             4
         """
         assert len(keyframes) == len(values)
+        if isinstance(easings, str) or isinstance(easings, Easing):
+            raise ValueError("easings must be a list of strings or Easing enums")
         if easings is not None:
             if len(easings) == len(keyframes) - 1:
                 easings = list(easings) + [Easing.LINEAR]
