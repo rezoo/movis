@@ -36,7 +36,7 @@ def _linear_dodge(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
 
 
 def _linear_burn(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
-    return np.maximum(0, bg.astype(np.int32) + fg.astype(np.int32)).astype(np.uint8)
+    return np.maximum(0, bg.astype(np.int32) + fg.astype(np.int32) - 255).astype(np.uint8)
 
 
 def _blend_soft_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
