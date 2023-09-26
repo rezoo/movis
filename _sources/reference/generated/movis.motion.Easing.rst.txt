@@ -27,6 +27,7 @@
       ~Easing.EASE_IN
       ~Easing.EASE_OUT
       ~Easing.EASE_IN_OUT
+      ~Easing.FLAT
       ~Easing.EASE_IN2
       ~Easing.EASE_IN3
       ~Easing.EASE_IN4
