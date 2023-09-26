@@ -48,6 +48,7 @@ class Easing(Enum):
     EASE_IN = 1
     EASE_OUT = 2
     EASE_IN_OUT = 3
+    FLAT = 4
     EASE_IN2 = 102
     EASE_IN3 = 103
     EASE_IN4 = 104
@@ -114,6 +115,7 @@ STRING_TO_EASING = {
     "ease_in": Easing.EASE_IN,
     "ease_out": Easing.EASE_OUT,
     "ease_in_out": Easing.EASE_IN_OUT,
+    "flat": Easing.FLAT,
     "ease_in2": Easing.EASE_IN2,
     "ease_in3": Easing.EASE_IN3,
     "ease_in4": Easing.EASE_IN4,

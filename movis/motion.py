@@ -12,6 +12,7 @@ EASING_TO_FUNC = {
     Easing.EASE_IN: lambda t: t**2,
     Easing.EASE_OUT: lambda t: 1.0 - (1.0 - t) ** 2,
     Easing.EASE_IN_OUT: lambda t: t**2 * (3.0 - 2.0 * t),
+    Easing.FLAT: lambda t: 0.0,
     Easing.EASE_IN2: lambda t: t ** 2,
     Easing.EASE_IN3: lambda t: t ** 3,
     Easing.EASE_IN4: lambda t: t ** 4,
