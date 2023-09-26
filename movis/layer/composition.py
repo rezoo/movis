@@ -380,7 +380,8 @@ class Composition:
             if result is None:
                 continue
             layer_time_start, _, audio_i = result
-            ind_start = int((layer_time_start + layer_item.offset) * AUDIO_SAMPLING_RATE)
+            time_i = layer_time_start + layer_item.offset - start_time
+            ind_start = int(time_i * AUDIO_SAMPLING_RATE)
             if audio is None:
                 n_samples = int((end_time - start_time) * AUDIO_SAMPLING_RATE)
                 audio = np.zeros((2, n_samples), dtype=np.float32)
