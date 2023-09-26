@@ -24,7 +24,7 @@ def extract(args: argparse.Namespace):
         ffmpeg.input(audio_fp.name).output(str(args.output), b='128k').run(overwrite_output=True)
 
     non_silent_frame = pd.DataFrame(non_silent_regions, columns=['start_time', 'end_time'])
-    non_silent_frame.to_csv(args.out_region, sep='\t', index=False)
+    non_silent_frame.to_csv(args.region, sep='\t', index=False)
 
 
 def transcribe(args: argparse.Namespace):
@@ -42,8 +42,8 @@ def transcribe(args: argparse.Namespace):
 
 
 def render(args: argparse.Namespace):
-    subtitle = pd.read_csv(args.in_subtitle, sep='\t')
-    region = pd.read_csv(args.in_region, sep='\t')
+    subtitle = pd.read_csv(args.subtitle, sep='\t')
+    region = pd.read_csv(args.region, sep='\t')
     font_name = 'M PLUS 1p'
     font_style = 'Medium'
 
@@ -85,8 +85,8 @@ if __name__ == '__main__':
     parser_extract = subparsers.add_parser(
         'extract', help='Extract non-silent regions from audio and generate subtitle')
     parser_extract.add_argument('-i', '--input', default='video.mp4', type=Path)
-    parser_extract.add_argument('-o', '--output', default='truncated.m4a', type=Path)
-    parser_extract.add_argument('--out-region', default='non_silent_regions.tsv', type=Path)
+    parser_extract.add_argument('-o', '--output', default='truncated_audio.m4a', type=Path)
+    parser_extract.add_argument('--region', default='non_silent_regions.tsv', type=Path)
     parser_extract.add_argument('--threshold', default=30, type=int)
     parser_extract.add_argument('--frame_length', default=512, type=int)
     parser_extract.set_defaults(func=extract)
@@ -98,8 +98,8 @@ if __name__ == '__main__':
 
     parser_render = subparsers.add_parser('render', help='Render video with subtitle and non-silent regions')
     parser_render.add_argument('-i', '--input', default='video.mp4', type=Path)
-    parser_render.add_argument('--in-region', default='non_silent_regions.tsv', type=Path)
-    parser_render.add_argument('--in-subtitle', default='subtitle.tsv', type=Path)
+    parser_render.add_argument('--region', default='non_silent_regions.tsv', type=Path)
+    parser_render.add_argument('--subtitle', default='subtitle.tsv', type=Path)
     parser_render.add_argument('-o', '--output', default='video_truncated.mp4', type=Path)
     parser_render.set_defaults(func=render)
 
