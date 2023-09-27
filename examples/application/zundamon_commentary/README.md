@@ -52,3 +52,25 @@ This example is expected to generate speech with the following settings.
 Once the script is complete, all that remains is to write out all the audio files in the `audio` directory and the video will be generated.
 
 完成したら、あとは `audio` ディレクトリ内にファイルを書き出せば、ひとまずテンプレート動画は完成するはずです。
+
+## Prepare images (画像を準備する)
+
+At the moment, the character images provided only include the minimum number of expressions needed to run the sample. If you wish to create additional expressions, you need to prepare images by following these steps:
+
+1. Download Zundamon's material from an appropriate URL. This sample utilizes image materials from [Sakamoto Ahiru-san](https://seiga.nicovideo.jp/seiga/im10788496).
+2. Extract the expressions from the downloaded PSD file and save them as PNG files.
+3. Place the saved PNG files in the images/zundamon directory.
+4. For Shikoku Metan, who is the partner character, please follow the same procedure.
+
+現在、キャラクターの画像は、サンプルを動かすための最低限の表情しか提供されていません。
+もし自分で別の表情を作りたい場合には、次の手順で画像を準備する必要があります。
+
+1. ずんだもんの素材を適当なURLからダウンロードします。本サンプルは[坂本アヒルさんの画像素材](https://seiga.nicovideo.jp/seiga/im10788496)を利用しています。
+2. ダウンロードしたpsdファイルから、表情を切り出し、pngファイルとして保存します。
+3. 保存したpngファイルを、`images/zundamon` ディレクトリに配置します。
+4. 相方である四国めたんに関しても、同様の手順で行います。
+
+## Reference
+
+* 音声ソフト：VOICEVOX(ずんだもん) https://voicevox.hiroshiba.jp/
+* 立ち絵：坂本アヒル様 https://seiga.nicovideo.jp/seiga/im10788496
