@@ -65,7 +65,7 @@ At the moment, the character images provided only include the minimum number of 
 現在、キャラクターの画像は、サンプルを動かすための最低限の表情しか提供されていません。
 もし自分で別の表情を作りたい場合には、次の手順で画像を準備する必要があります。
 
-1. ずんだもんの素材を適当なURLからダウンロードします。本サンプルは[坂本アヒルさんの画像素材](https://seiga.nicovideo.jp/seiga/im10788496)を利用しています。
+1. ずんだもんの素材を適当なURLからダウンロードします。本サンプルは[坂本アヒルさまの画像素材](https://seiga.nicovideo.jp/seiga/im10788496)を利用しています。
 2. ダウンロードしたpsdファイルから、表情を切り出し、pngファイルとして保存します。
 3. 保存したpngファイルを、`images/zundamon` ディレクトリに配置します。
 4. 相方である四国めたんに関しても、同様の手順で行います。

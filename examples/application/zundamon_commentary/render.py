@@ -37,7 +37,7 @@ def main():
 
     scene = mv.layer.Composition(size=(1920, 1080), duration=tl['end_time'].max())
     scene.add_layer(
-        mv.layer.Image(img_file='assets/bg2.png', duration=tl['end_time'].max()),
+        mv.layer.Image(img_file='assets/bg.jpg', duration=tl['end_time'].max()),
         position=(960, 540))
     scene.add_layer(
         Slide(
