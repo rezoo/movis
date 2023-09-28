@@ -12,7 +12,7 @@ def parse_requirements(name: str = "requirements.txt"):
 
 setup(
     name="movis",
-    version="0.5",
+    version="0.6",
     author="Masaki Saito",
     author_email="msaito@preferred.jp",
     description="A video editing library",
