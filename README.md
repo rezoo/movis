@@ -3,6 +3,7 @@
 # Movis: Video Editing as a Code
 
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)](https://www.python.org)
+[![pypi](https://img.shields.io/pypi/v/movis.svg)](https://pypi.python.org/pypi/movis)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rezoo/movis)
 ![Continuous integration](https://github.com/rezoo/movis/actions/workflows/python-package.yml/badge.svg)
 ![Docs](https://github.com/rezoo/movis/actions/workflows/docs.yml/badge.svg)
