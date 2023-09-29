@@ -1,0 +1,22 @@
+﻿movis.contrib.segmentation.ChromaKey
+====================================
+
+.. currentmodule:: movis.contrib.segmentation
+
+.. autoclass:: ChromaKey
+
+   
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   .. automethod:: from_preset
+   
+
+
+
+   
+   
+   

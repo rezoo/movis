@@ -45,7 +45,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="movis.contrib.voicevox.make_voicevox_dataframe" href="movis.contrib.voicevox.make_voicevox_dataframe.html" />
-    <link rel="prev" title="movis.contrib.presentation.Character" href="movis.contrib.presentation.Character.html" />
+    <link rel="prev" title="movis.contrib.segmentation.ChromaKey" href="movis.contrib.segmentation.ChromaKey.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -309,6 +309,7 @@ document.write(`
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">movis.contrib</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="movis.contrib.presentation.Slide.html">movis.contrib.presentation.Slide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.contrib.presentation.Character.html">movis.contrib.presentation.Character</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.contrib.segmentation.ChromaKey.html">movis.contrib.segmentation.ChromaKey</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.contrib.segmentation.RobustVideoMatting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.contrib.voicevox.make_voicevox_dataframe.html">movis.contrib.voicevox.make_voicevox_dataframe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.contrib.voicevox.make_timeline_from_voicevox.html">movis.contrib.voicevox.make_timeline_from_voicevox</a></li>
@@ -442,8 +443,8 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="movis.contrib.segmentation.RobustVideoMatting">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">movis.contrib.segmentation.</span></span><span class="sig-name descname"><span class="pre">RobustVideoMatting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">onnx_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.11)"><span class="pre">PathLike</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsample_ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurrent_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/movis/contrib/segmentation.html#RobustVideoMatting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.contrib.segmentation.RobustVideoMatting" title="Link to this definition">#</a></dt>
-<dd><p>Extract the foreground using the RobustVideoMatting [Li2021].</p>
-<p>This effect uses a deep learning model to automatically identify the area of persons in a given frame
+<dd><p>An effect that extracts the foreground using the RobustVideoMatting [Li2021].</p>
+<p>It uses a deep learning model to automatically identify the area of persons in a given frame
 and extract it as the foreground.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -511,12 +512,12 @@ The default value is <code class="docutils literal notranslate"><span class="pre
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="movis.contrib.presentation.Character.html"
+       href="movis.contrib.segmentation.ChromaKey.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">movis.contrib.presentation.Character</p>
+        <p class="prev-next-title">movis.contrib.segmentation.ChromaKey</p>
       </div>
     </a>
     <a class="right-next"

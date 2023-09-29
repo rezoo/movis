@@ -35,6 +35,7 @@ Segmentation
    :toctree: generated/
    :nosignatures:
 
+   movis.contrib.segmentation.ChromaKey
    movis.contrib.segmentation.RobustVideoMatting
 
 
