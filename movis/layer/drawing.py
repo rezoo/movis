@@ -501,6 +501,28 @@ class Text(AttributesMixin):
         key = super().get_key(time)
         return (self.get_text(time), key)
 
+    def _get_current_cursor_position(
+        self, metrics: QFontMetrics, line: str, cursor_y: float,
+        lineno: int, width: float
+    ) -> tuple[float, float]:
+        rect = metrics.boundingRect(line)
+        if lineno == 0:
+            cursor_y += rect.height()
+        elif self.line_spacing is None:
+            cursor_y += (rect.height() - rect.y())
+        else:
+            cursor_y += self.line_spacing
+
+        if self.text_alignment == TextAlignment.LEFT:
+            cursor_x = 0.
+        elif self.text_alignment == TextAlignment.CENTER:
+            cursor_x = (width - rect.width() - rect.x()) / 2
+        elif self.text_alignment == TextAlignment.RIGHT:
+            cursor_x = width - rect.width() - rect.x()
+        else:
+            raise ValueError(f"Invalid text alignment: {self.text_alignment}")
+        return cursor_x, cursor_y
+
     def __call__(self, time: float) -> np.ndarray | None:
         if len(self.contents) == 0:
             return None
@@ -537,22 +559,8 @@ class Text(AttributesMixin):
                 painter.setPen(QColor(b, g, r, a))
                 cursor_y = margin
                 for i, line in enumerate(lines):
-                    rect = metrics.boundingRect(line)
-                    if i == 0:
-                        cursor_y += rect.height()
-                    elif self.line_spacing is None:
-                        cursor_y += (rect.height() - rect.y())
-                    else:
-                        cursor_y += self.line_spacing
-
-                    if self.text_alignment == TextAlignment.LEFT:
-                        cursor_x = 0.
-                    elif self.text_alignment == TextAlignment.CENTER:
-                        cursor_x = (w - rect.width() - rect.x()) / 2
-                    elif self.text_alignment == TextAlignment.RIGHT:
-                        cursor_x = w - rect.width() - rect.x()
-                    else:
-                        raise ValueError(f"Invalid text alignment: {self.text_alignment}")
+                    cursor_x, cursor_y = self._get_current_cursor_position(
+                        metrics, line, cursor_y, lineno=i, width=w)
                     painter.drawText(QPointF(max_stroke + margin + cursor_x, cursor_y), line)
             elif isinstance(c, StrokeProperty):
                 r, g, b = c.color
@@ -564,22 +572,8 @@ class Text(AttributesMixin):
                 painter_path = QPainterPath()
                 cursor_y = margin
                 for i, line in enumerate(lines):
-                    rect = metrics.boundingRect(line)
-                    if i == 0:
-                        cursor_y += rect.height()
-                    elif self.line_spacing is None:
-                        cursor_y += (rect.height() - rect.y())
-                    else:
-                        cursor_y += self.line_spacing
-
-                    if self.text_alignment == TextAlignment.LEFT:
-                        cursor_x = 0.
-                    elif self.text_alignment == TextAlignment.CENTER:
-                        cursor_x = (w - rect.width() - rect.x()) / 2
-                    elif self.text_alignment == TextAlignment.RIGHT:
-                        cursor_x = w - rect.width() - rect.x()
-                    else:
-                        raise ValueError(f"Invalid text alignment: {self.text_alignment}")
+                    cursor_x, cursor_y = self._get_current_cursor_position(
+                        metrics, line, cursor_y, lineno=i, width=w)
                     painter_path.addText(QPointF(max_stroke + margin + cursor_x, cursor_y), qfont, line)
                 painter.drawPath(painter_path)
         painter.end()
