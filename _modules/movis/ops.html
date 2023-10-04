@@ -570,6 +570,57 @@ document.write(`
         <span class="n">layer</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span><span class="p">),</span> <span class="n">origin_point</span><span class="o">=</span><span class="n">Direction</span><span class="o">.</span><span class="n">TOP_LEFT</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">composition</span></div>
 
+
+
+<span class="k">def</span> <span class="nf">switch</span><span class="p">(</span>
+    <span class="n">layers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BasicLayer</span><span class="p">],</span>
+    <span class="n">start_times</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">cams</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Composition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Switch layers at specified times.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        layers:</span>
+<span class="sd">            Layers to switch.</span>
+<span class="sd">        start_times:</span>
+<span class="sd">            Start times of the intervals.</span>
+<span class="sd">        cams:</span>
+<span class="sd">            Scene numbers of the intervals.</span>
+<span class="sd">        size:</span>
+<span class="sd">            Size of the composition. If ``None``, the size of the layer is estimated.</span>
+<span class="sd">        duration:</span>
+<span class="sd">            Duration of the composition. If ``None``, the duration is estimated.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Composition with the layer switched.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import movis as mv</span>
+<span class="sd">        &gt;&gt;&gt; layer1 = mv.layer.Image(&quot;image1.png&quot;, duration=5.0)</span>
+<span class="sd">        &gt;&gt;&gt; layer2 = mv.layer.Image(&quot;image2.png&quot;, duration=5.0)</span>
+<span class="sd">        &gt;&gt;&gt; # Show layer1 at 0.0-2.0 and layer2 at 2.0-5.0</span>
+<span class="sd">        &gt;&gt;&gt; composition = mv.switch([layer1, layer2], [0.0, 2.0], [0, 1])</span>
+<span class="sd">        &gt;&gt;&gt; composition.duration</span>
+<span class="sd">        5.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">start_times</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">cams</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">min</span><span class="p">(</span><span class="n">cams</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">max</span><span class="p">(</span><span class="n">cams</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+    <span class="n">starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">start_times</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">starts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="n">starts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot determine size of composition.&quot;</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">duration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">duration</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">)</span>
+    <span class="n">composition</span> <span class="o">=</span> <span class="n">Composition</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">starts</span><span class="p">,</span> <span class="p">[</span><span class="n">duration</span><span class="p">]])</span>
+    <span class="k">for</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">times</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">cams</span><span class="p">):</span>
+        <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span>
+            <span class="n">layers</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">composition</span>
 </pre></div>
 
                 </article>
