@@ -104,3 +104,20 @@ def test_crop():
     assert np.all(frame[-1, 0, :] == np.array([1, 0, 0, 255]))
     assert np.all(frame[0, -1, :] == np.array([1, 0, 0, 255]))
     assert np.all(frame[-1, -1, :] == np.array([1, 0, 0, 255]))
+
+
+def test_switch():
+    img1 = mv.layer.Image(np.full((100, 100, 4), 1, dtype=np.uint8), duration=5.0)
+    img2 = mv.layer.Image(np.full((100, 100, 4), 2, dtype=np.uint8), duration=6.0)
+    img3 = mv.layer.Image(np.full((100, 100, 4), 3, dtype=np.uint8), duration=7.0)
+    scene = mv.switch([img1, img2, img3], [0.0, 1.0, 2.0, 3.0, 4.0], [0, 1, 2, 1, 0])
+
+    assert scene.duration == 5.0
+    assert scene.size == (100, 100)
+    assert len(scene) == 5
+
+    assert np.all(scene(0.0)[0, 0, :] == np.array([1, 1, 1, 1]))
+    assert np.all(scene(1.0)[0, 0, :] == np.array([2, 2, 2, 2]))
+    assert np.all(scene(2.0)[0, 0, :] == np.array([3, 3, 3, 3]))
+    assert np.all(scene(3.0)[0, 0, :] == np.array([2, 2, 2, 2]))
+    assert np.all(scene(4.0)[0, 0, :] == np.array([1, 1, 1, 1]))

@@ -212,3 +212,54 @@ def crop(layer: BasicLayer, rect: tuple[int, int, int, int]) -> Composition:
     composition.add_layer(
         layer, position=(-x, -y), origin_point=Direction.TOP_LEFT)
     return composition
+
+
+def switch(
+    layers: Sequence[BasicLayer],
+    start_times: Sequence[float], cams: Sequence[int],
+    size: tuple[int, int] | None = None, duration: float | None = None
+) -> Composition:
+    """Switch layers at specified times.
+
+    Args:
+        layers:
+            Layers to switch.
+        start_times:
+            Start times of the intervals.
+        cams:
+            Scene numbers of the intervals.
+        size:
+            Size of the composition. If ``None``, the size of the layer is estimated.
+        duration:
+            Duration of the composition. If ``None``, the duration is estimated.
+
+    Returns:
+        Composition with the layer switched.
+
+    Examples:
+        >>> import movis as mv
+        >>> layer1 = mv.layer.Image("image1.png", duration=5.0)
+        >>> layer2 = mv.layer.Image("image2.png", duration=5.0)
+        >>> # Show layer1 at 0.0-2.0 and layer2 at 2.0-5.0
+        >>> composition = mv.switch([layer1, layer2], [0.0, 2.0], [0, 1])
+        >>> composition.duration
+        5.0
+    """
+    assert len(start_times) == len(cams)
+    assert 0 <= min(cams)
+    assert max(cams) < len(layers)
+    starts = np.array(start_times, dtype=np.float64)
+    assert np.all(starts[1:] > starts[:-1])
+    if size is None:
+        img = layers[0](0.0)
+        if img is None:
+            raise ValueError("Cannot determine size of composition.")
+        size = img.shape[1], img.shape[0]
+    if duration is None:
+        duration = min(layer.duration for layer in layers)
+    composition = Composition(size=size, duration=duration)
+    times = np.concatenate([starts, [duration]])
+    for start_time, end_time, ind in zip(times[:-1], times[1:], cams):
+        composition.add_layer(
+            layers[ind], start_time=start_time, end_time=end_time)
+    return composition
