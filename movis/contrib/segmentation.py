@@ -9,6 +9,8 @@ from pathlib import Path
 import cv2
 import numpy as np
 
+from movis.util import to_rgb
+
 try:
     import onnxruntime
     onnxruntime_available = True
@@ -24,33 +26,34 @@ class ChromaKey:
     The color is specified by the lower and upper bounds in the HSV color space.
 
     Args:
-        lower_key_color:
-            The lower bound of the key color in the HSV color space.
-            the range of each channel is: ``[0, 360], [0, 1], [0, 1]``.
-        upper_key_color:
-            The upper bound of the key color in the HSV color space.
+        key_color:
+            The key color in the RGB color space.
+            It also supports the color name in CSS3 (e.g., ``blur`` and ``green``).
+        color_space:
+            The color space when extracting the background. Currently, only ``hsv`` is supported.
+        key_color_range:
+            The color range of the background.
+            The range of each channel is ``[0, 360]``, ``[0, 1]``, and ``[0, 1]``
+            if the color space is ``hsv``.
     """
 
     def __init__(
             self,
-            lower_key_color: tuple[float, float, float] = (80.0, 0.4, 0.4),
-            upper_key_color: tuple[float, float, float] = (160.0, 1.0, 1.0)):
-        lc, uc = lower_key_color, upper_key_color
-        self._lower_color = np.array([lc[0] / 2, lc[1] * 255, lc[2] * 255], dtype=np.uint8)
-        self._upper_color = np.array([uc[0] / 2, uc[1] * 255, uc[2] * 255], dtype=np.uint8)
-
-    @classmethod
-    def from_preset(cls, preset: str = 'green'):
-        """Make an instance from a specified preset.
-
-        Args:
-            preset:
-                A string. Currently, ``'blue'`` and ``'green'`` are supported.
-        """
-        if preset == 'green':
-            return cls((80.0, 0.4, 0.4), (160.0, 1.0, 1.0))
-        elif preset == 'blue':
-            return cls((200.0, 0.4, 0.4), (280.0, 1.0, 1.0))
+            key_color: tuple[int, int, int] | str = (0, 255, 0),
+            color_space: str = 'hsv',
+            key_color_range: tuple[float, float, float] = (20.0, 0.3, 0.3)):
+        assert color_space == 'hsv', "Only HSV color space is supported."
+        c = cv2.cvtColor(
+            np.array(to_rgb(key_color), dtype=np.uint8).reshape(1, 1, 3), cv2.COLOR_RGB2HSV)[0, 0, :].astype(np.float64)
+        self._key_color = c.astype(np.uint8)
+        self._lower_color = np.clip(np.array([
+            c[0] - key_color_range[0] / 2,
+            c[1] - 255 * key_color_range[1],
+            c[2] - 255 * key_color_range[2]]), 0, 255).astype(np.uint8)
+        self._upper_color = np.clip(np.array([
+            c[0] + key_color_range[0] / 2,
+            c[1] + 255 * key_color_range[1],
+            c[2] + 255 * key_color_range[2]]), 0, 255).astype(np.uint8)
 
     def __call__(self, prev_image: np.ndarray, time: float) -> np.ndarray:
         hsv_foreground = cv2.cvtColor(prev_image[:, :, :3], cv2.COLOR_RGB2HSV)
