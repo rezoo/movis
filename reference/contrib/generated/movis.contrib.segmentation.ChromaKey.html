@@ -442,39 +442,25 @@ document.write(`
 <h1>movis.contrib.segmentation.ChromaKey<a class="headerlink" href="#movis-contrib-segmentation-chromakey" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="movis.contrib.segmentation.ChromaKey">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">movis.contrib.segmentation.</span></span><span class="sig-name descname"><span class="pre">ChromaKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower_key_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(80.0,</span> <span class="pre">0.4,</span> <span class="pre">0.4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_key_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(160.0,</span> <span class="pre">1.0,</span> <span class="pre">1.0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/movis/contrib/segmentation.html#ChromaKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.contrib.segmentation.ChromaKey" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">movis.contrib.segmentation.</span></span><span class="sig-name descname"><span class="pre">ChromaKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">255,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'hsv'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_color_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(20.0,</span> <span class="pre">0.3,</span> <span class="pre">0.3)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/movis/contrib/segmentation.html#ChromaKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.contrib.segmentation.ChromaKey" title="Link to this definition">#</a></dt>
 <dd><p>An effect that extracts the foreground using the chroma key composition.</p>
 <p>It extracts the foreground by using the chroma key composition,
 which identifies the background by a given color.
 The color is specified by the lower and upper bounds in the HSV color space.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><dl class="simple">
-<dt>lower_key_color:</dt><dd><p>The lower bound of the key color in the HSV color space.
-the range of each channel is: <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">360],</span> <span class="pre">[0,</span> <span class="pre">1],</span> <span class="pre">[0,</span> <span class="pre">1]</span></code>.</p>
+<dt>key_color:</dt><dd><p>The key color in the RGB color space.
+It also supports the color name in CSS3 (e.g., <code class="docutils literal notranslate"><span class="pre">blur</span></code> and <code class="docutils literal notranslate"><span class="pre">green</span></code>).</p>
 </dd>
-<dt>upper_key_color:</dt><dd><p>The upper bound of the key color in the HSV color space.</p>
+<dt>color_space:</dt><dd><p>The color space when extracting the background. Currently, only <code class="docutils literal notranslate"><span class="pre">hsv</span></code> is supported.</p>
 </dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable table autosummary">
-<tbody>
-</tbody>
-</table>
-<dl class="py method">
-<dt class="sig sig-object py" id="movis.contrib.segmentation.ChromaKey.from_preset">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_preset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'green'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/movis/contrib/segmentation.html#ChromaKey.from_preset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.contrib.segmentation.ChromaKey.from_preset" title="Link to this definition">#</a></dt>
-<dd><p>Make an instance from a specified preset.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>preset:</dt><dd><p>A string. Currently, <code class="docutils literal notranslate"><span class="pre">'blue'</span></code> and <code class="docutils literal notranslate"><span class="pre">'green'</span></code> are supported.</p>
+<dt>key_color_range:</dt><dd><p>The color range of the background.
+The range of each channel is <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">360]</span></code>, <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>, and <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>
+if the color space is <code class="docutils literal notranslate"><span class="pre">hsv</span></code>.</p>
 </dd>
 </dl>
 </dd>
 </dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -522,10 +508,7 @@ the range of each channel is: <code class="docutils literal notranslate"><span c
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.contrib.segmentation.ChromaKey"><code class="docutils literal notranslate"><span class="pre">ChromaKey</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.contrib.segmentation.ChromaKey.from_preset"><code class="docutils literal notranslate"><span class="pre">ChromaKey.from_preset()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.contrib.segmentation.ChromaKey"><code class="docutils literal notranslate"><span class="pre">ChromaKey</span></code></a></li>
 </ul>
   </nav></div>
 

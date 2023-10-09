@@ -8,12 +8,6 @@
    
    
    
-   .. rubric:: Methods
-
-   .. autosummary::
-   
-   .. automethod:: from_preset
-   
 
 
 
