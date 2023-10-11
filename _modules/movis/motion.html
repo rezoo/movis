@@ -482,7 +482,7 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">keyframe</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">easing</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Easing</span> <span class="o">=</span> <span class="n">Easing</span><span class="o">.</span><span class="n">LINEAR</span><span class="p">,</span>
+        <span class="n">easing</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Easing</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Easing</span><span class="o">.</span><span class="n">LINEAR</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Motion&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a single keyframe.</span>
 
@@ -492,7 +492,9 @@ document.write(`
 <span class="sd">            value:</span>
 <span class="sd">                value of the keyframe.</span>
 <span class="sd">            easing:</span>
-<span class="sd">                motion type of the keyframe. This can be either a string or an ``Easing`` enum.</span>
+<span class="sd">                motion type of the keyframe. This must be a string,</span>
+<span class="sd">                ``Easing`` enum, or an easing function</span>
+<span class="sd">                ``f: float -&gt; float`` that satisfies ``f(0) == 0`` and ``f(1) == 1``.</span>
 <span class="sd">                The default is ``Easing.LINEAR`` (linear completion).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i</span> <span class="o">=</span> <span class="n">bisect</span><span class="o">.</span><span class="n">bisect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyframes</span><span class="p">,</span> <span class="n">keyframe</span><span class="p">)</span>
@@ -500,9 +502,15 @@ document.write(`
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Keyframe </span><span class="si">{</span><span class="n">keyframe</span><span class="si">}</span><span class="s2"> already exists&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">keyframes</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">keyframe</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">transform_to_numpy</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_type</span><span class="p">))</span>
-        <span class="n">easing</span> <span class="o">=</span> <span class="n">Easing</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">easing</span><span class="p">)</span> \
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">easing</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">easing</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">easings</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">EASING_TO_FUNC</span><span class="p">[</span><span class="n">easing</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">easing</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">easing_func</span> <span class="o">=</span> <span class="n">EASING_TO_FUNC</span><span class="p">[</span><span class="n">Easing</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">easing</span><span class="p">)]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">easing</span><span class="p">,</span> <span class="n">Easing</span><span class="p">):</span>
+            <span class="n">easing_func</span> <span class="o">=</span> <span class="n">EASING_TO_FUNC</span><span class="p">[</span><span class="n">easing</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">easing</span><span class="p">):</span>
+            <span class="n">easing_func</span> <span class="o">=</span> <span class="n">easing</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid easing type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">easing</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">easings</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">easing_func</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
@@ -512,7 +520,7 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">keyframes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
         <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-        <span class="n">easings</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Easing</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">easings</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Easing</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Motion&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Append multiple keyframes.</span>
 
@@ -522,11 +530,12 @@ document.write(`
 <span class="sd">            values:</span>
 <span class="sd">                values of the keyframes. The length of ``values`` must be the same as ``keyframes``.</span>
 <span class="sd">            easings:</span>
-<span class="sd">                motion types of the keyframes. This can be either a string or an ``Easing`` enum.</span>
-<span class="sd">                The length of ``easings`` must be the same as ``len(keyframes)`` or ``len(keyframes) - 1``.</span>
+<span class="sd">                motion types of the keyframes. Each element of ``easings`` must be a string, ``Easing`` enum,</span>
+<span class="sd">                or an easing function ``f: float -&gt; float`` that satisfies ``f(0) == 0`` and ``f(1) == 1``.</span>
+<span class="sd">                Note that the length of ``easings`` must be the same as ``len(keyframes)`` or ``len(keyframes) - 1``.</span>
 <span class="sd">                If ``easings`` is ``None``, ``Easing.LINEAR`` is used for all keyframes.</span>
-<span class="sd">                If ``len(easings) == len(keyframes) - 1``, ``Motion`` automatically adds ``Easing.LINEAR``</span>
-<span class="sd">                to the end of ``easings``.</span>
+<span class="sd">                If ``len(easings) == len(keyframes) - 1``, ``Motion`` automatically adds</span>
+<span class="sd">                ``Easing.LINEAR`` to the end of ``easings``.</span>
 
 <span class="sd">        Examples:</span>
 <span class="sd">            &gt;&gt;&gt; import movis as mv</span>
@@ -562,9 +571,15 @@ document.write(`
             <span class="n">transform_to_numpy</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_type</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
         <span class="n">updated_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="n">converted_values</span>
 
-        <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Easing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
-            <span class="k">return</span> <span class="n">EASING_TO_FUNC</span><span class="p">[</span><span class="n">Easing</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span> \
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">EASING_TO_FUNC</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Easing</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">t</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Easing</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">EASING_TO_FUNC</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">EASING_TO_FUNC</span><span class="p">[</span><span class="n">Easing</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid easing type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">converted_easings</span> <span class="o">=</span> <span class="p">[</span><span class="n">convert</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">easings</span><span class="p">]</span>
         <span class="n">updated_easings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">easings</span> <span class="o">+</span> <span class="n">converted_easings</span>
