@@ -162,7 +162,7 @@ class Motion:
         self,
         keyframes: Sequence[float],
         values: Sequence[float | Sequence[float] | np.ndarray],
-        easings: Sequence[str | Easing] | None = None,
+        easings: Sequence[str | Easing | Callable[[float], float]] | None = None,
     ) -> "Motion":
         """Append multiple keyframes.
 
@@ -172,11 +172,12 @@ class Motion:
             values:
                 values of the keyframes. The length of ``values`` must be the same as ``keyframes``.
             easings:
-                motion types of the keyframes. This can be either a string or an ``Easing`` enum.
-                The length of ``easings`` must be the same as ``len(keyframes)`` or ``len(keyframes) - 1``.
+                motion types of the keyframes. Each element of ``easings`` must be a string, ``Easing`` enum,
+                or an easing function ``f: float -> float`` that satisfies ``f(0) == 0`` and ``f(1) == 1``.
+                Note that the length of ``easings`` must be the same as ``len(keyframes)`` or ``len(keyframes) - 1``.
                 If ``easings`` is ``None``, ``Easing.LINEAR`` is used for all keyframes.
-                If ``len(easings) == len(keyframes) - 1``, ``Motion`` automatically adds ``Easing.LINEAR``
-                to the end of ``easings``.
+                If ``len(easings) == len(keyframes) - 1``, ``Motion`` automatically adds
+                ``Easing.LINEAR`` to the end of ``easings``.
 
         Examples:
             >>> import movis as mv
@@ -212,9 +213,15 @@ class Motion:
             transform_to_numpy(v, self.value_type) for v in values]
         updated_values: list[np.ndarray[Any, np.dtype[np.float64]]] = self.values + converted_values
 
-        def convert(t: str | Easing) -> Callable[[float], float]:
-            return EASING_TO_FUNC[Easing.from_string(t)] \
-                if isinstance(t, str) else EASING_TO_FUNC[t]
+        def convert(t: str | Easing | Callable[[float], float]) -> Callable[[float], float]:
+            if callable(t):
+                return t
+            elif isinstance(t, Easing):
+                return EASING_TO_FUNC[t]
+            elif isinstance(t, str):
+                return EASING_TO_FUNC[Easing.from_string(t)]
+            else:
+                raise ValueError(f"Invalid easing type: {type(t)}")
 
         converted_easings = [convert(t) for t in easings]
         updated_easings: list[Callable[[float], float]] = self.easings + converted_easings

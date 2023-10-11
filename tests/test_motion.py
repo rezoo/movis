@@ -154,3 +154,16 @@ def test_motion_easing(value_type, n_dim):
     assert np.all(motion(None, 0.0) == np.array([0.0] * n_dim))
     assert np.all(motion(None, 0.5) == np.array([0.5] * n_dim))
     assert np.all(motion(None, 1.0) == np.array([1.0] * n_dim))
+
+    motion = Motion(init_value=[0.0] * n_dim, value_type=value_type)
+    motion.extend(keyframes=[0.0, 1.0], values=[0.0, 1.0], easings=['ease_in_out'])
+
+    assert np.all(motion(None, 0.0) == np.array([0.0] * n_dim))
+    assert np.all(motion(None, 0.5) == np.array([0.5] * n_dim))
+    assert np.all(motion(None, 1.0) == np.array([1.0] * n_dim))
+
+    motion = Motion(init_value=[0.0] * n_dim, value_type=value_type)
+    motion.extend(keyframes=[0.0, 1.0], values=[0.0, 1.0], easings=[lambda t: t])
+
+    assert np.all(motion(None, 0.0) == np.array([0.0] * n_dim))
+    assert np.all(motion(None, 1.0) == np.array([1.0] * n_dim))
