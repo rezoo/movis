@@ -135,7 +135,7 @@ class Motion:
         self,
         keyframe: float,
         value: float | Sequence[float] | np.ndarray,
-        easing: str | Easing = Easing.LINEAR,
+        easing: str | Easing | Callable[[float], float] = Easing.LINEAR,
     ) -> "Motion":
         """Append a single keyframe.
 
@@ -145,7 +145,9 @@ class Motion:
             value:
                 value of the keyframe.
             easing:
-                motion type of the keyframe. This can be either a string or an ``Easing`` enum.
+                motion type of the keyframe. This must be a string,
+                ``Easing`` enum, or an easing function
+                ``f: float -> float`` that satisfies ``f(0) == 0`` and ``f(1) == 1``.
                 The default is ``Easing.LINEAR`` (linear completion).
         """
         i = bisect.bisect(self.keyframes, keyframe)
@@ -153,9 +155,15 @@ class Motion:
             raise ValueError(f"Keyframe {keyframe} already exists")
         self.keyframes.insert(i, float(keyframe))
         self.values.insert(i, transform_to_numpy(value, self.value_type))
-        easing = Easing.from_string(easing) \
-            if isinstance(easing, str) else easing
-        self.easings.insert(i, EASING_TO_FUNC[easing])
+        if isinstance(easing, str):
+            easing_func = EASING_TO_FUNC[Easing.from_string(easing)]
+        elif isinstance(easing, Easing):
+            easing_func = EASING_TO_FUNC[easing]
+        elif callable(easing):
+            easing_func = easing
+        else:
+            raise ValueError(f"Invalid easing type: {type(easing)}")
+        self.easings.insert(i, easing_func)
         return self
 
     def extend(
