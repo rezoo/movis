@@ -377,7 +377,7 @@ class Composition:
         """
         assert start_time >= 0, "start_time must be nonnegative"
         assert end_time is None or start_time < end_time
-        target_layers = [li for li in self.layers if li.audio and hasattr(li.layer, 'get_audio')]
+        target_layers = [li for li in self.layers if hasattr(li.layer, 'get_audio')]
 
         audio = None
         for layer_item in target_layers:
@@ -723,6 +723,8 @@ class LayerItem:
         return frame
 
     def _get_audio_data(self, start_time: float, end_time: float) -> tuple[float, float, np.ndarray] | None:
+        if not self.audio:
+            return None
         layer_time_start = max(self.start_time, start_time - self.offset)
         layer_time_end = min(self.end_time, end_time - self.offset)
         if layer_time_start >= layer_time_end:
