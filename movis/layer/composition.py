@@ -211,6 +211,7 @@ class Composition:
         end_time: float | None = None,
         audio_level: float = 0.0,
         visible: bool = True,
+        audio: bool = True,
     ) -> LayerItem:
         """Add a layer to the composition.
 
@@ -275,6 +276,9 @@ class Composition:
             visible:
                 A flag specifying whether the layer is visible or not;
                 if ``visible=False``, the layer in the composition is not rendered.
+            audio:
+                A flag specifying whether the audio is enabled or not;
+                if ``audio=False``, the audio of the given layer is not used.
 
         Returns:
             A ``LayerItem`` object that wraps the layer and its corresponding information.
@@ -306,6 +310,7 @@ class Composition:
             end_time=end_time,
             audio_level=audio_level,
             visible=visible,
+            audio=audio,
         )
         self._layers.append(layer_item)
         self._name_to_layer[name] = layer_item
@@ -372,7 +377,7 @@ class Composition:
         """
         assert start_time >= 0, "start_time must be nonnegative"
         assert end_time is None or start_time < end_time
-        target_layers = [li for li in self.layers if hasattr(li.layer, 'get_audio')]
+        target_layers = [li for li in self.layers if li.audio and hasattr(li.layer, 'get_audio')]
 
         audio = None
         for layer_item in target_layers:
@@ -545,11 +550,14 @@ class LayerItem:
         visible:
             A flag specifying whether the layer is visible or not;
             if ``visible=False``, the layer in the composition is not rendered.
+        audio:
+            A flag specifying whether the audio is enabled or not;
+            if ``audio=False``, the audio of the given layer is not used.
     """
     def __init__(
             self, layer: Layer, name: str = 'layer', transform: Transform | None = None,
             offset: float = 0.0, start_time: float = 0.0, end_time: float | None = None,
-            audio_level: float = 0.0, visible: bool = True):
+            audio_level: float = 0.0, visible: bool = True, audio: bool = True):
         self.layer: Layer = layer
         self.name: str = name
         self.transform: Transform = transform if transform is not None else Transform()
@@ -558,6 +566,7 @@ class LayerItem:
         self.end_time: float = end_time if end_time is not None else getattr(layer, "duration", 1e6)
         self.audio_level: Attribute = Attribute(audio_level, AttributeType.SCALAR, range=(-1000, 1000))
         self.visible: bool = visible
+        self.audio: bool = audio
         self._effects: list[Effect] = []
 
     @property
