@@ -573,6 +573,7 @@ document.write(`
         <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">audio_level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">audio</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LayerItem</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a layer to the composition.</span>
 
@@ -637,6 +638,9 @@ document.write(`
 <span class="sd">            visible:</span>
 <span class="sd">                A flag specifying whether the layer is visible or not;</span>
 <span class="sd">                if ``visible=False``, the layer in the composition is not rendered.</span>
+<span class="sd">            audio:</span>
+<span class="sd">                A flag specifying whether the audio is enabled or not;</span>
+<span class="sd">                if ``audio=False``, the audio of the given layer is not used.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A ``LayerItem`` object that wraps the layer and its corresponding information.</span>
@@ -668,6 +672,7 @@ document.write(`
             <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span>
             <span class="n">audio_level</span><span class="o">=</span><span class="n">audio_level</span><span class="p">,</span>
             <span class="n">visible</span><span class="o">=</span><span class="n">visible</span><span class="p">,</span>
+            <span class="n">audio</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer_item</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_layer</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer_item</span>
@@ -926,11 +931,14 @@ document.write(`
 <span class="sd">        visible:</span>
 <span class="sd">            A flag specifying whether the layer is visible or not;</span>
 <span class="sd">            if ``visible=False``, the layer in the composition is not rendered.</span>
+<span class="sd">        audio:</span>
+<span class="sd">            A flag specifying whether the audio is enabled or not;</span>
+<span class="sd">            if ``audio=False``, the audio of the given layer is not used.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;layer&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="p">:</span> <span class="n">Transform</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">audio_level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">audio_level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">audio</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span> <span class="o">=</span> <span class="n">layer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">:</span> <span class="n">Transform</span> <span class="o">=</span> <span class="n">transform</span> <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Transform</span><span class="p">()</span>
@@ -939,6 +947,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">end_time</span> <span class="k">if</span> <span class="n">end_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="s2">&quot;duration&quot;</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">audio_level</span><span class="p">:</span> <span class="n">Attribute</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">audio_level</span><span class="p">,</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">visible</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">audio</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_effects</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Effect</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="nd">@property</span>
@@ -1104,6 +1113,8 @@ document.write(`
         <span class="k">return</span> <span class="n">frame</span>
 
     <span class="k">def</span> <span class="nf">_get_audio_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
         <span class="n">layer_time_start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">start_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
         <span class="n">layer_time_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span> <span class="n">end_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">layer_time_start</span> <span class="o">&gt;=</span> <span class="n">layer_time_end</span><span class="p">:</span>
