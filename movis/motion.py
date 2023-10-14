@@ -7,63 +7,96 @@ import numpy as np
 
 from .enum import AttributeType, Easing
 
-EASING_TO_FUNC = {
-    Easing.LINEAR: lambda t: t,
-    Easing.EASE_IN: lambda t: t**2,
-    Easing.EASE_OUT: lambda t: 1.0 - (1.0 - t) ** 2,
-    Easing.EASE_IN_OUT: lambda t: t**2 * (3.0 - 2.0 * t),
-    Easing.FLAT: lambda t: 0.0,
-    Easing.EASE_IN2: lambda t: t ** 2,
-    Easing.EASE_IN3: lambda t: t ** 3,
-    Easing.EASE_IN4: lambda t: t ** 4,
-    Easing.EASE_IN5: lambda t: t ** 5,
-    Easing.EASE_IN6: lambda t: t ** 6,
-    Easing.EASE_IN7: lambda t: t ** 7,
-    Easing.EASE_IN8: lambda t: t ** 8,
-    Easing.EASE_IN9: lambda t: t ** 9,
-    Easing.EASE_IN10: lambda t: t ** 10,
-    Easing.EASE_IN12: lambda t: t ** 12,
-    Easing.EASE_IN14: lambda t: t ** 14,
-    Easing.EASE_IN16: lambda t: t ** 16,
-    Easing.EASE_IN18: lambda t: t ** 18,
-    Easing.EASE_IN20: lambda t: t ** 20,
-    Easing.EASE_IN25: lambda t: t ** 25,
-    Easing.EASE_IN30: lambda t: t ** 30,
-    Easing.EASE_IN35: lambda t: t ** 35,
-    Easing.EASE_OUT2: lambda t: 1. - (1 - t) ** 2,
-    Easing.EASE_OUT3: lambda t: 1. - (1 - t) ** 3,
-    Easing.EASE_OUT4: lambda t: 1. - (1 - t) ** 4,
-    Easing.EASE_OUT5: lambda t: 1. - (1 - t) ** 5,
-    Easing.EASE_OUT6: lambda t: 1. - (1 - t) ** 6,
-    Easing.EASE_OUT7: lambda t: 1. - (1 - t) ** 7,
-    Easing.EASE_OUT8: lambda t: 1. - (1 - t) ** 8,
-    Easing.EASE_OUT9: lambda t: 1. - (1 - t) ** 9,
-    Easing.EASE_OUT10: lambda t: 1. - (1 - t) ** 10,
-    Easing.EASE_OUT12: lambda t: 1. - (1 - t) ** 12,
-    Easing.EASE_OUT14: lambda t: 1. - (1 - t) ** 14,
-    Easing.EASE_OUT16: lambda t: 1. - (1 - t) ** 16,
-    Easing.EASE_OUT18: lambda t: 1. - (1 - t) ** 18,
-    Easing.EASE_OUT20: lambda t: 1. - (1 - t) ** 20,
-    Easing.EASE_OUT25: lambda t: 1. - (1 - t) ** 25,
-    Easing.EASE_OUT30: lambda t: 1. - (1 - t) ** 30,
-    Easing.EASE_OUT35: lambda t: 1. - (1 - t) ** 35,
-    Easing.EASE_IN_OUT2: lambda t: 0.5 * (2 * t) ** 2 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 2,
-    Easing.EASE_IN_OUT3: lambda t: 0.5 * (2 * t) ** 3 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 3,
-    Easing.EASE_IN_OUT4: lambda t: 0.5 * (2 * t) ** 4 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 4,
-    Easing.EASE_IN_OUT5: lambda t: 0.5 * (2 * t) ** 5 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 5,
-    Easing.EASE_IN_OUT6: lambda t: 0.5 * (2 * t) ** 6 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 6,
-    Easing.EASE_IN_OUT7: lambda t: 0.5 * (2 * t) ** 7 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 7,
-    Easing.EASE_IN_OUT8: lambda t: 0.5 * (2 * t) ** 8 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 8,
-    Easing.EASE_IN_OUT9: lambda t: 0.5 * (2 * t) ** 9 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 9,
-    Easing.EASE_IN_OUT10: lambda t: 0.5 * (2 * t) ** 10 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 10,
-    Easing.EASE_IN_OUT12: lambda t: 0.5 * (2 * t) ** 12 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 12,
-    Easing.EASE_IN_OUT14: lambda t: 0.5 * (2 * t) ** 14 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 14,
-    Easing.EASE_IN_OUT16: lambda t: 0.5 * (2 * t) ** 16 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 16,
-    Easing.EASE_IN_OUT18: lambda t: 0.5 * (2 * t) ** 18 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 18,
-    Easing.EASE_IN_OUT20: lambda t: 0.5 * (2 * t) ** 20 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 20,
-    Easing.EASE_IN_OUT25: lambda t: 0.5 * (2 * t) ** 25 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 25,
-    Easing.EASE_IN_OUT30: lambda t: 0.5 * (2 * t) ** 30 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 30,
-    Easing.EASE_IN_OUT35: lambda t: 0.5 * (2 * t) ** 35 if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** 35,
+
+def linear(t: float) -> float:
+    return t
+
+
+def flat(t: float) -> float:
+    return 0.0
+
+
+class EaseIn:
+    def __init__(self, n: int):
+        self.n = n
+
+    def __call__(self, t: float) -> float:
+        return t ** self.n
+
+
+class EaseOut:
+    def __init__(self, n: int):
+        self.n = n
+
+    def __call__(self, t: float) -> float:
+        return 1.0 - (1.0 - t) ** self.n
+
+
+class EaseInOut:
+    def __init__(self, n: int):
+        self.n = n
+
+    def __call__(self, t: float) -> float:
+        return 0.5 * (2 * t) ** self.n if t < 0.5 else 1.0 - 0.5 * (1.0 - 2 * (t - 0.5)) ** self.n
+
+
+EASING_TO_FUNC: dict[Easing, Callable[[float], float]] = {  # type: ignore
+    Easing.LINEAR: linear,
+    Easing.EASE_IN: EaseIn(2),
+    Easing.EASE_OUT: EaseOut(2),
+    Easing.EASE_IN_OUT: EaseInOut(2),
+    Easing.FLAT: flat,
+    Easing.EASE_IN2: EaseIn(2),
+    Easing.EASE_IN3: EaseIn(3),
+    Easing.EASE_IN4: EaseIn(4),
+    Easing.EASE_IN5: EaseIn(5),
+    Easing.EASE_IN6: EaseIn(6),
+    Easing.EASE_IN7: EaseIn(7),
+    Easing.EASE_IN8: EaseIn(8),
+    Easing.EASE_IN9: EaseIn(9),
+    Easing.EASE_IN10: EaseIn(10),
+    Easing.EASE_IN12: EaseIn(12),
+    Easing.EASE_IN14: EaseIn(14),
+    Easing.EASE_IN16: EaseIn(16),
+    Easing.EASE_IN18: EaseIn(18),
+    Easing.EASE_IN20: EaseIn(20),
+    Easing.EASE_IN25: EaseIn(25),
+    Easing.EASE_IN30: EaseIn(30),
+    Easing.EASE_IN35: EaseIn(35),
+    Easing.EASE_OUT2: EaseOut(2),
+    Easing.EASE_OUT3: EaseOut(3),
+    Easing.EASE_OUT4: EaseOut(4),
+    Easing.EASE_OUT5: EaseOut(5),
+    Easing.EASE_OUT6: EaseOut(6),
+    Easing.EASE_OUT7: EaseOut(7),
+    Easing.EASE_OUT8: EaseOut(8),
+    Easing.EASE_OUT9: EaseOut(9),
+    Easing.EASE_OUT10: EaseOut(10),
+    Easing.EASE_OUT12: EaseOut(12),
+    Easing.EASE_OUT14: EaseOut(14),
+    Easing.EASE_OUT16: EaseOut(16),
+    Easing.EASE_OUT18: EaseOut(18),
+    Easing.EASE_OUT20: EaseOut(20),
+    Easing.EASE_OUT25: EaseOut(25),
+    Easing.EASE_OUT30: EaseOut(30),
+    Easing.EASE_OUT35: EaseOut(35),
+    Easing.EASE_IN_OUT2: EaseInOut(2),
+    Easing.EASE_IN_OUT3: EaseInOut(3),
+    Easing.EASE_IN_OUT4: EaseInOut(4),
+    Easing.EASE_IN_OUT5: EaseInOut(5),
+    Easing.EASE_IN_OUT6: EaseInOut(6),
+    Easing.EASE_IN_OUT7: EaseInOut(7),
+    Easing.EASE_IN_OUT8: EaseInOut(8),
+    Easing.EASE_IN_OUT9: EaseInOut(9),
+    Easing.EASE_IN_OUT10: EaseInOut(10),
+    Easing.EASE_IN_OUT12: EaseInOut(12),
+    Easing.EASE_IN_OUT14: EaseInOut(14),
+    Easing.EASE_IN_OUT16: EaseInOut(16),
+    Easing.EASE_IN_OUT18: EaseInOut(18),
+    Easing.EASE_IN_OUT20: EaseInOut(20),
+    Easing.EASE_IN_OUT25: EaseInOut(25),
+    Easing.EASE_IN_OUT30: EaseInOut(30),
+    Easing.EASE_IN_OUT35: EaseInOut(35),
 }
 
 
