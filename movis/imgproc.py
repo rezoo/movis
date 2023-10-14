@@ -8,12 +8,24 @@ from PySide6.QtGui import QImage
 from .enum import BlendingMode, MatteMode
 
 
+def _normal(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return fg
+
+
 def _blend_multiply(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
     return (bg.astype(np.int32) * fg.astype(np.int32) // 255).astype(np.uint8)
 
 
 def _blend_overlay(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
     return np.where(bg < 128, 2 * bg * fg // 255, 255 - 2 * (255 - bg) * (255 - fg) // 255)
+
+
+def _darken(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return np.minimum(bg, fg)
+
+
+def _lighten(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return np.maximum(bg, fg)
 
 
 def _blend_screen(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
@@ -37,6 +49,10 @@ def _linear_dodge(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
 
 def _linear_burn(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
     return np.maximum(0, bg.astype(np.int32) + fg.astype(np.int32) - 255).astype(np.uint8)
+
+
+def _hard_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
+    return _blend_overlay(fg, bg)
 
 
 def _blend_soft_light(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
@@ -96,17 +112,17 @@ def _subtract(bg: np.ndarray, fg: np.ndarray) -> np.ndarray:
 
 
 BLENDING_MODE_TO_FUNC = {
-    BlendingMode.NORMAL: lambda bg, fg: fg,
+    BlendingMode.NORMAL: _normal,
     BlendingMode.MULTIPLY: _blend_multiply,
     BlendingMode.SCREEN: _blend_screen,
     BlendingMode.OVERLAY: _blend_overlay,
-    BlendingMode.DARKEN: lambda bg, fg: np.minimum(bg, fg),
-    BlendingMode.LIGHTEN: lambda bg, fg: np.maximum(bg, fg),
+    BlendingMode.DARKEN: _darken,
+    BlendingMode.LIGHTEN: _lighten,
     BlendingMode.COLOR_DODGE: _color_dodge,
     BlendingMode.COLOR_BURN: _color_burn,
     BlendingMode.LINEAR_DODGE: _linear_dodge,
     BlendingMode.LINEAR_BURN: _linear_burn,
-    BlendingMode.HARD_LIGHT: lambda bg, fg: _blend_overlay(fg, bg),
+    BlendingMode.HARD_LIGHT: _hard_light,
     BlendingMode.SOFT_LIGHT: _blend_soft_light,
     BlendingMode.VIVID_LIGHT: _vivid_light,
     BlendingMode.LINEAR_LIGHT: _linear_light,
