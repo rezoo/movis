@@ -242,6 +242,11 @@ class Video:
         if audio and "audio_codec" in meta_data:
             self._audio_layer = Audio(video_file)
 
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state['_reader'] = None
+        return state
+
     @property
     def fps(self) -> float:
         """The frame rate of the video."""
@@ -279,6 +284,8 @@ class Video:
         return frame_index
 
     def __call__(self, time: float) -> np.ndarray | None:
+        if self._reader is None:
+            self._reader = imageio.get_reader(self.video_file)
         frame_index = int(time * self._fps)
         try:
             frame = self._reader.get_data(frame_index)

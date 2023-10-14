@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 import tempfile
+import warnings
 from contextlib import contextmanager
 from os import PathLike
 from typing import Hashable, Iterator, Sequence
-from weakref import WeakValueDictionary
 
 import cv2
 import imageio
 import numpy as np
 import soundfile as sf
 from diskcache import Cache
+from imageio.core.format import Format
 from tqdm import tqdm
 
 from ..attribute import Attribute, AttributeType
@@ -57,7 +58,7 @@ class Composition:
         self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0
     ) -> None:
         self._layers: list[LayerItem] = []
-        self._name_to_layer: WeakValueDictionary[str, LayerItem] = WeakValueDictionary()
+        self._name_to_layer: dict[str, LayerItem] = {}
         assert duration > 0, "duration must be positive"
         self._duration = duration
         self._cache: Cache = Cache(size_limit=1024 * 1024 * 1024)
@@ -337,6 +338,7 @@ class Composition:
     def clear(self) -> None:
         """Removes all layers from the composition."""
         self._layers.clear()
+        self._name_to_layer.clear()
         self._cache.clear()
 
     def __call__(self, time: float) -> np.ndarray | None:
@@ -395,6 +397,19 @@ class Composition:
             audio[:, ind_start:ind_end] += audio_i[:, :length]
         return audio
 
+    def _compute_frame(self, time: float) -> np.ndarray:
+        return np.asarray(self(time))
+
+    def _write_video(
+        self, start_time: float, end_time: float,
+        fps: float, writer: Format.Writer,
+    ) -> None:
+        times = np.arange(start_time, end_time, 1.0 / fps)
+        for t in tqdm(times, total=len(times)):
+            frame = np.asarray(self(t))
+            writer.append_data(frame)
+        writer.close()
+
     def write_video(
         self,
         dst_file: str | PathLike,
@@ -436,7 +451,7 @@ class Composition:
         """
         if end_time is None:
             end_time = self.duration
-        times = np.arange(start_time, end_time, 1.0 / fps)
+        writer = None
         if audio:
             with tempfile.NamedTemporaryFile(suffix='.wav') as audio_fp:
                 audio_array = self.get_audio(start_time, end_time)
@@ -448,24 +463,24 @@ class Composition:
                         samplerate=AUDIO_SAMPLING_RATE,
                         subtype='PCM_16')
                     audio_path = audio_fp.name
+                with warnings.catch_warnings():
+                    # XXX: Suppress the deprecation warning from imageio-ffmpeg.
+                    warnings.simplefilter("ignore", category=DeprecationWarning)
+                    writer = imageio.get_writer(
+                        uri=str(dst_file), fps=fps, codec=codec, pixelformat=pixelformat,
+                        macro_block_size=None, ffmpeg_log_level="error",
+                        input_params=input_params, output_params=output_params,
+                        audio_path=audio_path, audio_codec=audio_codec)
+                    self._write_video(start_time, end_time, fps, writer)
+        else:
+            with warnings.catch_warnings():
+                # XXX: Suppress the deprecation warning from imageio-ffmpeg.
+                warnings.simplefilter("ignore", category=DeprecationWarning)
                 writer = imageio.get_writer(
                     uri=str(dst_file), fps=fps, codec=codec, pixelformat=pixelformat,
-                    macro_block_size=None, ffmpeg_log_level="error",
                     input_params=input_params, output_params=output_params,
-                    audio_path=audio_path, audio_codec=audio_codec)
-                for t in tqdm(times, total=len(times)):
-                    frame = np.asarray(self(t))
-                    writer.append_data(frame)
-                writer.close()
-        else:
-            writer = imageio.get_writer(
-                uri=str(dst_file), fps=fps, codec=codec, pixelformat=pixelformat,
-                input_params=input_params, output_params=output_params,
-                macro_block_size=None, ffmpeg_log_level="error")
-            for t in tqdm(times, total=len(times)):
-                frame = np.asarray(self(t))
-                writer.append_data(frame)
-            writer.close()
+                    macro_block_size=None, ffmpeg_log_level="error")
+                self._write_video(start_time, end_time, fps, writer)
 
     def render_and_play(
         self,

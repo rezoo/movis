@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import Callable, Hashable, Sequence
+from typing import Any, Callable, Hashable, Sequence
 
 import numpy as np
 from PySide6.QtCore import QCoreApplication, QPointF, QRectF, Qt
@@ -308,6 +308,19 @@ class Ellipse(AttributesMixin):
         return qimage_to_numpy(image)
 
 
+class _TextWithTime(TimelineMixin):
+    def __init__(self, start_times: Sequence[float], end_times: Sequence[float], texts: Sequence[str]):
+        super().__init__(start_times, end_times)
+        self.texts = texts
+
+    def __call__(self, time: float) -> str:
+        idx = self.get_state(time)
+        if idx >= 0:
+            return self.texts[idx]
+        else:
+            return ''
+
+
 class Text(AttributesMixin):
     """Draw a text.
 
@@ -385,20 +398,8 @@ class Text(AttributesMixin):
         """
         assert len(start_times) == len(texts)
 
-        class TextWithTime(TimelineMixin):
-            def __init__(self):
-                super().__init__(start_times, end_times)
-                self.texts = texts
-
-            def __call__(self, time: float) -> str:
-                idx = self.get_state(time)
-                if idx >= 0:
-                    return texts[idx]
-                else:
-                    return ''
-
         kwargs['duration'] = max(end_times)
-        return cls(text=TextWithTime(), **kwargs)
+        return cls(text=_TextWithTime(start_times, end_times, texts), **kwargs)
 
     def __init__(
         self,
@@ -426,6 +427,12 @@ class Text(AttributesMixin):
         self._duration = duration
         if QCoreApplication.instance() is None:
             QApplication(sys.argv[:1])
+        self._init_app = True
+
+    def __getstate__(self) -> dict[str, Any]:
+        state = self.__dict__.copy()
+        state['_init_app'] = False
+        return state
 
     @property
     def text(self) -> str | Callable[[float], str]:
@@ -529,6 +536,10 @@ class Text(AttributesMixin):
         text = self.get_text(time)
         if text is None or text == '':
             return None
+        if not self._init_app:
+            if QCoreApplication.instance() is None:
+                QApplication(sys.argv[:1])
+            self._init_app = True
         size = self.get_size(time)
         w, h = float(size[0]), float(size[1])
 
