@@ -1,0 +1,6 @@
+﻿movis.ops.switch
+================
+
+.. currentmodule:: movis.ops
+
+.. autofunction:: switch

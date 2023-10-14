@@ -572,6 +572,8 @@ document.write(`
 
 
 
+<div class="viewcode-block" id="switch">
+<a class="viewcode-back" href="../../reference/generated/movis.ops.switch.html#movis.ops.switch">[docs]</a>
 <span class="k">def</span> <span class="nf">switch</span><span class="p">(</span>
     <span class="n">layers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BasicLayer</span><span class="p">],</span>
     <span class="n">start_times</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">cams</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
@@ -620,7 +622,8 @@ document.write(`
     <span class="k">for</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">times</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">cams</span><span class="p">):</span>
         <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span>
             <span class="n">layers</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">composition</span>
+    <span class="k">return</span> <span class="n">composition</span></div>
+
 </pre></div>
 
                 </article>

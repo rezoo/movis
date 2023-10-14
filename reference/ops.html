@@ -358,6 +358,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/movis.ops.concatenate.html">movis.ops.concatenate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/movis.ops.crop.html">movis.ops.crop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/movis.ops.repeat.html">movis.ops.repeat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/movis.ops.switch.html">movis.ops.switch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/movis.ops.tile.html">movis.ops.tile</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/movis.ops.trim.html">movis.ops.trim</a></li>
 </ul>
@@ -437,7 +438,7 @@ document.write(`
                   
   <section id="movis-ops">
 <span id="module-movis.ops"></span><h1>movis.ops<a class="headerlink" href="#movis-ops" title="Link to this heading">#</a></h1>
-<p>The <a class="reference internal" href="#module-movis.ops" title="movis.ops"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ops</span></code></a> module contains a set of functions that transform a given single or multiple layers into a new composition.</p>
+<p>The <a class="reference internal" href="#module-movis.ops" title="movis.ops"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ops</span></code></a> module contains a set of functions for video editing that transform a given single or multiple layers into a new composition.</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/movis.ops.concatenate.html#movis.ops.concatenate" title="movis.ops.concatenate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">movis.ops.concatenate</span></code></a></p></td>
@@ -449,10 +450,13 @@ document.write(`
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/movis.ops.repeat.html#movis.ops.repeat" title="movis.ops.repeat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">movis.ops.repeat</span></code></a></p></td>
 <td><p>Repeat a layer multiple times.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/movis.ops.tile.html#movis.ops.tile" title="movis.ops.tile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">movis.ops.tile</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/movis.ops.switch.html#movis.ops.switch" title="movis.ops.switch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">movis.ops.switch</span></code></a></p></td>
+<td><p>Switch layers at specified times.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/movis.ops.tile.html#movis.ops.tile" title="movis.ops.tile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">movis.ops.tile</span></code></a></p></td>
 <td><p>Tile layers into a single composition.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/movis.ops.trim.html#movis.ops.trim" title="movis.ops.trim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">movis.ops.trim</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/movis.ops.trim.html#movis.ops.trim" title="movis.ops.trim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">movis.ops.trim</span></code></a></p></td>
 <td><p>Trim a layer with given time intervals and concatenate them.</p></td>
 </tr>
 </tbody>
