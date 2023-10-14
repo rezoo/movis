@@ -1,3 +1,6 @@
+import os
+import tempfile
+
 import numpy as np
 
 import pytest
@@ -233,3 +236,19 @@ def test_composition_preview_level():
     img = scene(0.0)
     assert img.shape == (240, 320, 4)
     assert img.dtype == np.uint8
+
+
+def test_composition_write_video():
+    scene = Composition(size=(640, 480), duration=1.0)
+    scene.add_layer(
+        mv.layer.Rectangle((256, 256), color='#ffffff', duration=1.0),
+        name='layer')
+
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
+    file_name = temp_file.name
+    temp_file.close()
+
+    try:
+        scene.write_video(file_name, fps=3.0)
+    finally:
+        os.remove(file_name)
