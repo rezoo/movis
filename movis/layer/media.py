@@ -336,7 +336,7 @@ class Audio:
         """The duration of the audio data."""
         if self._duration is not None:
             return self._duration
-        duration = librosa.get_duration(path=self._audio_file)
+        duration = librosa.get_duration(path=str(self._audio_file))
         self._duration = duration
         return duration
 
