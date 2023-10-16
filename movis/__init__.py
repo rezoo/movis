@@ -5,6 +5,7 @@ from .attribute import (Attribute, AttributesMixin,  # noqa
 from .enum import (AttributeType, BlendingMode, Direction, Easing,  # noqa
                    MatteMode, TextAlignment)
 from .imgproc import alpha_composite  # noqa
+from .layer.protocol import AUDIO_SAMPLING_RATE  # noqa
 from .motion import Motion  # noqa
 from .ops import concatenate, crop, repeat, switch, tile, trim  # noqa
 from .subtitle import (ASSStyleType, rgb_to_ass_color, write_ass_file,  # noqa
