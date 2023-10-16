@@ -443,11 +443,13 @@ document.write(`
 <h1>movis.layer.media.Audio<a class="headerlink" href="#movis-layer-media-audio" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="movis.layer.media.Audio">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">movis.layer.media.</span></span><span class="sig-name descname"><span class="pre">Audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">PathLike</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/movis/layer/media.html#Audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.media.Audio" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">movis.layer.media.</span></span><span class="sig-name descname"><span class="pre">Audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">PathLike</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">ndarray</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/movis/layer/media.html#Audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.layer.media.Audio" title="Link to this definition">#</a></dt>
 <dd><p>Audio layer to encapsulate various formats of audio data.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><dl class="simple">
-<dt>audio_file:</dt><dd><p>the source of the audio data. It can be a file path (<code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">Path</span></code>).</p>
+<dt>audio_file:</dt><dd><p>the source of the audio data. It can be a file path (<code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">Path</span></code>)
+or a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> with a shape of <code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">N)</span></code> and a sampling rate of 44100.
+If the audio data is a mono channel, it will be broadcasted to a stereo channel.</p>
 </dd>
 </dl>
 </dd>
@@ -483,10 +485,13 @@ end_time: the end time of the audio data.</p>
 <p class="rubric">Attributes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_file</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio</span></code></p></td>
+<td><p>The audio data with a shape of <code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">N)</span></code> with a sampling rate of 44100.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">audio_file</span></code></p></td>
 <td><p>The file path of the audio data.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">duration</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">duration</span></code></p></td>
 <td><p>The duration of the audio data.</p></td>
 </tr>
 </tbody>

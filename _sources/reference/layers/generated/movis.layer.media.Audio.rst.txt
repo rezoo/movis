@@ -24,6 +24,7 @@
 
    .. autosummary::
    
+      ~Audio.audio
       ~Audio.audio_file
       ~Audio.duration
    

@@ -626,7 +626,7 @@ for rendering the video. If <code class="docutils literal notranslate"><span cla
 <p>This method returns an audio clip of the layer between the given start and end times.
 The returned audio clip should be a two-dimensional <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> with a shape of <code class="docutils literal notranslate"><span class="pre">(2,T)</span></code>,
 where <code class="docutils literal notranslate"><span class="pre">T</span></code> is the number of samples in the audio clip and <code class="docutils literal notranslate"><span class="pre">2</span></code> is the number of channels.
-The sample rate of the audio clip should be <code class="docutils literal notranslate"><span class="pre">AUDIO_SAMPLING_RATE</span></code> (= 48000).</p>
+The sample rate of the audio clip should be <code class="docutils literal notranslate"><span class="pre">AUDIO_SAMPLING_RATE</span></code> (= 44100).</p>
 <p>If not implemented, Movis assumes that the layer does not have any audio.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>start_time: The start time of the audio clip.
