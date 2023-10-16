@@ -4,7 +4,7 @@ from typing import Hashable, Protocol
 
 import numpy as np
 
-AUDIO_SAMPLING_RATE = 48000
+AUDIO_SAMPLING_RATE = 44100
 AUDIO_BLOCK_SIZE = 1024
 
 
@@ -100,7 +100,7 @@ class AudioLayer(Protocol):
         This method returns an audio clip of the layer between the given start and end times.
         The returned audio clip should be a two-dimensional ``numpy.ndarray`` with a shape of ``(2,T)``,
         where ``T`` is the number of samples in the audio clip and ``2`` is the number of channels.
-        The sample rate of the audio clip should be ``AUDIO_SAMPLING_RATE`` (= 48000).
+        The sample rate of the audio clip should be ``AUDIO_SAMPLING_RATE`` (= 44100).
 
         If not implemented, Movis assumes that the layer does not have any audio.
 

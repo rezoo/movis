@@ -305,16 +305,29 @@ class Audio:
 
     Args:
         audio_file:
-            the source of the audio data. It can be a file path (``str`` or ``Path``).
+            the source of the audio data. It can be a file path (``str`` or ``Path``)
+            or a ``numpy.ndarray`` with a shape of ``(2, N)`` and a sampling rate of 44100.
+            If the audio data is a mono channel, it will be broadcasted to a stereo channel.
     """
 
-    def __init__(self, audio_file: str | PathLike) -> None:
+    def __init__(self, audio_file: str | PathLike | np.ndarray) -> None:
         self._audio_file: Path | None = None
         self._audio: np.ndarray | None = None
         self._duration: float | None = None
         if isinstance(audio_file, (str, PathLike)):
             self._audio_file = Path(audio_file)
             assert self._audio_file.exists(), f"{self._audio_file} does not exist"
+        elif isinstance(audio_file, np.ndarray):
+            if audio_file.dtype != np.float32:
+                raise ValueError(f"Invalid audio_file dtype: {audio_file.dtype}. Must be np.float32")
+            if audio_file.ndim == 1:
+                audio = np.broadcast_to(audio_file[None, :], (2, len(audio_file)))
+            elif audio_file.ndim == 2:
+                assert audio_file.shape[0] == 2, "Audio must have 2 channels"
+                audio = audio_file
+            else:
+                raise ValueError(f"Invalid audio_file shape: {audio_file.shape}")
+            self._audio = audio
         else:
             raise ValueError(f"Invalid audio_file type: {type(audio_file)}")
 
@@ -336,9 +349,20 @@ class Audio:
         """The duration of the audio data."""
         if self._duration is not None:
             return self._duration
-        duration = librosa.get_duration(path=str(self._audio_file))
-        self._duration = duration
-        return duration
+
+        if self._audio is not None:
+            duration = self._audio.shape[1] / AUDIO_SAMPLING_RATE
+            self._duration = duration
+            return duration
+        else:
+            duration = librosa.get_duration(path=str(self._audio_file))
+            self._duration = duration
+            return duration
+
+    @property
+    def audio(self) -> np.ndarray:
+        """The audio data with a shape of ``(2, N)`` with a sampling rate of 44100."""
+        return self._load_audio()
 
     def __call__(self, time: float) -> np.ndarray | None:
         return None
@@ -361,9 +385,19 @@ class Audio:
         Returns:
             The audio data for the given time range. If no audio data is found, ``None`` is returned.
         """
+        assert start_time < end_time, f"start_time ({start_time}) must be smaller than end_time ({end_time})"
+        if end_time <= 0 or start_time >= self.duration:
+            return None
+
         audio = self._load_audio()
         start_index = int(start_time * AUDIO_SAMPLING_RATE)
         end_index = int(end_time * AUDIO_SAMPLING_RATE)
+        if start_index < 0:
+            audio = np.pad(audio, ((0, 0), (-start_index, 0)))
+            end_index = end_index - start_index
+            start_index = 0
+        if end_index > audio.shape[1]:
+            audio = np.pad(audio, ((0, 0), (0, end_index - audio.shape[1])))
         return audio[:, start_index:end_index]
 
 
@@ -376,16 +410,22 @@ class AudioSequence:
         end_times:
             a sequence of end times for each audio.
         audio_files:
-            a sequence of audio data. Each element can be a file path (``str`` or ``Path``).
+            a sequence of audio data. Each element can be a file path (``str`` or ``Path``)
+            or a ``numpy.ndarray`` with a shape of ``(2, N)`` and a sampling rate of 44100.
+            If the audio data is a mono channel, it will be broadcasted to a stereo channel.
         """
 
     def __init__(
         self,
         start_times: Sequence[float],
         end_times: Sequence[float],
-        audio_files: Sequence[str | Path],
+        audio_files: Sequence[str | Path | np.ndarray],
     ) -> None:
         assert len(start_times) == len(end_times) == len(audio_files)
+        assert np.all(np.asarray(start_times) < np.asarray(end_times))
+        # Check if the time ranges are not overlapped
+        assert np.all(np.asarray(end_times)[:-1] <= np.asarray(start_times)[1:])
+
         self.start_times = np.asarray(start_times, dtype=float)
         self.end_times = np.asarray(end_times, dtype=float)
         self.audio_files = list(audio_files)
@@ -414,6 +454,16 @@ class AudioSequence:
                 a_i, _ = librosa.load(audio_file, sr=AUDIO_SAMPLING_RATE, mono=False)
                 if a_i.ndim == 1:
                     a_i = np.broadcast_to(a_i[None, :], (2, len(a_i)))
+            elif isinstance(audio_file, np.ndarray):
+                if audio_file.dtype != np.float32:
+                    raise ValueError(f"Invalid audio_file dtype: {audio_file.dtype}. Must be np.float32")
+                if audio_file.ndim == 1:
+                    a_i = np.broadcast_to(audio_file[None, :], (2, len(audio_file)))
+                elif audio_file.ndim == 2:
+                    assert audio_file.shape[0] == 2, "Audio must have 2 channels"
+                    a_i = audio_file
+                else:
+                    raise ValueError(f"Invalid audio_file shape: {audio_file.shape}")
             else:
                 raise ValueError(f"Invalid audio_file type: {type(audio_file)}")
             self._audio[index] = a_i
@@ -432,17 +482,32 @@ class AudioSequence:
         Returns:
             The audio data for the given time range. If no audio data is found, ``None`` is returned.
         """
-        assert start_time < end_time
-        audio: list[np.ndarray] = []
-        for i, (s, e) in enumerate(zip(self.start_times, self.end_times)):
-            if s < end_time and e > start_time:
-                audio_i = self._load_audio(i)
-                start_index = int(max(start_time - s, 0) * AUDIO_SAMPLING_RATE)
-                end_index = int(min(end_time - s, e - s) * AUDIO_SAMPLING_RATE)
-                if len(audio_i) < end_index:
-                    # Pad with zeros
-                    audio_i = np.pad(audio_i, ((0, 0), (0, end_index - len(audio_i))))
-                audio.append(audio_i[:, start_index:end_index])
-        if len(audio) == 0:
+        assert start_time < end_time, f"start_time ({start_time}) must be smaller than end_time ({end_time})"
+        if end_time <= 0 or start_time >= self.duration:
             return None
-        return np.concatenate(audio, axis=1)
+        w0 = int((end_time - start_time) * AUDIO_SAMPLING_RATE)
+        if w0 <= 0:
+            return None
+        audio = np.zeros((2, w0), dtype=np.float32)
+
+        start_index = max(
+            0, int(np.searchsorted(self.start_times, start_time, side="right") - 1))
+        end_index = min(
+            len(self.end_times),
+            int(np.searchsorted(self.end_times, end_time, side="left") + 1))
+        if start_index == end_index:
+            return None
+
+        for i in range(start_index, end_index):
+            ts = float(self.start_times[i])
+            te = float(self.end_times[i])
+            audio_i = self._load_audio(i)[:, :int((te - ts) * AUDIO_SAMPLING_RATE)]
+            wi = audio_i.shape[1]
+
+            p = int((ts - start_time) * AUDIO_SAMPLING_RATE)
+            x1, x2 = max(0, p), - min(0, p)
+            w = min(p + wi, w0) - x1
+            if w <= 0:
+                continue
+            audio[:, x1:x1 + w] = audio_i[:, x2:x2 + w]
+        return audio
