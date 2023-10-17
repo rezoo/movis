@@ -24,16 +24,18 @@ shader art coding, and game commentary videos, through Python.
 
 ## 🚀 Main Features
 
-* Easy and intuitive video editing (including scene cut, transition, crop, concatenation, inserting images, etc.)
+* Easy and intuitive video editing (including scene cut, transition, crop, concatenation, inserting images and texts, etc.)
 * Layer transformation (position, scale, and rotation) with sub-pixel precision
 * A variety of Photoshop-level blending modes
+* Keypoint and easing-based animation engine
 * Nested compositions
-* Inserting text containing multiple outlines
+* Inserting text layers containing multiple outlines
 * Simple audio editing (including fade-in and fade-out effects)
 * A variety of video and audio formats using ffmpeg
 * Layer effects (drop shadow, grow, blur, chromakey, etc.)
-* Support for rendering at 1/2 quality and 1/4 quality for drafts.
-* Adding user-defined layers and effects without using inheritance.
+* Support for rendering at 1/2 quality and 1/4 quality for drafts
+* Fast rendering using cache mechanism
+* Adding user-defined layers, effects, and animations without using inheritance
 
 ## 💻 Installation
 
