@@ -1,4 +1,7 @@
+import tempfile
+
 import numpy as np
+import soundfile as sf
 
 import movis as mv
 
@@ -44,6 +47,25 @@ def test_audio_ndarray():
     assert np.all(x[:, -1] == 0.0)
 
 
+def generate_sine_wave(frequency: float = 440.0, duration: float = 1.0):
+    T = int(mv.AUDIO_SAMPLING_RATE * duration)
+    t = np.linspace(0, duration, T, endpoint=False)
+    sine_wave = 0.5 * np.sin(2 * np.pi * frequency * t)
+    sine_wave = np.broadcast_to(sine_wave[:, None], (T, 2))
+    return sine_wave
+
+
+def test_audio_file():
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as temp_file:
+        sine_wave = generate_sine_wave(duration=1.0)
+        sf.write(temp_file.name, sine_wave, mv.AUDIO_SAMPLING_RATE, subtype='PCM_24')
+
+        layer = mv.layer.Audio(temp_file.name)
+        assert layer.duration == 1.0
+        audio = layer.get_audio(0.0, 1.0)
+        assert audio.shape == (2, mv.AUDIO_SAMPLING_RATE)
+
+
 def test_audiosequence_ndarray():
     start_times = np.array([0.0, 1.0, 2.0])
     end_times = np.array([1.0, 2.0, 3.0])
@@ -84,3 +106,17 @@ def test_audiosequence_ndarray():
 
     x = layer.get_audio(3.0, 3.5)
     assert x is None
+
+
+def test_audiosequence_files():
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as temp_file:
+        sine_wave = generate_sine_wave(duration=1.0)
+        sf.write(temp_file.name, sine_wave, mv.AUDIO_SAMPLING_RATE, subtype='PCM_24')
+
+        start_times = np.array([0.0, 1.0])
+        end_times = np.array([1.0, 2.0])
+        audios = [temp_file.name, temp_file.name]
+        layer = mv.layer.AudioSequence(start_times, end_times, audios)
+        assert layer.duration == 2.0
+        audio = layer.get_audio(0.0, 2.0)
+        assert audio.shape == (2, 2 * mv.AUDIO_SAMPLING_RATE)
