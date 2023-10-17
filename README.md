@@ -15,12 +15,37 @@
 | [**API Reference**](https://rezoo.github.io/movis/reference/index.html)
 | [**Contribution Guide**](https://rezoo.github.io/movis/contribution.html)
 
-## What is Movis?
+## ✅ What is Movis?
 
 Movis is an engine written in Python, purposed for video production tasks.
 This library allows users to generate various types of videos,
 including but not limited to presentation videos, motion graphics,
 shader art coding, and game commentary videos, through Python.
+
+## 🚀 Main Features
+
+* Easy and intuitive video editing (including scene cut, transition, crop, concatenation, inserting images, etc.)
+* Layer transformation (position, scale, and rotation) with sub-pixel precision
+* A variety of Photoshop-level blending modes
+* Nested compositions
+* Inserting text containing multiple outlines
+* Simple audio editing (including fade-in and fade-out effects)
+* A variety of video and audio formats using ffmpeg
+* Layer effects (drop shadow, grow, blur, chromakey, etc.)
+* Support for rendering at 1/2 quality and 1/4 quality for drafts.
+* Adding user-defined layers and effects without using inheritance.
+
+## 💻 Installation
+
+Movis is a pure Python library and can be installed via the Python Package Index:
+
+```bash
+$ pip install movis
+```
+
+We have confirmed that movis works with Python versions 3.9 to 3.11.
+
+## ⭐️ Code Overview
 
 ### Creating Video with Compositions
 
@@ -226,17 +251,6 @@ assert img.shape == (540, 960, 4)
 
 Within this scope, the resolution of all videos and images will be reduced to 1/2.
 This can be useful during the trial and error process.
-
-## Installation
-
-Movis is a pure Python library and can be installed via the Python Package Index:
-
-```bash
-# PyPI
-$ pip install movis
-```
-
-We have confirmed that movis works with Python versions 3.9 to 3.11.
 
 ## License
 
