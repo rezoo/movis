@@ -121,3 +121,21 @@ def test_switch():
     assert np.all(scene(2.0)[0, 0, :] == np.array([3, 3, 3, 3]))
     assert np.all(scene(3.0)[0, 0, :] == np.array([2, 2, 2, 2]))
     assert np.all(scene(4.0)[0, 0, :] == np.array([1, 1, 1, 1]))
+
+
+def test_insert():
+    img1 = mv.layer.Image(np.full((100, 100, 4), 1, dtype=np.uint8), duration=2.0)
+    img2 = mv.layer.Image(np.full((100, 100, 4), 3, dtype=np.uint8), duration=3.0)
+    source = mv.concatenate([img1, img2], size=img1.size)
+
+    target = mv.layer.Image(np.full((100, 100, 4), 2, dtype=np.uint8), duration=1.0)
+    scene = mv.insert(source, target, 2.0)
+
+    assert scene.duration == 6.0
+    assert scene.size == (100, 100)
+    assert len(scene) == 3
+
+    assert np.all(scene(0.0)[0, 0, :] == np.array([1, 1, 1, 1]))
+    assert np.all(scene(2.0)[0, 0, :] == np.array([2, 2, 2, 2]))
+    assert np.all(scene(3.0)[0, 0, :] == np.array([3, 3, 3, 3]))
+    assert np.all(scene(6.0 - 1e-5)[0, 0, :] == np.array([3, 3, 3, 3]))

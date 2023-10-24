@@ -263,3 +263,53 @@ def switch(
         composition.add_layer(
             layers[ind], start_time=start_time, end_time=end_time)
     return composition
+
+
+def insert(
+    source: BasicLayer, target: BasicLayer, time: float,
+    size: tuple[int, int] | None = None
+) -> Composition:
+    """Insert a target layer into a source layer at a specified time.
+
+    For instance, consider inserting a brief eye-catch scene to indicate a change in chapters within
+    a long interview video. ``mv.insert()`` is used for such purposes, to insert a short scene into a longer one:
+
+    |------------------------|    |------------|----------|------------|
+    |    Source layer        | -> |   Source   |  target  |   Source   |
+    |------------------------|    |------------|----------|------------|
+
+    Args:
+        source:
+            The layer to insert the target layer into.
+        target:
+            The layer to insert.
+        time:
+            The time to insert the target layer.
+        size:
+            Size of the returned composition. If ``None``, the size of the source layer is used.
+
+    Returns:
+        Composition with the target layer inserted.
+
+    Examples:
+        >>> import movis as mv
+        >>> source = mv.layer.Image("source.png", duration=5.0)
+        >>> target = mv.layer.Image("target.png", duration=1.0)
+        >>> composition = mv.insert(source, target, time=2.0)
+        >>> composition.duration
+        6.0
+        >>> composition(0.0)  # source layer
+        >>> composition(2.0)  # target layer
+        >>> composition(3.0)  # source layer
+    """
+    if size is None:
+        img = source(0.0)
+        if img is None:
+            raise ValueError("Cannot determine size of composition.")
+        size = img.shape[1], img.shape[0]
+    duration = source.duration + target.duration
+    composition = Composition(size=size, duration=duration)
+    composition.add_layer(source, end_time=time)
+    composition.add_layer(target, offset=time)
+    composition.add_layer(source, offset=target.duration, start_time=time)
+    return composition
