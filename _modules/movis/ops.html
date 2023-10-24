@@ -624,6 +624,59 @@ document.write(`
             <span class="n">layers</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">composition</span></div>
 
+
+
+<div class="viewcode-block" id="insert">
+<a class="viewcode-back" href="../../reference/generated/movis.ops.insert.html#movis.ops.insert">[docs]</a>
+<span class="k">def</span> <span class="nf">insert</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Composition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Insert a target layer into a source layer at a specified time.</span>
+
+<span class="sd">    For instance, consider inserting a brief eye-catch scene to indicate a change in chapters within</span>
+<span class="sd">    a long interview video. ``mv.insert()`` is used for such purposes, to insert a short scene into a longer one:</span>
+
+<span class="sd">    |------------------------|    |------------|----------|------------|</span>
+<span class="sd">    |    Source layer        | -&gt; |   Source   |  target  |   Source   |</span>
+<span class="sd">    |------------------------|    |------------|----------|------------|</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        source:</span>
+<span class="sd">            The layer to insert the target layer into.</span>
+<span class="sd">        target:</span>
+<span class="sd">            The layer to insert.</span>
+<span class="sd">        time:</span>
+<span class="sd">            The time to insert the target layer.</span>
+<span class="sd">        size:</span>
+<span class="sd">            Size of the returned composition. If ``None``, the size of the source layer is used.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Composition with the target layer inserted.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import movis as mv</span>
+<span class="sd">        &gt;&gt;&gt; source = mv.layer.Image(&quot;source.png&quot;, duration=5.0)</span>
+<span class="sd">        &gt;&gt;&gt; target = mv.layer.Image(&quot;target.png&quot;, duration=1.0)</span>
+<span class="sd">        &gt;&gt;&gt; composition = mv.insert(source, target, time=2.0)</span>
+<span class="sd">        &gt;&gt;&gt; composition.duration</span>
+<span class="sd">        6.0</span>
+<span class="sd">        &gt;&gt;&gt; composition(0.0)  # source layer</span>
+<span class="sd">        &gt;&gt;&gt; composition(2.0)  # target layer</span>
+<span class="sd">        &gt;&gt;&gt; composition(3.0)  # source layer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">source</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot determine size of composition.&quot;</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">duration</span> <span class="o">+</span> <span class="n">target</span><span class="o">.</span><span class="n">duration</span>
+    <span class="n">composition</span> <span class="o">=</span> <span class="n">Composition</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+    <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">time</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">composition</span></div>
+
 </pre></div>
 
                 </article>

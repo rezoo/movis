@@ -1,0 +1,6 @@
+﻿movis.ops.insert
+================
+
+.. currentmodule:: movis.ops
+
+.. autofunction:: insert

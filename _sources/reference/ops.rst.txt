@@ -11,6 +11,7 @@ The :mod:`~movis.ops` module contains a set of functions for video editing that 
 
    movis.ops.concatenate
    movis.ops.crop
+   movis.ops.insert
    movis.ops.repeat
    movis.ops.switch
    movis.ops.tile

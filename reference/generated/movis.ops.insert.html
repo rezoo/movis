@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>movis.util.to_rgb &#8212; movis  documentation</title>
+    <title>movis.ops.insert &#8212; movis  documentation</title>
   
   
   
@@ -41,11 +41,11 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/movis.util.to_rgb';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/movis.ops.insert';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Contribution Guide" href="../../contribution.html" />
-    <link rel="prev" title="movis.util.add_materials_to_video" href="movis.util.add_materials_to_video.html" />
+    <link rel="next" title="movis.ops.repeat" href="movis.ops.repeat.html" />
+    <link rel="prev" title="movis.ops.crop" href="movis.ops.crop.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -354,10 +354,10 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="movis.motion.Easing.html">movis.motion.Easing</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../ops.html">movis.ops</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../ops.html">movis.ops</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.concatenate.html">movis.ops.concatenate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.crop.html">movis.ops.crop</a></li>
-<li class="toctree-l2"><a class="reference internal" href="movis.ops.insert.html">movis.ops.insert</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.ops.insert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.repeat.html">movis.ops.repeat</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.switch.html">movis.ops.switch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.tile.html">movis.ops.tile</a></li>
@@ -375,9 +375,9 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="movis.transform.TransformValue.html">movis.transform.TransformValue</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../util.html">movis.util</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../util.html">movis.util</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="movis.util.add_materials_to_video.html">movis.util.add_materials_to_video</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.util.to_rgb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movis.util.to_rgb.html">movis.util.to_rgb</a></li>
 </ul>
 </li>
 </ul>
@@ -421,9 +421,9 @@ document.write(`
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../util.html" class="nav-link">movis.util</a></li>
+    <li class="breadcrumb-item"><a href="../ops.html" class="nav-link">movis.ops</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">movis.util.to_rgb</li>
+    <li class="breadcrumb-item active" aria-current="page">movis.ops.insert</li>
   </ul>
 </nav>
 </div>
@@ -440,24 +440,42 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="movis-util-to-rgb">
-<h1>movis.util.to_rgb<a class="headerlink" href="#movis-util-to-rgb" title="Link to this heading">#</a></h1>
+  <section id="movis-ops-insert">
+<h1>movis.ops.insert<a class="headerlink" href="#movis-ops-insert" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="movis.util.to_rgb">
-<span class="sig-prename descclassname"><span class="pre">movis.util.</span></span><span class="sig-name descname"><span class="pre">to_rgb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/movis/util.html#to_rgb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.util.to_rgb" title="Link to this definition">#</a></dt>
-<dd><p>Converts a color input to its RGB tuple representation.</p>
-<p>The input can be either a string representing a color name or a hex code,
-or a sequence of integers representing the RGB values.</p>
-<dl class="simple">
+<dt class="sig sig-object py" id="movis.ops.insert">
+<span class="sig-prename descclassname"><span class="pre">movis.ops.</span></span><span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../layers/index.html#movis.layer.protocol.BasicLayer" title="movis.layer.protocol.BasicLayer"><span class="pre">BasicLayer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../layers/index.html#movis.layer.protocol.BasicLayer" title="movis.layer.protocol.BasicLayer"><span class="pre">BasicLayer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition" title="movis.layer.composition.Composition"><span class="pre">Composition</span></a></span></span><a class="reference internal" href="../../_modules/movis/ops.html#insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.ops.insert" title="Link to this definition">#</a></dt>
+<dd><p>Insert a target layer into a source layer at a specified time.</p>
+<p>For instance, consider inserting a brief eye-catch scene to indicate a change in chapters within
+a long interview video. <code class="docutils literal notranslate"><span class="pre">mv.insert()</span></code> is used for such purposes, to insert a short scene into a longer one:</p>
+<p><a href="#id1"><span class="problematic" id="id2">|------------------------|</span></a>    <a href="#id3"><span class="problematic" id="id4">|------------|</span></a>———-<a href="#id5"><span class="problematic" id="id6">|------------|</span></a>
+|    Source layer        | -&gt; |   Source   |  target  |   Source   |
+<a href="#id7"><span class="problematic" id="id8">|------------------------|</span></a>    <a href="#id9"><span class="problematic" id="id10">|------------|</span></a>———-<a href="#id11"><span class="problematic" id="id12">|------------|</span></a></p>
+<dl>
 <dt>Args:</dt><dd><dl class="simple">
-<dt>color:</dt><dd><p>A union type that can be either a string or a tuple containing RGB integers or a sequence of integers.
-If <code class="docutils literal notranslate"><span class="pre">str</span></code>: The string can be either a CSS color name (e.g., ‘red’) or a hexadecimal RGB string
-(e.g., <code class="docutils literal notranslate"><span class="pre">'#FF0000'</span></code>). If <code class="docutils literal notranslate"><span class="pre">tuple[int,</span> <span class="pre">int,</span> <span class="pre">int]</span></code> or <code class="docutils literal notranslate"><span class="pre">Sequence[int]</span></code>, it represents RGB values
-as integers between 0 and 255 (<cite>e.g.</cite>, <code class="docutils literal notranslate"><span class="pre">(255,</span> <span class="pre">0,</span> <span class="pre">0)</span></code>).</p>
+<dt>source:</dt><dd><p>The layer to insert the target layer into.</p>
+</dd>
+<dt>target:</dt><dd><p>The layer to insert.</p>
+</dd>
+<dt>time:</dt><dd><p>The time to insert the target layer.</p>
+</dd>
+<dt>size:</dt><dd><p>Size of the returned composition. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the size of the source layer is used.</p>
 </dd>
 </dl>
 </dd>
-<dt>Returns:</dt><dd><p>A tuple of three integers <code class="docutils literal notranslate"><span class="pre">(R,</span> <span class="pre">G,</span> <span class="pre">B)</span></code> that represent the RGB values.</p>
+<dt>Returns:</dt><dd><p>Composition with the target layer inserted.</p>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">movis</span> <span class="k">as</span> <span class="nn">mv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="s2">&quot;source.png&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="s2">&quot;target.png&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="o">.</span><span class="n">duration</span>
+<span class="go">6.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>  <span class="c1"># source layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>  <span class="c1"># target layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>  <span class="c1"># source layer</span>
+</pre></div>
+</div>
 </dd>
 </dl>
 </dd></dl>
@@ -475,20 +493,20 @@ as integers between 0 and 255 (<cite>e.g.</cite>, <code class="docutils literal 
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="movis.util.add_materials_to_video.html"
+       href="movis.ops.crop.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">movis.util.add_materials_to_video</p>
+        <p class="prev-next-title">movis.ops.crop</p>
       </div>
     </a>
     <a class="right-next"
-       href="../../contribution.html"
+       href="movis.ops.repeat.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Contribution Guide</p>
+        <p class="prev-next-title">movis.ops.repeat</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -507,13 +525,13 @@ as integers between 0 and 255 (<cite>e.g.</cite>, <code class="docutils literal 
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.util.to_rgb"><code class="docutils literal notranslate"><span class="pre">to_rgb()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.ops.insert"><code class="docutils literal notranslate"><span class="pre">insert()</span></code></a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../../_sources/reference/generated/movis.util.to_rgb.rst.txt">
+    <a href="../../_sources/reference/generated/movis.ops.insert.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
