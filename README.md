@@ -22,6 +22,8 @@ This library allows users to generate various types of videos,
 including but not limited to presentation videos, motion graphics,
 shader art coding, and game commentary videos, through Python.
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rezoo/movis/blob/colab/Quickstart.ipynb)
+
 ## 🚀 Main Features
 
 * Easy and intuitive video editing (including scene cut, transition, crop, concatenation, inserting images and texts, etc.)
