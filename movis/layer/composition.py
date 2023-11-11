@@ -447,7 +447,9 @@ class Composition:
             audio:
                 A flag specifying whether to include audio in the video.
             audio_codec:
-                The codec used to encode the audio. If not specified, the default codec is used.
+                The codec used to encode the audio. If not specified, the default codec
+                determined by ``codec`` is used. For example, if ``codec="libx264"``,
+                the default value of ``audio_codec`` is ``aac``.
         """
         if end_time is None:
             end_time = self.duration
@@ -527,6 +529,43 @@ class Composition:
                     writer.append_data(frame)
                 writer.close()
                 display(Video.from_file(filename, autoplay=True, loop=True))
+
+    def write_audio(
+        self,
+        dst_file: str | PathLike,
+        start_time: float = 0.0,
+        end_time: float | None = None,
+        format: str | None = None,
+        subtype: str | None = None,
+    ) -> None:
+        """Writes the audio of the composition to a file.
+
+        The current supported audio formats are limited to those supported by the soundfile module
+        (wav, flac, ogg, etc.). For more details, please refer to the soundfile documentation.
+
+        Args:
+            dst_file:
+                The path to the destination audio file.
+            start_time:
+                The start time of the audio. This variable is used to clip the audio in the time axis direction.
+            end_time:
+                The end time of the audio. This variable is used to clip the audio in the time axis direction.
+                If not specified, the composition's duration is used for ``end_time``.
+            format:
+                The format of the audio file. If not specified, the format is inferred from the file extension.
+            subtype:
+                The subtype of the audio file. If not specified, the subtype is inferred from the file extension.
+        """
+        if end_time is None:
+            end_time = self.duration
+        audio_array = self.get_audio(start_time, end_time)
+        if audio_array is None:
+            raise ValueError("No audio found in the composition")
+        sf.write(
+            dst_file, audio_array.transpose(),
+            samplerate=AUDIO_SAMPLING_RATE,
+            format=format,
+            subtype=subtype)
 
 
 class LayerItem:
