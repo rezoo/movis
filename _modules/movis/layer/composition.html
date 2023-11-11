@@ -821,7 +821,9 @@ document.write(`
 <span class="sd">            audio:</span>
 <span class="sd">                A flag specifying whether to include audio in the video.</span>
 <span class="sd">            audio_codec:</span>
-<span class="sd">                The codec used to encode the audio. If not specified, the default codec is used.</span>
+<span class="sd">                The codec used to encode the audio. If not specified, the default codec</span>
+<span class="sd">                determined by ``codec`` is used. For example, if ``codec=&quot;libx264&quot;``,</span>
+<span class="sd">                the default value of ``audio_codec`` is ``aac``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">end_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
@@ -904,6 +906,46 @@ document.write(`
                     <span class="n">writer</span><span class="o">.</span><span class="n">append_data</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
                 <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
                 <span class="n">display</span><span class="p">(</span><span class="n">Video</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">autoplay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Composition.write_audio">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition.write_audio">[docs]</a>
+    <span class="k">def</span> <span class="nf">write_audio</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dst_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PathLike</span><span class="p">,</span>
+        <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">subtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes the audio of the composition to a file.</span>
+
+<span class="sd">        The current supported audio formats are limited to those supported by the soundfile module</span>
+<span class="sd">        (wav, flac, ogg, etc.). For more details, please refer to the soundfile documentation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dst_file:</span>
+<span class="sd">                The path to the destination audio file.</span>
+<span class="sd">            start_time:</span>
+<span class="sd">                The start time of the audio. This variable is used to clip the audio in the time axis direction.</span>
+<span class="sd">            end_time:</span>
+<span class="sd">                The end time of the audio. This variable is used to clip the audio in the time axis direction.</span>
+<span class="sd">                If not specified, the composition&#39;s duration is used for ``end_time``.</span>
+<span class="sd">            format:</span>
+<span class="sd">                The format of the audio file. If not specified, the format is inferred from the file extension.</span>
+<span class="sd">            subtype:</span>
+<span class="sd">                The subtype of the audio file. If not specified, the subtype is inferred from the file extension.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">end_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+        <span class="n">audio_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_audio</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">audio_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No audio found in the composition&quot;</span><span class="p">)</span>
+        <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="n">dst_file</span><span class="p">,</span> <span class="n">audio_array</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
+            <span class="n">samplerate</span><span class="o">=</span><span class="n">AUDIO_SAMPLING_RATE</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
+            <span class="n">subtype</span><span class="o">=</span><span class="n">subtype</span><span class="p">)</span></div>
 </div>
 
 

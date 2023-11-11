@@ -22,6 +22,7 @@
    .. automethod:: preview
    .. automethod:: render_and_play
    .. automethod:: values
+   .. automethod:: write_audio
    .. automethod:: write_video
    
 
