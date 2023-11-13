@@ -420,7 +420,7 @@ class Composition:
         input_params: list[str] | None = None,
         output_params: list[str] | None = None,
         fps: float = 30.0,
-        audio: bool = False,
+        audio: bool = True,
         audio_codec: str | None = None,
     ) -> None:
         """Writes the composition's contents to a video file.
@@ -446,6 +446,9 @@ class Composition:
                 The frame rate of the video. Default is ``30.0``.
             audio:
                 A flag specifying whether to include audio in the video.
+                If ``audio=False``, the audio of the composition is not rendered.
+                Note that if the composition has no audio, this value is simply ignored and
+                the video is rendered without audio.
             audio_codec:
                 The codec used to encode the audio. If not specified, the default codec
                 determined by ``codec`` is used. For example, if ``codec="libx264"``,
