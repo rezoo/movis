@@ -794,7 +794,7 @@ document.write(`
         <span class="n">input_params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">output_params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">fps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30.0</span><span class="p">,</span>
-        <span class="n">audio</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">audio</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">audio_codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes the composition&#39;s contents to a video file.</span>
@@ -820,6 +820,9 @@ document.write(`
 <span class="sd">                The frame rate of the video. Default is ``30.0``.</span>
 <span class="sd">            audio:</span>
 <span class="sd">                A flag specifying whether to include audio in the video.</span>
+<span class="sd">                If ``audio=False``, the audio of the composition is not rendered.</span>
+<span class="sd">                Note that if the composition has no audio, this value is simply ignored and</span>
+<span class="sd">                the video is rendered without audio.</span>
 <span class="sd">            audio_codec:</span>
 <span class="sd">                The codec used to encode the audio. If not specified, the default codec</span>
 <span class="sd">                determined by ``codec`` is used. For example, if ``codec=&quot;libx264&quot;``,</span>
