@@ -3,6 +3,7 @@ from __future__ import annotations
 from os import PathLike
 from pathlib import Path
 from typing import Sequence
+import warnings
 
 import imageio
 import librosa
@@ -333,7 +334,11 @@ class Audio:
 
     def _load_audio(self) -> np.ndarray:
         if self._audio is None:
-            audio, _ = librosa.load(str(self._audio_file), sr=AUDIO_SAMPLING_RATE, mono=False)
+            with warnings.catch_warnings():
+                # XXX: Suppress the two warnings from librosa.
+                warnings.simplefilter("ignore", category=FutureWarning)
+                warnings.simplefilter("ignore", category=UserWarning)
+                audio, _ = librosa.load(str(self._audio_file), sr=AUDIO_SAMPLING_RATE, mono=False)
             if audio.ndim == 1:
                 audio = np.broadcast_to(audio[None, :], (2, len(audio)))
             self._audio = audio
@@ -355,9 +360,12 @@ class Audio:
             self._duration = duration
             return duration
         else:
-            duration = librosa.get_duration(path=str(self._audio_file))
-            self._duration = duration
-            return duration
+            with warnings.catch_warnings():
+                # XXX: Suppress the future warning from librosa.
+                warnings.simplefilter("ignore", category=FutureWarning)
+                duration = librosa.get_duration(path=str(self._audio_file))
+                self._duration = duration
+                return duration
 
     @property
     def audio(self) -> np.ndarray:
@@ -451,7 +459,11 @@ class AudioSequence:
         if a is None:
             audio_file = self.audio_files[index]
             if isinstance(audio_file, (str, Path)):
-                a_i, _ = librosa.load(audio_file, sr=AUDIO_SAMPLING_RATE, mono=False)
+                with warnings.catch_warnings():
+                    # XXX: Suppress the two warnings from librosa.
+                    warnings.simplefilter("ignore", category=FutureWarning)
+                    warnings.simplefilter("ignore", category=UserWarning)
+                    a_i, _ = librosa.load(audio_file, sr=AUDIO_SAMPLING_RATE, mono=False)
                 if a_i.ndim == 1:
                     a_i = np.broadcast_to(a_i[None, :], (2, len(a_i)))
             elif isinstance(audio_file, np.ndarray):
