@@ -9,6 +9,18 @@ from movis.layer.composition import Composition
 from movis.layer.protocol import BasicLayer
 
 
+def _get_size(layer: BasicLayer, size: tuple[int, int] | None) -> tuple[int, int]:
+    """Determines the size of the layer."""
+    if size is not None:
+        return size
+    elif isinstance(layer, Composition):
+        return layer.size
+    img = layer(0.0)
+    if img is None:
+        raise ValueError("Cannot determine size of composition.")
+    return img.shape[1], img.shape[0]
+
+
 def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None = None) -> Composition:
     """Concatenate layers into a single composition.
 
@@ -29,11 +41,7 @@ def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None = Non
         >>> composition.duration
         3.0
     """
-    if size is None:
-        img = layers[0](0.0)
-        if img is None:
-            raise ValueError("Cannot determine size of composition.")
-        size = img.shape[1], img.shape[0]
+    size = _get_size(layers[0], size)
     duration = sum(layer.duration for layer in layers)
     composition = Composition(size=size, duration=duration)
     time = 0.0
@@ -64,11 +72,7 @@ def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None = None
         >>> composition.duration
         3.0
     """
-    if size is None:
-        img = layer(0.0)
-        if img is None:
-            raise ValueError("Cannot determine size of composition.")
-        size = img.shape[1], img.shape[0]
+    size = _get_size(layer, size)
     duration = layer.duration * n_repeat
     composition = Composition(size=size, duration=duration)
     for i in range(n_repeat):
@@ -107,11 +111,7 @@ def trim(
     starts = np.array(start_times, dtype=np.float64)
     ends = np.array(end_times, dtype=np.float64)
     assert np.all(starts < ends)
-    if size is None:
-        img = layer(0.0)
-        if img is None:
-            raise ValueError("Cannot determine size of composition.")
-        size = img.shape[1], img.shape[0]
+    size = _get_size(layer, size)
     durations = ends - starts
     total_duration = float(durations.sum())
     offsets = np.cumsum(np.concatenate([[0.], durations]))[:-1] - starts
@@ -163,14 +163,7 @@ def tile(
     """
     assert len(layers) == rows * cols, \
         f"Number of layers ({len(layers)}) must be equal to rows * cols ({rows * cols})."
-    if size is None:
-        result = layers[0](0.0)
-        if result is None:
-            raise ValueError("Cannot determine size of composition.")
-        w, h = result.shape[1], result.shape[0]
-    else:
-        w, h = size
-
+    w, h = _get_size(layers[0], size)
     W = cols * w
     H = rows * h
     duration = max(layer.duration for layer in layers)
@@ -250,11 +243,7 @@ def switch(
     assert max(cams) < len(layers)
     starts = np.array(start_times, dtype=np.float64)
     assert np.all(starts[1:] > starts[:-1])
-    if size is None:
-        img = layers[0](0.0)
-        if img is None:
-            raise ValueError("Cannot determine size of composition.")
-        size = img.shape[1], img.shape[0]
+    size = _get_size(layers[0], size)
     if duration is None:
         duration = min(layer.duration for layer in layers)
     composition = Composition(size=size, duration=duration)
@@ -302,14 +291,92 @@ def insert(
         >>> composition(2.0)  # target layer
         >>> composition(3.0)  # source layer
     """
-    if size is None:
-        img = source(0.0)
-        if img is None:
-            raise ValueError("Cannot determine size of composition.")
-        size = img.shape[1], img.shape[0]
+    size = _get_size(source, size)
     duration = source.duration + target.duration
     composition = Composition(size=size, duration=duration)
     composition.add_layer(source, end_time=time)
     composition.add_layer(target, offset=time)
     composition.add_layer(source, offset=target.duration, start_time=time)
+    return composition
+
+
+def fade_in(
+    layer: BasicLayer, fade_in: float = 0.0, size: tuple[int, int] | None = None
+) -> Composition:
+    """Fade in a layer.
+
+    Args:
+        layer:
+            Layer to fade in.
+        fade_in:
+            Duration of the fade-in effect.
+        size:
+            Size of the composition. If ``None``, the size of the layer is estimated."""
+    return fade_in_out(layer, fade_in=fade_in, fade_out=0.0, size=size)
+
+
+def fade_out(
+    layer: BasicLayer, fade_out: float = 0.0, size: tuple[int, int] | None = None
+) -> Composition:
+    """Fade out a layer.
+
+    Args:
+        layer:
+            Layer to fade out.
+        fade_out:
+            Duration of the fade-out effect.
+        size:
+            Size of the composition. If ``None``, the size of the layer is estimated."""
+    return fade_in_out(layer, fade_in=0.0, fade_out=fade_out, size=size)
+
+
+def fade_in_out(
+    layer: BasicLayer, fade_in: float = 0.0, fade_out: float = 0.0,
+    size: tuple[int, int] | None = None,
+) -> Composition:
+    """Fade in and out a layer. If ``fade_in`` or ``fade_out`` is ``0.0``, the corresponding effect is not applied.
+
+    Args:
+        layer:
+            Layer to fade in and out.
+        fade_in:
+            Duration of the fade-in effect.
+        fade_out:
+            Duration of the fade-out effect.
+        size:
+            Size of the composition. If ``None``, the size of the layer is estimated.
+
+    Returns:
+        Composition with the layer faded in and out.
+
+    Examples:
+        >>> import movis as mv
+        >>> layer = mv.layer.Image.from_color((10, 10), "white", duration=3.0)
+        >>> composition = mv.fade_in_out(layer, fade_in=1.0, fade_out=1.0)
+        >>> composition(0.0)[0, 0, :]
+        array([0, 0, 0, 0], dtype=uint8)
+        >>> composition(1.0)[0, 0, :]
+        array([255, 255, 255, 255], dtype=uint8)
+        >>> composition(2.0)[0, 0, :]
+        array([255, 255, 255, 255], dtype=uint8)
+        >>> composition(3.0 - 1e-5)[0, 0, :]
+        array([0, 0, 0, 0], dtype=uint8)
+    """
+    assert 0.0 <= fade_in, "fade_in must be non-negative."
+    assert 0.0 <= fade_out, "fade_out must be non-negative."
+    assert fade_in + fade_out <= layer.duration, \
+        "fade_in + fade_out must be less than or equal to the layer duration."
+    size = _get_size(layer, size)
+    composition = Composition(size=size, duration=layer.duration)
+    item = composition.add_layer(layer, name="main")
+    if 0.0 < fade_in:
+        item.opacity.enable_motion().extend(
+            keyframes=[0.0, fade_in], values=[0.0, 1.0])
+        item.audio_level.enable_motion().extend(
+            keyframes=[0.0, fade_in], values=[0.0, -40.0])
+    if 0.0 < fade_out:
+        item.opacity.enable_motion().extend(
+            keyframes=[layer.duration - fade_out, layer.duration], values=[1.0, 0.0])
+        item.audio_level.enable_motion().extend(
+            keyframes=[layer.duration - fade_out, layer.duration], values=[-40.0, 0.0])
     return composition
