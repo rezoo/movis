@@ -143,7 +143,7 @@ def test_insert():
 
 def test_fade_in():
     img = mv.layer.Image.from_color(size=(10, 10), color='white', duration=4.0)
-    scene = mv.fade_in(img, fade_in=1.0)
+    scene = mv.fade_in(img, duration=1.0)
 
     assert np.all(scene(0.0)[0, 0, :] == np.array([0, 0, 0, 0]))
     assert np.all(scene(1.0)[0, 0, :] == np.array([255, 255, 255, 255]))
@@ -151,7 +151,7 @@ def test_fade_in():
 
 def test_fade_out():
     img = mv.layer.Image.from_color(size=(10, 10), color='white', duration=4.0)
-    scene = mv.fade_out(img, fade_out=1.0)
+    scene = mv.fade_out(img, duration=1.0)
 
     assert np.all(scene(0.0)[0, 0, :] == np.array([255, 255, 255, 255]))
     assert np.all(scene(3.0)[0, 0, :] == np.array([255, 255, 255, 255]))

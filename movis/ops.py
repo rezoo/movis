@@ -301,33 +301,33 @@ def insert(
 
 
 def fade_in(
-    layer: BasicLayer, fade_in: float = 0.0, size: tuple[int, int] | None = None
+    layer: BasicLayer, duration: float = 0.0, size: tuple[int, int] | None = None
 ) -> Composition:
     """Fade in a layer.
 
     Args:
         layer:
             Layer to fade in.
-        fade_in:
+        duration:
             Duration of the fade-in effect.
         size:
             Size of the composition. If ``None``, the size of the layer is estimated."""
-    return fade_in_out(layer, fade_in=fade_in, fade_out=0.0, size=size)
+    return fade_in_out(layer, fade_in=duration, fade_out=0.0, size=size)
 
 
 def fade_out(
-    layer: BasicLayer, fade_out: float = 0.0, size: tuple[int, int] | None = None
+    layer: BasicLayer, duration: float = 0.0, size: tuple[int, int] | None = None
 ) -> Composition:
     """Fade out a layer.
 
     Args:
         layer:
             Layer to fade out.
-        fade_out:
+        duration:
             Duration of the fade-out effect.
         size:
             Size of the composition. If ``None``, the size of the layer is estimated."""
-    return fade_in_out(layer, fade_in=0.0, fade_out=fade_out, size=size)
+    return fade_in_out(layer, fade_in=0.0, fade_out=duration, size=size)
 
 
 def fade_in_out(
