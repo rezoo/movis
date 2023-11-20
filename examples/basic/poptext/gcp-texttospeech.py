@@ -1,10 +1,12 @@
 import json
+
 from google.cloud import texttospeech_v1beta1 as tts
 
 # NOTE!
 # This example uses the Google Cloud Text-to-Speech API. You will need
 # authentication already configured and this may also incur charges
 # against your GCP billing account.
+
 
 def main():
     client = tts.TextToSpeechClient()
@@ -52,6 +54,7 @@ def main():
 
     with open("timings.json", "w") as f:
         json.dump(timepoints, f)
+
 
 if __name__ == '__main__':
     main()
