@@ -1,0 +1,6 @@
+﻿movis.ops.fade\_in\_out
+=======================
+
+.. currentmodule:: movis.ops
+
+.. autofunction:: fade_in_out

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>movis.subtitle.write_ass_file &#8212; movis  documentation</title>
+    <title>movis.ops.fade_out &#8212; movis  documentation</title>
   
   
   
@@ -41,11 +41,11 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/movis.subtitle.write_ass_file';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/movis.ops.fade_out';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="movis.subtitle.rgb_to_ass_color" href="movis.subtitle.rgb_to_ass_color.html" />
-    <link rel="prev" title="movis.subtitle" href="../subtitle.html" />
+    <link rel="next" title="movis.ops.fade_in_out" href="movis.ops.fade_in_out.html" />
+    <link rel="prev" title="movis.ops.fade_in" href="movis.ops.fade_in.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -354,12 +354,12 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="movis.motion.Easing.html">movis.motion.Easing</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../ops.html">movis.ops</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../ops.html">movis.ops</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.concatenate.html">movis.ops.concatenate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.crop.html">movis.ops.crop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.insert.html">movis.ops.insert</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.fade_in.html">movis.ops.fade_in</a></li>
-<li class="toctree-l2"><a class="reference internal" href="movis.ops.fade_out.html">movis.ops.fade_out</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.ops.fade_out</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.fade_in_out.html">movis.ops.fade_in_out</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.repeat.html">movis.ops.repeat</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.switch.html">movis.ops.switch</a></li>
@@ -367,8 +367,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="movis.ops.trim.html">movis.ops.trim</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../subtitle.html">movis.subtitle</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">movis.subtitle.write_ass_file</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../subtitle.html">movis.subtitle</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="movis.subtitle.write_ass_file.html">movis.subtitle.write_ass_file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.subtitle.rgb_to_ass_color.html">movis.subtitle.rgb_to_ass_color</a></li>
 <li class="toctree-l2"><a class="reference internal" href="movis.subtitle.write_srt_file.html">movis.subtitle.write_srt_file</a></li>
 </ul>
@@ -424,9 +424,9 @@ document.write(`
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../subtitle.html" class="nav-link">movis.subtitle</a></li>
+    <li class="breadcrumb-item"><a href="../ops.html" class="nav-link">movis.ops</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">movis.subtitle.write_ass_file</li>
+    <li class="breadcrumb-item active" aria-current="page">movis.ops.fade_out</li>
   </ul>
 </nav>
 </div>
@@ -443,48 +443,21 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="movis-subtitle-write-ass-file">
-<h1>movis.subtitle.write_ass_file<a class="headerlink" href="#movis-subtitle-write-ass-file" title="Link to this heading">#</a></h1>
+  <section id="movis-ops-fade-out">
+<h1>movis.ops.fade_out<a class="headerlink" href="#movis-ops-fade-out" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="movis.subtitle.write_ass_file">
-<span class="sig-prename descclassname"><span class="pre">movis.subtitle.</span></span><span class="sig-name descname"><span class="pre">write_ass_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_ass_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">PathLike</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1920,</span> <span class="pre">1080)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">characters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">styles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ASSStyleType</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/movis/subtitle.html#write_ass_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.subtitle.write_ass_file" title="Link to this definition">#</a></dt>
-<dd><p>Writes an ASS (Advanced SubStation Alpha) subtitle file.</p>
-<dl>
+<dt class="sig sig-object py" id="movis.ops.fade_out">
+<span class="sig-prename descclassname"><span class="pre">movis.ops.</span></span><span class="sig-name descname"><span class="pre">fade_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../layers/index.html#movis.layer.protocol.BasicLayer" title="movis.layer.protocol.BasicLayer"><span class="pre">BasicLayer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../layers/generated/movis.layer.composition.Composition.html#movis.layer.composition.Composition" title="movis.layer.composition.Composition"><span class="pre">Composition</span></a></span></span><a class="reference internal" href="../../_modules/movis/ops.html#fade_out"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#movis.ops.fade_out" title="Link to this definition">#</a></dt>
+<dd><p>Fade out a layer.</p>
+<dl class="simple">
 <dt>Args:</dt><dd><dl class="simple">
-<dt>start_times:</dt><dd><p>A list of start times in seconds for each subtitle entry.</p>
+<dt>layer:</dt><dd><p>Layer to fade out.</p>
 </dd>
-<dt>end_times:</dt><dd><p>A list of end times in seconds for each subtitle entry.</p>
+<dt>duration:</dt><dd><p>Duration of the fade-out effect.</p>
 </dd>
-<dt>texts:</dt><dd><p>A list of text strings corresponding to each subtitle entry.</p>
-</dd>
-<dt>dst_ass_file:</dt><dd><p>The destination path for the generated ASS file.</p>
-</dd>
-<dt>size:</dt><dd><p>The resolution of the video, defaults to (1920, 1080).</p>
-</dd>
-<dt>characters:</dt><dd><p>A list of character names for each subtitle entry. Defaults to None.</p>
-</dd>
-<dt>styles:</dt><dd><p>A list of styles for each subtitle entry. Defaults to None.</p>
+<dt>size:</dt><dd><p>Size of the composition. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the size of the layer is estimated.</p>
 </dd>
 </dl>
-</dd>
-<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">movis</span> <span class="k">as</span> <span class="nn">mv</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mv</span><span class="o">.</span><span class="n">write_ass_file</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">start_times</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">end_times</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">texts</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Subtitle1&#39;</span><span class="p">,</span> <span class="s1">&#39;Subtitle2&#39;</span><span class="p">,</span> <span class="s1">&#39;Subtitle3&#39;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">styles</span><span class="o">=</span><span class="p">[</span><span class="n">mv</span><span class="o">.</span><span class="n">ASSStyleType</span><span class="p">(</span><span class="n">font_size</span><span class="o">=</span><span class="mi">96</span><span class="p">)],</span>  <span class="c1"># Set default font size</span>
-<span class="gp">... </span>    <span class="n">dst_ass_file</span><span class="o">=</span><span class="s1">&#39;subtitle1.ass&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mv</span><span class="o">.</span><span class="n">write_ass_file</span><span class="p">(</span>
-<span class="gp">... </span>   <span class="n">start_times</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
-<span class="gp">... </span>   <span class="n">end_times</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span>
-<span class="gp">... </span>   <span class="n">texts</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;text by Alice&#39;</span><span class="p">,</span> <span class="s1">&#39;text by Bob&#39;</span><span class="p">,</span> <span class="s1">&#39;text by Alice&#39;</span><span class="p">],</span>
-<span class="gp">... </span>   <span class="n">characters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Alice&#39;</span><span class="p">,</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="s1">&#39;Alice&#39;</span><span class="p">],</span>
-<span class="gp">... </span>   <span class="n">styles</span><span class="o">=</span><span class="p">[</span>
-<span class="gp">... </span>       <span class="n">mv</span><span class="o">.</span><span class="n">ASSStyleType</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Alice&#39;</span><span class="p">,</span> <span class="n">primary_color</span><span class="o">=</span><span class="n">mv</span><span class="o">.</span><span class="n">rgb_to_ass_color</span><span class="p">(</span><span class="s1">&#39;red&#39;</span><span class="p">)),</span>
-<span class="gp">... </span>       <span class="n">mv</span><span class="o">.</span><span class="n">ASSStyleType</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="n">primary_color</span><span class="o">=</span><span class="n">mv</span><span class="o">.</span><span class="n">rgb_to_ass_color</span><span class="p">(</span><span class="s1">&#39;blue&#39;</span><span class="p">))],</span>
-<span class="gp">... </span>   <span class="n">dst_ass_file</span><span class="o">=</span><span class="s1">&#39;subtitle2.ass&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd>
 </dl>
 </dd></dl>
@@ -502,20 +475,20 @@ document.write(`
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../subtitle.html"
+       href="movis.ops.fade_in.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">movis.subtitle</p>
+        <p class="prev-next-title">movis.ops.fade_in</p>
       </div>
     </a>
     <a class="right-next"
-       href="movis.subtitle.rgb_to_ass_color.html"
+       href="movis.ops.fade_in_out.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">movis.subtitle.rgb_to_ass_color</p>
+        <p class="prev-next-title">movis.ops.fade_in_out</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -534,13 +507,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.subtitle.write_ass_file"><code class="docutils literal notranslate"><span class="pre">write_ass_file()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#movis.ops.fade_out"><code class="docutils literal notranslate"><span class="pre">fade_out()</span></code></a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../../_sources/reference/generated/movis.subtitle.write_ass_file.rst.txt">
+    <a href="../../_sources/reference/generated/movis.ops.fade_out.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
