@@ -18,10 +18,11 @@ def extract(args: argparse.Namespace):
         audio, top_db=args.threshold, frame_length=args.frame_length)
     non_silent_regions = non_silent_slices / sr
     dst_audio = np.concatenate([audio[start:end] for start, end in non_silent_slices])
-    with tempfile.NamedTemporaryFile(suffix='.wav') as audio_fp:
-        sf.write(audio_fp, dst_audio, sr)
-        print(audio_fp.name)
-        ffmpeg.input(audio_fp.name).output(str(args.output), b='128k').run(overwrite_output=True)
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_dir = Path(temp_dir)
+        audio_file = temp_dir / 'audio.wav'
+        sf.write(str(audio_file), dst_audio, sr)
+        ffmpeg.input(str(audio_file)).output(str(args.output), b='128k').run(overwrite_output=True)
 
     non_silent_frame = pd.DataFrame(non_silent_regions, columns=['start_time', 'end_time'])
     non_silent_frame.to_csv(args.region, sep='\t', index=False)
