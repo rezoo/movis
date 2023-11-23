@@ -1,3 +1,4 @@
+from pathlib import Path
 import tempfile
 
 import numpy as np
@@ -56,11 +57,12 @@ def generate_sine_wave(frequency: float = 440.0, duration: float = 1.0):
 
 
 def test_audio_file():
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as temp_file:
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_file = Path(temp_dir) / "test.wav"
         sine_wave = generate_sine_wave(duration=1.0)
-        sf.write(temp_file.name, sine_wave, mv.AUDIO_SAMPLING_RATE, subtype='PCM_24')
+        sf.write(str(temp_file), sine_wave, mv.AUDIO_SAMPLING_RATE, subtype='PCM_24')
 
-        layer = mv.layer.Audio(temp_file.name)
+        layer = mv.layer.Audio(temp_file)
         assert layer.duration == 1.0
         audio = layer.get_audio(0.0, 1.0)
         assert audio.shape == (2, mv.AUDIO_SAMPLING_RATE)
@@ -109,13 +111,14 @@ def test_audiosequence_ndarray():
 
 
 def test_audiosequence_files():
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as temp_file:
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_file = Path(temp_dir) / "test.wav"
         sine_wave = generate_sine_wave(duration=1.0)
-        sf.write(temp_file.name, sine_wave, mv.AUDIO_SAMPLING_RATE, subtype='PCM_24')
+        sf.write(str(temp_file), sine_wave, mv.AUDIO_SAMPLING_RATE, subtype='PCM_24')
 
         start_times = np.array([0.0, 1.0])
         end_times = np.array([1.0, 2.0])
-        audios = [temp_file.name, temp_file.name]
+        audios = [temp_file, temp_file]
         layer = mv.layer.AudioSequence(start_times, end_times, audios)
         assert layer.duration == 2.0
         audio = layer.get_audio(0.0, 2.0)

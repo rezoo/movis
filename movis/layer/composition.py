@@ -4,6 +4,7 @@ import tempfile
 import warnings
 from contextlib import contextmanager
 from os import PathLike
+from pathlib import Path
 from typing import Hashable, Iterator, Sequence
 
 import cv2
@@ -458,16 +459,17 @@ class Composition:
             end_time = self.duration
         writer = None
         if audio:
-            with tempfile.NamedTemporaryFile(suffix='.wav') as audio_fp:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                audio_file = Path(temp_dir) / "audio.wav"
                 audio_array = self.get_audio(start_time, end_time)
                 if audio_array is None:
                     audio_path = None
                 else:
                     sf.write(
-                        audio_fp, audio_array.transpose(),
+                        str(audio_file), audio_array.transpose(),
                         samplerate=AUDIO_SAMPLING_RATE,
                         subtype='PCM_16')
-                    audio_path = audio_fp.name
+                    audio_path = str(audio_file)
                 with warnings.catch_warnings():
                     # XXX: Suppress the deprecation warning from imageio-ffmpeg.
                     warnings.simplefilter("ignore", category=DeprecationWarning)
@@ -519,9 +521,10 @@ class Composition:
             end_time = self.duration
 
         times = np.arange(start_time, end_time, 1.0 / fps)
-        with tempfile.NamedTemporaryFile(suffix='.mp4') as fp:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_file = Path(temp_dir) / "output.mp4"
             with self.preview(level=preview_level):
-                filename: str = fp.name
+                filename: str = str(temp_file)
                 writer = imageio.get_writer(
                     filename, fps=fps, codec="libx264",
                     ffmpeg_params=["-preset", "veryfast"],
