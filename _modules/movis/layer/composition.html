@@ -347,6 +347,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">PathLike</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Sequence</span>
 
 <span class="kn">import</span> <span class="nn">cv2</span>
@@ -832,16 +833,17 @@ document.write(`
             <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
         <span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">audio</span><span class="p">:</span>
-            <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;.wav&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">audio_fp</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
+                <span class="n">audio_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;audio.wav&quot;</span>
                 <span class="n">audio_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_audio</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">audio_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">audio_path</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                        <span class="n">audio_fp</span><span class="p">,</span> <span class="n">audio_array</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">audio_file</span><span class="p">),</span> <span class="n">audio_array</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
                         <span class="n">samplerate</span><span class="o">=</span><span class="n">AUDIO_SAMPLING_RATE</span><span class="p">,</span>
                         <span class="n">subtype</span><span class="o">=</span><span class="s1">&#39;PCM_16&#39;</span><span class="p">)</span>
-                    <span class="n">audio_path</span> <span class="o">=</span> <span class="n">audio_fp</span><span class="o">.</span><span class="n">name</span>
+                    <span class="n">audio_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">audio_file</span><span class="p">)</span>
                 <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
                     <span class="c1"># XXX: Suppress the deprecation warning from imageio-ffmpeg.</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
@@ -896,9 +898,10 @@ document.write(`
             <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 
         <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fps</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;.mp4&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
+            <span class="n">temp_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;output.mp4&quot;</span>
             <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">preview_level</span><span class="p">):</span>
-                <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">temp_file</span><span class="p">)</span>
                 <span class="n">writer</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span>
                     <span class="n">filename</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="s2">&quot;libx264&quot;</span><span class="p">,</span>
                     <span class="n">ffmpeg_params</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;-preset&quot;</span><span class="p">,</span> <span class="s2">&quot;veryfast&quot;</span><span class="p">],</span>
