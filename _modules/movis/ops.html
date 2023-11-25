@@ -349,6 +349,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">movis.enum</span> <span class="kn">import</span> <span class="n">Direction</span>
 <span class="kn">from</span> <span class="nn">movis.layer.composition</span> <span class="kn">import</span> <span class="n">Composition</span>
+<span class="kn">from</span> <span class="nn">movis.layer.media</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">movis.layer.protocol</span> <span class="kn">import</span> <span class="n">BasicLayer</span>
 
 
@@ -726,13 +727,13 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt; layer = mv.layer.Image.from_color((10, 10), &quot;white&quot;, duration=3.0)</span>
 <span class="sd">        &gt;&gt;&gt; composition = mv.fade_in_out(layer, fade_in=1.0, fade_out=1.0)</span>
 <span class="sd">        &gt;&gt;&gt; composition(0.0)[0, 0, :]</span>
-<span class="sd">        array([0, 0, 0, 0], dtype=uint8)</span>
+<span class="sd">        array([0, 0, 0, 255], dtype=uint8)</span>
 <span class="sd">        &gt;&gt;&gt; composition(1.0)[0, 0, :]</span>
 <span class="sd">        array([255, 255, 255, 255], dtype=uint8)</span>
 <span class="sd">        &gt;&gt;&gt; composition(2.0)[0, 0, :]</span>
 <span class="sd">        array([255, 255, 255, 255], dtype=uint8)</span>
 <span class="sd">        &gt;&gt;&gt; composition(3.0 - 1e-5)[0, 0, :]</span>
-<span class="sd">        array([0, 0, 0, 0], dtype=uint8)</span>
+<span class="sd">        array([0, 0, 0, 255], dtype=uint8)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">fade_in</span><span class="p">,</span> <span class="s2">&quot;fade_in must be non-negative.&quot;</span>
     <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">fade_out</span><span class="p">,</span> <span class="s2">&quot;fade_out must be non-negative.&quot;</span>
@@ -740,6 +741,7 @@ document.write(`
         <span class="s2">&quot;fade_in + fade_out must be less than or equal to the layer duration.&quot;</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">_get_size</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
     <span class="n">composition</span> <span class="o">=</span> <span class="n">Composition</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+    <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">from_color</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">duration</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bg&#39;</span><span class="p">)</span>
     <span class="n">item</span> <span class="o">=</span> <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">fade_in</span><span class="p">:</span>
         <span class="n">item</span><span class="o">.</span><span class="n">opacity</span><span class="o">.</span><span class="n">enable_motion</span><span class="p">()</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>

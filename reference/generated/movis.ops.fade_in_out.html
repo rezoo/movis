@@ -467,13 +467,13 @@ document.write(`
 <span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">from_color</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">fade_in_out</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">fade_in</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fade_out</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
-<span class="go">array([0, 0, 0, 0], dtype=uint8)</span>
+<span class="go">array([0, 0, 0, 255], dtype=uint8)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
 <span class="go">array([255, 255, 255, 255], dtype=uint8)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
 <span class="go">array([255, 255, 255, 255], dtype=uint8)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="mf">1e-5</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
-<span class="go">array([0, 0, 0, 0], dtype=uint8)</span>
+<span class="go">array([0, 0, 0, 255], dtype=uint8)</span>
 </pre></div>
 </div>
 </dd>
