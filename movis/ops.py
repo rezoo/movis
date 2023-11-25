@@ -6,6 +6,7 @@ import numpy as np
 
 from movis.enum import Direction
 from movis.layer.composition import Composition
+from movis.layer.media import Image
 from movis.layer.protocol import BasicLayer
 
 
@@ -354,13 +355,13 @@ def fade_in_out(
         >>> layer = mv.layer.Image.from_color((10, 10), "white", duration=3.0)
         >>> composition = mv.fade_in_out(layer, fade_in=1.0, fade_out=1.0)
         >>> composition(0.0)[0, 0, :]
-        array([0, 0, 0, 0], dtype=uint8)
+        array([0, 0, 0, 255], dtype=uint8)
         >>> composition(1.0)[0, 0, :]
         array([255, 255, 255, 255], dtype=uint8)
         >>> composition(2.0)[0, 0, :]
         array([255, 255, 255, 255], dtype=uint8)
         >>> composition(3.0 - 1e-5)[0, 0, :]
-        array([0, 0, 0, 0], dtype=uint8)
+        array([0, 0, 0, 255], dtype=uint8)
     """
     assert 0.0 <= fade_in, "fade_in must be non-negative."
     assert 0.0 <= fade_out, "fade_out must be non-negative."
@@ -368,6 +369,7 @@ def fade_in_out(
         "fade_in + fade_out must be less than or equal to the layer duration."
     size = _get_size(layer, size)
     composition = Composition(size=size, duration=layer.duration)
+    composition.add_layer(Image.from_color(size, (0, 0, 0), duration=layer.duration), name='bg')
     item = composition.add_layer(layer, name="main")
     if 0.0 < fade_in:
         item.opacity.enable_motion().extend(
