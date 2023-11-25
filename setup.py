@@ -16,7 +16,7 @@ with open(BASE_DIR / "README.md", encoding="utf-8") as f:
 
 setup(
     name="movis",
-    version="0.7",
+    version="0.71",
     author="Masaki Saito",
     author_email="msaito@preferred.jp",
     description="A video editing library",
