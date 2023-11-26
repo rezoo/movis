@@ -342,7 +342,10 @@ class Composition:
         self._name_to_layer.clear()
         self._cache.clear()
 
-    def __call__(self, time: float) -> np.ndarray | None:
+    def __call__(
+        self, time: float,
+        bg_color: tuple[int, int, int, int] = (0, 0, 0, 0),
+    ) -> np.ndarray | None:
         if time < 0.0 or self.duration <= time:
             return None
 
@@ -357,7 +360,8 @@ class Composition:
             else:
                 del self._cache[key]
 
-        frame = np.zeros(current_shape + (4,), dtype=np.uint8)
+        frame = np.empty(current_shape + (4,), dtype=np.uint8)
+        frame[:, :, :] = np.asarray(bg_color, dtype=np.uint8).reshape(1, 1, 4)
         for layer_item in self._layers:
             frame = layer_item._composite(
                 frame, time, preview_level=self._preview_level,
@@ -398,16 +402,13 @@ class Composition:
             audio[:, ind_start:ind_end] += audio_i[:, :length]
         return audio
 
-    def _compute_frame(self, time: float) -> np.ndarray:
-        return np.asarray(self(time))
-
     def _write_video(
         self, start_time: float, end_time: float,
         fps: float, writer: Format.Writer,
     ) -> None:
         times = np.arange(start_time, end_time, 1.0 / fps)
         for t in tqdm(times, total=len(times)):
-            frame = np.asarray(self(t))
+            frame = np.asarray(self(t, bg_color=(0, 0, 0, 255)))
             writer.append_data(frame)
         writer.close()
 
@@ -531,7 +532,7 @@ class Composition:
                     pixelformat="yuv444p", macro_block_size=None,
                     ffmpeg_log_level="error")
                 for t in tqdm(times, total=len(times)):
-                    frame = np.asarray(self(t))
+                    frame = np.asarray(self(t, bg_color=(0, 0, 0, 255)))
                     writer.append_data(frame)
                 writer.close()
                 display(Video.from_file(filename, autoplay=True, loop=True))
