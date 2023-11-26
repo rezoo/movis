@@ -668,7 +668,9 @@ document.write(`
 <div class="viewcode-block" id="fade_in">
 <a class="viewcode-back" href="../../reference/generated/movis.ops.fade_in.html#movis.ops.fade_in">[docs]</a>
 <span class="k">def</span> <span class="nf">fade_in</span><span class="p">(</span>
-    <span class="n">layer</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">bg_color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Composition</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fade in a layer.</span>
 
@@ -678,15 +680,20 @@ document.write(`
 <span class="sd">        duration:</span>
 <span class="sd">            Duration of the fade-in effect.</span>
 <span class="sd">        size:</span>
-<span class="sd">            Size of the composition. If ``None``, the size of the layer is estimated.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">fade_in_out</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">fade_in</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">fade_out</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span></div>
+<span class="sd">            Size of the composition. If ``None``, the size of the layer is estimated.</span>
+<span class="sd">        bg_color:</span>
+<span class="sd">            Background color. If ``None``, the background is transparent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">fade_in_out</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">fade_in</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">fade_out</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">bg_color</span><span class="o">=</span><span class="n">bg_color</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="fade_out">
 <a class="viewcode-back" href="../../reference/generated/movis.ops.fade_out.html#movis.ops.fade_out">[docs]</a>
 <span class="k">def</span> <span class="nf">fade_out</span><span class="p">(</span>
-    <span class="n">layer</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">bg_color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Composition</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fade out a layer.</span>
 
@@ -696,8 +703,11 @@ document.write(`
 <span class="sd">        duration:</span>
 <span class="sd">            Duration of the fade-out effect.</span>
 <span class="sd">        size:</span>
-<span class="sd">            Size of the composition. If ``None``, the size of the layer is estimated.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">fade_in_out</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">fade_in</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fade_out</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span></div>
+<span class="sd">            Size of the composition. If ``None``, the size of the layer is estimated.</span>
+<span class="sd">        bg_color:</span>
+<span class="sd">            Background color. If ``None``, the background is transparent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">fade_in_out</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">fade_in</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fade_out</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">bg_color</span><span class="o">=</span><span class="n">bg_color</span><span class="p">)</span></div>
 
 
 
@@ -706,6 +716,7 @@ document.write(`
 <span class="k">def</span> <span class="nf">fade_in_out</span><span class="p">(</span>
     <span class="n">layer</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">fade_in</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">fade_out</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">bg_color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Composition</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fade in and out a layer. If ``fade_in`` or ``fade_out`` is ``0.0``, the corresponding effect is not applied.</span>
 
@@ -718,6 +729,8 @@ document.write(`
 <span class="sd">            Duration of the fade-out effect.</span>
 <span class="sd">        size:</span>
 <span class="sd">            Size of the composition. If ``None``, the size of the layer is estimated.</span>
+<span class="sd">        bg_color:</span>
+<span class="sd">            Background color. If ``None``, the background is transparent.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Composition with the layer faded in and out.</span>
@@ -727,13 +740,13 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt; layer = mv.layer.Image.from_color((10, 10), &quot;white&quot;, duration=3.0)</span>
 <span class="sd">        &gt;&gt;&gt; composition = mv.fade_in_out(layer, fade_in=1.0, fade_out=1.0)</span>
 <span class="sd">        &gt;&gt;&gt; composition(0.0)[0, 0, :]</span>
-<span class="sd">        array([0, 0, 0, 255], dtype=uint8)</span>
+<span class="sd">        array([0, 0, 0, 0], dtype=uint8)</span>
 <span class="sd">        &gt;&gt;&gt; composition(1.0)[0, 0, :]</span>
 <span class="sd">        array([255, 255, 255, 255], dtype=uint8)</span>
 <span class="sd">        &gt;&gt;&gt; composition(2.0)[0, 0, :]</span>
 <span class="sd">        array([255, 255, 255, 255], dtype=uint8)</span>
 <span class="sd">        &gt;&gt;&gt; composition(3.0 - 1e-5)[0, 0, :]</span>
-<span class="sd">        array([0, 0, 0, 255], dtype=uint8)</span>
+<span class="sd">        array([0, 0, 0, 0], dtype=uint8)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">fade_in</span><span class="p">,</span> <span class="s2">&quot;fade_in must be non-negative.&quot;</span>
     <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">fade_out</span><span class="p">,</span> <span class="s2">&quot;fade_out must be non-negative.&quot;</span>
@@ -741,7 +754,9 @@ document.write(`
         <span class="s2">&quot;fade_in + fade_out must be less than or equal to the layer duration.&quot;</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">_get_size</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
     <span class="n">composition</span> <span class="o">=</span> <span class="n">Composition</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
-    <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">from_color</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">duration</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bg&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">bg_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span>
+            <span class="n">Image</span><span class="o">.</span><span class="n">from_color</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">bg_color</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">duration</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bg&#39;</span><span class="p">)</span>
     <span class="n">item</span> <span class="o">=</span> <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">fade_in</span><span class="p">:</span>
         <span class="n">item</span><span class="o">.</span><span class="n">opacity</span><span class="o">.</span><span class="n">enable_motion</span><span class="p">()</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
