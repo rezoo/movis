@@ -302,7 +302,9 @@ def insert(
 
 
 def fade_in(
-    layer: BasicLayer, duration: float = 0.0, size: tuple[int, int] | None = None
+    layer: BasicLayer, duration: float = 0.0,
+    size: tuple[int, int] | None = None,
+    bg_color: tuple[int, int, int] | str | None = None,
 ) -> Composition:
     """Fade in a layer.
 
@@ -312,12 +314,17 @@ def fade_in(
         duration:
             Duration of the fade-in effect.
         size:
-            Size of the composition. If ``None``, the size of the layer is estimated."""
-    return fade_in_out(layer, fade_in=duration, fade_out=0.0, size=size)
+            Size of the composition. If ``None``, the size of the layer is estimated.
+        bg_color:
+            Background color. If ``None``, the background is transparent.
+    """
+    return fade_in_out(layer, fade_in=duration, fade_out=0.0, size=size, bg_color=bg_color)
 
 
 def fade_out(
-    layer: BasicLayer, duration: float = 0.0, size: tuple[int, int] | None = None
+    layer: BasicLayer, duration: float = 0.0,
+    size: tuple[int, int] | None = None,
+    bg_color: tuple[int, int, int] | str | None = None,
 ) -> Composition:
     """Fade out a layer.
 
@@ -327,13 +334,17 @@ def fade_out(
         duration:
             Duration of the fade-out effect.
         size:
-            Size of the composition. If ``None``, the size of the layer is estimated."""
-    return fade_in_out(layer, fade_in=0.0, fade_out=duration, size=size)
+            Size of the composition. If ``None``, the size of the layer is estimated.
+        bg_color:
+            Background color. If ``None``, the background is transparent.
+    """
+    return fade_in_out(layer, fade_in=0.0, fade_out=duration, size=size, bg_color=bg_color)
 
 
 def fade_in_out(
     layer: BasicLayer, fade_in: float = 0.0, fade_out: float = 0.0,
     size: tuple[int, int] | None = None,
+    bg_color: tuple[int, int, int] | str | None = None,
 ) -> Composition:
     """Fade in and out a layer. If ``fade_in`` or ``fade_out`` is ``0.0``, the corresponding effect is not applied.
 
@@ -346,6 +357,8 @@ def fade_in_out(
             Duration of the fade-out effect.
         size:
             Size of the composition. If ``None``, the size of the layer is estimated.
+        bg_color:
+            Background color. If ``None``, the background is transparent.
 
     Returns:
         Composition with the layer faded in and out.
@@ -355,13 +368,13 @@ def fade_in_out(
         >>> layer = mv.layer.Image.from_color((10, 10), "white", duration=3.0)
         >>> composition = mv.fade_in_out(layer, fade_in=1.0, fade_out=1.0)
         >>> composition(0.0)[0, 0, :]
-        array([0, 0, 0, 255], dtype=uint8)
+        array([0, 0, 0, 0], dtype=uint8)
         >>> composition(1.0)[0, 0, :]
         array([255, 255, 255, 255], dtype=uint8)
         >>> composition(2.0)[0, 0, :]
         array([255, 255, 255, 255], dtype=uint8)
         >>> composition(3.0 - 1e-5)[0, 0, :]
-        array([0, 0, 0, 255], dtype=uint8)
+        array([0, 0, 0, 0], dtype=uint8)
     """
     assert 0.0 <= fade_in, "fade_in must be non-negative."
     assert 0.0 <= fade_out, "fade_out must be non-negative."
@@ -369,7 +382,9 @@ def fade_in_out(
         "fade_in + fade_out must be less than or equal to the layer duration."
     size = _get_size(layer, size)
     composition = Composition(size=size, duration=layer.duration)
-    composition.add_layer(Image.from_color(size, (0, 0, 0), duration=layer.duration), name='bg')
+    if bg_color is not None:
+        composition.add_layer(
+            Image.from_color(size, bg_color, duration=layer.duration), name='bg')
     item = composition.add_layer(layer, name="main")
     if 0.0 < fade_in:
         item.opacity.enable_motion().extend(
