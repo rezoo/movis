@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Sequence
+from typing import Hashable, Sequence
 
 import numpy as np
 
@@ -38,12 +38,26 @@ class _ConcatenateLayer:
     def __len__(self) -> int:
         return len(self.layers)
 
-    def __call__(self, time: float) -> np.ndarray | None:
+    def get_state(self, time: float) -> tuple[int, float] | None:
         if time < 0.0 or self.duration <= time:
             return None
-        ind = np.searchsorted(self.offsets, time, side="right") - 1
+        ind = int(np.searchsorted(self.offsets, time, side="right") - 1)
         t = time - self.offsets[ind]
+        return ind, t
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        result = self.get_state(time)
+        if result is None:
+            return None
+        ind, t = result
         return self.layers[ind](t)
+
+    def get_key(self, time: float) -> Hashable:
+        result = self.get_state(time)
+        if result is None:
+            return None
+        ind, t = result
+        return (ind, self.layers[ind](t))
 
 
 def concatenate(layers: Sequence[BasicLayer]) -> _ConcatenateLayer:
@@ -117,13 +131,27 @@ class _TrimLayer:
     def duration(self) -> float:
         return self._duration
 
-    def __call__(self, time: float) -> np.ndarray | None:
+    def get_state(self, time: float) -> tuple[BasicLayer, float] | None:
         if time < 0.0 or self.duration <= time:
             return None
         ind = np.searchsorted(self.offsets, time, side="right") - 1
         delta = time - self.offsets[ind]
         t = self.start_times[ind] + delta
-        return self.layer(t)
+        return self.layer, t
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        result = self.get_state(time)
+        if result is None:
+            return None
+        layer, t = result
+        return layer(t)
+
+    def get_key(self, time: float) -> Hashable:
+        result = self.get_state(time)
+        if result is None:
+            return None
+        layer, t = result
+        return layer.get_key(t)
 
 
 def trim(
