@@ -22,14 +22,36 @@ def _get_size(layer: BasicLayer, size: tuple[int, int] | None) -> tuple[int, int
     return img.shape[1], img.shape[0]
 
 
-def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None = None) -> Composition:
+# XXX: Support get_audio
+class _ConcatenateLayer:
+
+    def __init__(self, layers: Sequence[BasicLayer]):
+        self.layers = layers
+        durations = np.array([layer.duration for layer in layers], dtype=np.float64)
+        self.offsets = np.cumsum(np.concatenate([[0.], durations]))
+        self._duration = self.offsets[-1]
+
+    @property
+    def duration(self) -> float:
+        return self._duration
+
+    def __len__(self) -> int:
+        return len(self.layers)
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        if time < 0.0 or self.duration <= time:
+            return None
+        ind = np.searchsorted(self.offsets, time, side="right") - 1
+        t = time - self.offsets[ind]
+        return self.layers[ind](t)
+
+
+def concatenate(layers: Sequence[BasicLayer]) -> _ConcatenateLayer:
     """Concatenate layers into a single composition.
 
     Args:
         layers:
             Layers to concatenate.
-        size:
-            Size of the composition. If ``None``, the size of the layer is estimated.
 
     Returns:
         Composition with all layers concatenated.
@@ -42,14 +64,7 @@ def concatenate(layers: Sequence[BasicLayer], size: tuple[int, int] | None = Non
         >>> composition.duration
         3.0
     """
-    size = _get_size(layers[0], size)
-    duration = sum(layer.duration for layer in layers)
-    composition = Composition(size=size, duration=duration)
-    time = 0.0
-    for layer in layers:
-        composition.add_layer(layer, offset=time)
-        time += layer.duration
-    return composition
+    return _ConcatenateLayer(layers)
 
 
 def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None = None) -> Composition:
@@ -81,10 +96,39 @@ def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None = None
     return composition
 
 
+# XXX: Support get_audio
+class _TrimLayer:
+
+    def __init__(self, layer: BasicLayer, start_times: Sequence[float], end_times: Sequence[float]):
+        assert 0 < len(start_times)
+        assert len(start_times) == len(end_times)
+        self.layer = layer
+        self.start_times = np.array(start_times, dtype=np.float64)
+        self.end_times = np.array(end_times, dtype=np.float64)
+        assert np.all(self.start_times < self.end_times)
+        durations = self.end_times - self.start_times
+        self.offsets = np.cumsum(np.concatenate([[0.], durations]))
+        self._duration = self.offsets[-1]
+
+    def __len__(self) -> int:
+        return len(self.start_times)
+
+    @property
+    def duration(self) -> float:
+        return self._duration
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        if time < 0.0 or self.duration <= time:
+            return None
+        ind = np.searchsorted(self.offsets, time, side="right") - 1
+        delta = time - self.offsets[ind]
+        t = self.start_times[ind] + delta
+        return self.layer(t)
+
+
 def trim(
-    layer: BasicLayer, start_times: Sequence[float], end_times: Sequence[float],
-    size: tuple[int, int] | None = None
-) -> Composition:
+    layer: BasicLayer, start_times: Sequence[float], end_times: Sequence[float]
+) -> _TrimLayer:
     """Trim a layer with given time intervals and concatenate them.
 
     Args:
@@ -107,20 +151,7 @@ def trim(
         >>> composition.duration
         2.0
     """
-    assert 0 < len(start_times)
-    assert len(start_times) == len(end_times)
-    starts = np.array(start_times, dtype=np.float64)
-    ends = np.array(end_times, dtype=np.float64)
-    assert np.all(starts < ends)
-    size = _get_size(layer, size)
-    durations = ends - starts
-    total_duration = float(durations.sum())
-    offsets = np.cumsum(np.concatenate([[0.], durations]))[:-1] - starts
-
-    composition = Composition(size=size, duration=total_duration)
-    for start, end, offset in zip(starts, ends, offsets):
-        composition.add_layer(layer, offset=offset, start_time=start, end_time=end)
-    return composition
+    return _TrimLayer(layer, start_times, end_times)
 
 
 def tile(
