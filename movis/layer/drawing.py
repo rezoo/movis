@@ -595,7 +595,7 @@ class Text(AttributesMixin):
 def _clip_image(image: np.ndarray) -> np.ndarray:
     assert image.ndim == 3
     assert image.shape[2] == 4
-    non_empty_pixels = np.all(image != np.array([0, 0, 0, 0]), axis=-1)
+    non_empty_pixels = (image[:, :, 3] != 0)
     non_empty_row_indices, non_empty_col_indices = np.where(non_empty_pixels)
     if non_empty_row_indices.size == 0 or non_empty_col_indices.size == 0:
         return image
