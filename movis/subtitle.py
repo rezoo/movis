@@ -69,7 +69,7 @@ def _make_ass_style(s: ASSStyleType):
         f'{s.outline_color},{s.back_color},' \
         f'{int(s.bold)},{int(s.italic)},{int(s.underline)},{int(s.strike_out)},' \
         f'{s.scale_x},{s.scale_y},{s.spacing},{s.angle},{s.border_style},' \
-        f'{s.outline},{s.shadow},2,{s.margin_l},{s.margin_r},{s.margin_v},1'
+        f'{s.outline},{s.shadow},{s.alignment.value},{s.margin_l},{s.margin_r},{s.margin_v},1'
     return style_str
 
 
