@@ -29,10 +29,11 @@ def extract(args: argparse.Namespace):
 
 
 def transcribe(args: argparse.Namespace):
-    transcription = openai.Audio.transcribe(
-        "whisper-1", open(args.input, 'rb'), response_format='verbose_json')
+    client = openai.OpenAI()
+    transcription = client.audio.transcriptions.create(
+        model="whisper-1", file=open(args.input, 'rb'), response_format='verbose_json')
     rows = []
-    for segment in transcription['segments']:
+    for segment in transcription.segments:
         rows.append({
             'start_time': segment['start'],
             'end_time': segment['end'],
