@@ -22,7 +22,6 @@ def _get_size(layer: BasicLayer, size: tuple[int, int] | None) -> tuple[int, int
     return img.shape[1], img.shape[0]
 
 
-# XXX: Support get_audio
 class _ConcatenateLayer:
 
     def __init__(self, layers: Sequence[BasicLayer]):
@@ -58,6 +57,14 @@ class _ConcatenateLayer:
             return None
         ind, t = result
         return (ind, self.layers[ind](t))
+
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        c = Composition(size=(8, 8), duration=self.duration)
+        time = 0.0
+        for layer in self.layers:
+            c.add_layer(layer, offset=time)
+            time += layer.duration
+        return c.get_audio(start_time, end_time)
 
 
 def concatenate(layers: Sequence[BasicLayer]) -> _ConcatenateLayer:
@@ -110,7 +117,6 @@ def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None = None
     return composition
 
 
-# XXX: Support get_audio
 class _TrimLayer:
 
     def __init__(self, layer: BasicLayer, start_times: Sequence[float], end_times: Sequence[float]):
@@ -152,6 +158,13 @@ class _TrimLayer:
             return None
         layer, t = result
         return layer.get_key(t)
+
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        c = Composition(size=(8, 8), duration=self.duration)
+        offsets = self.offsets[:-1] - self.start_times
+        for start, end, offset in zip(self.start_times, self.end_times, offsets):
+            c.add_layer(self.layer, start_time=start, end_time=end, offset=offset)
+        return c.get_audio(start_time, end_time)
 
 
 def trim(
