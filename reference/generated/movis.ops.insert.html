@@ -451,10 +451,23 @@ document.write(`
 <dd><p>Insert a target layer into a source layer at a specified time.</p>
 <p>For instance, consider inserting a brief eye-catch scene to indicate a change in chapters within
 a long interview video. <code class="docutils literal notranslate"><span class="pre">mv.insert()</span></code> is used for such purposes, to insert a short scene into a longer one:</p>
-<p><a href="#id1"><span class="problematic" id="id2">|------------------------|</span></a>    <a href="#id3"><span class="problematic" id="id4">|------------|</span></a>———-<a href="#id5"><span class="problematic" id="id6">|------------|</span></a>
-|    Source layer        | -&gt; |   Source   |  target  |   Source   |
-<a href="#id7"><span class="problematic" id="id8">|------------------------|</span></a>    <a href="#id9"><span class="problematic" id="id10">|------------|</span></a>———-<a href="#id11"><span class="problematic" id="id12">|------------|</span></a></p>
-<dl>
+<pre>
+|------------------------|    |------------|----------|------------|
+|    Source layer        | -> |   Source   |  target  |   Source   |
+|------------------------|    |------------|----------|------------|
+</pre><dl>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">movis</span> <span class="k">as</span> <span class="nn">mv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="s2">&quot;source.png&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="s2">&quot;target.png&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="o">.</span><span class="n">duration</span>
+<span class="go">6.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>  <span class="c1"># source layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>  <span class="c1"># target layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>  <span class="c1"># source layer</span>
+</pre></div>
+</div>
+</dd>
 <dt>Args:</dt><dd><dl class="simple">
 <dt>source:</dt><dd><p>The layer to insert the target layer into.</p>
 </dd>
@@ -467,18 +480,6 @@ a long interview video. <code class="docutils literal notranslate"><span class="
 </dl>
 </dd>
 <dt>Returns:</dt><dd><p>Composition with the target layer inserted.</p>
-</dd>
-<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">movis</span> <span class="k">as</span> <span class="nn">mv</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">source</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="s2">&quot;source.png&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="s2">&quot;target.png&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="o">.</span><span class="n">duration</span>
-<span class="go">6.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>  <span class="c1"># source layer</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>  <span class="c1"># target layer</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">composition</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>  <span class="c1"># source layer</span>
-</pre></div>
-</div>
 </dd>
 </dl>
 </dd></dl>

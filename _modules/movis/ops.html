@@ -627,9 +627,24 @@ document.write(`
 <span class="sd">    For instance, consider inserting a brief eye-catch scene to indicate a change in chapters within</span>
 <span class="sd">    a long interview video. ``mv.insert()`` is used for such purposes, to insert a short scene into a longer one:</span>
 
-<span class="sd">    |------------------------|    |------------|----------|------------|</span>
-<span class="sd">    |    Source layer        | -&gt; |   Source   |  target  |   Source   |</span>
-<span class="sd">    |------------------------|    |------------|----------|------------|</span>
+<span class="sd">    .. raw:: html</span>
+
+<span class="sd">        &lt;pre&gt;</span>
+<span class="sd">        |------------------------|    |------------|----------|------------|</span>
+<span class="sd">        |    Source layer        | -&gt; |   Source   |  target  |   Source   |</span>
+<span class="sd">        |------------------------|    |------------|----------|------------|</span>
+<span class="sd">        &lt;/pre&gt;</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import movis as mv</span>
+<span class="sd">        &gt;&gt;&gt; source = mv.layer.Image(&quot;source.png&quot;, duration=5.0)</span>
+<span class="sd">        &gt;&gt;&gt; target = mv.layer.Image(&quot;target.png&quot;, duration=1.0)</span>
+<span class="sd">        &gt;&gt;&gt; composition = mv.insert(source, target, time=2.0)</span>
+<span class="sd">        &gt;&gt;&gt; composition.duration</span>
+<span class="sd">        6.0</span>
+<span class="sd">        &gt;&gt;&gt; composition(0.0)  # source layer</span>
+<span class="sd">        &gt;&gt;&gt; composition(2.0)  # target layer</span>
+<span class="sd">        &gt;&gt;&gt; composition(3.0)  # source layer</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        source:</span>
@@ -643,17 +658,6 @@ document.write(`
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Composition with the target layer inserted.</span>
-
-<span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import movis as mv</span>
-<span class="sd">        &gt;&gt;&gt; source = mv.layer.Image(&quot;source.png&quot;, duration=5.0)</span>
-<span class="sd">        &gt;&gt;&gt; target = mv.layer.Image(&quot;target.png&quot;, duration=1.0)</span>
-<span class="sd">        &gt;&gt;&gt; composition = mv.insert(source, target, time=2.0)</span>
-<span class="sd">        &gt;&gt;&gt; composition.duration</span>
-<span class="sd">        6.0</span>
-<span class="sd">        &gt;&gt;&gt; composition(0.0)  # source layer</span>
-<span class="sd">        &gt;&gt;&gt; composition(2.0)  # target layer</span>
-<span class="sd">        &gt;&gt;&gt; composition(3.0)  # source layer</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">_get_size</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
     <span class="n">duration</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">duration</span> <span class="o">+</span> <span class="n">target</span><span class="o">.</span><span class="n">duration</span>
