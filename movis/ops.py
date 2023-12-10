@@ -264,9 +264,24 @@ def insert(
     For instance, consider inserting a brief eye-catch scene to indicate a change in chapters within
     a long interview video. ``mv.insert()`` is used for such purposes, to insert a short scene into a longer one:
 
-    |------------------------|    |------------|----------|------------|
-    |    Source layer        | -> |   Source   |  target  |   Source   |
-    |------------------------|    |------------|----------|------------|
+    .. raw:: html
+
+        <pre>
+        |------------------------|    |------------|----------|------------|
+        |    Source layer        | -> |   Source   |  target  |   Source   |
+        |------------------------|    |------------|----------|------------|
+        </pre>
+
+    Examples:
+        >>> import movis as mv
+        >>> source = mv.layer.Image("source.png", duration=5.0)
+        >>> target = mv.layer.Image("target.png", duration=1.0)
+        >>> composition = mv.insert(source, target, time=2.0)
+        >>> composition.duration
+        6.0
+        >>> composition(0.0)  # source layer
+        >>> composition(2.0)  # target layer
+        >>> composition(3.0)  # source layer
 
     Args:
         source:
@@ -280,17 +295,6 @@ def insert(
 
     Returns:
         Composition with the target layer inserted.
-
-    Examples:
-        >>> import movis as mv
-        >>> source = mv.layer.Image("source.png", duration=5.0)
-        >>> target = mv.layer.Image("target.png", duration=1.0)
-        >>> composition = mv.insert(source, target, time=2.0)
-        >>> composition.duration
-        6.0
-        >>> composition(0.0)  # source layer
-        >>> composition(2.0)  # target layer
-        >>> composition(3.0)  # source layer
     """
     size = _get_size(source, size)
     duration = source.duration + target.duration
