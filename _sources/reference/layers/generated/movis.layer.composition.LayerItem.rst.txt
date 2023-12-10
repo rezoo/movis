@@ -13,6 +13,7 @@
    .. autosummary::
    
    .. automethod:: add_effect
+   .. automethod:: get_composition_coords
    .. automethod:: get_key
    .. automethod:: remove_effect
    

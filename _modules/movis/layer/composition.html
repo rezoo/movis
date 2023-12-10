@@ -1092,6 +1092,56 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The blending mode of the layer.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">blending_mode</span>
 
+<div class="viewcode-block" id="LayerItem.get_composition_coords">
+<a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem.get_composition_coords">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_composition_coords</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">layer_coords</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">layer_size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the coordinates of the composition from the coordinates of the layer.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; import movis as mv</span>
+<span class="sd">            &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">            &gt;&gt;&gt; composition = mv.layer.Composition(size=(640, 480), duration=5.0)</span>
+<span class="sd">            &gt;&gt;&gt; layer = mv.layer.Image.from_color(size=scene.size, color=&#39;white&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; scene.add_layer(layer, scale=0.5, name=&#39;item&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; scene[&#39;item&#39;].get_composition_coords(</span>
+<span class="sd">            ...     layer_coords=np.array([[0, 0], [640, 480]], dtype=float))</span>
+<span class="sd">            array([[160., 120.],</span>
+<span class="sd">                   [480., 360.]])</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            layer_coords:</span>
+<span class="sd">                The coordinates of the layer. The shape of the array must be ``(N, 2)`` or ``(2,)``.</span>
+<span class="sd">            time:</span>
+<span class="sd">                The time at which the layer is rendered. Defaults to ``0.0``.</span>
+<span class="sd">            layer_size:</span>
+<span class="sd">                The size of the layer. If not specified, the size of the layer is determined</span>
+<span class="sd">                from the layer&#39;s current frame.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The coordinates of the composition from the coordinates of the layer.</span>
+<span class="sd">            The shape of the array is ``(N, 2)``.&quot;&quot;&quot;</span>
+        <span class="n">layer_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">get_current_value</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">layer_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="n">layer_time</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;layer is empty at the given time&quot;</span>
+            <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">layer_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+        <span class="n">affine_matrix</span> <span class="o">=</span> <span class="n">get_affine_matrix</span><span class="p">(</span><span class="n">layer_size</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+        <span class="n">layer_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">layer_coords</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">layer_coords</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">layer_coords</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;layer_coords must be 1D or 2D&quot;</span>
+        <span class="k">if</span> <span class="n">layer_coords</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">layer_coords</span> <span class="o">=</span> <span class="n">layer_coords</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">layer_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;layer_coords must have 2 columns&quot;</span>
+
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">layer_coords</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">layer_coords</span><span class="p">),</span> <span class="mi">1</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">composition_coords</span> <span class="o">=</span> <span class="n">coords</span> <span class="o">@</span> <span class="n">affine_matrix</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">composition_coords</span></div>
+
+
 <div class="viewcode-block" id="LayerItem.get_key">
 <a class="viewcode-back" href="../../../reference/layers/generated/movis.layer.composition.LayerItem.html#movis.layer.composition.LayerItem.get_key">[docs]</a>
     <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">]:</span>
@@ -1197,6 +1247,24 @@ document.write(`
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;LayerItem(name=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">, layer=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="si">!r}</span><span class="s2">, transform=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="si">!r}</span><span class="s2">, &quot;</span> \
             <span class="sa">f</span><span class="s2">&quot;offset=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="si">}</span><span class="s2">, visible=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">visible</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
+
+
+<span class="k">def</span> <span class="nf">get_affine_matrix</span><span class="p">(</span><span class="n">layer_size</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">p</span><span class="p">:</span> <span class="n">TransformValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the affine matrix that tranforms the layer coordinates to the composition.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        layer_size:</span>
+<span class="sd">            The size of the layer given by ``(width, height)``.</span>
+<span class="sd">        p:</span>
+<span class="sd">            The transform value of the layer.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The affine matrix of ``(2, 3)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">T1</span><span class="p">,</span> <span class="n">SR</span> <span class="o">=</span> <span class="n">_get_T1</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">_get_SR</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">T2</span> <span class="o">=</span> <span class="n">_get_T2</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">layer_size</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">origin_point</span><span class="p">)</span>
+    <span class="n">affine_matrix</span> <span class="o">=</span> <span class="n">T1</span> <span class="o">@</span> <span class="n">SR</span> <span class="o">@</span> <span class="n">T2</span>
+    <span class="k">return</span> <span class="n">affine_matrix</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">_get_fixed_affine_matrix</span><span class="p">(</span>
