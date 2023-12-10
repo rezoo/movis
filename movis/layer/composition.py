@@ -733,7 +733,9 @@ class LayerItem:
         layer_time = time - self.offset
         p = self.transform.get_current_value(layer_time)
         if layer_size is None:
-            h, w = self.layer(layer_time).shape[:2]
+            result = self.layer(layer_time)
+            assert result is not None, "layer is empty at the given time"
+            h, w = result.shape[:2]
             layer_size = (w, h)
         affine_matrix = get_affine_matrix(layer_size, p)
 
