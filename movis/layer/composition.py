@@ -702,6 +702,40 @@ class LayerItem:
         """The blending mode of the layer."""
         return self.transform.blending_mode
 
+    def get_composition_coords(
+            self, time: float, layer_coords: np.ndarray,
+            layer_size: tuple[int, int] | None = None) -> np.ndarray:
+        """Returns the coordinates of the composition from the coordinates of the layer.
+
+        Args:
+            time:
+                The time at which the layer is rendered.
+            layer_coords:
+                The coordinates of the layer. The shape of the array must be ``(N, 2)`` or ``(2,)``.
+            layer_size:
+                The size of the layer. If not specified, the size of the layer is determined
+                from the layer's current frame.
+
+        Returns:
+            The coordinates of the composition from the coordinates of the layer.
+            The shape of the array is ``(N, 2)``."""
+        layer_time = time - self.offset
+        p = self.transform.get_current_value(layer_time)
+        if layer_size is None:
+            h, w = self.layer(layer_time).shape[:2]
+            layer_size = (w, h)
+        affine_matrix = get_affine_matrix(layer_size, p)
+
+        layer_coords = np.array(layer_coords, dtype=np.float64)
+        assert layer_coords.ndim == 1 or layer_coords.ndim == 2, "layer_coords must be 1D or 2D"
+        if layer_coords.ndim == 1:
+            layer_coords = layer_coords.reshape(1, -1)
+        assert layer_coords.shape[1] == 2, "layer_coords must have 2 columns"
+
+        coords = np.concatenate([layer_coords, np.ones((len(layer_coords), 1))], axis=1)
+        composition_coords = coords @ affine_matrix.transpose()
+        return composition_coords
+
     def get_key(self, time: float) -> tuple[Hashable, Hashable, Hashable]:
         """Returns the state of the layer item at the given time.
 
@@ -803,6 +837,24 @@ class LayerItem:
     def __repr__(self) -> str:
         return f"LayerItem(name={self.name!r}, layer={self.layer!r}, transform={self.transform!r}, " \
             f"offset={self.offset}, visible={self.visible})"
+
+
+def get_affine_matrix(layer_size: tuple[int, int], p: TransformValue) -> np.ndarray:
+    """Get the affine matrix that tranforms the layer coordinates to the composition.
+
+    Args:
+        layer_size:
+            The size of the layer given by ``(width, height)``.
+        p:
+            The transform value of the layer.
+
+    Returns:
+        The affine matrix of ``(2, 3)``.
+    """
+    T1, SR = _get_T1(p), _get_SR(p)
+    T2 = _get_T2(p, layer_size, p.origin_point)
+    affine_matrix = T1 @ SR @ T2
+    return affine_matrix[:2]
 
 
 def _get_fixed_affine_matrix(

@@ -252,3 +252,23 @@ def test_composition_write_video():
         scene.write_video(file_name, fps=3.0)
     finally:
         os.remove(file_name)
+
+
+def test_composition_get_coords():
+    scene = Composition(size=(32, 16), duration=1.0)
+    item = scene.add_layer(
+        mv.layer.Image.from_color((32, 16), color='white'),
+        scale=1.0,
+    )
+    coords = item.get_composition_coords(
+       time=0.0, layer_coords=np.array([[0, 0], [32, 16]], dtype=float))
+    assert np.all(coords == np.array([[0, 0], [32, 16]], dtype=float))
+
+    scene = Composition(size=(32, 16), duration=1.0)
+    item = scene.add_layer(
+        mv.layer.Image.from_color((32, 16), color='white'),
+        scale=0.5,
+    )
+    coords = item.get_composition_coords(
+        time=0.0, layer_coords=np.array([[0, 0], [32, 16]], dtype=float))
+    assert np.all(coords == np.array([[8, 4], [24, 12]], dtype=float))
