@@ -703,15 +703,26 @@ class LayerItem:
         return self.transform.blending_mode
 
     def get_composition_coords(
-            self, time: float, layer_coords: np.ndarray,
+            self, layer_coords: np.ndarray, time: float = 0.0,
             layer_size: tuple[int, int] | None = None) -> np.ndarray:
         """Returns the coordinates of the composition from the coordinates of the layer.
 
+        Examples:
+            >>> import movis as mv
+            >>> import numpy as np
+            >>> composition = mv.layer.Composition(size=(640, 480), duration=5.0)
+            >>> layer = mv.layer.Image.from_color(size=scene.size, color='white')
+            >>> scene.add_layer(layer, scale=0.5, name='item')
+            >>> scene['item'].get_composition_coords(
+            ...     layer_coords=np.array([[0, 0], [640, 480]], dtype=float))
+            array([[160., 120.],
+                   [480., 360.]])
+
         Args:
-            time:
-                The time at which the layer is rendered.
             layer_coords:
                 The coordinates of the layer. The shape of the array must be ``(N, 2)`` or ``(2,)``.
+            time:
+                The time at which the layer is rendered. Defaults to ``0.0``.
             layer_size:
                 The size of the layer. If not specified, the size of the layer is determined
                 from the layer's current frame.
