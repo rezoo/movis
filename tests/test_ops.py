@@ -22,25 +22,23 @@ def test_concatenate():
 
 
 def test_repeat():
-    img1 = mv.layer.Image.from_color(size=(10, 10), color=(255, 0, 0), duration=1.0)
-    img2 = mv.layer.Image.from_color(size=(10, 10), color=(0, 255, 0), duration=1.0)
+    img1 = mv.layer.Image.from_color(size=(10, 10), color=(255, 0, 0), duration=2.0)
+    img2 = mv.layer.Image.from_color(size=(10, 10), color=(0, 255, 0), duration=2.0)
     layer = mv.concatenate([img1, img2])
-    scene = mv.repeat(layer, 3, size=(10, 10))
+    scene = mv.repeat(layer, 3)
 
-    assert scene.duration == 6.0
-    assert scene.layers[0].duration == 2.0
-    assert scene.layers[1].duration == 2.0
-    assert scene.layers[2].duration == 2.0
+    assert scene.duration == 12.0
+    assert scene.layer.duration == 4.0
 
     assert np.all(scene(0.0)[0, 0, :] == np.array([255, 0, 0, 255]))
-    assert np.all(scene(1.0)[0, 0, :] == np.array([0, 255, 0, 255]))
-    assert np.all(scene(2.0)[0, 0, :] == np.array([255, 0, 0, 255]))
-    assert np.all(scene(3.0)[0, 0, :] == np.array([0, 255, 0, 255]))
+    assert np.all(scene(2.0)[0, 0, :] == np.array([0, 255, 0, 255]))
     assert np.all(scene(4.0)[0, 0, :] == np.array([255, 0, 0, 255]))
-    assert np.all(scene(5.0)[0, 0, :] == np.array([0, 255, 0, 255]))
+    assert np.all(scene(6.0)[0, 0, :] == np.array([0, 255, 0, 255]))
+    assert np.all(scene(8.0)[0, 0, :] == np.array([255, 0, 0, 255]))
+    assert np.all(scene(10.0)[0, 0, :] == np.array([0, 255, 0, 255]))
 
     scene = mv.repeat(layer, 3)
-    assert scene.size == (10, 10)
+    assert scene(0.0).shape == (10, 10, 4)
 
 
 def test_trim():
