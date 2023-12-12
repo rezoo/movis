@@ -63,14 +63,12 @@ Of course, movis also supports simple video processing such as video merging and
     chapter1 = mv.layer.Video('chapter1.mp4')
     ...
     scene = mv.concatenate([intro, title, chapter1, ...])
-    scene.write_video('output.mp4')
 
 .. code-block:: python
 
     raw_video = mv.layer.Video('video.mp4')
     # select 0.0-1.0 secs and 2.0-3.0 secs, and concatenate them
     scene = mv.trim(layer, start_times=[0.0, 2.0], end_times=[1.0, 3.0])
-    scene.write_video('output.mp4')
 
 .. code-block:: python
 
