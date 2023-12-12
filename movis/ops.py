@@ -88,7 +88,42 @@ def concatenate(layers: Sequence[BasicLayer]) -> _ConcatenateLayer:
     return _ConcatenateLayer(layers)
 
 
-def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None = None) -> Composition:
+class _RepeatLayer:
+
+    def __init__(self, layer: BasicLayer, n_repeat: int):
+        self.layer = layer
+        self.n_repeat = n_repeat
+
+    @property
+    def duration(self) -> float:
+        return self.layer.duration * self.n_repeat
+
+    def get_state(self, time: float) -> float | None:
+        if time < 0.0 or self.duration <= time:
+            return None
+        t = time % self.layer.duration
+        return t
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        t = self.get_state(time)
+        if t is None:
+            return None
+        return self.layer(t)
+
+    def get_key(self, time: float) -> Hashable:
+        t = self.get_state(time)
+        if t is None:
+            return None
+        return self.layer.get_key(t)
+
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        c = Composition(size=(8, 8), duration=self.duration)
+        for i in range(self.n_repeat):
+            c.add_layer(self.layer, offset=i * self.layer.duration)
+        return c.get_audio(start_time, end_time)
+
+
+def repeat(layer: BasicLayer, n_repeat: int) -> _RepeatLayer:
     """Repeat a layer multiple times.
 
     Args:
@@ -96,8 +131,6 @@ def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None = None
             Layer to repeat.
         n_repeat:
             Number of times to repeat the layer.
-        size:
-            Size of the composition. If ``None``, the size of the layer is estimated.
 
     Returns:
         Composition with the layer repeated.
@@ -109,12 +142,7 @@ def repeat(layer: BasicLayer, n_repeat: int, size: tuple[int, int] | None = None
         >>> composition.duration
         3.0
     """
-    size = _get_size(layer, size)
-    duration = layer.duration * n_repeat
-    composition = Composition(size=size, duration=duration)
-    for i in range(n_repeat):
-        composition.add_layer(layer, offset=i * layer.duration)
-    return composition
+    return _RepeatLayer(layer, n_repeat)
 
 
 class _TrimLayer:
