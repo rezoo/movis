@@ -62,21 +62,27 @@ Of course, movis also supports simple video processing such as video merging and
     title = mv.layer.Video('title.mp4')
     chapter1 = mv.layer.Video('chapter1.mp4')
     ...
-    scene = mv.concatenate([intro, title, chapter1, ...])
-    scene.write_video('output.mp4')
+    main = mv.concatenate([intro, title, chapter1, ...])
 
 .. code-block:: python
 
     raw_video = mv.layer.Video('video.mp4')
     # select 0.0-1.0 secs and 2.0-3.0 secs, and concatenate them
-    scene = mv.trim(layer, start_times=[0.0, 2.0], end_times=[1.0, 3.0])
-    scene.write_video('output.mp4')
+    video = mv.trim(raw_video, start_times=[0.0, 2.0], end_times=[1.0, 3.0])
 
 .. code-block:: python
 
     layer = mv.layer.Image("image.png", duration=1.0)
     # crop from x, y = (10, 20) with size w, h = (100, 200)
     layer = mv.crop(layer, (10, 20, 100, 200))
+
+.. code-block:: python
+
+    layer = mv.layer.Video('video.mp4')
+    video1 = mv.fade_in(layer, 1.0)  # fade-in for 1.0 secs
+    video2 = mv.fade_out(layer, 1.0)  # fade-out for 1.0 secs
+    video3 = mv.fade_in_out(layer, 1.0, 2.0)  # fade-in for 1.0 secs and fade-out for 2.0 secs
+
 
 Implementation of custom layers, effects, and animations
 ---------------------------------------------------------------
