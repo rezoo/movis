@@ -106,8 +106,7 @@ intro = mv.layer.Video('intro.mp4')
 title = mv.layer.Video('title.mp4')
 chapter1 = mv.layer.Composition(size=(1920, 1080), duration=60.0)
 ...
-scene = mv.concatenate([intro, title, chapter1, ...])
-scene.write_video('output.mp4')
+main = mv.concatenate([intro, title, chapter1, ...])
 ```
 
 #### cutout
@@ -115,8 +114,7 @@ scene.write_video('output.mp4')
 ```python
 raw_video = mv.layer.Video('video.mp4')
 # select 0.0-1.0 secs and 2.0-3.0 secs, and concatenate them
-scene = mv.trim(layer, start_times=[0.0, 2.0], end_times=[1.0, 3.0])
-scene.write_video('output.mp4')
+video = mv.trim(raw_video, start_times=[0.0, 2.0], end_times=[1.0, 3.0])
 ```
 
 #### cropping
