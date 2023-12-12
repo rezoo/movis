@@ -7,18 +7,18 @@ def test_concatenate():
     layer1 = mv.layer.Image.from_color(size=(10, 10), color=(255, 0, 0), duration=1.0)
     layer2 = mv.layer.Image.from_color(size=(10, 10), color=(0, 255, 0), duration=2.0)
     layer3 = mv.layer.Image.from_color(size=(10, 10), color=(0, 0, 255), duration=3.0)
-    scene = mv.concatenate([layer1, layer2, layer3], size=(10, 10))
+    scene = mv.concatenate([layer1, layer2, layer3])
     assert scene.duration == 6.0
     assert scene.layers[0].duration == 1.0
     assert scene.layers[1].duration == 2.0
     assert scene.layers[2].duration == 3.0
 
     assert np.all(scene(0.0)[0, 0, :] == np.array([255, 0, 0, 255]))
+    assert np.all(scene(1.0 - 1e-5)[0, 0, :] == np.array([255, 0, 0, 255]))
     assert np.all(scene(1.0)[0, 0, :] == np.array([0, 255, 0, 255]))
+    assert np.all(scene(3.0 - 1e-5)[0, 0, :] == np.array([0, 255, 0, 255]))
     assert np.all(scene(3.0)[0, 0, :] == np.array([0, 0, 255, 255]))
-
-    scene = mv.concatenate([layer1, layer2, layer3])
-    assert scene.size == (10, 10)
+    assert np.all(scene(6.0 - 1e-5)[0, 0, :] == np.array([0, 0, 255, 255]))
 
 
 def test_repeat():
@@ -48,18 +48,15 @@ def test_trim():
     layer2 = mv.layer.Image.from_color(size=(10, 10), color=(0, 255, 0), duration=2.0)
     layer3 = mv.layer.Image.from_color(size=(10, 10), color=(0, 0, 255), duration=3.0)
     layer = mv.concatenate([layer1, layer2, layer3])
-    scene = mv.trim(layer, start_times=[0.0, 3.0], end_times=[1.0, 4.0], size=(10, 10))
+    scene = mv.trim(layer, start_times=[0.0, 3.0], end_times=[1.0, 4.0])
 
     assert scene.duration == 2.0
     assert len(scene) == 2
-    assert scene.layers[0].duration == 1.0
-    assert scene.layers[1].duration == 1.0
 
     assert np.all(scene(0.0)[0, 0, :] == np.array([255, 0, 0, 255]))
+    assert np.all(scene(1.0 - 1e-5)[0, 0, :] == np.array([255, 0, 0, 255]))
     assert np.all(scene(1.0)[0, 0, :] == np.array([0, 0, 255, 255]))
-
-    scene = mv.trim(layer, start_times=[0.0, 3.0], end_times=[1.0, 4.0])
-    assert scene.size == (10, 10)
+    assert np.all(scene(2.0 - 1e-5)[0, 0, :] == np.array([0, 0, 255, 255]))
 
 
 def test_tile():
@@ -126,7 +123,7 @@ def test_switch():
 def test_insert():
     img1 = mv.layer.Image(np.full((100, 100, 4), 1, dtype=np.uint8), duration=2.0)
     img2 = mv.layer.Image(np.full((100, 100, 4), 3, dtype=np.uint8), duration=3.0)
-    source = mv.concatenate([img1, img2], size=img1.size)
+    source = mv.concatenate([img1, img2])
 
     target = mv.layer.Image(np.full((100, 100, 4), 2, dtype=np.uint8), duration=1.0)
     scene = mv.insert(source, target, 2.0)
