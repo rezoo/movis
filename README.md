@@ -27,17 +27,22 @@ shader art coding, and game commentary videos, through Python.
 ## 🚀 Main Features
 
 * Easy and intuitive video editing (including scene cut, transition, crop, concatenation, inserting images and texts, etc.)
+* Inserting text layers containing multiple outlines
+* Simple audio editing (including fade-in and fade-out effects)
+* Support for a variety of video and audio formats using ffmpeg
+
+The following features are *unique* to the Movis, and are not found in other Python libraries for video editing:
+
 * Layer transformation (position, scale, and rotation) with sub-pixel precision
 * Support for a variety of Photoshop-level blending modes
 * Keypoint and easing-based animation engine
 * Nested compositions
-* Inserting text layers containing multiple outlines
-* Simple audio editing (including fade-in and fade-out effects)
-* Support for a variety of video and audio formats using ffmpeg
-* Layer effects (drop shadow, grow, blur, chromakey, etc.)
 * Support for rendering at 1/2 quality and 1/4 quality for drafts
 * Fast rendering using cache mechanism
 * Adding user-defined layers, effects, and animations without using inheritance
+* Layer effects (drop shadow, grow, blur, chromakey, etc.)
+
+To put it simply, Movis is a library for complex video editing that includes several features found in proprietary software.
 
 ## 💻 Installation
 
