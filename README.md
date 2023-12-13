@@ -31,7 +31,7 @@ shader art coding, and game commentary videos, through Python.
 * Simple audio editing (including fade-in and fade-out effects)
 * Support for a variety of video and audio formats using ffmpeg
 
-The following features are *unique* to the Movis, and are not found in other Python libraries for video editing:
+The following features are not found in other Python libraries for video editing:
 
 * Layer transformation (position, scale, and rotation) with sub-pixel precision
 * Support for a variety of Photoshop-level blending modes
