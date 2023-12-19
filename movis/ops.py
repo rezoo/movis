@@ -299,10 +299,13 @@ class _CropLayer:
         return self.layer.get_key(time)
 
     def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
-        return self.layer.get_audio(start_time, end_time)
+        if hasattr(self.layer, 'get_audio'):
+            return self.layer.get_audio(start_time, end_time)
+        else:
+            return None
 
 
-def crop(layer: BasicLayer, rect: tuple[int, int, int, int]) -> Composition:
+def crop(layer: BasicLayer, rect: tuple[int, int, int, int]) -> _CropLayer:
     """Crop a layer from a specified rectangle.
 
     Args:
