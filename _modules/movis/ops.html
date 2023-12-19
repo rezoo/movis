@@ -347,7 +347,6 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">movis.enum</span> <span class="kn">import</span> <span class="n">Direction</span>
 <span class="kn">from</span> <span class="nn">movis.layer.composition</span> <span class="kn">import</span> <span class="n">Composition</span>
 <span class="kn">from</span> <span class="nn">movis.layer.media</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">movis.layer.protocol</span> <span class="kn">import</span> <span class="n">BasicLayer</span>
@@ -633,9 +632,37 @@ document.write(`
 
 
 
+<span class="k">class</span> <span class="nc">_CropLayer</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">rect</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">duration</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span>
+        <span class="k">return</span> <span class="n">img</span><span class="p">[</span><span class="n">y</span><span class="p">:</span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">+</span><span class="n">w</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Hashable</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_audio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">,</span> <span class="s1">&#39;get_audio&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">get_audio</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+
 <div class="viewcode-block" id="crop">
 <a class="viewcode-back" href="../../reference/generated/movis.ops.crop.html#movis.ops.crop">[docs]</a>
-<span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="n">layer</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Composition</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="n">layer</span><span class="p">:</span> <span class="n">BasicLayer</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">_CropLayer</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Crop a layer from a specified rectangle.</span>
 
 <span class="sd">    Args:</span>
@@ -656,13 +683,7 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt; composition.size</span>
 <span class="sd">        (100, 200)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
-    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rect</span>
-    <span class="n">duration</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">duration</span>
-    <span class="n">composition</span> <span class="o">=</span> <span class="n">Composition</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
-    <span class="n">composition</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span>
-        <span class="n">layer</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span><span class="p">),</span> <span class="n">origin_point</span><span class="o">=</span><span class="n">Direction</span><span class="o">.</span><span class="n">TOP_LEFT</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">composition</span></div>
+    <span class="k">return</span> <span class="n">_CropLayer</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">rect</span><span class="p">)</span></div>
 
 
 
