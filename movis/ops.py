@@ -4,7 +4,6 @@ from typing import Hashable, Sequence
 
 import numpy as np
 
-from movis.enum import Direction
 from movis.layer.composition import Composition
 from movis.layer.media import Image
 from movis.layer.protocol import BasicLayer
