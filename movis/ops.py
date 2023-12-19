@@ -4,7 +4,6 @@ from typing import Hashable, Sequence
 
 import numpy as np
 
-from movis.enum import Direction
 from movis.layer.composition import Composition
 from movis.layer.media import Image
 from movis.layer.protocol import BasicLayer
@@ -278,7 +277,35 @@ def tile(
     return composition
 
 
-def crop(layer: BasicLayer, rect: tuple[int, int, int, int]) -> Composition:
+class _CropLayer:
+
+    def __init__(self, layer: BasicLayer, rect: tuple[int, int, int, int]):
+        assert len(rect) == 4
+        self.layer = layer
+        self.rect = rect
+
+    @property
+    def duration(self) -> float:
+        return self.layer.duration
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        img = self.layer(time)
+        if img is None:
+            return None
+        x, y, w, h = self.rect
+        return img[y:y+h, x:x+w]
+
+    def get_key(self, time: float) -> Hashable:
+        return self.layer.get_key(time)
+
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        if hasattr(self.layer, 'get_audio'):
+            return self.layer.get_audio(start_time, end_time)
+        else:
+            return None
+
+
+def crop(layer: BasicLayer, rect: tuple[int, int, int, int]) -> _CropLayer:
     """Crop a layer from a specified rectangle.
 
     Args:
@@ -299,13 +326,7 @@ def crop(layer: BasicLayer, rect: tuple[int, int, int, int]) -> Composition:
         >>> composition.size
         (100, 200)
     """
-    assert len(rect) == 4
-    x, y, w, h = rect
-    duration = layer.duration
-    composition = Composition(size=(w, h), duration=duration)
-    composition.add_layer(
-        layer, position=(-x, -y), origin_point=Direction.TOP_LEFT)
-    return composition
+    return _CropLayer(layer, rect)
 
 
 def switch(

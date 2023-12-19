@@ -91,8 +91,6 @@ def test_crop():
     scene = mv.crop(layer, (10, 10, 20, 20))
 
     assert scene.duration == 2.0
-    assert scene.size == (20, 20)
-    assert len(scene) == 1
 
     frame = scene(0.0)
     assert np.all(frame[0, 0, :] == np.array([1, 0, 0, 255]))
