@@ -130,6 +130,17 @@ layer = mv.layer.Image("image.png", duration=1.0)
 layer = mv.crop(layer, (10, 20, 100, 200))
 ```
 
+#### resizing
+
+```python
+layer = mv.layer.Video('video.mp4')
+width, height = layer.size
+
+# resize to 1/2
+main = mv.layer.Composition(size=(width // 2, height // 2), duration=layer.duration)
+main.add_layer(layer, scale=0.5)
+```
+
 #### fade-in / out
 
 ```python
