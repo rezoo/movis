@@ -334,7 +334,6 @@ class VideoFrameSequence:
         self._reader = imageio.get_reader(sequence[0])
         self._sequence = sequence
         meta_data = self._reader.get_meta_data()
-        print(meta_data)
         self._fps = fps
         self._size = meta_data["shape"]
         self._n_frame = len(sequence)
