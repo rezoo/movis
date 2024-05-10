@@ -319,6 +319,82 @@ class Video:
             return self._audio_layer.get_audio(start_time, end_time)
         return None
 
+class VideoFrameSequence:
+    """Video layer to encapsulate various formats of video data.
+
+    Args:
+        video_file:
+            the source of the video data. It can be a file path (``str`` or ``Path``).
+        audio:
+            whether to include the audio layer. Default is ``True``.
+    """
+
+    def __init__(self, sequence_path: str | PathLike, fps: int = 24) -> None:
+        sequence = [os.path.join(sequence_path, f) for f in sorted(os.listdir(sequence_path))]
+        self._reader = imageio.get_reader(sequence[0])
+        self._sequence = sequence
+        meta_data = self._reader.get_meta_data()
+        self._fps = fps
+        self._size = meta_data["shape"]
+        self._n_frame = len(sequence)
+        self._duration = float(len(sequence)/float(fps))
+
+        self._audio_layer = None
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state['_reader'] = None
+        return state
+
+    @property
+    def fps(self) -> float:
+        """The frame rate of the video."""
+        return self._fps
+
+    @property
+    def size(self) -> tuple[int, int]:
+        """The size of the video with a tuple of ``(width, height)``."""
+        return self._size
+
+    @property
+    def n_frame(self) -> int:
+        """The number of frames in the video."""
+        return self._n_frame
+
+    @property
+    def duration(self) -> float:
+        """The duration of the video."""
+        return self._duration
+
+    def has_audio(self) -> bool:
+        """Return True if the video has audio layer."""
+        return self._audio_layer is not None
+
+    @property
+    def audio(self) -> bool:
+        """Whether the video has audio data."""
+        return self._audio
+
+    def get_key(self, time: float) -> int:
+        """Get the state index for the given time."""
+        if time < 0 or self.duration < time:
+            return -1
+        frame_index = int(time * self._fps)
+        return frame_index
+
+    def __call__(self, time: float) -> np.ndarray | None:
+        frame_index = int(time * self._fps)
+        try:
+            frame = np.asarray(PILImage.open(self._sequence[frame_index]))
+
+        except IndexError:
+            return None
+
+        return frame
+
+    def get_audio(self, start_time: float, end_time: float) -> np.ndarray | None:
+        return None
+
 class Audio:
     """Audio layer to encapsulate various formats of audio data.
 
