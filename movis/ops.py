@@ -100,7 +100,12 @@ class _RepeatLayer:
     def get_state(self, time: float) -> float | None:
         if time < 0.0 or self.duration <= time:
             return None
+
+        completed_cycles = int(time / self.layer.duration)
         t = time % self.layer.duration
+        if completed_cycles % 2 > 0:
+            t = self.layer.duration - t
+
         return t
 
     def __call__(self, time: float) -> np.ndarray | None:

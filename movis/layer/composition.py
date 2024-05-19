@@ -55,14 +55,22 @@ class Composition:
             The duration along the time axis for the composition.
     """
 
+    def __exit__(self, exc_type, exc_value, traceback):
+        print("BRO I QUIT!")
+
     def __init__(
-        self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0
-    ) -> None:
+        self, size: tuple[int, int] = (1920, 1080), duration: float = 1.0, cache_directory: str = None
+) -> None:
         self._layers: list[LayerItem] = []
         self._name_to_layer: dict[str, LayerItem] = {}
         assert duration > 0, "duration must be positive"
         self._duration = duration
-        self._cache: Cache = Cache(size_limit=1024 * 1024 * 1024)
+
+        if cache_directory is not None:
+            self._cache: Cache = Cache(size_limit=1024 * 1024 * 1024, directory="cache")
+        else:
+            self._cache: Cache = Cache(size_limit=1024 * 1024 * 1024)
+
         self._preview_level: int = 1
         assert isinstance(size, tuple) and len(size) == 2, "size must be a tuple of length 2"
         assert size[0] > 0 and size[1] > 0, "size must be positive"

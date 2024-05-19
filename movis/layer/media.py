@@ -377,18 +377,23 @@ class VideoFrameSequence:
 
     def get_key(self, time: float) -> int:
         """Get the state index for the given time."""
-        if time < 0 or self.duration < time:
-            return -1
         frame_index = int(time * self._fps)
+
+        if frame_index < 0:
+            frame_index = 0
+        elif frame_index+1 >= self.n_frame:
+            frame_index = self.n_frame-1
+
         return frame_index
 
     def __call__(self, time: float) -> np.ndarray | None:
-        frame_index = int(time * self._fps)
+        frame_index = self.get_key(time)
+
         try:
             frame = np.asarray(PILImage.open(self._sequence[frame_index]))
 
         except IndexError:
-            return None
+            raise IndexError
 
         return frame
 
