@@ -28,9 +28,9 @@ class FillProperty:
             The opacity of the shape in the range of ``[0, 1]``.
     """
 
-    def __init__(self, color: tuple[int, int, int] | str, opacify: float = 1.):
+    def __init__(self, color: tuple[int, int, int] | str, opacity: float = 1.):
         self._color: tuple[int, int, int] = to_rgb(color)
-        self._opacity: float = float(opacify)
+        self._opacity: float = float(opacity)
 
     @property
     def color(self) -> tuple[int, int, int]:
