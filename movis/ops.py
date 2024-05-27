@@ -89,9 +89,10 @@ def concatenate(layers: Sequence[BasicLayer]) -> _ConcatenateLayer:
 
 class _RepeatLayer:
 
-    def __init__(self, layer: BasicLayer, n_repeat: int):
+    def __init__(self, layer: BasicLayer, n_repeat: int, repeat_method: str):
         self.layer = layer
         self.n_repeat = n_repeat
+        self.repeat_method = repeat_method
 
     @property
     def duration(self) -> float:
@@ -100,7 +101,13 @@ class _RepeatLayer:
     def get_state(self, time: float) -> float | None:
         if time < 0.0 or self.duration <= time:
             return None
+
+        completed_cycles = int(time / self.layer.duration)
         t = time % self.layer.duration
+
+        if completed_cycles % 2 > 0 and self.repeat_method == "bounce":
+            t = self.layer.duration - t
+
         return t
 
     def __call__(self, time: float) -> np.ndarray | None:
@@ -122,7 +129,7 @@ class _RepeatLayer:
         return c.get_audio(start_time, end_time)
 
 
-def repeat(layer: BasicLayer, n_repeat: int) -> _RepeatLayer:
+def repeat(layer: BasicLayer, n_repeat: int, repeat_method: str = "loop") -> _RepeatLayer:
     """Repeat a layer multiple times.
 
     Args:
@@ -130,6 +137,8 @@ def repeat(layer: BasicLayer, n_repeat: int) -> _RepeatLayer:
             Layer to repeat.
         n_repeat:
             Number of times to repeat the layer.
+        repeat_method:
+            Method to repeat the layer, choose from bounce or loop.
 
     Returns:
         Composition with the layer repeated.
@@ -141,7 +150,8 @@ def repeat(layer: BasicLayer, n_repeat: int) -> _RepeatLayer:
         >>> composition.duration
         3.0
     """
-    return _RepeatLayer(layer, n_repeat)
+
+    return _RepeatLayer(layer, n_repeat, repeat_method)
 
 
 class _TrimLayer:
